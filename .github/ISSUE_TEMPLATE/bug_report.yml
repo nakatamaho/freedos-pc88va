@@ -1,0 +1,55 @@
+name: Scaffold or integration report
+description: Report a reproducible issue in the experimental integration project.
+title: "[report] "
+labels:
+  - needs-triage
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is an experimental project. Do not include private manuals, ROMs, BIOS files, disk images, or private-derived facts.
+  - type: dropdown
+    id: component
+    attributes:
+      label: Component
+      options:
+        - Parent scaffold
+        - fdkernel
+        - FreeCOM
+        - COUNTRY.SYS data
+        - QA/documentation
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: State the host, checkout SHA, and relevant public tool versions.
+    validations:
+      required: true
+  - type: dropdown
+    id: evidence
+    attributes:
+      label: Evidence tier
+      options:
+        - HOST PASS
+        - VAEG PASS
+        - HARDWARE PASS
+        - DEFERRED HARDWARE VALIDATION
+        - NOT RUN
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Reproduction
+      description: Give exact public commands, expected result, and actual result.
+    validations:
+      required: true
+  - type: checkboxes
+    id: private-artifacts
+    attributes:
+      label: Private-artifact check
+      options:
+        - label: I have not attached private artifacts or private-derived information.
+          required: true

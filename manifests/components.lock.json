@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "status": "scaffold",
+  "components": [
+    {
+      "name": "fdkernel",
+      "path": "components/fdkernel",
+      "repository": "https://github.com/nakatamaho/fdkernel.git",
+      "branch": "nec88va",
+      "commit": "c9ce245e0447003645adce47bd34960ae276d4bd",
+      "role": "Editable experimental PC-88VA kernel fork",
+      "stability": "experimental"
+    },
+    {
+      "name": "freecom",
+      "path": "components/freecom",
+      "repository": "https://github.com/nakatamaho/freecom_dbcs2.git",
+      "branch": "nec88va",
+      "commit": "c059aafe857f005b0d7d8295e3be67c0dba2aafd",
+      "role": "Editable DBCS/Japanese command processor fork",
+      "stability": "experimental-fork"
+    },
+    {
+      "name": "country",
+      "path": "components/country",
+      "repository": "https://github.com/FDOS/country.git",
+      "branch": "master",
+      "commit": "23f189cca3420606eae8723884fa92ccd65eb307",
+      "role": "COUNTRY.SYS NLS/DBCS data",
+      "stability": "upstream"
+    }
+  ]
+}

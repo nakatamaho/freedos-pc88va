@@ -1,0 +1,70 @@
+# Editor and operating-system noise
+.DS_Store
+Thumbs.db
+*~
+.#*
+.idea/
+.vscode/
+
+# Python caches and environments
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.venv/
+venv/
+env/
+
+# Local configuration and private material
+config/local.env
+/local/
+/private/
+pc88va-private-docs/
+qa/vaeg/local/*
+!qa/vaeg/local/README.md
+qa/vaeg/bios/*
+!qa/vaeg/bios/README.md
+
+# Build, cache, log, and result directories
+build/
+dist/
+cache/
+logs/
+results/
+tmp/
+
+# Generated image output; retain its directory marker
+images/output/*
+!images/output/.gitkeep
+
+# DOS executables and build products
+*.com
+*.exe
+*.obj
+*.o
+*.lib
+*.a
+*.map
+*.sym
+*.lst
+*.err
+
+# ROM, BIOS, and disk-image artifacts
+*.rom
+*.bin
+*.d88
+*.d98
+*.hdi
+*.hdd
+*.img
+*.ima
+*.iso
+
+# Archives and local fixture payloads
+*.zip
+*.7z
+*.tar
+*.tgz
+*.gz
+qa/fixtures/*
+!qa/fixtures/README.md

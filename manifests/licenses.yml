@@ -1,0 +1,17 @@
+schema_version: 1
+status: scaffold
+parent_license: deferred
+components:
+  - name: fdkernel
+    repository: https://github.com/nakatamaho/fdkernel.git
+    license_source: https://github.com/lpproj/fdkernel
+    spdx: null
+  - name: freecom
+    repository: https://github.com/nakatamaho/freecom_dbcs2.git
+    license_source: https://github.com/lpproj/freecom_dbcs2
+    spdx: null
+  - name: country
+    repository: https://github.com/FDOS/country.git
+    license_source: https://github.com/FDOS/country
+    spdx: null
+packages: []

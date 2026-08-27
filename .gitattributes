@@ -1,0 +1,18 @@
+* text=auto eol=lf
+*.bat text eol=crlf
+*.cmd text eol=crlf
+
+*.rom -text
+*.d88 -text
+*.d98 -text
+*.hdi -text
+*.hdd -text
+*.img -text
+*.ima -text
+*.iso -text
+*.com -text
+*.exe -text
+*.zip -text
+*.7z -text
+*.tar -text
+*.gz -text
