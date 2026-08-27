@@ -26,12 +26,12 @@ qa/vaeg/bios/*
 !qa/vaeg/bios/README.md
 
 # Build, cache, log, and result directories
-build/
-dist/
-cache/
-logs/
-results/
-tmp/
+/build/
+/dist/
+/cache/
+/logs/
+/results/
+/tmp/
 
 # Generated image output; retain its directory marker
 images/output/*
