@@ -22,6 +22,7 @@ def main():
     root = Path(__file__).resolve().parents[2]
     harness = (root / "tools/m01/build_baseline.sh").read_text(encoding="utf-8")
     image_block = harness[harness.index("record_image() {"):harness.index("\nimage() {", harness.index("record_image() {"))]
+    build_block = harness[harness.index("build() {"):harness.index("\ncompare() {", harness.index("build() {"))]
 
     equal = "sha256:" + "a" * 64
     unequal = "sha256:" + "b" * 64
@@ -32,6 +33,8 @@ def main():
         assert DIGEST.fullmatch(malformed) is None
 
     assert 'docker image inspect "$image_reference" --format \'{{.Id}}\'' in image_block
+    assert 'docker image inspect "$M01_IMAGE_TAG" >/dev/null 2>&1' in build_block
+    assert 'docker image inspect --platform "$M01_PLATFORM" "$M01_IMAGE_TAG"' not in build_block
     assert '"$resolved_local_image_config_id" /input/image_tool_probe.sh' in image_block
     assert '"$M01_IMAGE_TAG" /input/image_tool_probe.sh' not in image_block
     assert "wait_status=0" in image_block

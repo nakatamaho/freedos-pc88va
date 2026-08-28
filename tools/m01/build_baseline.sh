@@ -1158,7 +1158,7 @@ PY
 
 build() {
     assert_prestart_lifecycle_policy
-    docker image inspect --platform "$M01_PLATFORM" "$M01_IMAGE_TAG" >/dev/null 2>&1 || fail "M01 image is not available; run make m01-image"
+    docker image inspect "$M01_IMAGE_TAG" >/dev/null 2>&1 || fail "M01 image is not available; run make m01-image"
     validate_gitlinks
     validate_contract_inputs
     [ ! -d "$M01_RESULTS_ROOT/run-1" ] || fail "run-1 exists; use m01-clean before rebuilding"
