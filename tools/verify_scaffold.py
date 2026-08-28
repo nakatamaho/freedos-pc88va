@@ -14,12 +14,12 @@ EXPECTED_SUBMODULES = {
     "components/fdkernel": {
         "name": "fdkernel",
         "url": "https://github.com/nakatamaho/fdkernel.git",
-        "branch": "nec88va",
+        "branch": "nec98-current",
     },
     "components/freecom": {
         "name": "freecom",
         "url": "https://github.com/nakatamaho/freecom_dbcs2.git",
-        "branch": "nec88va",
+        "branch": "deterministic-build-timestamp",
     },
     "components/country": {
         "name": "country",

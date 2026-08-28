@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "milestone": "M01-upstream-baseline-build",
+  "canonical_platform": "linux/amd64",
+  "toolchain": {
+    "name": "Open Watcom",
+    "release": "Open Watcom 1.9",
+    "release_tag": "ow1.9",
+    "package": "open-watcom-c-linux-1.9",
+    "package_sha256": "f7484be27eb70028010303fc16bb2acc5a785679567a568b940c28190ddbf3f3",
+    "host_directory": "binl",
+    "install_path": "/opt/openwatcom-1.9"
+  },
+  "deterministic_environment": {
+    "LC_ALL": "C",
+    "LANG": "C",
+    "TZ": "UTC",
+    "UMASK": "022"
+  },
+  "components": [
+    {
+      "name": "fdkernel-nec98",
+      "path": "components/fdkernel",
+      "commit": "29085311a47c8fcceb7902b64b0b5ebc170b8de5",
+      "branch_metadata": "nec98-current",
+      "base_commit": "c9ce245e0447003645adce47bd34960ae276d4bd",
+      "build_system_fix": "Only nec98/sys/makefile.wc ifdef/endif directives were changed to WMake !ifdef/!endif in the child commit.",
+      "source_date_epoch": 1787814827,
+      "working_directory": "nec98",
+      "configuration_template": "config/m01/fdkernel-nec98.mak",
+      "configuration_copy": ["cp", "/input/fdkernel-nec98.mak", "config.mak"],
+      "build_commands": [
+        ["env", "-u", "XUPX", "-u", "UPXOPT", "make", "clobber", "COMPILER=owlinux"],
+        ["env", "-u", "XUPX", "-u", "UPXOPT", "make", "all", "COMPILER=owlinux"]
+      ],
+      "upx_enabled": false,
+      "required_artifacts": [
+        {"path": "nec98/bin/kernel.sys", "namespace": "fdkernel-nec98"},
+        {"path": "nec98/bin/KWC8616.sys", "namespace": "fdkernel-nec98"},
+        {"path": "nec98/bin/sys.com", "namespace": "fdkernel-nec98"},
+        {"path": "nec98/bin/country.sys", "namespace": "fdkernel-country"},
+        {"path": "nec98/boot/b_fat12f.bin", "namespace": "fdkernel-nec98"},
+        {"path": "nec98/boot/b_fat12.bin", "namespace": "fdkernel-nec98"},
+        {"path": "nec98/boot/b_fat16.bin", "namespace": "fdkernel-nec98"},
+        {"path": "nec98/boot/b_fat32.bin", "namespace": "fdkernel-nec98"}
+      ],
+      "optional_diagnostics": ["nec98/bin/*.map", "nec98/bin/*.lst"]
+    },
+    {
+      "name": "freecom-nec98-japanese",
+      "path": "components/freecom",
+      "commit": "855281a3114b43ad4b8d9a320f2aca39be046bba",
+      "branch_metadata": "deterministic-build-timestamp",
+      "base_commit": "c059aafe857f005b0d7d8295e3be67c0dba2aafd",
+      "build_system_fix": "Generic opt-in FREECOM_BUILD_DATE and FREECOM_BUILD_TIME macros preserve upstream defaults while enabling deterministic builds.",
+      "source_date_epoch": 1740233872,
+      "working_directory": ".",
+      "configuration_source": "components/freecom/config.std",
+      "configuration_copy": ["cp", "/input/freecom-nec98.mak", "config.mak"],
+      "timestamp_contract": "config/m01/freecom-build-timestamp.json",
+      "command": ["./build.sh", "-r", "dbcs", "nec98", "watcom", "japanese"],
+      "build_commands": [["./build.sh", "-r", "dbcs", "nec98", "watcom", "japanese"]],
+      "upx_enabled": false,
+      "required_artifacts": [
+        {"path": "command.com", "namespace": "freecom-nec98-japanese"}
+      ],
+      "optional_diagnostics": ["*.map", "*.lst"]
+    },
+    {
+      "name": "fdos-country",
+      "path": "components/country",
+      "commit": "23f189cca3420606eae8723884fa92ccd65eb307",
+      "source_date_epoch": 1779123341,
+      "working_directory": ".",
+      "command": ["make", "clean", "all"],
+      "build_commands": [["make", "clean", "all"]],
+      "validator_command": ["python3", "./ci_validate.py"],
+      "upx_enabled": false,
+      "required_artifacts": [
+        {"path": "country.sys", "namespace": "fdos-country"}
+      ],
+      "optional_diagnostics": ["country.lst"]
+    }
+  ],
+  "artifact_namespace_policy": "Kernel-produced country.sys uses fdkernel-country; FDOS/country country.sys uses fdos-country.",
+  "network_policy": "Build containers use network mode none and have no mounts."
+}

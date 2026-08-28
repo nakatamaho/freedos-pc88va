@@ -6,18 +6,18 @@
       "name": "fdkernel",
       "path": "components/fdkernel",
       "repository": "https://github.com/nakatamaho/fdkernel.git",
-      "branch": "nec88va",
-      "commit": "c9ce245e0447003645adce47bd34960ae276d4bd",
-      "role": "Editable experimental PC-88VA kernel fork",
+      "branch": "nec98-current",
+      "commit": "29085311a47c8fcceb7902b64b0b5ebc170b8de5",
+      "role": "Editable experimental NEC98 kernel build-fix fork",
       "stability": "experimental"
     },
     {
       "name": "freecom",
       "path": "components/freecom",
       "repository": "https://github.com/nakatamaho/freecom_dbcs2.git",
-      "branch": "nec88va",
-      "commit": "c059aafe857f005b0d7d8295e3be67c0dba2aafd",
-      "role": "Editable DBCS/Japanese command processor fork",
+      "branch": "deterministic-build-timestamp",
+      "commit": "855281a3114b43ad4b8d9a320f2aca39be046bba",
+      "role": "Editable DBCS/Japanese command processor reproducibility fork",
       "stability": "experimental-fork"
     },
     {

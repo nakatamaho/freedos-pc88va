@@ -1,15 +1,16 @@
 # FreeDOS PC-88VA Integration
 
 This is an experimental FreeDOS integration project for NEC PC-88VA. The
-current milestone is the M00 scaffold; no bootable release exists.
+current milestone is M01 upstream baseline buildability; no bootable release
+exists.
 
 Kernel-only is not a complete distribution. The three foundational components
 are:
 
-- `components/fdkernel`: the editable experimental PC-88VA kernel fork,
-  `nakatamaho/fdkernel:nec88va`.
+- `components/fdkernel`: the editable experimental NEC98 kernel build-fix fork,
+  `nakatamaho/fdkernel:nec98-current`; no PC-88VA porting change is included.
 - `components/freecom`: the editable DBCS/Japanese command processor fork,
-  `nakatamaho/freecom_dbcs2:nec88va`.
+  `nakatamaho/freecom_dbcs2:deterministic-build-timestamp`.
 - `components/country`: the read-only upstream NLS/DBCS data component,
   `FDOS/country:master`.
 
@@ -34,6 +35,21 @@ The host scaffold check is:
 ```sh
 make verify-scaffold
 ```
+
+M01 uses a pinned Linux/amd64 container and does not modify the component
+sources. Its host checks are:
+
+```sh
+make m01-preflight
+make m01-image
+make m01-build
+make m01-compare
+make m01-verify
+```
+
+M01 proves only that the exact pinned upstream baselines build reproducibly in
+the canonical host environment. It does not prove PC-88VA compatibility or a
+successful boot.
 
 VAEG and private documentation are sibling checkouts and are not included in
 this repository. A possible workspace layout is:

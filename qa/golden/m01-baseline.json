@@ -1,0 +1,127 @@
+{
+  "artifacts": [
+    {
+      "artifact": "fdkernel-country/nec98/bin/country.sys",
+      "build_contract_sha256": "85a3a9a96b4b5fb4f4d1d90f836c97eade24a639de4aa0f908640ca91057759c",
+      "component_commit": "29085311a47c8fcceb7902b64b0b5ebc170b8de5",
+      "sha256": "541f5abefd8d0fd9f4f3eeef7741f36f666eaaa5b0020203a5786a1bc270048f",
+      "size": 30250,
+      "source_archive_sha256": "d39ace4ed008f6dc74be3ce52d87c56706aa834816d01a1f93f6d338ee258e38",
+      "toolchain_lock_sha256": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162"
+    },
+    {
+      "artifact": "fdkernel-nec98/nec98/bin/KWC8616.sys",
+      "build_contract_sha256": "85a3a9a96b4b5fb4f4d1d90f836c97eade24a639de4aa0f908640ca91057759c",
+      "component_commit": "29085311a47c8fcceb7902b64b0b5ebc170b8de5",
+      "sha256": "89534be7b9e8646fc0d5eabe8292f7fe86142192cbb22115fc469b253afb5705",
+      "size": 83774,
+      "source_archive_sha256": "d39ace4ed008f6dc74be3ce52d87c56706aa834816d01a1f93f6d338ee258e38",
+      "toolchain_lock_sha256": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162"
+    },
+    {
+      "artifact": "fdkernel-nec98/nec98/bin/kernel.sys",
+      "build_contract_sha256": "85a3a9a96b4b5fb4f4d1d90f836c97eade24a639de4aa0f908640ca91057759c",
+      "component_commit": "29085311a47c8fcceb7902b64b0b5ebc170b8de5",
+      "sha256": "89534be7b9e8646fc0d5eabe8292f7fe86142192cbb22115fc469b253afb5705",
+      "size": 83774,
+      "source_archive_sha256": "d39ace4ed008f6dc74be3ce52d87c56706aa834816d01a1f93f6d338ee258e38",
+      "toolchain_lock_sha256": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162"
+    },
+    {
+      "artifact": "fdkernel-nec98/nec98/bin/sys.com",
+      "build_contract_sha256": "85a3a9a96b4b5fb4f4d1d90f836c97eade24a639de4aa0f908640ca91057759c",
+      "component_commit": "29085311a47c8fcceb7902b64b0b5ebc170b8de5",
+      "sha256": "356f6dce5fa5fb2877a79dd4b7fcc0ff3bc3b00f9c77739fb2c7d2e9f1ae8528",
+      "size": 17930,
+      "source_archive_sha256": "d39ace4ed008f6dc74be3ce52d87c56706aa834816d01a1f93f6d338ee258e38",
+      "toolchain_lock_sha256": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162"
+    },
+    {
+      "artifact": "fdkernel-nec98/nec98/boot/b_fat12.bin",
+      "build_contract_sha256": "85a3a9a96b4b5fb4f4d1d90f836c97eade24a639de4aa0f908640ca91057759c",
+      "component_commit": "29085311a47c8fcceb7902b64b0b5ebc170b8de5",
+      "sha256": "5a480da31b43cde006614d8c3be6fff4d5f227f83055e4ee6ac82665bf6c1212",
+      "size": 512,
+      "source_archive_sha256": "d39ace4ed008f6dc74be3ce52d87c56706aa834816d01a1f93f6d338ee258e38",
+      "toolchain_lock_sha256": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162"
+    },
+    {
+      "artifact": "fdkernel-nec98/nec98/boot/b_fat12f.bin",
+      "build_contract_sha256": "85a3a9a96b4b5fb4f4d1d90f836c97eade24a639de4aa0f908640ca91057759c",
+      "component_commit": "29085311a47c8fcceb7902b64b0b5ebc170b8de5",
+      "sha256": "abc12598f215502ff18fdefb5fb961d82573e31860f34bfd555265e4d04ac559",
+      "size": 512,
+      "source_archive_sha256": "d39ace4ed008f6dc74be3ce52d87c56706aa834816d01a1f93f6d338ee258e38",
+      "toolchain_lock_sha256": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162"
+    },
+    {
+      "artifact": "fdkernel-nec98/nec98/boot/b_fat16.bin",
+      "build_contract_sha256": "85a3a9a96b4b5fb4f4d1d90f836c97eade24a639de4aa0f908640ca91057759c",
+      "component_commit": "29085311a47c8fcceb7902b64b0b5ebc170b8de5",
+      "sha256": "a233d5b7360b5fbee4f4e449d89a77c4adf9cea8210689a64dd5a79fcd75844d",
+      "size": 512,
+      "source_archive_sha256": "d39ace4ed008f6dc74be3ce52d87c56706aa834816d01a1f93f6d338ee258e38",
+      "toolchain_lock_sha256": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162"
+    },
+    {
+      "artifact": "fdkernel-nec98/nec98/boot/b_fat32.bin",
+      "build_contract_sha256": "85a3a9a96b4b5fb4f4d1d90f836c97eade24a639de4aa0f908640ca91057759c",
+      "component_commit": "29085311a47c8fcceb7902b64b0b5ebc170b8de5",
+      "sha256": "607c68fe41ebc150d59078fad7fb859a33b7edfd8f12a5c82c019c9cebcd4ca7",
+      "size": 512,
+      "source_archive_sha256": "d39ace4ed008f6dc74be3ce52d87c56706aa834816d01a1f93f6d338ee258e38",
+      "toolchain_lock_sha256": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162"
+    },
+    {
+      "artifact": "fdos-country/country.sys",
+      "build_contract_sha256": "85a3a9a96b4b5fb4f4d1d90f836c97eade24a639de4aa0f908640ca91057759c",
+      "component_commit": "23f189cca3420606eae8723884fa92ccd65eb307",
+      "sha256": "04b2d2bc8df382090686f00e547d718d6706d22fb34c34dd77cd55083d5c34d5",
+      "size": 42614,
+      "source_archive_sha256": "db1e064862e9400e6ba433f07c3e5caf7a50780fd9e953b34f8eff2cdeaec87b",
+      "toolchain_lock_sha256": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162"
+    },
+    {
+      "artifact": "freecom-nec98-japanese/command.com",
+      "build_contract_sha256": "85a3a9a96b4b5fb4f4d1d90f836c97eade24a639de4aa0f908640ca91057759c",
+      "component_commit": "855281a3114b43ad4b8d9a320f2aca39be046bba",
+      "sha256": "fabe7744cc7c51c6f72519cc39d89bf77beaf908f994675a97a1e34c93549da1",
+      "size": 91143,
+      "source_archive_sha256": "d5543cb133dd47299e4d448f951da30df4f7e60610e0523ed782cf890cdc6fa3",
+      "toolchain_lock_sha256": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162"
+    }
+  ],
+  "canonical_platform": "linux/amd64",
+  "comparison": "byte-identical",
+  "contract_sha256": "85a3a9a96b4b5fb4f4d1d90f836c97eade24a639de4aa0f908640ca91057759c",
+  "informational_country_comparison": {
+    "artifacts": [
+      {
+        "artifact": "fdkernel-country/nec98/bin/country.sys",
+        "present_in_both_runs": true,
+        "run_1_sha256": "541f5abefd8d0fd9f4f3eeef7741f36f666eaaa5b0020203a5786a1bc270048f",
+        "run_1_size": 30250,
+        "run_2_sha256": "541f5abefd8d0fd9f4f3eeef7741f36f666eaaa5b0020203a5786a1bc270048f",
+        "run_2_size": 30250
+      },
+      {
+        "artifact": "fdos-country/country.sys",
+        "present_in_both_runs": true,
+        "run_1_sha256": "04b2d2bc8df382090686f00e547d718d6706d22fb34c34dd77cd55083d5c34d5",
+        "run_1_size": 42614,
+        "run_2_sha256": "04b2d2bc8df382090686f00e547d718d6706d22fb34c34dd77cd55083d5c34d5",
+        "run_2_size": 42614
+      }
+    ],
+    "comparison": "informational",
+    "equal_within_run_1": false
+  },
+  "milestone": "M01-upstream-baseline-build",
+  "schema_version": 1,
+  "source_archives": {
+    "country": "db1e064862e9400e6ba433f07c3e5caf7a50780fd9e953b34f8eff2cdeaec87b",
+    "fdkernel": "d39ace4ed008f6dc74be3ce52d87c56706aa834816d01a1f93f6d338ee258e38",
+    "freecom": "d5543cb133dd47299e4d448f951da30df4f7e60610e0523ed782cf890cdc6fa3"
+  },
+  "toolchain_lock_sha256": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162"
+}

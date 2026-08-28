@@ -1,0 +1,103 @@
+name: M01 upstream baseline
+
+on:
+  push:
+    paths:
+      - ".github/workflows/m01-baseline.yml"
+      - "components/fdkernel"
+      - "components/freecom"
+      - "components/country"
+      - ".gitmodules"
+      - ".gitignore"
+      - "Makefile"
+      - "containers/m01/**"
+      - "config/m01/**"
+      - "docs/build/**"
+      - "docs/decisions/0001-m01-canonical-toolchain.md"
+      - "docs/milestones/M01-upstream-baseline-build.md"
+      - "manifests/components.lock.json"
+      - "manifests/m01-build-contract.json"
+      - "manifests/toolchains.lock.json"
+      - "qa/golden/m01-baseline.json"
+      - "qa/host/m01/**"
+      - "tools/m01/**"
+  pull_request:
+    paths:
+      - ".github/workflows/m01-baseline.yml"
+      - "components/fdkernel"
+      - "components/freecom"
+      - "components/country"
+      - ".gitmodules"
+      - ".gitignore"
+      - "Makefile"
+      - "containers/m01/**"
+      - "config/m01/**"
+      - "docs/build/**"
+      - "docs/decisions/0001-m01-canonical-toolchain.md"
+      - "docs/milestones/M01-upstream-baseline-build.md"
+      - "manifests/components.lock.json"
+      - "manifests/m01-build-contract.json"
+      - "manifests/toolchains.lock.json"
+      - "qa/golden/m01-baseline.json"
+      - "qa/host/m01/**"
+      - "tools/m01/**"
+
+jobs:
+  baseline:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out repository and submodules
+        # v4.2.2
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          submodules: recursive
+
+      - name: Assert native x64 runner
+        run: |
+          test "$(uname -m)" = x86_64
+          test "$(dpkg --print-architecture)" = amd64
+
+      - name: Configure component remotes
+        run: bash tools/configure_component_remotes.sh
+
+      - name: Check source and parent whitespace
+        run: |
+          git diff --check
+          test -z "$(git -C components/fdkernel status --short --untracked-files=all)"
+          test -z "$(git -C components/freecom status --short --untracked-files=all)"
+          test -z "$(git -C components/country status --short --untracked-files=all)"
+
+      - name: Verify M00 scaffold
+        run: make verify-scaffold
+
+      - name: Run host portability regression checks
+        run: make m01-host-portability
+
+      - name: Run image identity regression checks
+        run: make m01-image-identity
+
+      - name: Run M01 host preflight
+        run: make m01-preflight
+
+      - name: Build pinned M01 image
+        run: make m01-image
+
+      - name: Build two isolated M01 runs
+        run: make m01-build
+
+      - name: Compare M01 runs against the committed contract
+        run: |
+          python3 tools/m01/compare_runs.py \
+            --run1 qa/results/m01/run-1 \
+            --run2 qa/results/m01/run-2 \
+            --output qa/results/m01/comparison.json
+
+      - name: Verify result against committed golden manifest
+        run: make m01-verify
+
+      - name: Recheck source cleanliness and parent whitespace
+        run: |
+          git diff --check
+          test -z "$(git -C components/fdkernel status --short --untracked-files=all)"
+          test -z "$(git -C components/freecom status --short --untracked-files=all)"
+          test -z "$(git -C components/country status --short --untracked-files=all)"
