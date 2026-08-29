@@ -111,6 +111,9 @@ jobs:
           name: m02-bundle-evidence
           if-no-files-found: ignore
           path: |
+            qa/results/m01/comparison.json
+            qa/results/m01/run-1/manifest.json
+            qa/results/m01/run-2/manifest.json
             qa/results/m02/comparison.json
             qa/results/m02/run-1/baseline-artifact-bundle/metadata/*.json
             qa/results/m02/run-2/baseline-artifact-bundle/metadata/*.json
