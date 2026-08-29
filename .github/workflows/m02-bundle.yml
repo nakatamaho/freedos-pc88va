@@ -1,0 +1,112 @@
+name: M02 baseline artifact bundle
+
+on:
+  push:
+    paths:
+      - ".github/workflows/m02-bundle.yml"
+      - ".github/workflows/m01-baseline.yml"
+      - "components/fdkernel"
+      - "components/freecom"
+      - "components/country"
+      - ".gitmodules"
+      - ".gitignore"
+      - "Makefile"
+      - "containers/m01/**"
+      - "config/m01/**"
+      - "manifests/**"
+      - "qa/golden/m01-baseline.json"
+      - "qa/golden/m02/**"
+      - "tools/m01/**"
+      - "tools/m02/**"
+      - "docs/build/m02-artifact-contract.md"
+      - "docs/milestones/M02-baseline-artifact-bundle.md"
+  pull_request:
+    paths:
+      - ".github/workflows/m02-bundle.yml"
+      - ".github/workflows/m01-baseline.yml"
+      - "components/fdkernel"
+      - "components/freecom"
+      - "components/country"
+      - ".gitmodules"
+      - ".gitignore"
+      - "Makefile"
+      - "containers/m01/**"
+      - "config/m01/**"
+      - "manifests/**"
+      - "qa/golden/m01-baseline.json"
+      - "qa/golden/m02/**"
+      - "tools/m01/**"
+      - "tools/m02/**"
+      - "docs/build/m02-artifact-contract.md"
+      - "docs/milestones/M02-baseline-artifact-bundle.md"
+
+jobs:
+  bundle:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out repository and submodules
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Assert native x64 runner
+        run: |
+          test "$(uname -m)" = x86_64
+          test "$(dpkg --print-architecture)" = amd64
+
+      - name: Configure component remotes
+        run: bash tools/configure_component_remotes.sh
+
+      - name: Check source and parent whitespace
+        run: |
+          git diff --check
+          test -z "$(git -C components/fdkernel status --short --untracked-files=all)"
+          test -z "$(git -C components/freecom status --short --untracked-files=all)"
+          test -z "$(git -C components/country status --short --untracked-files=all)"
+
+      - name: Verify M00 scaffold
+        run: make verify-scaffold
+
+      - name: Run M01 host portability checks
+        run: make m01-host-portability
+
+      - name: Run M01 image identity checks
+        run: make m01-image-identity
+
+      - name: Run M01 host preflight
+        run: make m01-preflight
+
+      - name: Build pinned M01 image
+        run: make m01-image
+
+      - name: Build two verified M01 runs
+        run: make m01-build
+
+      - name: Compare M01 runs
+        run: make m01-compare
+
+      - name: Verify M01 golden
+        run: make m01-verify
+
+      - name: Run M02 contract tests
+        run: PYTHONDONTWRITEBYTECODE=1 python3 tools/m02/test_bundle_contract.py
+
+      - name: Run M02 preflight, bundle, compare, and verify
+        run: |
+          make m02-preflight
+          make m02-clean
+          make m02-bundle
+          make m02-compare
+          make m02-verify
+
+      - name: Upload bounded M02 evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: m02-bundle-evidence
+          if-no-files-found: ignore
+          path: |
+            qa/results/m02/comparison.json
+            qa/results/m02/run-1/baseline-artifact-bundle/metadata/*.json
+            qa/results/m02/run-2/baseline-artifact-bundle/metadata/*.json

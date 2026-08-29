@@ -33,6 +33,7 @@ qa/vaeg/bios/*
 /results/
 /tmp/
 /qa/results/m01/
+/qa/results/m02/
 
 # Generated image output; retain its directory marker
 images/output/*
