@@ -84,7 +84,11 @@ jobs:
         run: make m01-build
 
       - name: Compare M01 runs
-        run: make m01-compare
+        run: |
+          python3 tools/m01/compare_runs.py \
+            --run1 qa/results/m01/run-1 \
+            --run2 qa/results/m01/run-2 \
+            --output qa/results/m01/comparison.json
 
       - name: Verify M01 golden
         run: make m01-verify
