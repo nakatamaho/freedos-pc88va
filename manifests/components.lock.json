@@ -7,7 +7,7 @@
       "path": "components/fdkernel",
       "repository": "https://github.com/nakatamaho/fdkernel.git",
       "branch": "nec98-current",
-      "commit": "29085311a47c8fcceb7902b64b0b5ebc170b8de5",
+      "commit": "6523acdb87f4665e6068ea331859885267242005",
       "role": "Editable experimental NEC98 kernel build-fix fork",
       "stability": "experimental"
     },

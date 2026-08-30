@@ -81,6 +81,7 @@ export BUILDX_CONFIG=$M01_BUILDX_CONFIG
 M01_IMAGE_TAG=freedos-pc88va-m01:local
 M01_FREECOM_TIMESTAMP=$M01_ROOT/config/m01/freecom-build-timestamp.json
 IFS="$(printf '\t')" read -r M01_FREECOM_SOURCE_DATE_EPOCH M01_FREECOM_BUILD_DATE M01_FREECOM_BUILD_TIME < <(python3 "$M01_ROOT/tools/m01/freecom_timestamp.py" "$M01_FREECOM_TIMESTAMP")
+IFS="$(printf '\t')" read -r M01_FDKERNEL_SOURCE_DATE_EPOCH M01_FDKERNEL_BUILD_DATE < <(python3 "$M01_ROOT/tools/m01/kernel_timestamp.py" "$M01_CONTRACT" components/fdkernel)
 
 fail() {
     printf 'error: %s\n' "$*" >&2
@@ -927,6 +928,10 @@ copy_output() {
         docker cp "$container:/output/freecom-timestamp.json" "$run_dir/tool-versions/freecom-timestamp.json"
         docker cp "$container:/output/freecom-watcomc.cfg" "$run_dir/tool-versions/freecom-watcomc.cfg"
     fi
+    if [ "$component" = fdkernel ]; then
+        mkdir -p "$run_dir/diagnostics"
+        if docker cp "$container:/output/diagnostics/." "$run_dir/diagnostics/" 2>/dev/null; then :; fi
+    fi
 }
 
 assert_prestart_lifecycle_policy() {
@@ -958,8 +963,28 @@ PY
 stage_fdkernel_configuration() {
     local run_dir=$1
     local staged_configuration=$run_dir/input-staging/fdkernel-nec98.mak
+    local temporary_configuration=${staged_configuration}.tmp-$$
     mkdir -p "$(dirname "$staged_configuration")"
-    install -m 0444 "$M01_ROOT/config/m01/fdkernel-nec98.mak" "$staged_configuration"
+    python3 - "$M01_ROOT/config/m01/fdkernel-nec98.mak" "$M01_FDKERNEL_BUILD_DATE" "$temporary_configuration" <<'PY'
+import re
+import sys
+from pathlib import Path
+
+source_path = Path(sys.argv[1])
+date = sys.argv[2]
+output_path = Path(sys.argv[3])
+if re.fullmatch(r"[A-Z][a-z]{2} [ 0-9][0-9] [0-9]{4}", date) is None or len(date) != 11:
+    raise SystemExit("fdkernel build date is not a C-compatible 11-byte value")
+source = source_path.read_text(encoding="utf-8")
+if "KERNEL_BUILD_DATE" in source:
+    raise SystemExit("fdkernel configuration already contains a deterministic date definition")
+encoded_date = date.replace(" ", r"\ ")
+line = f'ALLCFLAGS=-DKERNEL_BUILD_DATE=\\"{encoded_date}\\" \n'
+with output_path.open("w", encoding="utf-8", newline="\n") as stream:
+    stream.write(source + line)
+PY
+    install -m 0444 "$temporary_configuration" "$staged_configuration"
+    rm -f -- "$temporary_configuration"
     python3 - "$staged_configuration" <<'PY'
 import os
 import sys
@@ -1091,6 +1116,9 @@ PY
         archive_sha=$(portable_file_hash sha256 "$M01_SOURCE_ROOT/$archive_name")
         container=freedos-m01-${run_id}-${component}-$$
         container_env_args=(--env "SOURCE_DATE_EPOCH=$source_epoch" --env UMASK=022)
+        if [ "${M01_DIAGNOSTICS-}" = 1 ]; then
+            container_env_args+=(--env M01_DIAGNOSTICS=1)
+        fi
         if [ "$component" = freecom ]; then
             container_env_args+=(--env "M01_FREECOM_BUILD_DATE=$M01_FREECOM_BUILD_DATE" --env "M01_FREECOM_BUILD_TIME=$M01_FREECOM_BUILD_TIME")
         fi
@@ -1134,6 +1162,10 @@ PY
             if docker cp "$container_id:/output/container-manifest.json" "$run_dir/container-manifests/$component.json" 2>/dev/null; then :; fi
             if docker cp "$container_id:/output/tool-versions.txt" "$run_dir/tool-versions/$component.txt" 2>/dev/null; then :; fi
             if docker cp "$container_id:/output/tool-selection.txt" "$run_dir/tool-selections/$component.txt" 2>/dev/null; then :; fi
+            if [ "$component" = fdkernel ]; then
+                mkdir -p "$run_dir/diagnostics"
+                if docker cp "$container_id:/output/diagnostics/." "$run_dir/diagnostics/" 2>/dev/null; then :; fi
+            fi
             if [ "$component" = freecom ]; then
                 if docker cp "$container_id:/output/freecom-timestamp.json" "$run_dir/tool-versions/freecom-timestamp.json" 2>/dev/null; then :; fi
                 if docker cp "$container_id:/output/freecom-watcomc.cfg" "$run_dir/tool-versions/freecom-watcomc.cfg" 2>/dev/null; then :; fi
@@ -1189,7 +1221,14 @@ compare() {
     python3 tools/m01/compare_runs.py \
         --run1 "$M01_RESULTS_ROOT/run-1" \
         --run2 "$M01_RESULTS_ROOT/run-2" \
-        --output "$M01_RESULTS_ROOT/comparison.json" \
+        --output "$M01_RESULTS_ROOT/comparison.json"
+}
+
+enroll() {
+    python3 tools/m01/enroll_m01_golden.py \
+        --run1 "$M01_RESULTS_ROOT/run-1" \
+        --run2 "$M01_RESULTS_ROOT/run-2" \
+        --comparison "$M01_RESULTS_ROOT/comparison.json" \
         --golden "$M01_ROOT/qa/golden/m01-baseline.json"
 }
 
@@ -1234,7 +1273,8 @@ case "${1-}" in
     image) image ;;
     build) build ;;
     compare) compare ;;
+    enroll) enroll ;;
     verify) verify ;;
     clean) clean ;;
-    *) printf '%s\n' 'Usage: build_baseline.sh {preflight|image|build|compare|verify|clean}' >&2; exit 64 ;;
+    *) printf '%s\n' 'Usage: build_baseline.sh {preflight|image|build|compare|enroll|verify|clean}' >&2; exit 64 ;;
 esac

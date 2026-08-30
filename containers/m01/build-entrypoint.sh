@@ -388,6 +388,102 @@ PY
     cp "$work_directory/shell/watcomc.cfg" /output/freecom-watcomc.cfg
 }
 
+collect_fdkernel_diagnostics() {
+    [ "${M01_DIAGNOSTICS-}" = 1 ] || return 0
+    local diagnostics_root=/output/diagnostics
+    mkdir -p "$diagnostics_root/objects" "$diagnostics_root/generated"
+python3 - "$work_directory" "$diagnostics_root" "$command_log" <<'PY'
+import hashlib
+import json
+import os
+import re
+import shutil
+import sys
+from pathlib import Path
+
+work_directory = Path(sys.argv[1])
+diagnostics_root = Path(sys.argv[2])
+command_log = Path(sys.argv[3])
+
+
+def digest(path):
+    data = path.read_bytes()
+    return {
+        "path": str(path.relative_to(work_directory)),
+        "size": len(data),
+        "sha256": hashlib.sha256(data).hexdigest(),
+        "mtime_ns": path.stat().st_mtime_ns,
+    }
+
+
+objects = []
+for path in sorted(work_directory.rglob("*.obj")):
+    if path.is_file() and not path.is_symlink():
+        record = digest(path)
+        target = diagnostics_root / "objects" / record["path"]
+        target.parent.mkdir(parents=True, exist_ok=True)
+        shutil.copyfile(path, target)
+        objects.append(record)
+
+generated_names = {
+    "config.mak",
+}
+generated_inputs = []
+source_inputs = []
+for path in sorted(work_directory.rglob("*")):
+    if not path.is_file() or path.is_symlink():
+        continue
+    if path.suffix.lower() in {".h", ".c", ".asm", ".inc"}:
+        source_inputs.append(digest(path))
+    if path.name in generated_names or path.name == "KWC8616.rsp" or (path.parent.name == "sys" and path.name.startswith("b_fat") and path.suffix == ".h"):
+        record = digest(path)
+        generated_inputs.append(record)
+        if path.parent.name == "sys" and path.name.startswith("b_fat") and path.suffix == ".h":
+            target = diagnostics_root / "generated" / record["path"]
+            target.parent.mkdir(parents=True, exist_ok=True)
+            shutil.copyfile(path, target)
+
+link_inputs = []
+response = work_directory / "kernel" / "KWC8616.rsp"
+if response.is_file() and not response.is_symlink():
+    response_lines = response.read_text(encoding="utf-8", errors="replace").splitlines()
+    for line in response_lines:
+        value = line.strip()
+        if value:
+            link_inputs.extend(value.rstrip("+").split())
+
+command_lines = []
+for line in command_log.read_text(encoding="utf-8", errors="replace").splitlines():
+    if re.search(r"\b(?:wcc|wmake|wlink|wlib|wasm|nasm|gcc)\b|exeflat\.exe", line, re.I):
+        command_lines.append(line)
+
+map_path = work_directory / "kernel" / "kernel.map"
+if map_path.is_file() and not map_path.is_symlink():
+    shutil.copyfile(map_path, diagnostics_root / "kernel.map")
+
+records = {
+    "schema_version": 1,
+    "component": "fdkernel",
+    "working_directory": "nec98",
+    "source_date_epoch": int(os.environ["SOURCE_DATE_EPOCH"]),
+    "timezone": os.environ.get("TZ"),
+    "objects": objects,
+    "source_inputs": source_inputs,
+    "generated_inputs": generated_inputs,
+    "link_response_file": "kernel/KWC8616.rsp",
+    "link_response_lines": response_lines if response.is_file() and not response.is_symlink() else [],
+    "link_inputs_in_response_order": link_inputs,
+    "command_lines": command_lines,
+    "link_map": "kernel.map" if map_path.is_file() else None,
+}
+with (diagnostics_root / "object-manifest.json").open("w", encoding="utf-8", newline="\n") as stream:
+    json.dump(records, stream, indent=2, sort_keys=True)
+    stream.write("\n")
+if response.is_file() and not response.is_symlink():
+    shutil.copyfile(response, diagnostics_root / "KWC8616.rsp")
+PY
+}
+
 command_log=${log_root}/${component}.log
 status=0
 if [ "$component" = fdkernel ]; then
@@ -423,6 +519,10 @@ mv "${command_log}.bounded" "$command_log"
 
 if [ "$component" = freecom ] && [ "$status" -eq 0 ]; then
     verify_freecom_timestamp || status=$?
+fi
+
+if [ "$component" = fdkernel ]; then
+    collect_fdkernel_diagnostics || status=$?
 fi
 
 if grep -E '(^|[[:space:]])(XUPX|UPXOPT|upx)([=[:space:]]|$)' "$command_log" >/dev/null; then

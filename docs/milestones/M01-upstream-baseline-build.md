@@ -10,11 +10,12 @@ bootable system or PC-88VA compatibility.
 ## Inputs and non-goals
 
 Inputs are the three pinned component gitlinks, including the approved M01F
-fdkernel build-system repair and the generic FreeCOM reproducible-build child
-commit, deterministic source archives, the locked Ubuntu snapshot, and the
-dated official Open Watcom release. The M01F child changes only WMake
-conditional syntax, while the FreeCOM child adds opt-in timestamp macros; no
-PC-88VA source change is made.
+fdkernel build-system repair, the M01R1 fdkernel reproducibility child, and the
+generic FreeCOM reproducible-build child commit, deterministic source archives,
+the locked Ubuntu snapshot, and the dated official Open Watcom release. The
+fdkernel M01R1 child removes ambient kernel date input and stabilizes generated
+header mtimes; the FreeCOM child adds opt-in timestamp macros. No PC-88VA
+source change is made.
 
 M01 does not select userland packages, add PC-88VA code, create disk images,
 run VAEG, run another emulator, or use real hardware. Hardware is optional and
@@ -41,9 +42,11 @@ invocation: its empty command-line variable remained defined under GNU Make
 and caused the nested post-link command to expand to `sys.com`. The resulting
 status 2 was a build-contract error, not a compiler or linker failure.
 The current required fdkernel binaries come from child commit
-`29085311a47c8fcceb7902b64b0b5ebc170b8de5`, whose base is
+`6523acdb87f4665e6068ea331859885267242005`, whose lineage includes the
+accepted M01F commit and whose base is
 `c9ce245e0447003645adce47bd34960ae276d4bd`; the parent performs no source
-patch during export.
+patch during export. M01R1 records its root cause and regression contract in
+`docs/build/m01r1-kernel-reproducibility.md`.
 
 The required artifacts and namespaces are declared in
 `manifests/m01-build-contract.json`. Both COUNTRY.SYS producers are retained

@@ -82,8 +82,8 @@ jobs:
       - name: Build pinned M01 image
         run: make m01-image
 
-      - name: Build two isolated M01 runs
-        run: make m01-build
+      - name: Build two isolated M01 runs with M01R1 diagnostics
+        run: M01_DIAGNOSTICS=1 make m01-build
 
       - name: Compare M01 runs against the committed contract
         run: |
@@ -92,8 +92,33 @@ jobs:
             --run2 qa/results/m01/run-2 \
             --output qa/results/m01/comparison.json
 
+      - name: Run M01R1 kernel reproducibility regression
+        run: python3 tools/m01/test_kernel_reproducibility.py --repo-root .
+
       - name: Verify result against committed golden manifest
         run: make m01-verify
+
+      - name: Upload bounded M01R1 kernel evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: m01r1-kernel-evidence
+          if-no-files-found: ignore
+          retention-days: 7
+          path: |
+            qa/results/m01/run-1/artifacts/fdkernel-nec98/nec98/bin/kernel.sys
+            qa/results/m01/run-1/artifacts/fdkernel-nec98/nec98/bin/KWC8616.sys
+            qa/results/m01/run-2/artifacts/fdkernel-nec98/nec98/bin/kernel.sys
+            qa/results/m01/run-2/artifacts/fdkernel-nec98/nec98/bin/KWC8616.sys
+            qa/results/m01/run-1/diagnostics/object-manifest.json
+            qa/results/m01/run-1/diagnostics/KWC8616.rsp
+            qa/results/m01/run-1/diagnostics/kernel.map
+            qa/results/m01/run-2/diagnostics/object-manifest.json
+            qa/results/m01/run-2/diagnostics/KWC8616.rsp
+            qa/results/m01/run-2/diagnostics/kernel.map
+            qa/results/m01/run-1/manifest.json
+            qa/results/m01/run-2/manifest.json
+            qa/results/m01/comparison.json
 
       - name: Recheck source cleanliness and parent whitespace
         run: |
