@@ -52,6 +52,9 @@ jobs:
       - name: Verify baseline identity
         run: make m03-preflight
 
+      - name: Configure component remotes
+        run: bash tools/configure_component_remotes.sh
+
       - name: Verify scaffold and source cleanliness
         run: |
           make verify-scaffold
