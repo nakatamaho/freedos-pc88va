@@ -21,10 +21,10 @@
     {
       "name": "fdkernel-nec98",
       "path": "components/fdkernel",
-      "commit": "29085311a47c8fcceb7902b64b0b5ebc170b8de5",
+      "commit": "6523acdb87f4665e6068ea331859885267242005",
       "branch_metadata": "nec98-current",
       "base_commit": "c9ce245e0447003645adce47bd34960ae276d4bd",
-      "build_system_fix": "Only nec98/sys/makefile.wc ifdef/endif directives were changed to WMake !ifdef/!endif in the child commit.",
+      "build_system_fix": "M01R1 child commit replaces the compiled kernel version __DATE__ with an opt-in KERNEL_BUILD_DATE macro and makes bin2c honor SOURCE_DATE_EPOCH for generated-header mtimes; the earlier WMake conditional fix remains included.",
       "source_date_epoch": 1787814827,
       "working_directory": "nec98",
       "configuration_template": "config/m01/fdkernel-nec98.mak",

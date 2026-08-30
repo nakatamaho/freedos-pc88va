@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help submodules component-status verify-scaffold m01-host-portability m01-image-identity m01-preflight m01-image m01-build m01-compare m01-verify m01-clean verify
+.PHONY: help submodules component-status verify-scaffold m01-host-portability m01-image-identity m01-preflight m01-image m01-build m01-compare m01-enroll-golden m01-verify m01-clean verify
 
 help:
 	@printf '%s\n' \
@@ -15,6 +15,7 @@ help:
 		'  m01-image         Build the pinned M01 toolchain image' \
 		'  m01-build         Perform two isolated M01 baseline builds' \
 		'  m01-compare       Compare the two M01 build runs' \
+		'  m01-enroll-golden Explicitly enroll a passing M01 comparison as golden' \
 		'  m01-verify        Run offline M01 verification' \
 		'  m01-clean         Remove only ignored M01 build results' \
 		'  verify            Run scaffold and available M01 verification'
@@ -45,6 +46,9 @@ m01-build:
 
 m01-compare:
 	@bash tools/m01/build_baseline.sh compare
+
+m01-enroll-golden:
+	@bash tools/m01/build_baseline.sh enroll
 
 m01-verify:
 	@bash tools/m01/build_baseline.sh verify

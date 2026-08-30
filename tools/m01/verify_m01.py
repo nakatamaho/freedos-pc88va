@@ -10,8 +10,7 @@ import subprocess
 from pathlib import Path
 
 
-EXPECTED_COMMITS = {
-    "components/fdkernel": "29085311a47c8fcceb7902b64b0b5ebc170b8de5",
+EXPECTED_FIXED_COMMITS = {
     "components/freecom": "855281a3114b43ad4b8d9a320f2aca39be046bba",
     "components/country": "23f189cca3420606eae8723884fa92ccd65eb307",
 }
@@ -34,6 +33,7 @@ REQUIRED_FILES = {
     "docs/decisions/0001-m01-canonical-toolchain.md",
     "docs/milestones/M01-upstream-baseline-build.md",
     "manifests/m01-build-contract.json",
+    "manifests/components.lock.json",
     "manifests/toolchains.lock.json",
     "qa/golden/m01-baseline.json",
     "qa/host/m01/README.md",
@@ -102,12 +102,39 @@ def assert_equal(errors, label, actual, expected):
         fail(errors, f"{label}: expected {expected!r}, got {actual!r}")
 
 
+def component_commits(root, errors):
+    path = root / "manifests/components.lock.json"
+    try:
+        lock = load_json(path)
+    except (OSError, json.JSONDecodeError) as exc:
+        fail(errors, f"components lock cannot be parsed: {exc}")
+        return {}
+    components = lock.get("components")
+    if lock.get("schema_version") != 1 or lock.get("status") != "scaffold" or not isinstance(components, list) or len(components) != 3:
+        fail(errors, "components lock schema or component count is invalid")
+        return {}
+    result = {}
+    for item in components:
+        path_value = item.get("path") if isinstance(item, dict) else None
+        commit = item.get("commit") if isinstance(item, dict) else None
+        if path_value in result or not isinstance(path_value, str) or not re.fullmatch(r"[0-9a-f]{40}", str(commit)):
+            fail(errors, "components lock contains a duplicate or invalid commit")
+        else:
+            result[path_value] = commit
+    for path_value, expected in EXPECTED_FIXED_COMMITS.items():
+        assert_equal(errors, f"components lock fixed commit for {path_value}", result.get(path_value), expected)
+    return result
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=Path.cwd())
     args = parser.parse_args()
     root = args.repo_root.resolve()
     errors = []
+    expected_commits = component_commits(root, errors)
+    if "components/fdkernel" not in expected_commits:
+        fail(errors, "components lock is missing the fdkernel commit")
 
     if root.name != "freedos-pc88va":
         fail(errors, f"repository basename is not freedos-pc88va: {root.name}")
@@ -177,9 +204,9 @@ def main():
                 fail(errors, f"submodule gitlink is missing: {path}")
             else:
                 assert_equal(errors, f"gitlink mode for {path}", stage[0], "160000")
-                assert_equal(errors, f"gitlink SHA for {path}", stage[1], EXPECTED_COMMITS[path])
+                assert_equal(errors, f"gitlink SHA for {path}", stage[1], expected_commits.get(path))
             head = run_git(root / path, "rev-parse", "HEAD").stdout.strip()
-            assert_equal(errors, f"checked-out submodule SHA for {path}", head, EXPECTED_COMMITS[path])
+            assert_equal(errors, f"checked-out submodule SHA for {path}", head, expected_commits.get(path))
             status = run_git(root / path, "status", "--short", "--untracked-files=all").stdout
             if status:
                 fail(errors, f"component is not clean: {path}: {status.strip()}")
@@ -198,7 +225,7 @@ def main():
             fail(errors, "contract must contain exactly three components")
             components = []
         contract_commits = {component.get("path"): component.get("commit") for component in components}
-        for path, commit in EXPECTED_COMMITS.items():
+        for path, commit in expected_commits.items():
             assert_equal(errors, f"contract commit for {path}", contract_commits.get(path), commit)
         for component in components:
             for artifact in component.get("required_artifacts", []):
@@ -219,7 +246,7 @@ def main():
             fail(errors, f"fdkernel build command contract mismatch: {commands!r}")
         freecom = next((component for component in components if component.get("path") == "components/freecom"), None)
         freecom_expected = {
-            "commit": EXPECTED_COMMITS["components/freecom"],
+            "commit": expected_commits["components/freecom"],
             "branch_metadata": "deterministic-build-timestamp",
             "base_commit": "c059aafe857f005b0d7d8295e3be67c0dba2aafd",
             "configuration_source": "components/freecom/config.std",

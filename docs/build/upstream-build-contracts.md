@@ -5,8 +5,8 @@ archive SHA-256 values are checked before each pair of builds.
 
 ## fdkernel NEC98 baseline
 
-The build input is the child fork commit
-`29085311a47c8fcceb7902b64b0b5ebc170b8de5` on
+The build input is the M01R1 child fork commit
+`6523acdb87f4665e6068ea331859885267242005` on
 `nakatamaho/fdkernel:nec98-current`, based directly on
 `lpproj/fdkernel:nec98test_cherry-picked` commit
 `c9ce245e0447003645adce47bd34960ae276d4bd`. The pinned [NEC98
@@ -19,10 +19,14 @@ documents disabling UPX by leaving the compressor variable unexported. M01
 uses the project-owned `config/m01/fdkernel-nec98.mak` template and explicitly
 removes `XUPX` and `UPXOPT` from each make environment.
 
-The child [patched WMake file](https://github.com/nakatamaho/fdkernel/blob/29085311a47c8fcceb7902b64b0b5ebc170b8de5/nec98/sys/makefile.wc)
-contains the only M01F source change: the two conditional directives around
-`XUPXSYS` are `!ifdef` and `!endif`, as required by WMake. The parent applies
-no export-time source patch and no macro workaround.
+The accepted M01F child [patched WMake file](https://github.com/nakatamaho/fdkernel/blob/29085311a47c8fcceb7902b64b0b5ebc170b8de5/nec98/sys/makefile.wc)
+contains the two conditional directives around `XUPXSYS` changed to `!ifdef`
+and `!endif`, as required by WMake. M01R1's
+[fdkernel child commit](https://github.com/nakatamaho/fdkernel/commit/6523acdb87f4665e6068ea331859885267242005)
+also makes the compiled kernel date an opt-in `KERNEL_BUILD_DATE` macro and
+makes `sys/bin2c.c` set generated-header mtimes from `SOURCE_DATE_EPOCH`. The
+parent derives that date from the committed UTC epoch and stages the WMake
+definition; it applies no export-time source patch or post-link modification.
 
 The exact command contract, run in exported `fdkernel/nec98`, is:
 
