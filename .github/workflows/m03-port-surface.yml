@@ -1,0 +1,83 @@
+name: M03 port surface and integration ADR
+
+on:
+  push:
+    paths:
+      - ".github/workflows/m03-port-surface.yml"
+      - ".gitignore"
+      - "Makefile"
+      - "components/fdkernel"
+      - "components/freecom"
+      - "components/country"
+      - ".gitmodules"
+      - "manifests/**"
+      - "tools/m03/**"
+      - "tests/m03/**"
+      - "docs/porting/**"
+      - "docs/adr/**"
+      - "docs/references/pc88va-source-register.md"
+      - "qa/golden/m03/**"
+  pull_request:
+    paths:
+      - ".github/workflows/m03-port-surface.yml"
+      - ".gitignore"
+      - "Makefile"
+      - "components/fdkernel"
+      - "components/freecom"
+      - "components/country"
+      - ".gitmodules"
+      - "manifests/**"
+      - "tools/m03/**"
+      - "tests/m03/**"
+      - "docs/porting/**"
+      - "docs/adr/**"
+      - "docs/references/pc88va-source-register.md"
+      - "qa/golden/m03/**"
+
+jobs:
+  census:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out repository and pinned submodules
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Verify native x64 runner
+        run: |
+          test "$(uname -m)" = x86_64
+          test "$(dpkg --print-architecture)" = amd64
+
+      - name: Verify baseline identity
+        run: make m03-preflight
+
+      - name: Verify scaffold and source cleanliness
+        run: |
+          make verify-scaffold
+          test -z "$(git -C components/fdkernel status --short --untracked-files=all)"
+          test -z "$(git -C components/freecom status --short --untracked-files=all)"
+          test -z "$(git -C components/country status --short --untracked-files=all)"
+
+      - name: Scan two independent census outputs
+        run: |
+          make m03-clean
+          make m03-scan
+          make m03-compare
+
+      - name: Verify reviewed census and protected M01/M02 evidence
+        run: make m03-verify
+
+      - name: Run M03 unit and negative tests
+        run: python3 -m unittest discover -s tests/m03 -p 'test_*.py'
+
+      - name: Run syntax, JSON, and whitespace checks
+        run: |
+          PYTHONPYCACHEPREFIX="$RUNNER_TEMP/m03-pycache" python3 -m compileall -q tools/m03 tests/m03
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          for path in Path('qa/golden/m03').glob('*.json'):
+              json.loads(path.read_text(encoding='utf-8'))
+          PY
+          git diff --check

@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help submodules component-status verify-scaffold m01-host-portability m01-image-identity m01-preflight m01-image m01-build m01-compare m01-enroll-golden m01-verify m01-clean m02-preflight m02-clean m02-bundle m02-compare m02-verify m02-enroll-golden m02 verify
+.PHONY: help submodules component-status verify-scaffold m01-host-portability m01-image-identity m01-preflight m01-image m01-build m01-compare m01-enroll-golden m01-verify m01-clean m02-preflight m02-clean m02-bundle m02-compare m02-verify m02-enroll-golden m02 m03-preflight m03-clean m03-scan m03-compare m03-enroll-golden m03-verify m03 verify
 
 help:
 	@printf '%s\n' \
@@ -25,6 +25,13 @@ help:
 		'  m02-verify        Verify M02 against its committed golden' \
 		'  m02-enroll-golden Enroll an M02 golden after a passing comparison' \
 		'  m02               Run the complete non-destructive M02 sequence' \
+		'  m03-preflight     Check M03 baseline and component identity' \
+		'  m03-clean         Remove only generated M03 result paths' \
+		'  m03-scan          Generate two deterministic M03 source censuses' \
+		'  m03-compare       Compare the two M03 census outputs' \
+		'  m03-enroll-golden Enroll an M03 golden after a passing comparison' \
+		'  m03-verify        Verify M03 against its reviewed golden' \
+		'  m03               Run the complete non-destructive M03 sequence' \
 		'  verify            Run scaffold and available M01 verification'
 
 submodules:
@@ -87,6 +94,32 @@ m02:
 	@$(MAKE) m02-bundle
 	@$(MAKE) m02-compare
 	@$(MAKE) m02-verify
+
+m03-preflight:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m03/verify_m03.py --baseline
+
+m03-clean:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m03/verify_m03.py --clean
+
+m03-scan:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m03/scan_port_surface.py --repo-root . --output qa/results/m03/run-1/port-surface.json
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m03/scan_port_surface.py --repo-root . --output qa/results/m03/run-2/port-surface.json
+
+m03-compare:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m03/verify_m03.py --compare
+
+m03-enroll-golden:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m03/verify_m03.py --enroll-golden
+
+m03-verify:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m03/verify_m03.py --verify
+
+m03:
+	@$(MAKE) m03-preflight
+	@$(MAKE) m03-clean
+	@$(MAKE) m03-scan
+	@$(MAKE) m03-compare
+	@$(MAKE) m03-verify
 
 verify: verify-scaffold
 	@if test -f qa/golden/m01-baseline.json && test -d qa/results/m01/run-1 && test -d qa/results/m01/run-2; then \
