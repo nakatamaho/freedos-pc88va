@@ -656,7 +656,8 @@ def validate_repository_identity(root):
         raise ValidationError(f"parent identity check failed: {exc}") from exc
     if actual_root != root:
         raise ValidationError(f"repository root mismatch: {actual_root}")
-    if origin != PARENT_REPOSITORY:
+    accepted_origins = {PARENT_REPOSITORY, PARENT_REPOSITORY.removesuffix(".git")}
+    if origin not in accepted_origins:
         raise ValidationError(f"parent origin mismatch: {origin!r}")
     authority = component_identity(root)
     for component_key, item in ((PurePosixPath(path).name, value) for path, value in authority["lock_by_path"].items()):
