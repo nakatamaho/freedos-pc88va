@@ -8,7 +8,7 @@ import tarfile
 from pathlib import Path, PurePosixPath
 
 from common import (
-    ACCEPTED_COMMITTED_DIGESTS,
+    M01R1_COMMITTED_DIGESTS,
     CONSUMER_CONTRACT,
     COPY_METADATA,
     GENERATED_METADATA,
@@ -134,7 +134,7 @@ def validate_bundle(root, authority, run_root, m01_run):
     for bundle_path, source_path, digest_name in COPY_METADATA:
         source = root / source_path
         destination = bundle_root / bundle_path
-        if destination.read_bytes() != source.read_bytes() or sha256_file(destination) != ACCEPTED_COMMITTED_DIGESTS[digest_name]:
+        if destination.read_bytes() != source.read_bytes() or sha256_file(destination) != M01R1_COMMITTED_DIGESTS[digest_name]:
             raise ValidationError(f"copied committed metadata was modified: {bundle_path}")
     for item in artifacts:
         destination = bundle_root / item["bundle_path"]
@@ -169,14 +169,16 @@ def verify(root, authority, run1, run2, golden_path, comparison_path, m01_run):
     print("M02 verification passed: payloads, role metadata, provenance, tar attributes, and golden are valid")
 
 
-def enroll(root, authority, run1, run2, golden_path, comparison_path, m01_run):
-    if Path(golden_path).exists():
+def enroll(root, authority, run1, run2, golden_path, comparison_path, m01_run, supersede=False):
+    if Path(golden_path).exists() and not supersede:
         raise ValidationError(f"M02 golden already exists; ordinary verification never rewrites it: {golden_path}")
     check_comparison(comparison_path)
     first = validate_bundle(root, authority, run1, m01_run)
     second = validate_bundle(root, authority, run2, m01_run)
     if first != second:
         raise ValidationError("cannot enroll M02 golden when run-1 and run-2 differ")
+    if supersede:
+        print(f"M02 golden superseded explicitly: {golden_path}")
     write_canonical_json(golden_path, first)
     print(f"M02 golden enrolled explicitly: {golden_path}")
     print(f"M02 golden SHA-256: {sha256_file(golden_path)}")
@@ -186,6 +188,7 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--repo-root", type=Path, default=Path.cwd())
     parser.add_argument("--enroll-golden", action="store_true")
+    parser.add_argument("--supersede-golden", action="store_true")
     parser.add_argument("--run1", type=Path, default=Path("qa/results/m02/run-1"))
     parser.add_argument("--run2", type=Path, default=Path("qa/results/m02/run-2"))
     parser.add_argument("--golden", type=Path, default=Path("qa/golden/m02/bundle-manifest.json"))
@@ -198,8 +201,10 @@ def main():
         validate_host_capability()
         authority = validate_repository_identity(root)
         m01_run = root / "qa/results/m01/run-1"
+        if args.supersede_golden and not args.enroll_golden:
+            parser.error("--supersede-golden requires --enroll-golden")
         if args.enroll_golden:
-            enroll(root, authority, rooted(args.run1), rooted(args.run2), rooted(args.golden), rooted(args.comparison), m01_run)
+            enroll(root, authority, rooted(args.run1), rooted(args.run2), rooted(args.golden), rooted(args.comparison), m01_run, args.supersede_golden)
         else:
             verify(root, authority, rooted(args.run1), rooted(args.run2), rooted(args.golden), rooted(args.comparison), m01_run)
     except ValidationError as exc:

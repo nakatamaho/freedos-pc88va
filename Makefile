@@ -79,7 +79,7 @@ m02-verify:
 	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m02/verify_bundle.py
 
 m02-enroll-golden:
-	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m02/verify_bundle.py --enroll-golden
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m02/verify_bundle.py --enroll-golden --supersede-golden
 
 m02:
 	@$(MAKE) m02-preflight

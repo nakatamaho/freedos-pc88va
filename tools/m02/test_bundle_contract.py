@@ -117,6 +117,17 @@ class M02ContractTests(unittest.TestCase):
             second_path.write_bytes(first_bytes)
             self.expect_failure(lambda: validate_m01_input(swapped, self.authority))
 
+    def test_superseded_m01_contract_is_rejected(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            stale = self.copy_m01(temporary)
+            manifest_path = stale / "manifest.json"
+            manifest = __import__("json").loads(manifest_path.read_text())
+            # Deliberately use a superseded pre-M01R1 contract identity. This
+            # is a negative fixture, never an accepted M02 input identity.
+            manifest["contract_sha256"] = "85a3a9a96b4b5fb4f4d1d90f836c97eade24a639de4aa0f908640ca91057759c"
+            manifest_path.write_bytes(canonical_json_bytes(manifest))
+            self.expect_failure(lambda: validate_m01_input(stale, self.authority))
+
     def test_duplicate_role_and_bundle_path(self):
         duplicate_role = copy.deepcopy(self.artifacts)
         duplicate_role[1]["role"] = duplicate_role[0]["role"]

@@ -14,20 +14,20 @@ import tarfile
 from pathlib import Path, PurePosixPath
 
 
-M01_PARENT_COMMIT = "096d9ba3fc5f0239822ac71e697bffd34c8a86d4"
+M01R1_PARENT_COMMIT = "0ad3b0e33da66c552113c7389c8c81010a50f1f2"
 PARENT_REPOSITORY = "https://github.com/nakatamaho/freedos-pc88va.git"
 M01_MILESTONE = "M01-upstream-baseline-build"
 M02_MILESTONE = "M02-baseline-artifact-bundle"
 CANONICAL_PLATFORM = "nec98-baseline"
 PURPOSE = "build-reference-only"
 
-# These identify the accepted committed M01 snapshot. Individual artifact and
+# These identify the accepted final M01R1 snapshot. Individual artifact and
 # source-archive identities are read from the committed M01 golden below.
-ACCEPTED_COMMITTED_DIGESTS = {
-    "components_lock": "291490d59e62280e617a5107d11363cfecfbd7238815105b81dd5f8468a247bd",
+M01R1_COMMITTED_DIGESTS = {
+    "components_lock": "440e481b28c740875489a6953a246ce5370c44074053c7aad3f80e79ec40c19c",
     "toolchain_lock": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162",
-    "m01_contract": "85a3a9a96b4b5fb4f4d1d90f836c97eade24a639de4aa0f908640ca91057759c",
-    "m01_golden": "756be74a0c72f9150173e053812094de334a69dc193b627e06421536598d22fb",
+    "m01_contract": "7d66be32b508395d8c36a902389f368e9f38d9abab08085bda89e3d2c5d6d578",
+    "m01_golden": "6fcfe834f90ffc602589ddc63b50d90eba33bbc1802b6bff3c9ef6b9d397c7c3",
 }
 
 ROLE_ORDER = [
@@ -215,14 +215,14 @@ def component_identity(root):
     root = Path(root)
     paths = accepted_paths(root)
     for name, path in paths.items():
-        expected = ACCEPTED_COMMITTED_DIGESTS[name]
+        expected = M01R1_COMMITTED_DIGESTS[name]
         if not path.is_file() or sha256_file(path) != expected:
             raise ValidationError(f"committed M01 {name} digest mismatch: {path}")
     lock = load_json(paths["components_lock"])
     contract = load_json(paths["m01_contract"])
     golden = load_json(paths["m01_golden"])
     if golden.get("schema_version") != 1 or golden.get("milestone") != M01_MILESTONE:
-        raise ValidationError("committed M01 golden manifest is not the accepted M01 snapshot")
+        raise ValidationError("committed M01 golden manifest is not the accepted M01R1 snapshot")
     if golden.get("canonical_platform") != "linux/amd64" or golden.get("comparison") != "byte-identical":
         raise ValidationError("committed M01 golden manifest has the wrong platform or comparison status")
     records = golden.get("artifacts")
@@ -230,9 +230,9 @@ def component_identity(root):
         raise ValidationError("committed M01 golden manifest does not contain ten artifacts")
     if len({record.get("artifact") for record in records}) != len(records):
         raise ValidationError("committed M01 golden manifest contains duplicate artifact paths")
-    if golden.get("contract_sha256") != ACCEPTED_COMMITTED_DIGESTS["m01_contract"]:
+    if golden.get("contract_sha256") != M01R1_COMMITTED_DIGESTS["m01_contract"]:
         raise ValidationError("M01 golden build-contract identity is not accepted")
-    if golden.get("toolchain_lock_sha256") != ACCEPTED_COMMITTED_DIGESTS["toolchain_lock"]:
+    if golden.get("toolchain_lock_sha256") != M01R1_COMMITTED_DIGESTS["toolchain_lock"]:
         raise ValidationError("M01 golden toolchain-lock identity is not accepted")
     source_archives = golden.get("source_archives")
     if not isinstance(source_archives, dict) or set(source_archives) != {"country", "fdkernel", "freecom"}:
@@ -475,14 +475,14 @@ def artifact_manifest(root, authority, artifacts, component_epochs, metadata_epo
     metadata_files = []
     for bundle_path, source_path, digest_name in COPY_METADATA:
         source = Path(root) / source_path
-        if sha256_file(source) != ACCEPTED_COMMITTED_DIGESTS[digest_name]:
+        if sha256_file(source) != M01R1_COMMITTED_DIGESTS[digest_name]:
             raise ValidationError(f"committed metadata digest changed: {source_path}")
         metadata_files.append(
             {
                 "path": bundle_path,
                 "source_path": source_path,
                 "size": source.stat().st_size,
-                "sha256": ACCEPTED_COMMITTED_DIGESTS[digest_name],
+                "sha256": M01R1_COMMITTED_DIGESTS[digest_name],
             }
         )
     return {
@@ -522,14 +522,14 @@ def provenance(authority, component_epochs, metadata_epoch):
         "schema_version": 1,
         "milestone": M02_MILESTONE,
         "source_milestone": M01_MILESTONE,
-        "parent": {"repository": PARENT_REPOSITORY, "accepted_m01_commit": M01_PARENT_COMMIT},
+        "parent": {"repository": PARENT_REPOSITORY, "accepted_m01r1_commit": M01R1_PARENT_COMMIT},
         "platform": CANONICAL_PLATFORM,
         "purpose": PURPOSE,
         "m01_evidence": {
-            "components_lock_sha256": ACCEPTED_COMMITTED_DIGESTS["components_lock"],
-            "toolchain_lock_sha256": ACCEPTED_COMMITTED_DIGESTS["toolchain_lock"],
-            "build_contract_sha256": ACCEPTED_COMMITTED_DIGESTS["m01_contract"],
-            "golden_manifest_sha256": ACCEPTED_COMMITTED_DIGESTS["m01_golden"],
+            "components_lock_sha256": M01R1_COMMITTED_DIGESTS["components_lock"],
+            "toolchain_lock_sha256": M01R1_COMMITTED_DIGESTS["toolchain_lock"],
+            "build_contract_sha256": M01R1_COMMITTED_DIGESTS["m01_contract"],
+            "golden_manifest_sha256": M01R1_COMMITTED_DIGESTS["m01_golden"],
             "source_archives": authority["source_archives"],
         },
         "archive_mtime": {
@@ -650,7 +650,7 @@ def validate_repository_identity(root):
     try:
         actual_root = Path(subprocess.check_output(["git", "rev-parse", "--show-toplevel"], cwd=root, text=True).strip()).resolve()
         head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip()
-        subprocess.run(["git", "merge-base", "--is-ancestor", M01_PARENT_COMMIT, head], cwd=root, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.run(["git", "merge-base", "--is-ancestor", M01R1_PARENT_COMMIT, head], cwd=root, check=True, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
         origin = subprocess.check_output(["git", "remote", "get-url", "origin"], cwd=root, text=True).strip()
     except (OSError, subprocess.CalledProcessError) as exc:
         raise ValidationError(f"parent identity check failed: {exc}") from exc

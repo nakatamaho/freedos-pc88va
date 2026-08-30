@@ -81,7 +81,7 @@ jobs:
         run: make m01-image
 
       - name: Build two verified M01 runs
-        run: make m01-build
+        run: M01_DIAGNOSTICS=1 make m01-build
 
       - name: Compare M01 runs
         run: |
@@ -91,7 +91,9 @@ jobs:
             --output qa/results/m01/comparison.json
 
       - name: Verify M01 golden
-        run: make m01-verify
+        run: |
+          make m01-verify
+          PYTHONDONTWRITEBYTECODE=1 python3 tools/m01/test_kernel_reproducibility.py --repo-root .
 
       - name: Run M02 contract tests
         run: PYTHONDONTWRITEBYTECODE=1 python3 tools/m02/test_bundle_contract.py
@@ -117,3 +119,5 @@ jobs:
             qa/results/m02/comparison.json
             qa/results/m02/run-1/baseline-artifact-bundle/metadata/*.json
             qa/results/m02/run-2/baseline-artifact-bundle/metadata/*.json
+            qa/results/m02/run-1/baseline-artifact-bundle.tar.sha256
+            qa/results/m02/run-2/baseline-artifact-bundle.tar.sha256

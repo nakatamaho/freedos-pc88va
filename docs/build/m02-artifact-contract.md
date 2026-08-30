@@ -10,7 +10,9 @@ bundle. It does not create a PC-88VA runtime. The bundle metadata declares
 `make m02-preflight` first runs the existing offline M01 verifier. The
 committed files `manifests/components.lock.json`,
 `manifests/toolchains.lock.json`, `manifests/m01-build-contract.json`, and
-`qa/golden/m01-baseline.json` must have the accepted M01 snapshot digests.
+`qa/golden/m01-baseline.json` must have the accepted final M01R1 snapshot
+digests. The M02 verifier also requires the M01R1 reproducibility regression
+and diagnostic object/input identity checks to pass before payload copying.
 The M01 golden manifest is the sole authority for individual artifact sizes,
 SHA-256 values, and source-archive SHA-256 values. M02 does not duplicate
 those values in source, documentation, or configuration.
@@ -75,12 +77,26 @@ make m02-compare
 make m02-verify
 ```
 
-For the first implementation only, run `make m02-enroll-golden` after
-`make m02-compare` passes, then clean and repeat the sequence. Enrollment is
-separate and refuses to overwrite an existing golden. Ordinary verification
-never rewrites it. Generated payloads, archives, sidecars, and comparison
-evidence remain ignored under `qa/results/m02/`; only the canonical M02 golden
-metadata is committed.
+After a verified M01R1 input has produced passing run-1/run-2 comparison,
+`make m02-enroll-golden` is the explicit supersession/enrollment command. It
+may replace the existing M02 golden only on that passing path; ordinary
+verification never rewrites it. Clean M02 results and repeat assembly,
+comparison, and verification after enrollment. Generated payloads, archives,
+sidecars, and comparison evidence remain ignored under `qa/results/m02/`; only
+the canonical M02 golden metadata is committed.
+
+## Superseded M02 evidence
+
+The previous M02 evidence was valid for the superseded M01 input but is not
+current acceptance. Its tar was 399360 bytes with SHA-256
+`feb4a1f8199bcb4dcdc4885d63944ab5eafb146b900ef61042a7094485110762`, and its
+golden manifest SHA-256 was
+`76fff7b3602e716e9fb9fdc99d782281913a1d4d60166cbc9f1c0fa0c9e7401f`. The old
+kernel input had SHA-256
+`89534be7b9e8646fc0d5eabe8292f7fe86142192cbb22115fc469b253afb5705`.
+M01R1 superseded those identities by removing the ambient `__DATE__` input
+and generated FAT-header mtime drift. The old values remain historical only;
+the final M01R1 golden is the sole source of current artifact identities.
 
 M02 host code supports macOS and Linux using Python standard-library file,
 JSON, hashing, and tar APIs. VAEG, PC-88VA hardware, VA bootability, disk

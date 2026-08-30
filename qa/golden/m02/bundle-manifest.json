@@ -1,107 +1,107 @@
 {
   "archive": {
     "path": "baseline-artifact-bundle.tar",
-    "sha256": "feb4a1f8199bcb4dcdc4885d63944ab5eafb146b900ef61042a7094485110762",
+    "sha256": "00fb02b03ea16423b5987d455a8ea11a8a567c699484656228722119c6239e51",
     "sidecar_path": "baseline-artifact-bundle.tar.sha256",
-    "sidecar_sha256": "ed0c8fc6084dbaad11badb61d513bd54e676fa6a540d2e0b01121b58f87c57e5",
+    "sidecar_sha256": "0ffe8a10fd1c430fc876a7387e44fe6084be5b21deaf93bb8826a3b13b278fbb",
     "sidecar_size": 95,
     "size": 399360
   },
   "artifacts": [
     {
       "bundle_path": "payload/fdkernel/KERNEL.SYS",
-      "component_commit": "29085311a47c8fcceb7902b64b0b5ebc170b8de5",
+      "component_commit": "6523acdb87f4665e6068ea331859885267242005",
       "component_namespace": "fdkernel",
       "m01_namespace": "fdkernel-nec98",
       "original_m01_source_path": "fdkernel-nec98/nec98/bin/kernel.sys",
       "role": "kernel",
-      "sha256": "89534be7b9e8646fc0d5eabe8292f7fe86142192cbb22115fc469b253afb5705",
+      "sha256": "3ebddb01abe5e39f16d27439836be283c57d454f012d3c990f01fa8a2b14101d",
       "size": 83774,
-      "source_archive_sha256": "d39ace4ed008f6dc74be3ce52d87c56706aa834816d01a1f93f6d338ee258e38",
+      "source_archive_sha256": "b9cbb7d40958a5ca0c6c49217464dba73b4bcb4dbe04e764648e0b3d8f66892d",
       "source_date_epoch": 1787814827
     },
     {
       "bundle_path": "payload/fdkernel/KWC8616.SYS",
-      "component_commit": "29085311a47c8fcceb7902b64b0b5ebc170b8de5",
+      "component_commit": "6523acdb87f4665e6068ea331859885267242005",
       "component_namespace": "fdkernel",
       "m01_namespace": "fdkernel-nec98",
       "original_m01_source_path": "fdkernel-nec98/nec98/bin/KWC8616.sys",
       "role": "kernel-alias",
-      "sha256": "89534be7b9e8646fc0d5eabe8292f7fe86142192cbb22115fc469b253afb5705",
+      "sha256": "3ebddb01abe5e39f16d27439836be283c57d454f012d3c990f01fa8a2b14101d",
       "size": 83774,
-      "source_archive_sha256": "d39ace4ed008f6dc74be3ce52d87c56706aa834816d01a1f93f6d338ee258e38",
+      "source_archive_sha256": "b9cbb7d40958a5ca0c6c49217464dba73b4bcb4dbe04e764648e0b3d8f66892d",
       "source_date_epoch": 1787814827
     },
     {
       "bundle_path": "payload/fdkernel/SYS.COM",
-      "component_commit": "29085311a47c8fcceb7902b64b0b5ebc170b8de5",
+      "component_commit": "6523acdb87f4665e6068ea331859885267242005",
       "component_namespace": "fdkernel",
       "m01_namespace": "fdkernel-nec98",
       "original_m01_source_path": "fdkernel-nec98/nec98/bin/sys.com",
       "role": "system-transfer-tool",
       "sha256": "356f6dce5fa5fb2877a79dd4b7fcc0ff3bc3b00f9c77739fb2c7d2e9f1ae8528",
       "size": 17930,
-      "source_archive_sha256": "d39ace4ed008f6dc74be3ce52d87c56706aa834816d01a1f93f6d338ee258e38",
+      "source_archive_sha256": "b9cbb7d40958a5ca0c6c49217464dba73b4bcb4dbe04e764648e0b3d8f66892d",
       "source_date_epoch": 1787814827
     },
     {
       "bundle_path": "payload/fdkernel/COUNTRY.SYS",
-      "component_commit": "29085311a47c8fcceb7902b64b0b5ebc170b8de5",
+      "component_commit": "6523acdb87f4665e6068ea331859885267242005",
       "component_namespace": "fdkernel",
       "m01_namespace": "fdkernel-country",
       "original_m01_source_path": "fdkernel-country/nec98/bin/country.sys",
       "role": "kernel-country-driver",
       "sha256": "541f5abefd8d0fd9f4f3eeef7741f36f666eaaa5b0020203a5786a1bc270048f",
       "size": 30250,
-      "source_archive_sha256": "d39ace4ed008f6dc74be3ce52d87c56706aa834816d01a1f93f6d338ee258e38",
+      "source_archive_sha256": "b9cbb7d40958a5ca0c6c49217464dba73b4bcb4dbe04e764648e0b3d8f66892d",
       "source_date_epoch": 1787814827
     },
     {
       "bundle_path": "payload/fdkernel/boot/B_FAT12.BIN",
-      "component_commit": "29085311a47c8fcceb7902b64b0b5ebc170b8de5",
+      "component_commit": "6523acdb87f4665e6068ea331859885267242005",
       "component_namespace": "fdkernel",
       "m01_namespace": "fdkernel-nec98",
       "original_m01_source_path": "fdkernel-nec98/nec98/boot/b_fat12.bin",
       "role": "boot-fat12",
       "sha256": "5a480da31b43cde006614d8c3be6fff4d5f227f83055e4ee6ac82665bf6c1212",
       "size": 512,
-      "source_archive_sha256": "d39ace4ed008f6dc74be3ce52d87c56706aa834816d01a1f93f6d338ee258e38",
+      "source_archive_sha256": "b9cbb7d40958a5ca0c6c49217464dba73b4bcb4dbe04e764648e0b3d8f66892d",
       "source_date_epoch": 1787814827
     },
     {
       "bundle_path": "payload/fdkernel/boot/B_FAT12F.BIN",
-      "component_commit": "29085311a47c8fcceb7902b64b0b5ebc170b8de5",
+      "component_commit": "6523acdb87f4665e6068ea331859885267242005",
       "component_namespace": "fdkernel",
       "m01_namespace": "fdkernel-nec98",
       "original_m01_source_path": "fdkernel-nec98/nec98/boot/b_fat12f.bin",
       "role": "boot-fat12-fallback",
       "sha256": "abc12598f215502ff18fdefb5fb961d82573e31860f34bfd555265e4d04ac559",
       "size": 512,
-      "source_archive_sha256": "d39ace4ed008f6dc74be3ce52d87c56706aa834816d01a1f93f6d338ee258e38",
+      "source_archive_sha256": "b9cbb7d40958a5ca0c6c49217464dba73b4bcb4dbe04e764648e0b3d8f66892d",
       "source_date_epoch": 1787814827
     },
     {
       "bundle_path": "payload/fdkernel/boot/B_FAT16.BIN",
-      "component_commit": "29085311a47c8fcceb7902b64b0b5ebc170b8de5",
+      "component_commit": "6523acdb87f4665e6068ea331859885267242005",
       "component_namespace": "fdkernel",
       "m01_namespace": "fdkernel-nec98",
       "original_m01_source_path": "fdkernel-nec98/nec98/boot/b_fat16.bin",
       "role": "boot-fat16",
       "sha256": "a233d5b7360b5fbee4f4e449d89a77c4adf9cea8210689a64dd5a79fcd75844d",
       "size": 512,
-      "source_archive_sha256": "d39ace4ed008f6dc74be3ce52d87c56706aa834816d01a1f93f6d338ee258e38",
+      "source_archive_sha256": "b9cbb7d40958a5ca0c6c49217464dba73b4bcb4dbe04e764648e0b3d8f66892d",
       "source_date_epoch": 1787814827
     },
     {
       "bundle_path": "payload/fdkernel/boot/B_FAT32.BIN",
-      "component_commit": "29085311a47c8fcceb7902b64b0b5ebc170b8de5",
+      "component_commit": "6523acdb87f4665e6068ea331859885267242005",
       "component_namespace": "fdkernel",
       "m01_namespace": "fdkernel-nec98",
       "original_m01_source_path": "fdkernel-nec98/nec98/boot/b_fat32.bin",
       "role": "boot-fat32",
       "sha256": "607c68fe41ebc150d59078fad7fb859a33b7edfd8f12a5c82c019c9cebcd4ca7",
       "size": 512,
-      "source_archive_sha256": "d39ace4ed008f6dc74be3ce52d87c56706aa834816d01a1f93f6d338ee258e38",
+      "source_archive_sha256": "b9cbb7d40958a5ca0c6c49217464dba73b4bcb4dbe04e764648e0b3d8f66892d",
       "source_date_epoch": 1787814827
     },
     {
@@ -133,12 +133,12 @@
   "metadata": [
     {
       "path": "metadata/artifact-manifest.json",
-      "sha256": "d8c7a196d05cf6f8dd3f4e266ee9bc52f4668f92b83f6195e4932df554961d37",
+      "sha256": "84156bad2ab9871e36a200eb99ea1368481139e491c3ef6aa51ce72191a99c00",
       "size": 7177
     },
     {
       "path": "metadata/components.lock.json",
-      "sha256": "291490d59e62280e617a5107d11363cfecfbd7238815105b81dd5f8468a247bd",
+      "sha256": "440e481b28c740875489a6953a246ce5370c44074053c7aad3f80e79ec40c19c",
       "size": 1072
     },
     {
@@ -148,18 +148,18 @@
     },
     {
       "path": "metadata/m01-build-contract.json",
-      "sha256": "85a3a9a96b4b5fb4f4d1d90f836c97eade24a639de4aa0f908640ca91057759c",
-      "size": 3907
+      "sha256": "7d66be32b508395d8c36a902389f368e9f38d9abab08085bda89e3d2c5d6d578",
+      "size": 4025
     },
     {
       "path": "metadata/m01-golden-manifest.json",
-      "sha256": "756be74a0c72f9150173e053812094de334a69dc193b627e06421536598d22fb",
+      "sha256": "6fcfe834f90ffc602589ddc63b50d90eba33bbc1802b6bff3c9ef6b9d397c7c3",
       "size": 6866
     },
     {
       "path": "metadata/provenance.json",
-      "sha256": "d99af3c3b054e86f91cd8a6c1c683fc7b94ee4a9d9042c2237960a9a53be85b8",
-      "size": 1315
+      "sha256": "93371e55827d340deab9a308c541011ed1c139a2ba35d57733fba44ca987931f",
+      "size": 1317
     },
     {
       "path": "metadata/toolchain-lock.json",
@@ -181,13 +181,13 @@
     },
     {
       "path": "baseline-artifact-bundle/metadata/artifact-manifest.json",
-      "sha256": "d8c7a196d05cf6f8dd3f4e266ee9bc52f4668f92b83f6195e4932df554961d37",
+      "sha256": "84156bad2ab9871e36a200eb99ea1368481139e491c3ef6aa51ce72191a99c00",
       "size": 7177,
       "type": "file"
     },
     {
       "path": "baseline-artifact-bundle/metadata/components.lock.json",
-      "sha256": "291490d59e62280e617a5107d11363cfecfbd7238815105b81dd5f8468a247bd",
+      "sha256": "440e481b28c740875489a6953a246ce5370c44074053c7aad3f80e79ec40c19c",
       "size": 1072,
       "type": "file"
     },
@@ -199,20 +199,20 @@
     },
     {
       "path": "baseline-artifact-bundle/metadata/m01-build-contract.json",
-      "sha256": "85a3a9a96b4b5fb4f4d1d90f836c97eade24a639de4aa0f908640ca91057759c",
-      "size": 3907,
+      "sha256": "7d66be32b508395d8c36a902389f368e9f38d9abab08085bda89e3d2c5d6d578",
+      "size": 4025,
       "type": "file"
     },
     {
       "path": "baseline-artifact-bundle/metadata/m01-golden-manifest.json",
-      "sha256": "756be74a0c72f9150173e053812094de334a69dc193b627e06421536598d22fb",
+      "sha256": "6fcfe834f90ffc602589ddc63b50d90eba33bbc1802b6bff3c9ef6b9d397c7c3",
       "size": 6866,
       "type": "file"
     },
     {
       "path": "baseline-artifact-bundle/metadata/provenance.json",
-      "sha256": "d99af3c3b054e86f91cd8a6c1c683fc7b94ee4a9d9042c2237960a9a53be85b8",
-      "size": 1315,
+      "sha256": "93371e55827d340deab9a308c541011ed1c139a2ba35d57733fba44ca987931f",
+      "size": 1317,
       "type": "file"
     },
     {
@@ -237,13 +237,13 @@
     },
     {
       "path": "baseline-artifact-bundle/payload/fdkernel/KERNEL.SYS",
-      "sha256": "89534be7b9e8646fc0d5eabe8292f7fe86142192cbb22115fc469b253afb5705",
+      "sha256": "3ebddb01abe5e39f16d27439836be283c57d454f012d3c990f01fa8a2b14101d",
       "size": 83774,
       "type": "file"
     },
     {
       "path": "baseline-artifact-bundle/payload/fdkernel/KWC8616.SYS",
-      "sha256": "89534be7b9e8646fc0d5eabe8292f7fe86142192cbb22115fc469b253afb5705",
+      "sha256": "3ebddb01abe5e39f16d27439836be283c57d454f012d3c990f01fa8a2b14101d",
       "size": 83774,
       "type": "file"
     },

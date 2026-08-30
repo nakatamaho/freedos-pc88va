@@ -48,6 +48,18 @@ def run_m01_verifier(root):
         output = (result.stdout + result.stderr).strip().replace("\n", " | ")
         raise ValidationError(f"existing M01 verifier rejected the input: {output}")
     print(result.stdout.strip())
+    regression = subprocess.run(
+        [sys.executable, str(root / "tools/m01/test_kernel_reproducibility.py"), "--repo-root", str(root)],
+        cwd=root,
+        env={**__import__("os").environ, "PYTHONDONTWRITEBYTECODE": "1"},
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if regression.returncode != 0:
+        output = (regression.stdout + regression.stderr).strip().replace("\n", " | ")
+        raise ValidationError(f"M01R1 reproducibility regression rejected the input: {output}")
+    print(regression.stdout.strip())
 
 
 def preflight(root):
