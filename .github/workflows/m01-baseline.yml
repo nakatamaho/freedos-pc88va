@@ -95,6 +95,19 @@ jobs:
       - name: Verify result against committed golden manifest
         run: make m01-verify
 
+      - name: Upload bounded M01R1 kernel evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: m01r1-kernel-evidence
+          if-no-files-found: ignore
+          retention-days: 7
+          path: |
+            qa/results/m01/run-1/artifacts/fdkernel-nec98/nec98/bin/kernel.sys
+            qa/results/m01/run-1/artifacts/fdkernel-nec98/nec98/bin/KWC8616.sys
+            qa/results/m01/run-2/artifacts/fdkernel-nec98/nec98/bin/kernel.sys
+            qa/results/m01/run-2/artifacts/fdkernel-nec98/nec98/bin/KWC8616.sys
+
       - name: Recheck source cleanliness and parent whitespace
         run: |
           git diff --check
