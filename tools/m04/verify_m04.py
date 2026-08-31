@@ -227,6 +227,15 @@ def validate_changed_paths(paths):
         "docs/porting/m04-", "docs/references/pc88va-source-register.md",
         "qa/golden/m04/", "tests/m04/", "tools/m03/verify_m03.py", "tools/m04/",
     )
+    m04r1_license_paths = {
+        ".github/workflows/m04r1-license.yml",
+        "COPYING",
+        "LICENSE.md",
+        "docs/licensing/README.md",
+        "manifests/licenses.yml",
+        "tests/qa/test_verify_license_policy.py",
+        "tools/qa/verify_license_policy.py",
+    }
     protected = (
         "components/", "manifests/", "qa/golden/m01", "qa/golden/m02",
         "qa/golden/m03", "config/m03/", "tools/m01/", "tools/m02/", "tools/m03/",
@@ -235,6 +244,8 @@ def validate_changed_paths(paths):
     binary_suffixes = {".rom", ".d88", ".bin", ".obj", ".o", ".img", ".ima", ".tar", ".zip", ".log"}
     for item in paths:
         path = PurePosixPath(item)
+        if item in m04r1_license_paths:
+            continue
         if item == "tools/m03/verify_m03.py":
             continue
         if any(item.startswith(prefix) for prefix in protected) or path.suffix.lower() in binary_suffixes:

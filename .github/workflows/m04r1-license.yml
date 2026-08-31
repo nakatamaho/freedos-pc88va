@@ -1,0 +1,69 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+name: M04R1 root license policy
+
+on:
+  push:
+    paths:
+      - ".github/workflows/m04r1-license.yml"
+      - "COPYING"
+      - "LICENSE.md"
+      - "Makefile"
+      - "components/fdkernel"
+      - "components/freecom"
+      - "components/country"
+      - "docs/licensing/**"
+      - "manifests/licenses.yml"
+      - "tools/m04/verify_m04.py"
+      - "tools/qa/verify_license_policy.py"
+      - "tests/m04/test_verify_m04.py"
+      - "tests/qa/test_verify_license_policy.py"
+  pull_request:
+    paths:
+      - ".github/workflows/m04r1-license.yml"
+      - "COPYING"
+      - "LICENSE.md"
+      - "Makefile"
+      - "components/fdkernel"
+      - "components/freecom"
+      - "components/country"
+      - "docs/licensing/**"
+      - "manifests/licenses.yml"
+      - "tools/m04/verify_m04.py"
+      - "tools/qa/verify_license_policy.py"
+      - "tests/m04/test_verify_m04.py"
+      - "tests/qa/test_verify_license_policy.py"
+
+jobs:
+  verify-license:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out repository and pinned submodules
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Configure component remotes
+        run: bash tools/configure_component_remotes.sh
+
+      - name: Verify accepted M04 baseline
+        run: |
+          make verify-scaffold
+          make m04-preflight
+          make m04-verify
+
+      - name: Verify root license policy
+        run: make m04r1-license-verify
+
+      - name: Run focused license-policy tests
+        run: |
+          python3 -m unittest discover -s tests/qa -p 'test_*.py'
+          python3 -m unittest discover -s tests/m04 -p 'test_*.py'
+
+      - name: Run syntax, component, and whitespace checks
+        run: |
+          PYTHONPYCACHEPREFIX="$RUNNER_TEMP/m04r1-pycache" python3 -m py_compile tools/qa/verify_license_policy.py tests/qa/test_verify_license_policy.py tools/m04/verify_m04.py tests/m04/test_verify_m04.py
+          test -z "$(git -C components/fdkernel status --short --untracked-files=all)"
+          test -z "$(git -C components/freecom status --short --untracked-files=all)"
+          test -z "$(git -C components/country status --short --untracked-files=all)"
+          git diff --check

@@ -216,6 +216,19 @@ class ContractNegativeTests(unittest.TestCase):
         with self.assertRaises(verifier.VerificationError):
             verifier.validate_changed_paths(["tools/m03/scan_port_surface.py"])
 
+    def test_m04r1_license_paths_are_narrowly_allowed(self):
+        verifier.validate_changed_paths([
+            ".github/workflows/m04r1-license.yml",
+            "COPYING",
+            "LICENSE.md",
+            "docs/licensing/README.md",
+            "manifests/licenses.yml",
+            "tests/qa/test_verify_license_policy.py",
+            "tools/qa/verify_license_policy.py",
+        ])
+        with self.assertRaises(verifier.VerificationError):
+            verifier.validate_changed_paths(["manifests/components.lock.json"])
+
     def test_component_gitlink_drift_is_rejected(self):
         data = self.invalid()
         data["component_gitlinks"]["fdkernel"] = "0" * 40
