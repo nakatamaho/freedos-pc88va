@@ -209,7 +209,7 @@ class MediaNegativeTests(MediaFixture):
     def test_ambient_timestamp_and_private_path_are_rejected(self):
         for value in (
             {"generated_at": "2026-08-31T00:00:00Z"},
-            {"source": "/Users/example/private/input"},
+            {"source": "/absolute/private/input"},
             {"source": "private-source-root/manual.txt"},
         ):
             with self.assertRaises(ValidationError):
