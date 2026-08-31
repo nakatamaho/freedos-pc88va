@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "input_preservation": {
+      "enum": [
+        "passed",
+        "failed"
+      ]
+    },
+    "private_gate_result": {
+      "enum": [
+        "conclusive",
+        "inconclusive",
+        "failed"
+      ]
+    },
+    "public_promotion_status": {
+      "const": "prohibited_pending_user_approval"
+    },
+    "questions": {
+      "additionalProperties": {
+        "additionalProperties": false,
+        "properties": {
+          "classification": {
+            "enum": [
+              "PRIVATE_VAEG_OBSERVATION",
+              "INFERENCE",
+              "UNKNOWN"
+            ]
+          },
+          "resolved": {
+            "type": "boolean"
+          },
+          "value": {}
+        },
+        "required": [
+          "resolved",
+          "classification",
+          "value"
+        ],
+        "type": "object"
+      },
+      "type": "object"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "trial_count": {
+      "minimum": 0,
+      "type": "integer"
+    },
+    "variant_count": {
+      "const": 5
+    }
+  },
+  "required": [
+    "schema_version",
+    "private_gate_result",
+    "input_preservation",
+    "variant_count",
+    "trial_count",
+    "questions",
+    "public_promotion_status"
+  ],
+  "title": "M07 local private overlay",
+  "type": "object"
+}

@@ -104,10 +104,13 @@ def validate_changed_paths(root: Path) -> None:
         "tools/qa/current_components.py",
         "tools/qa/verify_license_policy.py",
         "tools/verify_scaffold.py",
+        ".github/workflows/m07-probe.yml",
+        "qa/golden/m07-probe-manifest.json",
     }
     prefixes = (
         "config/m05/", "tests/m05/", "tools/m05/", "config/m06/",
         "docs/porting/m06-", "tests/m06/", "tools/m06/",
+        "config/m07/", "docs/porting/m07-", "schema/m07-", "tests/m07/", "tools/m07/",
     )
     for relative in sorted(item for item in changed if item):
         if relative not in exact and not relative.startswith(prefixes):

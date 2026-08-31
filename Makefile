@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help submodules component-status verify-scaffold m01-host-portability m01-image-identity m01-preflight m01-image m01-build m01-compare m01-enroll-golden m01-verify m01-clean m02-preflight m02-clean m02-bundle m02-compare m02-verify m02-enroll-golden m02 m03-preflight m03-clean m03-scan m03-compare m03-enroll-golden m03-verify m03 m04-preflight m04-private-evidence m04-verify m04 m04r1-license-verify m05-preflight m05-clean m05-build m05-compare m05-enroll-golden m05-negative-tests m05-verify m05 m06-preflight m06-prepare-m05 m06-clean m06-build m06-nec98-regression m06-media m06-compare m06-enroll-golden m06-negative-tests m06-verify m06 verify
+.PHONY: help submodules component-status verify-scaffold m01-host-portability m01-image-identity m01-preflight m01-image m01-build m01-compare m01-enroll-golden m01-verify m01-clean m02-preflight m02-clean m02-bundle m02-compare m02-verify m02-enroll-golden m02 m03-preflight m03-clean m03-scan m03-compare m03-enroll-golden m03-verify m03 m04-preflight m04-private-evidence m04-verify m04 m04r1-license-verify m05-preflight m05-clean m05-build m05-compare m05-enroll-golden m05-negative-tests m05-verify m05 m06-preflight m06-prepare-m05 m06-clean m06-build m06-nec98-regression m06-media m06-compare m06-enroll-golden m06-negative-tests m06-verify m06 m07-preflight m07-clean m07-probe m07-variants m07-public-tests m07-public-verify m07-enroll-golden m07-redact m07-public verify
 
 help:
 	@printf '%s\n' \
@@ -56,6 +56,13 @@ help:
 		'  m06-negative-tests  Run M06 fail-closed parent tests' \
 		'  m06-verify        Verify M06 runs against the committed golden' \
 		'  m06               Run the complete deterministic M06 sequence' \
+		'  m07-preflight     Verify accepted identities and public M07 inputs' \
+		'  m07-clean         Remove only generated public M07 result paths' \
+		'  m07-probe         Build the probe and five variants twice' \
+		'  m07-variants      Compare complete public result trees' \
+		'  m07-public-tests  Run M07 ROM-free fail-closed tests' \
+		'  m07-public-verify Verify public results against the M07 golden' \
+		'  m07-public        Run the complete ROM-free M07 public gate' \
 		'  verify            Run scaffold and available M01 verification'
 
 submodules:
@@ -231,6 +238,39 @@ m06:
 	@$(MAKE) m06-compare
 	@$(MAKE) m06-negative-tests
 	@$(MAKE) m06-verify
+
+m07-preflight:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m07/m07.py --preflight
+
+m07-clean:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m07/m07.py --clean
+
+m07-probe:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m07/m07.py --build
+
+m07-variants:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m07/m07.py --compare
+
+m07-public-tests:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m07/m07.py --tests
+
+m07-public-verify:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m07/m07.py --verify
+
+m07-enroll-golden:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m07/m07.py --enroll-golden
+
+m07-redact:
+	@test -n "$(M07_PRIVATE_RESULT)" || { printf '%s\n' 'M07_PRIVATE_RESULT is required'; exit 2; }
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m07/redact_private_result.py --input "$(M07_PRIVATE_RESULT)" --output config/m07/public-result.json
+
+m07-public:
+	@$(MAKE) m07-preflight
+	@$(MAKE) m07-clean
+	@$(MAKE) m07-probe
+	@$(MAKE) m07-variants
+	@$(MAKE) m07-public-tests
+	@$(MAKE) m07-public-verify
 
 verify: verify-scaffold
 	@if test -f qa/golden/m01-baseline.json && test -d qa/results/m01/run-1 && test -d qa/results/m01/run-2; then \

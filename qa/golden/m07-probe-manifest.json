@@ -1,0 +1,202 @@
+{
+  "claims": {
+    "firmware_boot_acceptance": false,
+    "hardware_validated": false,
+    "m06_kernel_executed": false,
+    "private_gate_ran": false
+  },
+  "consumed_identities": {
+    "copying": "0f1e68d9b4a580cdcca4c5f4e3b8046f7a8759da05edd109cff081bc484b3c4b",
+    "m01_contract": "7d66be32b508395d8c36a902389f368e9f38d9abab08085bda89e3d2c5d6d578",
+    "m01_golden": "6fcfe834f90ffc602589ddc63b50d90eba33bbc1802b6bff3c9ef6b9d397c7c3",
+    "m02_golden": "4d4e92f92911130109b5b140b2202fc1dfc3abb9af3cd7501b685894d0cb78fd",
+    "m03_golden": "d871c7f188313218c2c9481ea9fe7c6abf6acd6369f996b2641021ad27c80550",
+    "m04_contract": "f2e4efdc9d9e3a31dc100b81896427beeaeaca29d36d692b5dfeb5fb459460f4",
+    "m04_evidence": "0612699d305738f2db131cb87c5fa7e9393b206672d6bec27483a602e7e91770",
+    "m04_schema": "f50c099211e2e70f959fb1cc70e93553699f9862113b50c7cda7f29816e6b7c0",
+    "m05_golden": "b81c7bfdde36df76edfd9e802c22d90c865329f206c7bbb9dae2ddbe39e4abaa",
+    "m05_schema": "0380d30bec213ade393390498510176fcb14a4f904dd6a9c9c22cee50646fd0f",
+    "m05_specification": "f8ba0e41300ee6e11d7a1f0cf646e335a09df243afc8e1235efade3d17cd06bc",
+    "m06_component_lock": "58a900d0ad838f3eacfd8c2f32835634dd96cccc19649a276dc8dee6d5622bc8",
+    "m06_contract": "77bc415336ead1a6e7734ca35b49ef235744745c1f60fd482f376fec90c3fdf3",
+    "m06_golden": "db4160329758e5c055bd9c36a5e892903fcd92548a0d5e9feb790f1b51fd47c8",
+    "m06_schema": "cce4891a304ba372fc61e48d5809da939b0341d2fc1bf832e03d544f12d8212f",
+    "toolchain_lock": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162"
+  },
+  "m06_kernel": {
+    "sha256": "d7c864d29bf772b0bb167ac9b0a2c77d391d6c5a32102ba005f0043d981885a2",
+    "size": 4414
+  },
+  "probe": {
+    "assembler": {
+      "sha256": "ffcfd989c0879f868c6b654d554e0c497c8946061ef3972df16de0c2a3b9f838",
+      "size": 1739504
+    },
+    "entry_offset": 62,
+    "first_marker_hex": "9087db87c987d2",
+    "jump_hex": "eb3c90",
+    "probe": {
+      "sha256": "b7f629baec854f9c14776328df12833ba484317968f9cbd94614b33f02a9b03b",
+      "size": 9
+    },
+    "schema_version": 1,
+    "self_loop_hex": "ebfe",
+    "source": {
+      "path": "tools/m07/probe.asm",
+      "sha256": "ae17a5dcd461e80b2a0ca6db73333eebb461d81a0bb9589e464731c4f5bdfa7b",
+      "size": 232
+    }
+  },
+  "schema_version": 1,
+  "vaeg_public_contract": {
+    "binary": {
+      "sha256": "1fb5ca69611267041bda26ec83af9f10fb82cb052fd1d22b2c7dfa2fe09e2691",
+      "size": 8155976
+    },
+    "build_options": {
+      "VAEG_ENABLE_TESTS": "OFF",
+      "VAEG_Z80_COMPAT_INTEGRATION_TRACE": "OFF"
+    },
+    "build_preset": "macos-macports",
+    "repository": "https://github.com/nakatamaho/vaeg.git",
+    "reproducibility": "byte-identical-two-clean-builds",
+    "required_but_unavailable": [
+      "production-memory-upd9002-cpu-trace"
+    ],
+    "revision": "2a6c3944bab1fb691261fa2f0950dc4a2faeab8c",
+    "trace_facilities": [
+      "fdc-trace",
+      "fixed-model-selection",
+      "no-config",
+      "no-backup-memory"
+    ]
+  },
+  "variants": [
+    {
+      "changed_ranges": [],
+      "d88": {
+        "sha256": "141959c7fe8ddbaf2d37e9c3078404380cbb27198bfe650a17e6f0aa37c92004",
+        "size": 1331888
+      },
+      "d88_sector_count": 1280,
+      "d88_track_count": 160,
+      "id": "V00",
+      "probe": false,
+      "raw": {
+        "sha256": "333f1a7fd1385ba347e64ae7511f2ed060b057f3b73e1cec94e0532bc9916f66",
+        "size": 1310720
+      },
+      "round_trip": "byte-identical",
+      "signature_1022": false,
+      "signature_510": false
+    },
+    {
+      "changed_ranges": [
+        [
+          1,
+          2
+        ],
+        [
+          62,
+          1024
+        ]
+      ],
+      "d88": {
+        "sha256": "83ab53501702fa4eb8b46f5fe0e4b19b9f4a03c49917c1719056a28931d38dad",
+        "size": 1331888
+      },
+      "d88_sector_count": 1280,
+      "d88_track_count": 160,
+      "id": "V01",
+      "probe": true,
+      "raw": {
+        "sha256": "f45e2e135b419e666aa64324f4f093377e874da0355b3260e80ea2f4b1b05c7b",
+        "size": 1310720
+      },
+      "round_trip": "byte-identical",
+      "signature_1022": false,
+      "signature_510": false
+    },
+    {
+      "changed_ranges": [
+        [
+          1,
+          2
+        ],
+        [
+          62,
+          1024
+        ]
+      ],
+      "d88": {
+        "sha256": "e88eab0d5541db76696ff042ba498fad01ed022ca7ac5c274f98c24f2d65969c",
+        "size": 1331888
+      },
+      "d88_sector_count": 1280,
+      "d88_track_count": 160,
+      "id": "V02",
+      "probe": true,
+      "raw": {
+        "sha256": "6393c7b6389dbcaa2d5e3b9ec7b8b1f1ff0246bf65a297e484567ac1833069f1",
+        "size": 1310720
+      },
+      "round_trip": "byte-identical",
+      "signature_1022": false,
+      "signature_510": true
+    },
+    {
+      "changed_ranges": [
+        [
+          1,
+          2
+        ],
+        [
+          62,
+          1024
+        ]
+      ],
+      "d88": {
+        "sha256": "7d5f6e0a66ef45575dc159cb429fb7f8f28799a70431c0de69bcf07a8f117770",
+        "size": 1331888
+      },
+      "d88_sector_count": 1280,
+      "d88_track_count": 160,
+      "id": "V03",
+      "probe": true,
+      "raw": {
+        "sha256": "131a24345b25e358ab585877fac8c75969cca49ebabcf14ce1a4d6a72a463bac",
+        "size": 1310720
+      },
+      "round_trip": "byte-identical",
+      "signature_1022": true,
+      "signature_510": false
+    },
+    {
+      "changed_ranges": [
+        [
+          1,
+          2
+        ],
+        [
+          62,
+          1024
+        ]
+      ],
+      "d88": {
+        "sha256": "8d3c16f697cb51d12033ff1332a5e51fc1be5777b68949ecffa42d08c083e414",
+        "size": 1331888
+      },
+      "d88_sector_count": 1280,
+      "d88_track_count": 160,
+      "id": "V04",
+      "probe": true,
+      "raw": {
+        "sha256": "2c92cbe43edd2a3c7fd779b9176b22947cd4a6728c67bfaa96171f417d3fec07",
+        "size": 1310720
+      },
+      "round_trip": "byte-identical",
+      "signature_1022": true,
+      "signature_510": true
+    }
+  ]
+}

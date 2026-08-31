@@ -258,6 +258,11 @@ def validate_changed_paths(paths, m06_active=False):
         "tools/qa/verify_license_policy.py",
     }
     m06_prefixes = ("config/m06/", "docs/porting/m06-", "tests/m06/", "tools/m06/")
+    m07_paths = {
+        ".github/workflows/m07-probe.yml", ".gitignore", "Makefile",
+        "qa/golden/m07-probe-manifest.json",
+    }
+    m07_prefixes = ("config/m07/", "docs/porting/m07-", "schema/m07-", "tests/m07/", "tools/m07/")
     protected = (
         "components/", "manifests/", "qa/golden/m01", "qa/golden/m02",
         "qa/golden/m03", "config/m03/", "tools/m01/", "tools/m02/", "tools/m03/",
@@ -271,6 +276,8 @@ def validate_changed_paths(paths, m06_active=False):
         if item in m05_paths or item.startswith(m05_prefixes):
             continue
         if m06_active and (item in m06_paths or item.startswith(m06_prefixes)):
+            continue
+        if m06_active and (item in m07_paths or item.startswith(m07_prefixes)):
             continue
         if item == "tools/m03/verify_m03.py":
             continue

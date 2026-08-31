@@ -1,0 +1,116 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+name: M07 public boot-acceptance probe harness
+
+on:
+  push:
+    paths:
+      - ".github/workflows/m07-probe.yml"
+      - ".gitignore"
+      - "Makefile"
+      - "components/fdkernel"
+      - "config/m06/**"
+      - "config/m07/**"
+      - "docs/porting/m06-*.md"
+      - "docs/porting/m07-*.md"
+      - "manifests/m06-components.lock.json"
+      - "qa/golden/m06-kernel-manifest.json"
+      - "qa/golden/m07-probe-manifest.json"
+      - "schema/m06-*.json"
+      - "schema/m07-*.json"
+      - "tests/m06/**"
+      - "tests/m07/**"
+      - "tools/m01/**"
+      - "tools/m02/**"
+      - "tools/m03/**"
+      - "tools/m04/**"
+      - "tools/m05/**"
+      - "tools/m06/**"
+      - "tools/m07/**"
+      - "tools/qa/**"
+      - "tools/verify_scaffold.py"
+  pull_request:
+    paths:
+      - ".github/workflows/m07-probe.yml"
+      - ".gitignore"
+      - "Makefile"
+      - "components/fdkernel"
+      - "config/m06/**"
+      - "config/m07/**"
+      - "docs/porting/m06-*.md"
+      - "docs/porting/m07-*.md"
+      - "manifests/m06-components.lock.json"
+      - "qa/golden/m06-kernel-manifest.json"
+      - "qa/golden/m07-probe-manifest.json"
+      - "schema/m06-*.json"
+      - "schema/m07-*.json"
+      - "tests/m06/**"
+      - "tests/m07/**"
+      - "tools/m01/**"
+      - "tools/m02/**"
+      - "tools/m03/**"
+      - "tools/m04/**"
+      - "tools/m05/**"
+      - "tools/m06/**"
+      - "tools/m07/**"
+      - "tools/qa/**"
+      - "tools/verify_scaffold.py"
+
+jobs:
+  public-probe-harness:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out parent and exact submodules
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Assert native x64 and configure component remotes
+        run: |
+          test "$(uname -m)" = x86_64
+          test "$(dpkg --print-architecture)" = amd64
+          bash tools/configure_component_remotes.sh
+
+      - name: Verify static public boundaries
+        run: |
+          git diff --check
+          make verify-scaffold
+          make m04r1-license-verify
+          make m04-verify
+          PYTHONPYCACHEPREFIX="$RUNNER_TEMP/m07-pycache" python3 -m compileall -q tools/m06 tools/m07 tests/m06 tests/m07 tools/qa
+          PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s components/fdkernel/pc88va/tests -p 'test_*.py'
+
+      - name: Rebuild historical M01 and M02 prerequisites
+        run: |
+          make m01-host-portability
+          make m01-image-identity
+          make m01-preflight
+          make m01-image
+          M01_DIAGNOSTICS=1 make m01-build
+          make m01-compare
+          make m01-verify
+          PYTHONDONTWRITEBYTECODE=1 python3 tools/m01/test_kernel_reproducibility.py --repo-root .
+          PYTHONDONTWRITEBYTECODE=1 python3 tools/m02/test_bundle_contract.py
+          make m02-preflight
+          make m02-clean
+          make m02-bundle
+          make m02-compare
+          make m02-verify
+
+      - name: Regenerate immutable M05 and M06 prerequisites
+        run: |
+          make m06-prepare-m05
+          make m05-verify
+          make m06
+
+      - name: Build and verify the ROM-free M07 public harness
+        run: make m07-public
+
+      - name: Audit the public-only result
+        run: |
+          git diff --check
+          git diff --exit-code
+          test -z "$(git -C components/fdkernel status --short --untracked-files=all)"
+          test -z "$(git -C components/freecom status --short --untracked-files=all)"
+          test -z "$(git -C components/country status --short --untracked-files=all)"
+          echo 'M07 public CI did not run VAEG or inspect private firmware, traces, or results.'
