@@ -109,7 +109,7 @@ m03-compare:
 	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m03/verify_m03.py --compare
 
 m03-enroll-golden:
-	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m03/verify_m03.py --enroll-golden
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m03/verify_m03.py --enroll-golden --supersede-golden
 
 m03-verify:
 	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m03/verify_m03.py --verify

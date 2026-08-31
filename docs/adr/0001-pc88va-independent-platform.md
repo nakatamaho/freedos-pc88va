@@ -89,3 +89,11 @@ temporarily duplicate low-level glue and requires a disciplined migration.
 The largest risks are incomplete boot/firmware evidence, accidental shared
 preprocessor sprawl, and treating Japanese/DBCS behavior as hardware proof.
 Those risks remain explicit in the M04 blocker ledger.
+
+M03R1 corrects only the milestone-routing consequence of this decision. A
+source observation may inform several contracts or implementation stages, so
+the census records separate, overlapping `contract_milestones` and
+`implementation_milestones` arrays instead of one exclusive owner. M04 remains
+specification-only, M06 remains the first PC-88VA code milestone, and M18 is
+reserved for explicit SASI/SCSI/HDD evidence. This correction does not change
+the independent-platform decision or resolve any of the twelve M04 blockers.

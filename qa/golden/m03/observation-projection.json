@@ -1,0 +1,28 @@
+{
+  "accepted_entry_count": 14455,
+  "accepted_m03_commit": "1d885d24ab1aaf5e23b9b5e00b376c5a93165f31",
+  "accepted_m03_golden_sha256": "d075493a14b5913f968d30c284e625fc5e38f37300505fa557d948eabdc99f45",
+  "accepted_m03_golden_size": 10530917,
+  "accepted_m03_ruleset_sha256": "6d362672a193896e68531d2701f2645006d294d146cda408727981cefddddc52",
+  "fields": [
+    "id",
+    "component",
+    "component_commit",
+    "platform",
+    "path",
+    "symbol_or_section",
+    "surface",
+    "mechanism",
+    "matched_rule",
+    "evidence_excerpt_or_token",
+    "classification",
+    "candidate_boundary",
+    "disposition",
+    "confidence",
+    "notes"
+  ],
+  "projection_schema_version": 1,
+  "projection_sha256": "70bee9fedaa526f58a795c2acd43e3492a23e1554bcf843160bce7316120a42c",
+  "projection_size": 10039882,
+  "schema_version": 1
+}

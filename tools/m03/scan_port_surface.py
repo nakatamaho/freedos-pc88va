@@ -17,8 +17,16 @@ from pathlib import Path, PurePosixPath
 
 
 BASELINE_PARENT_COMMIT = "0babe66669b0e0eeb543cedaf427a3ff56eb5d83"
+ACCEPTED_M03_COMMIT = "1d885d24ab1aaf5e23b9b5e00b376c5a93165f31"
 SCANNER_NAME = "m03-port-surface-scanner"
-SCANNER_VERSION = 1
+SCANNER_VERSION = 2
+CENSUS_SCHEMA_VERSION = 2
+PROJECTION_SCHEMA_VERSION = 1
+CENSUS_SCHEMA_RELATIVE = "config/m03/census-schema.json"
+ROUTING_POLICY_RELATIVE = "config/m03/milestone-routing.json"
+MILESTONES = tuple(f"M{number:02d}" for number in range(4, 20))
+ROUTING_STATUSES = ("coarse", "curated", "not_applicable", "unresolved")
+MEMBERSHIP_COUNT_SEMANTICS = "Milestone membership counts overlap and are not task counts, effort estimates, or an exclusive partition of the census."
 
 SURFACES = (
     "build",
@@ -52,7 +60,23 @@ MECHANISMS = (
 DISPOSITIONS = ("reuse", "adapt", "replace", "investigate", "exclude")
 CLASSIFICATIONS = ("SOURCE_FACT", "DOCUMENT_FACT", "OBSERVATION", "INFERENCE", "HYPOTHESIS", "UNKNOWN")
 PLATFORMS = ("shared", "ibmpc", "nec98")
-TARGET_MILESTONES = tuple(f"M{number:02d}" for number in range(4, 19))
+OBSERVATION_FIELDS = (
+    "id",
+    "component",
+    "component_commit",
+    "platform",
+    "path",
+    "symbol_or_section",
+    "surface",
+    "mechanism",
+    "matched_rule",
+    "evidence_excerpt_or_token",
+    "classification",
+    "candidate_boundary",
+    "disposition",
+    "confidence",
+    "notes",
+)
 
 
 def rule(
@@ -64,7 +88,6 @@ def rule(
     mechanism,
     disposition,
     confidence,
-    target_milestone,
     candidate_boundary,
     notes,
     platform="shared",
@@ -79,7 +102,6 @@ def rule(
         "platform": platform,
         "disposition": disposition,
         "confidence": confidence,
-        "target_milestone": target_milestone,
         "candidate_boundary": candidate_boundary,
         "notes": notes,
     }
@@ -95,7 +117,6 @@ RULES = (
         "build_conditional",
         "investigate",
         "high",
-        "M05",
         "independent pc88va build target",
         "Path evidence identifies a platform variant; it does not establish hardware equivalence.",
         "ibmpc",
@@ -109,7 +130,6 @@ RULES = (
         "build_conditional",
         "investigate",
         "high",
-        "M05",
         "independent pc88va build target",
         "Path evidence identifies a platform variant; it does not establish VA hardware behavior.",
         "nec98",
@@ -123,7 +143,6 @@ RULES = (
         "build_conditional",
         "adapt",
         "high",
-        "M05",
         "explicit pc88va platform selection",
         "A conditional or build variable is a selection lead, not a complete build graph.",
     ),
@@ -136,7 +155,6 @@ RULES = (
         "file_layout",
         "reuse",
         "medium",
-        "M05",
         "platform-neutral interface include boundary",
         "The scanner records the textual relationship without resolving compiler search paths.",
     ),
@@ -149,7 +167,6 @@ RULES = (
         "file_layout",
         "replace",
         "high",
-        "M04",
         "pc88va IPL and boot-sector contract",
         "Boot naming is NEC98/source evidence only; it is not a VA IPL claim.",
     ),
@@ -162,7 +179,6 @@ RULES = (
         "function_boundary",
         "adapt",
         "high",
-        "M04",
         "pc88va block-I/O and media contract",
         "The hit identifies a source surface; geometry and firmware semantics remain unresolved.",
     ),
@@ -175,7 +191,6 @@ RULES = (
         "io_port",
         "replace",
         "high",
-        "M04",
         "pc88va FDC/DMA interface",
         "NEC98 controller references cannot be promoted to a VA contract without VA evidence.",
     ),
@@ -188,7 +203,6 @@ RULES = (
         "function_boundary",
         "adapt",
         "medium",
-        "M07",
         "pc88va early diagnostic console interface",
         "Output path names are not evidence of a VA firmware or video register contract.",
     ),
@@ -201,7 +215,6 @@ RULES = (
         "function_boundary",
         "adapt",
         "medium",
-        "M08",
         "pc88va keyboard and console-input interface",
         "Input naming is a port-surface lead and not a Japanese-runtime validation.",
     ),
@@ -214,7 +227,6 @@ RULES = (
         "io_port",
         "replace",
         "high",
-        "M09",
         "pc88va timer and clock interface",
         "Timer names do not establish interrupt frequency or BIOS time semantics.",
     ),
@@ -227,7 +239,6 @@ RULES = (
         "interrupt_vector",
         "replace",
         "high",
-        "M09",
         "pc88va interrupt and exception interface",
         "Interrupt references are source observations and do not define VA vector ownership.",
     ),
@@ -240,7 +251,6 @@ RULES = (
         "direct_memory",
         "investigate",
         "high",
-        "M04",
         "pc88va load, segment, and startup contract",
         "Names identify startup-sensitive code but do not resolve VA addresses or register state.",
     ),
@@ -253,7 +263,6 @@ RULES = (
         "bios_or_firmware",
         "investigate",
         "high",
-        "M04",
         "pc88va firmware boundary",
         "PC-98 BIOS references are not PC-88VA evidence.",
     ),
@@ -266,7 +275,6 @@ RULES = (
         "io_port",
         "replace",
         "high",
-        "M04",
         "pc88va low-level I/O interface",
         "Instruction syntax is recorded as a lead; port numbers and device semantics require review.",
     ),
@@ -279,7 +287,6 @@ RULES = (
         "interrupt_vector",
         "replace",
         "high",
-        "M09",
         "pc88va interrupt entry interface",
         "The scanner does not infer vector numbers or calling conventions from this token.",
     ),
@@ -292,7 +299,6 @@ RULES = (
         "data_table",
         "reuse",
         "high",
-        "M06",
         "platform-neutral NLS/DBCS interface",
         "NLS data and DBCS logic are separate from unresolved VA hardware services.",
     ),
@@ -305,7 +311,6 @@ RULES = (
         "function_boundary",
         "adapt",
         "medium",
-        "M10",
         "pc88va device initialization boundary",
         "Initialization order and device names require an explicit later contract.",
     ),
@@ -318,7 +323,6 @@ RULES = (
         "function_boundary",
         "reuse",
         "medium",
-        "M11",
         "platform-neutral DOS execution boundary",
         "A command/runtime hit does not claim that a NEC98 binary runs on VA.",
     ),
@@ -331,7 +335,6 @@ RULES = (
         "comment_lead",
         "investigate",
         "low",
-        "M18",
         "documented PC-88VA integration boundary",
         "Comments are leads only and are never sufficient hardware evidence.",
     ),
@@ -391,6 +394,164 @@ def ruleset_descriptors():
 
 def ruleset_sha256():
     return hashlib.sha256(canonical_json_bytes(ruleset_descriptors())).hexdigest()
+
+
+def sorted_milestones(values):
+    return sorted(values, key=lambda value: int(value[1:]))
+
+
+def validate_routing_policy(policy):
+    required = {"membership_count_semantics", "policy_id", "roadmap", "routing_statuses", "rules", "schema_version"}
+    if set(policy) != required:
+        raise ScanError(f"routing policy schema mismatch: {sorted(set(policy) ^ required)}")
+    if policy["schema_version"] != 1 or policy["policy_id"] != "m03r1-milestone-routing":
+        raise ScanError("routing policy identity is not accepted")
+    if policy["membership_count_semantics"] != MEMBERSHIP_COUNT_SEMANTICS:
+        raise ScanError("routing membership-count semantics are missing")
+    if policy["routing_statuses"] != list(ROUTING_STATUSES):
+        raise ScanError("routing status vocabulary is not canonical")
+    roadmap = policy["roadmap"]
+    if not isinstance(roadmap, list) or [item.get("milestone") for item in roadmap] != list(MILESTONES):
+        raise ScanError("routing roadmap does not define M04 through M19 in order")
+    if any(set(item) != {"milestone", "scope"} or not isinstance(item["scope"], str) or not item["scope"] for item in roadmap):
+        raise ScanError("routing roadmap entry is malformed")
+
+    rules = policy["rules"]
+    if not isinstance(rules, list) or not rules:
+        raise ScanError("routing policy has no rules")
+    priorities = [item.get("priority") for item in rules]
+    if priorities != sorted(priorities, reverse=True) or len(priorities) != len(set(priorities)):
+        raise ScanError("routing rules must have unique descending priorities")
+    rule_ids = set()
+    allowed_match = {"any_text_regex", "component", "matched_rule", "mechanism", "path_regex", "surface"}
+    for item in rules:
+        if set(item) != {"contract_milestones", "description", "id", "implementation_milestones", "match", "notes", "priority", "status"}:
+            raise ScanError("routing rule schema is malformed")
+        rule_id = item["id"]
+        if not isinstance(rule_id, str) or not re.fullmatch(r"route-[a-z0-9-]+", rule_id) or rule_id in rule_ids:
+            raise ScanError(f"routing rule ID is invalid or duplicated: {rule_id!r}")
+        rule_ids.add(rule_id)
+        if item["status"] not in ROUTING_STATUSES:
+            raise ScanError(f"routing rule status is invalid: {rule_id}")
+        for field in ("contract_milestones", "implementation_milestones"):
+            values = item[field]
+            if not isinstance(values, list) or values != sorted_milestones(values) or len(values) != len(set(values)) or any(value not in MILESTONES for value in values):
+                raise ScanError(f"routing milestones are invalid: {rule_id}.{field}")
+        if item["status"] in {"unresolved", "not_applicable"} and (item["contract_milestones"] or item["implementation_milestones"]):
+            raise ScanError(f"empty routing is required for status {item['status']}: {rule_id}")
+        if "M04" in item["implementation_milestones"]:
+            raise ScanError(f"contract-only M04 cannot be an implementation milestone: {rule_id}")
+        if "M19" in item["contract_milestones"] or "M19" in item["implementation_milestones"]:
+            raise ScanError(f"ordinary source observations cannot be routed automatically to M19: {rule_id}")
+        if "M18" in item["implementation_milestones"] and rule_id != "route-explicit-hdd-extension":
+            raise ScanError(f"M18 requires the explicit HDD routing rule: {rule_id}")
+        if "M05" in item["implementation_milestones"] and rule_id not in {"route-boot-image-layout", "route-build-image-layout"}:
+            raise ScanError(f"M05 requires explicit image-layout evidence: {rule_id}")
+        match = item["match"]
+        if not isinstance(match, dict) or not match or not set(match).issubset(allowed_match):
+            raise ScanError(f"routing match is invalid: {rule_id}")
+        for field, values in match.items():
+            if field.endswith("_regex"):
+                if not isinstance(values, str) or not values:
+                    raise ScanError(f"routing regex is invalid: {rule_id}.{field}")
+                try:
+                    re.compile(values, re.I)
+                except re.error as exc:
+                    raise ScanError(f"routing regex is invalid: {rule_id}.{field}: {exc}") from exc
+            elif not isinstance(values, list) or not values or len(values) != len(set(values)) or values != sorted(values):
+                raise ScanError(f"routing match values must be unique and sorted: {rule_id}.{field}")
+    return policy
+
+
+def load_routing_policy(root):
+    path = Path(root) / ROUTING_POLICY_RELATIVE
+    try:
+        raw = path.read_bytes()
+        policy = json.loads(raw.decode("utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise ScanError(f"cannot parse routing policy: {ROUTING_POLICY_RELATIVE}: {exc}") from exc
+    if raw != canonical_json_bytes(policy):
+        raise ScanError(f"routing policy is not canonical JSON: {ROUTING_POLICY_RELATIVE}")
+    return validate_routing_policy(policy)
+
+
+def load_census_schema(root):
+    path = Path(root) / CENSUS_SCHEMA_RELATIVE
+    try:
+        raw = path.read_bytes()
+        schema = json.loads(raw.decode("utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as exc:
+        raise ScanError(f"cannot parse census schema: {CENSUS_SCHEMA_RELATIVE}: {exc}") from exc
+    if raw != canonical_json_bytes(schema):
+        raise ScanError(f"census schema is not canonical JSON: {CENSUS_SCHEMA_RELATIVE}")
+    expected = {
+        "census_schema_version": CENSUS_SCHEMA_VERSION,
+        "entry_fields": list(OBSERVATION_FIELDS) + ["routing"],
+        "milestones": list(MILESTONES),
+        "observation_projection_fields": list(OBSERVATION_FIELDS),
+        "observation_projection_schema_version": PROJECTION_SCHEMA_VERSION,
+        "routing_fields": ["contract_milestones", "implementation_milestones", "notes", "rule_ids", "status"],
+        "routing_statuses": list(ROUTING_STATUSES),
+        "schema_id": "m03-port-surface-census",
+    }
+    if schema != expected:
+        raise ScanError("census schema fields or vocabulary are not accepted")
+    return schema
+
+
+def census_schema_sha256(root):
+    return hashlib.sha256((Path(root) / CENSUS_SCHEMA_RELATIVE).read_bytes()).hexdigest()
+
+
+def routing_policy_sha256(root):
+    return hashlib.sha256((Path(root) / ROUTING_POLICY_RELATIVE).read_bytes()).hexdigest()
+
+
+def routing_rule_matches(entry, rule_item):
+    match = rule_item["match"]
+    for field in ("component", "matched_rule", "mechanism", "surface"):
+        if field in match and entry[field] not in match[field]:
+            return False
+    if "path_regex" in match and re.search(match["path_regex"], entry["path"], re.I) is None:
+        return False
+    evidence_text = "\n".join((entry["path"], entry["symbol_or_section"], entry["evidence_excerpt_or_token"]))
+    if "any_text_regex" in match and re.search(match["any_text_regex"], evidence_text, re.I) is None:
+        return False
+    return True
+
+
+def route_observation(entry, policy):
+    for rule_item in policy["rules"]:
+        if not routing_rule_matches(entry, rule_item):
+            continue
+        return {
+            "status": rule_item["status"],
+            "contract_milestones": list(rule_item["contract_milestones"]),
+            "implementation_milestones": list(rule_item["implementation_milestones"]),
+            "rule_ids": [rule_item["id"]],
+            "notes": rule_item["notes"],
+        }
+    raise ScanError(f"no milestone routing rule matched observation: {entry['id']}")
+
+
+def observation_projection(entries):
+    projected = [{field: entry[field] for field in OBSERVATION_FIELDS} for entry in entries]
+    return {
+        "schema_version": PROJECTION_SCHEMA_VERSION,
+        "fields": list(OBSERVATION_FIELDS),
+        "entry_count": len(projected),
+        "entries": projected,
+    }
+
+
+def observation_projection_identity(entries):
+    encoded = canonical_json_bytes(observation_projection(entries))
+    return {
+        "schema_version": PROJECTION_SCHEMA_VERSION,
+        "entry_count": len(entries),
+        "size": len(encoded),
+        "sha256": hashlib.sha256(encoded).hexdigest(),
+    }
 
 
 def path_platform(path):
@@ -464,7 +625,6 @@ def make_entry(component, component_commit, path, symbol, matched, token, platfo
         "candidate_boundary": matched["candidate_boundary"],
         "disposition": matched["disposition"],
         "confidence": matched["confidence"],
-        "target_milestone": matched["target_milestone"],
         "notes": matched["notes"],
     }
     item["id"] = entry_id(item)
@@ -514,15 +674,50 @@ def scan_component(root, component):
 
 
 def counts(entries, key):
-    result = {value: 0 for value in (SURFACES if key == "surface" else MECHANISMS if key == "mechanism" else DISPOSITIONS if key == "disposition" else TARGET_MILESTONES if key == "target_milestone" else ("fdkernel", "freecom", "country"))}
+    result = {value: 0 for value in (SURFACES if key == "surface" else MECHANISMS if key == "mechanism" else DISPOSITIONS if key == "disposition" else ("fdkernel", "freecom", "country"))}
     for item in entries:
         result[item[key]] = result.get(item[key], 0) + 1
     return result
 
 
+def routing_counts(entries, policy):
+    status = {value: 0 for value in ROUTING_STATUSES}
+    contract = {value: 0 for value in MILESTONES}
+    implementation = {value: 0 for value in MILESTONES}
+    rule_ids = {item["id"]: 0 for item in policy["rules"]}
+    multiplicity = {"multiple": 0, "one": 0, "zero": 0}
+    unresolved_component = {value: 0 for value in ("country", "fdkernel", "freecom")}
+    unresolved_surface = {value: 0 for value in SURFACES}
+    for entry in entries:
+        routing = entry["routing"]
+        status[routing["status"]] += 1
+        for milestone in routing["contract_milestones"]:
+            contract[milestone] += 1
+        for milestone in routing["implementation_milestones"]:
+            implementation[milestone] += 1
+        for rule_id in routing["rule_ids"]:
+            rule_ids[rule_id] += 1
+        candidates = set(routing["contract_milestones"]) | set(routing["implementation_milestones"])
+        multiplicity["zero" if not candidates else "one" if len(candidates) == 1 else "multiple"] += 1
+        if routing["status"] == "unresolved":
+            unresolved_component[entry["component"]] += 1
+            unresolved_surface[entry["surface"]] += 1
+    return {
+        "contract_milestone_membership": contract,
+        "implementation_milestone_membership": implementation,
+        "milestone_multiplicity": multiplicity,
+        "routing_rule_membership": rule_ids,
+        "status": status,
+        "unresolved_by_component": unresolved_component,
+        "unresolved_by_surface": unresolved_surface,
+    }
+
+
 def scan_repository(root):
     root = Path(root).resolve()
     components = load_lock(root)
+    census_schema = load_census_schema(root)
+    routing_policy = load_routing_policy(root)
     entries = []
     component_records = []
     parent_gitlinks = []
@@ -553,14 +748,31 @@ def scan_repository(root):
         seen.add(item["id"])
         deduplicated.append(item)
     entries = deduplicated
+    for item in entries:
+        item["routing"] = route_observation(item, routing_policy)
     result = {
-        "schema_version": 1,
+        "schema_version": CENSUS_SCHEMA_VERSION,
+        "schema": {
+            "path": CENSUS_SCHEMA_RELATIVE,
+            "schema_id": census_schema["schema_id"],
+            "sha256": census_schema_sha256(root),
+            "version": census_schema["census_schema_version"],
+        },
         "scanner": {
             "name": SCANNER_NAME,
             "version": SCANNER_VERSION,
             "ruleset_sha256": ruleset_sha256(),
             "baseline_parent_commit": BASELINE_PARENT_COMMIT,
+            "accepted_m03_commit": ACCEPTED_M03_COMMIT,
         },
+        "routing_policy": {
+            "membership_count_semantics": MEMBERSHIP_COUNT_SEMANTICS,
+            "path": ROUTING_POLICY_RELATIVE,
+            "policy_id": routing_policy["policy_id"],
+            "schema_version": routing_policy["schema_version"],
+            "sha256": routing_policy_sha256(root),
+        },
+        "observation_projection": observation_projection_identity(entries),
         "parent_gitlinks": sorted(parent_gitlinks, key=lambda item: item["path"]),
         "components": sorted(component_records, key=lambda item: item["name"]),
         "surface_coverage": list(SURFACES),
@@ -571,7 +783,7 @@ def scan_repository(root):
             "surface": counts(entries, "surface"),
             "mechanism": counts(entries, "mechanism"),
             "disposition": counts(entries, "disposition"),
-            "target_milestone": counts(entries, "target_milestone"),
+            "routing": routing_counts(entries, routing_policy),
         },
         "limitations": [
             "This is a deterministic tracked-source signal census, not a complete call graph.",
@@ -586,7 +798,10 @@ def scan_repository(root):
 def write_output(path, value):
     path = Path(path)
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_bytes(canonical_json_bytes(value))
+    encoded = canonical_json_bytes(value)
+    path.write_bytes(encoded)
+    sidecar = path.with_suffix(".sha256")
+    sidecar.write_bytes(f"{hashlib.sha256(encoded).hexdigest()}  {path.name}\n".encode("ascii"))
 
 
 def main():

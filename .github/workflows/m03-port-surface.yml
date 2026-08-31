@@ -11,6 +11,7 @@ on:
       - "components/country"
       - ".gitmodules"
       - "manifests/**"
+      - "config/m03/**"
       - "tools/m03/**"
       - "tests/m03/**"
       - "docs/porting/**"
@@ -27,6 +28,7 @@ on:
       - "components/country"
       - ".gitmodules"
       - "manifests/**"
+      - "config/m03/**"
       - "tools/m03/**"
       - "tests/m03/**"
       - "docs/porting/**"
@@ -80,7 +82,8 @@ jobs:
           python3 - <<'PY'
           import json
           from pathlib import Path
-          for path in Path('qa/golden/m03').glob('*.json'):
+          paths = list(Path('qa/golden/m03').glob('*.json')) + list(Path('config/m03').glob('*.json'))
+          for path in paths:
               json.loads(path.read_text(encoding='utf-8'))
           PY
           git diff --check

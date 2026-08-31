@@ -140,6 +140,37 @@ class VerifierFixtureTests(unittest.TestCase):
         self.assertEqual(scanner.ruleset_sha256(), scanner.ruleset_sha256())
         self.assertEqual(len(scanner.ruleset_descriptors()), len(scanner.RULES))
 
+    def test_observation_projection_count_order_and_content_drift_are_rejected(self):
+        mutations = []
+
+        missing = self.invalid_data()
+        missing["entries"].pop()
+        mutations.append(("count", missing))
+
+        reordered = self.invalid_data()
+        reordered["entries"][0], reordered["entries"][1] = reordered["entries"][1], reordered["entries"][0]
+        mutations.append(("order", reordered))
+
+        changed = self.invalid_data()
+        changed["entries"][0]["evidence_excerpt_or_token"] += " changed"
+        mutations.append(("content", changed))
+
+        for label, data in mutations:
+            with self.subTest(label=label), self.assertRaisesRegex(
+                verifier.VerificationError,
+                "M03R1 FAIL .* SOURCE OBSERVATION DRIFT",
+            ):
+                verifier.validate_observation_invariant(ROOT, data)
+
+    def test_noncanonical_sha256_sidecar_is_rejected(self):
+        with tempfile.TemporaryDirectory() as directory:
+            payload = Path(directory) / "port-surface.json"
+            sidecar = Path(directory) / "port-surface.sha256"
+            payload.write_bytes(scanner.canonical_json_bytes({"schema_version": 1}))
+            sidecar.write_text("0" * 64 + "  port-surface.json\n", encoding="ascii")
+            with self.assertRaises(verifier.VerificationError):
+                verifier.validate_sidecar(sidecar, payload)
+
 
 if __name__ == "__main__":
     unittest.main()
