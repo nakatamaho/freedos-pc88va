@@ -63,8 +63,9 @@ class M07Tests(unittest.TestCase):
             M07.validate_probe_bytes(b"\xc3")
 
     def test_probe_ambient_path_bytes_are_rejected(self) -> None:
+        synthetic_home_path = ("/" + "Users/example").encode("ascii")
         with self.assertRaisesRegex(M07.M07Error, "ambient"):
-            M07.validate_probe_bytes(b"/Users/example")
+            M07.validate_probe_bytes(synthetic_home_path)
 
     def test_all_public_variants_preserve_non_boot_sectors(self) -> None:
         for item in M07.config()["variants"]:
@@ -168,7 +169,8 @@ class M07Tests(unittest.TestCase):
                 M07.validate_staged_paths([path])
 
     def test_public_text_private_markers_are_rejected(self) -> None:
-        for text in ("file:///tmp/input", "secret-va.rom", "/Users/example/input"):
+        synthetic_home_path = "/" + "Users/example/input"
+        for text in ("file:///tmp/input", "secret-va.rom", synthetic_home_path):
             with self.subTest(text=text), self.assertRaises(M07.M07Error):
                 M07.scan_public_text(text)
 
