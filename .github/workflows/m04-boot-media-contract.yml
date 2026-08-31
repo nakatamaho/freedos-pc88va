@@ -54,7 +54,7 @@ jobs:
       - name: Verify accepted baseline and public contract
         run: |
           make verify-scaffold
-          make m03-verify
+          make m03-preflight
           make m04-verify
 
       - name: Run M04 public positive and negative tests
