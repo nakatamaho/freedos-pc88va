@@ -223,7 +223,7 @@ def parse_synthetic_d88(data):
     return sectors
 
 
-def validate_changed_paths(paths):
+def validate_changed_paths(paths, m06_active=False):
     allowed = (
         ".github/workflows/m04-boot-media-contract.yml", ".gitignore", "Makefile",
         "config/contracts/m04-", "docs/adr/0002-", "docs/contracts/m04-",
@@ -246,12 +246,14 @@ def validate_changed_paths(paths):
     }
     m05_prefixes = ("config/m05/", "tests/m05/", "tools/m05/")
     m06_paths = {
-        ".github/workflows/m06-kernel.yml", ".gitignore", "Makefile",
+        ".github/workflows/m01-baseline.yml", ".github/workflows/m06-kernel.yml",
+        ".github/workflows/scaffold.yml", ".gitignore", "Makefile",
         "components/fdkernel", "manifests/README.md",
         "manifests/m06-components.lock.json", "qa/golden/m06-kernel-manifest.json",
         "schema/m06-kernel-interface.schema.json", "tools/verify_scaffold.py",
         "tools/m01/build_baseline.sh", "tools/m01/verify_m01.py",
-        "tools/m02/common.py", "tools/m04/verify_m04.py", "tools/m05/common.py",
+        "tools/m02/common.py", "tools/m03/scan_port_surface.py",
+        "tools/m04/verify_m04.py", "tools/m05/common.py",
         "tools/m05/verify_m05.py", "tools/qa/current_components.py",
         "tools/qa/verify_license_policy.py",
     }
@@ -268,7 +270,7 @@ def validate_changed_paths(paths):
             continue
         if item in m05_paths or item.startswith(m05_prefixes):
             continue
-        if item in m06_paths or item.startswith(m06_prefixes):
+        if m06_active and (item in m06_paths or item.startswith(m06_prefixes)):
             continue
         if item == "tools/m03/verify_m03.py":
             continue
@@ -302,7 +304,7 @@ def verify_baseline(root):
             raise VerificationError(f"component checkout mismatch: {name}")
         if git_text(component, "status", "--short", "--untracked-files=all"):
             raise VerificationError(f"component worktree is dirty: {name}")
-    return head
+    return head, current != historical
 
 
 def validate_evidence(data):
@@ -507,7 +509,7 @@ def validate_public_files(root):
 
 def verify_public(root):
     root = Path(root).resolve()
-    verify_baseline(root)
+    _, m06_active = verify_baseline(root)
     evidence = load_canonical(root / EVIDENCE_RELATIVE)
     claim_ids = validate_evidence(evidence)
     contract = load_canonical(root / CONTRACT_RELATIVE)
@@ -522,7 +524,7 @@ def verify_public(root):
     validate_public_files(root)
     changed = set(git_text(root, "diff", "--name-only", ACCEPTED_PARENT).splitlines())
     changed.update(git_text(root, "diff", "--cached", "--name-only").splitlines())
-    validate_changed_paths(sorted(item for item in changed if item))
+    validate_changed_paths(sorted(item for item in changed if item), m06_active=m06_active)
     return contract
 
 

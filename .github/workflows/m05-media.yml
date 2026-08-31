@@ -122,7 +122,14 @@ jobs:
           PY
 
       - name: Build, compare, and verify deterministic M05 media
-        run: make m05
+        run: |
+          if test -f manifests/m06-components.lock.json; then
+            make m06-prepare-m05
+            make m05-negative-tests
+            make m05-verify
+          else
+            make m05
+          fi
 
       - name: Audit public boundary and unchanged component state
         run: |

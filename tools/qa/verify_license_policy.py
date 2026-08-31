@@ -10,7 +10,10 @@ import subprocess
 import sys
 from pathlib import Path
 
-from current_components import CurrentComponentError, resolve_current_components
+try:
+    from .current_components import CurrentComponentError, resolve_current_components
+except ImportError:
+    from current_components import CurrentComponentError, resolve_current_components
 
 
 SPDX_EXPRESSION = "GPL-2.0-or-later"

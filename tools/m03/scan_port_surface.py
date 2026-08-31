@@ -564,7 +564,7 @@ def path_platform(path):
 
 
 def tracked_files(root, component):
-    result = git(root / component["path"], "ls-files", "-z")
+    result = git(root / component["path"], "ls-tree", "-r", "--name-only", "-z", component["commit"])
     paths = [item.decode("utf-8") for item in result.stdout.split(b"\0") if item]
     if paths != sorted(paths):
         raise ScanError(f"tracked file list is not sorted for {component['name']}")
@@ -572,7 +572,7 @@ def tracked_files(root, component):
 
 
 def blob_bytes(root, component, relative):
-    result = git(root / component["path"], "show", f"HEAD:{relative}")
+    result = git(root / component["path"], "show", f"{component['commit']}:{relative}")
     return result.stdout
 
 
@@ -637,9 +637,9 @@ def match_path(rule_item, path):
 
 def scan_component(root, component):
     commit = component["commit"]
-    actual = git_text(root / component["path"], "rev-parse", "HEAD")
-    if actual != commit:
-        raise ScanError(f"component commit mismatch for {component['name']}: {actual} != {commit}")
+    resolved = git_text(root / component["path"], "rev-parse", f"{commit}^{{commit}}")
+    if resolved != commit:
+        raise ScanError(f"component commit cannot be resolved for {component['name']}: {resolved} != {commit}")
     paths = tracked_files(root, component)
     entries = []
     for relative in paths:
@@ -723,7 +723,7 @@ def scan_repository(root):
     parent_gitlinks = []
     for component in components:
         component_root = root / component["path"]
-        tree = git_text(component_root, "rev-parse", "HEAD^{tree}")
+        tree = git_text(component_root, "rev-parse", f"{component['commit']}^{{tree}}")
         status = git(component_root, "status", "--porcelain=v1", "--untracked-files=all").stdout
         if status:
             raise ScanError(f"component worktree is dirty: {component['path']}")

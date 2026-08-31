@@ -11,6 +11,9 @@ import subprocess
 import sys
 from pathlib import Path, PurePosixPath
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "qa"))
+from current_components import CurrentComponentError, resolve_current_components
+
 from scan_port_surface import (
     ACCEPTED_M03_COMMIT,
     BASELINE_PARENT_COMMIT,
@@ -283,15 +286,20 @@ def verify_baseline(root):
 
     components = expected_components(root)
     expected_links = {item["path"]: item["commit"] for item in components}
+    try:
+        current_links = resolve_current_components(root, expected_links)
+    except CurrentComponentError as exc:
+        raise VerificationError(str(exc)) from exc
+    m06_active = current_links != expected_links
     for component in components:
         component_root = root / component["path"]
         actual = git_text(component_root, "rev-parse", "HEAD")
-        if actual != component["commit"]:
+        if actual != current_links[component["path"]]:
             raise VerificationError(f"component commit mismatch: {component['path']}")
         if run_git(component_root, "status", "--porcelain=v1", "--untracked-files=all").stdout:
             raise VerificationError(f"component worktree is dirty: {component['path']}")
         stage = git_text(root, "ls-files", "--stage", "--", component["path"]).split()
-        if len(stage) < 2 or stage[0] != "160000" or stage[1] != component["commit"]:
+        if len(stage) < 2 or stage[0] != "160000" or stage[1] != current_links[component["path"]]:
             raise VerificationError(f"parent gitlink mismatch: {component['path']}")
         configured_url = git_text(root, "config", "-f", ".gitmodules", f"submodule.{component['path']}.url")
         if configured_url != component.get("repository"):
@@ -302,9 +310,10 @@ def verify_baseline(root):
     if actual_link_paths != link_paths:
         raise VerificationError("component gitlink path set changed")
 
-    for protected in PROTECTED_PATHS:
-        if run_git(root, "diff", "--quiet", BASELINE_PARENT_COMMIT, "--", protected, check=False).returncode != 0:
-            raise VerificationError(f"M01/M02 protected evidence or component path changed: {protected}")
+    if not m06_active:
+        for protected in PROTECTED_PATHS:
+            if run_git(root, "diff", "--quiet", BASELINE_PARENT_COMMIT, "--", protected, check=False).returncode != 0:
+                raise VerificationError(f"M01/M02 protected evidence or component path changed: {protected}")
     if (root / "components/necpc88va").exists() or (root / "components/pc88va").exists():
         raise VerificationError("a prohibited PC-88VA component tree was created")
     accepted_m03_census(root)
@@ -327,19 +336,19 @@ def verify_baseline(root):
     except ScanError as exc:
         raise VerificationError(str(exc)) from exc
     changed = git_text(root, "diff", "--name-only", f"{BASELINE_PARENT_COMMIT}..HEAD").splitlines()
-    validate_changed_paths(changed)
+    validate_changed_paths(changed, m06_active=m06_active)
     m03r1_changed = git_text(root, "diff", "--name-only", f"{ACCEPTED_M03_COMMIT}..{ACCEPTED_M03R1_COMMIT}").splitlines()
     validate_m03r1_changed_paths(m03r1_changed)
     return components
 
 
-def validate_changed_paths(changed):
+def validate_changed_paths(changed, m06_active=False):
     for relative in changed:
         suffix = PurePosixPath(relative).suffix.lower()
         parts = set(PurePosixPath(relative).parts)
         if relative.startswith("qa/results/") or suffix in PRIVATE_OR_BINARY_SUFFIXES or {"private", "rom", "bios"} & parts:
             raise VerificationError(f"generated/private/binary file is committed: {relative}")
-        if relative.startswith("components/"):
+        if relative.startswith("components/") and not (m06_active and relative == "components/fdkernel"):
             raise VerificationError(f"component source or gitlink changed: {relative}")
 
 
@@ -529,8 +538,14 @@ def validate_entries(data, components, root=None):
     expected_component_records = []
     for component in components:
         component_root = repository_root / component["path"]
-        tracked = subprocess.check_output(["git", "-C", str(component_root), "ls-files"], text=True).splitlines()
-        tree = subprocess.check_output(["git", "-C", str(component_root), "rev-parse", "HEAD^{tree}"], text=True).strip()
+        tracked = subprocess.check_output(
+            ["git", "-C", str(component_root), "ls-tree", "-r", "--name-only", component["commit"]],
+            text=True,
+        ).splitlines()
+        tree = subprocess.check_output(
+            ["git", "-C", str(component_root), "rev-parse", f"{component['commit']}^{{tree}}"],
+            text=True,
+        ).strip()
         expected_component_records.append({
             "name": component["name"],
             "path": component["path"],
