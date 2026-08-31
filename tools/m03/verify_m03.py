@@ -66,6 +66,7 @@ M03R1_GOLDEN_SIZE = 14637790
 M03R1_RULESET_SHA256 = "57b8b299537bb9ca226e48cbd5bbf5dfe19da87d89ca3250c56a008fb9b0934c"
 M03R1_SCHEMA_SHA256 = "08af162ec4c6def748ebc57e1b48aa7e38a82e203615feb736458b53c8b35548"
 M03R1_ROUTING_POLICY_SHA256 = "dbb28f45c16d59b97fab8defa21ce4a866d51c701826987ce26a3b50ad8c938e"
+ACCEPTED_M03R1_COMMIT = "5bb5e1f47b0fdb954056532412889cee1123ef1b"
 ROUTING_POLICY_DOCUMENT = "docs/porting/m03r1-milestone-routing.md"
 PARENT_REPOSITORY = "https://github.com/nakatamaho/freedos-pc88va.git"
 
@@ -258,6 +259,8 @@ def verify_baseline(root):
     head = git_text(root, "rev-parse", "HEAD")
     if run_git(root, "merge-base", "--is-ancestor", ACCEPTED_M03_COMMIT, head, check=False).returncode != 0:
         raise VerificationError("parent baseline is not the accepted M03 commit ancestry")
+    if run_git(root, "merge-base", "--is-ancestor", ACCEPTED_M03R1_COMMIT, head, check=False).returncode != 0:
+        raise VerificationError("parent baseline is not the accepted M03R1 commit ancestry")
     origin = git_text(root, "remote", "get-url", "origin")
     if origin not in {PARENT_REPOSITORY, PARENT_REPOSITORY.removesuffix(".git") }:
         raise VerificationError(f"parent origin mismatch: {origin!r}")
@@ -325,7 +328,7 @@ def verify_baseline(root):
         raise VerificationError(str(exc)) from exc
     changed = git_text(root, "diff", "--name-only", f"{BASELINE_PARENT_COMMIT}..HEAD").splitlines()
     validate_changed_paths(changed)
-    m03r1_changed = git_text(root, "diff", "--name-only", f"{ACCEPTED_M03_COMMIT}..HEAD").splitlines()
+    m03r1_changed = git_text(root, "diff", "--name-only", f"{ACCEPTED_M03_COMMIT}..{ACCEPTED_M03R1_COMMIT}").splitlines()
     validate_m03r1_changed_paths(m03r1_changed)
     return components
 

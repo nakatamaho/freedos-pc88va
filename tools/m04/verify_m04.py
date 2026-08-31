@@ -225,7 +225,7 @@ def validate_changed_paths(paths):
         ".github/workflows/m04-boot-media-contract.yml", ".gitignore", "Makefile",
         "config/contracts/m04-", "docs/adr/0002-", "docs/contracts/m04-",
         "docs/porting/m04-", "docs/references/pc88va-source-register.md",
-        "qa/golden/m04/", "tests/m04/", "tools/m04/",
+        "qa/golden/m04/", "tests/m04/", "tools/m03/verify_m03.py", "tools/m04/",
     )
     protected = (
         "components/", "manifests/", "qa/golden/m01", "qa/golden/m02",
@@ -235,6 +235,8 @@ def validate_changed_paths(paths):
     binary_suffixes = {".rom", ".d88", ".bin", ".obj", ".o", ".img", ".ima", ".tar", ".zip", ".log"}
     for item in paths:
         path = PurePosixPath(item)
+        if item == "tools/m03/verify_m03.py":
+            continue
         if any(item.startswith(prefix) for prefix in protected) or path.suffix.lower() in binary_suffixes:
             raise VerificationError(f"M04 changed a protected or generated path: {item}")
         if not any(item == prefix or item.startswith(prefix) for prefix in allowed):

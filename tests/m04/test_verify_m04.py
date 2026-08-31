@@ -211,6 +211,11 @@ class ContractNegativeTests(unittest.TestCase):
             with self.subTest(path=path), self.assertRaises(verifier.VerificationError):
                 verifier.validate_changed_paths([path])
 
+    def test_exact_m03_verifier_portability_fix_is_allowed(self):
+        verifier.validate_changed_paths(["tools/m03/verify_m03.py"])
+        with self.assertRaises(verifier.VerificationError):
+            verifier.validate_changed_paths(["tools/m03/scan_port_surface.py"])
+
     def test_component_gitlink_drift_is_rejected(self):
         data = self.invalid()
         data["component_gitlinks"]["fdkernel"] = "0" * 40
