@@ -236,6 +236,12 @@ def validate_changed_paths(paths):
         "tests/qa/test_verify_license_policy.py",
         "tools/qa/verify_license_policy.py",
     }
+    m05_paths = {
+        ".github/workflows/m05-media.yml",
+        "docs/porting/m05-media-image.md",
+        "qa/golden/m05-media-manifest.json",
+    }
+    m05_prefixes = ("config/m05/", "tests/m05/", "tools/m05/")
     protected = (
         "components/", "manifests/", "qa/golden/m01", "qa/golden/m02",
         "qa/golden/m03", "config/m03/", "tools/m01/", "tools/m02/", "tools/m03/",
@@ -245,6 +251,8 @@ def validate_changed_paths(paths):
     for item in paths:
         path = PurePosixPath(item)
         if item in m04r1_license_paths:
+            continue
+        if item in m05_paths or item.startswith(m05_prefixes):
             continue
         if item == "tools/m03/verify_m03.py":
             continue

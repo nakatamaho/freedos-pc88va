@@ -229,6 +229,18 @@ class ContractNegativeTests(unittest.TestCase):
         with self.assertRaises(verifier.VerificationError):
             verifier.validate_changed_paths(["manifests/components.lock.json"])
 
+    def test_m05_parent_only_paths_are_narrowly_allowed(self):
+        verifier.validate_changed_paths([
+            ".github/workflows/m05-media.yml",
+            "config/m05/media.json",
+            "docs/porting/m05-media-image.md",
+            "qa/golden/m05-media-manifest.json",
+            "tests/m05/test_media.py",
+            "tools/m05/build_media.py",
+        ])
+        with self.assertRaises(verifier.VerificationError):
+            verifier.validate_changed_paths(["components/fdkernel"])
+
     def test_component_gitlink_drift_is_rejected(self):
         data = self.invalid()
         data["component_gitlinks"]["fdkernel"] = "0" * 40

@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help submodules component-status verify-scaffold m01-host-portability m01-image-identity m01-preflight m01-image m01-build m01-compare m01-enroll-golden m01-verify m01-clean m02-preflight m02-clean m02-bundle m02-compare m02-verify m02-enroll-golden m02 m03-preflight m03-clean m03-scan m03-compare m03-enroll-golden m03-verify m03 m04-preflight m04-private-evidence m04-verify m04 m04r1-license-verify verify
+.PHONY: help submodules component-status verify-scaffold m01-host-portability m01-image-identity m01-preflight m01-image m01-build m01-compare m01-enroll-golden m01-verify m01-clean m02-preflight m02-clean m02-bundle m02-compare m02-verify m02-enroll-golden m02 m03-preflight m03-clean m03-scan m03-compare m03-enroll-golden m03-verify m03 m04-preflight m04-private-evidence m04-verify m04 m04r1-license-verify m05-preflight m05-clean m05-build m05-compare m05-enroll-golden m05-negative-tests m05-verify m05 verify
 
 help:
 	@printf '%s\n' \
@@ -37,6 +37,14 @@ help:
 		'  m04-verify        Verify the public provisional M04 contract' \
 		'  m04               Run the public non-destructive M04 verification' \
 		'  m04r1-license-verify  Verify the GPL-2.0-or-later root policy' \
+		'  m05-preflight     Verify M05 identities and accepted M02 inputs' \
+		'  m05-clean         Remove only generated M05 result paths' \
+		'  m05-build         Build and inspect two independent M05 media runs' \
+		'  m05-compare       Compare complete M05 result trees byte-for-byte' \
+		'  m05-enroll-golden Explicitly enroll a passing M05 textual golden' \
+		'  m05-negative-tests  Run M05 fail-closed media tests' \
+		'  m05-verify        Verify M05 runs against the committed golden' \
+		'  m05               Run the complete deterministic M05 sequence' \
 		'  verify            Run scaffold and available M01 verification'
 
 submodules:
@@ -140,6 +148,38 @@ m04:
 
 m04r1-license-verify:
 	@PYTHONDONTWRITEBYTECODE=1 python3 tools/qa/verify_license_policy.py
+
+m05-preflight:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m05/verify_m05.py --preflight
+
+m05-clean:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m05/verify_m05.py --clean
+
+m05-build:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m05/build_media.py --repo-root . --output qa/results/m05/run-1
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m05/inspect_media.py --repo-root . --run-dir qa/results/m05/run-1
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m05/build_media.py --repo-root . --output qa/results/m05/run-2
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m05/inspect_media.py --repo-root . --run-dir qa/results/m05/run-2
+
+m05-compare:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m05/compare_media.py
+
+m05-enroll-golden:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m05/verify_m05.py --enroll-golden
+
+m05-negative-tests:
+	@PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/m05 -p 'test_*.py'
+
+m05-verify:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m05/verify_m05.py --verify
+
+m05:
+	@$(MAKE) m05-preflight
+	@$(MAKE) m05-clean
+	@$(MAKE) m05-build
+	@$(MAKE) m05-compare
+	@$(MAKE) m05-negative-tests
+	@$(MAKE) m05-verify
 
 verify: verify-scaffold
 	@if test -f qa/golden/m01-baseline.json && test -d qa/results/m01/run-1 && test -d qa/results/m01/run-2; then \

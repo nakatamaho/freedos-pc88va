@@ -1,0 +1,134 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+name: M05 deterministic candidate media
+
+on:
+  push:
+    paths:
+      - ".github/workflows/m05-media.yml"
+      - ".gitignore"
+      - "Makefile"
+      - "COPYING"
+      - "components/fdkernel"
+      - "components/freecom"
+      - "components/country"
+      - ".gitmodules"
+      - "containers/m01/**"
+      - "config/m01/**"
+      - "config/m05/**"
+      - "docs/porting/m05-media-image.md"
+      - "manifests/**"
+      - "qa/golden/m01-baseline.json"
+      - "qa/golden/m02/**"
+      - "qa/golden/m03/**"
+      - "qa/golden/m05-media-manifest.json"
+      - "schema/**"
+      - "tests/m04/**"
+      - "tests/m05/**"
+      - "tests/qa/**"
+      - "tools/m01/**"
+      - "tools/m02/**"
+      - "tools/m04/**"
+      - "tools/m05/**"
+      - "tools/qa/**"
+  pull_request:
+    paths:
+      - ".github/workflows/m05-media.yml"
+      - ".gitignore"
+      - "Makefile"
+      - "COPYING"
+      - "components/fdkernel"
+      - "components/freecom"
+      - "components/country"
+      - ".gitmodules"
+      - "containers/m01/**"
+      - "config/m01/**"
+      - "config/m05/**"
+      - "docs/porting/m05-media-image.md"
+      - "manifests/**"
+      - "qa/golden/m01-baseline.json"
+      - "qa/golden/m02/**"
+      - "qa/golden/m03/**"
+      - "qa/golden/m05-media-manifest.json"
+      - "schema/**"
+      - "tests/m04/**"
+      - "tests/m05/**"
+      - "tests/qa/**"
+      - "tools/m01/**"
+      - "tools/m02/**"
+      - "tools/m04/**"
+      - "tools/m05/**"
+      - "tools/qa/**"
+
+jobs:
+  deterministic-media:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out repository and pinned submodules
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Assert native x64 runner
+        run: |
+          test "$(uname -m)" = x86_64
+          test "$(dpkg --print-architecture)" = amd64
+
+      - name: Configure component remotes
+        run: bash tools/configure_component_remotes.sh
+
+      - name: Verify parent, component, M04, and license identities
+        run: |
+          git diff --check
+          make verify-scaffold
+          make m04-preflight
+          make m04-verify
+          make m04r1-license-verify
+          test -z "$(git -C components/fdkernel status --short --untracked-files=all)"
+          test -z "$(git -C components/freecom status --short --untracked-files=all)"
+          test -z "$(git -C components/country status --short --untracked-files=all)"
+
+      - name: Rebuild and verify accepted M01 inputs
+        run: |
+          make m01-host-portability
+          make m01-image-identity
+          make m01-preflight
+          make m01-image
+          M01_DIAGNOSTICS=1 make m01-build
+          make m01-compare
+          make m01-verify
+          PYTHONDONTWRITEBYTECODE=1 python3 tools/m01/test_kernel_reproducibility.py --repo-root .
+
+      - name: Rebuild and verify accepted M02 bundle inputs
+        run: |
+          PYTHONDONTWRITEBYTECODE=1 python3 tools/m02/test_bundle_contract.py
+          make m02-preflight
+          make m02-clean
+          make m02-bundle
+          make m02-compare
+          make m02-verify
+
+      - name: Run M05 syntax and fail-closed tests
+        run: |
+          PYTHONPYCACHEPREFIX="$RUNNER_TEMP/m05-pycache" python3 -m compileall -q tools/m05 tests/m05
+          python3 -m unittest discover -s tests/m04 -p 'test_*.py'
+          make m05-negative-tests
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          for path in sorted(Path('config/m05').glob('*.json')):
+              json.loads(path.read_text(encoding='utf-8'))
+          json.loads(Path('qa/golden/m05-media-manifest.json').read_text(encoding='utf-8'))
+          PY
+
+      - name: Build, compare, and verify deterministic M05 media
+        run: make m05
+
+      - name: Audit public boundary and unchanged component state
+        run: |
+          git diff --check
+          git diff --exit-code
+          test -z "$(git -C components/fdkernel status --short --untracked-files=all)"
+          test -z "$(git -C components/freecom status --short --untracked-files=all)"
+          test -z "$(git -C components/country status --short --untracked-files=all)"
+          echo 'M05 used no private manuals, ROMs, D88 inputs, or private analysis results.'

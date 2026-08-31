@@ -1,0 +1,100 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "boot_record": {
+      "type": "object"
+    },
+    "component_gitlinks": {
+      "additionalProperties": {
+        "pattern": "^[0-9a-f]{40}$",
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "consumed_identities": {
+      "additionalProperties": {
+        "pattern": "^[0-9a-f]{64}$",
+        "type": "string"
+      },
+      "type": "object"
+    },
+    "d88": {
+      "type": "object"
+    },
+    "filesystem": {
+      "type": "object"
+    },
+    "format_provenance": {
+      "type": "object"
+    },
+    "geometry": {
+      "type": "object"
+    },
+    "image": {
+      "type": "object"
+    },
+    "milestone": {
+      "const": "M05-deterministic-candidate-media"
+    },
+    "parent_commit": {
+      "pattern": "^[0-9a-f]{40}$",
+      "type": "string"
+    },
+    "payloads": {
+      "items": {
+        "additionalProperties": false,
+        "properties": {
+          "bundle_path": {
+            "type": "string"
+          },
+          "dos_name": {
+            "pattern": "^[A-Z0-9]{1,8}\\.[A-Z0-9]{1,3}$",
+            "type": "string"
+          },
+          "runtime_claim": {
+            "type": "string"
+          },
+          "source_role": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "bundle_path",
+          "dos_name",
+          "runtime_claim",
+          "source_role"
+        ],
+        "type": "object"
+      },
+      "minItems": 3,
+      "type": "array"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "unknowns": {
+      "items": {
+        "type": "string"
+      },
+      "type": "array"
+    }
+  },
+  "required": [
+    "boot_record",
+    "component_gitlinks",
+    "consumed_identities",
+    "d88",
+    "filesystem",
+    "format_provenance",
+    "geometry",
+    "image",
+    "milestone",
+    "parent_commit",
+    "payloads",
+    "schema_version",
+    "unknowns"
+  ],
+  "title": "M05 deterministic PC-88VA candidate media specification",
+  "type": "object"
+}
