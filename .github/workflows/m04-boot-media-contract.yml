@@ -1,0 +1,78 @@
+name: M04 provisional boot and media contract
+
+on:
+  push:
+    paths:
+      - ".github/workflows/m04-boot-media-contract.yml"
+      - ".gitignore"
+      - "Makefile"
+      - "components/fdkernel"
+      - "components/freecom"
+      - "components/country"
+      - ".gitmodules"
+      - "manifests/**"
+      - "config/contracts/**"
+      - "tools/m04/**"
+      - "tests/m04/**"
+      - "docs/contracts/**"
+      - "docs/porting/m04-*.md"
+      - "docs/adr/0002-*.md"
+      - "docs/references/pc88va-source-register.md"
+      - "qa/golden/m04/**"
+  pull_request:
+    paths:
+      - ".github/workflows/m04-boot-media-contract.yml"
+      - ".gitignore"
+      - "Makefile"
+      - "components/fdkernel"
+      - "components/freecom"
+      - "components/country"
+      - ".gitmodules"
+      - "manifests/**"
+      - "config/contracts/**"
+      - "tools/m04/**"
+      - "tests/m04/**"
+      - "docs/contracts/**"
+      - "docs/porting/m04-*.md"
+      - "docs/adr/0002-*.md"
+      - "docs/references/pc88va-source-register.md"
+      - "qa/golden/m04/**"
+
+jobs:
+  static-contract:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out repository and pinned submodules
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Configure component remotes
+        run: bash tools/configure_component_remotes.sh
+
+      - name: Verify accepted baseline and public contract
+        run: |
+          make verify-scaffold
+          make m03-verify
+          make m04-verify
+
+      - name: Run M04 public positive and negative tests
+        run: python3 -m unittest discover -s tests/m04 -p 'test_*.py'
+
+      - name: Run syntax, JSON, privacy, and whitespace checks
+        run: |
+          PYTHONPYCACHEPREFIX="$RUNNER_TEMP/m04-pycache" python3 -m compileall -q tools/m04 tests/m04
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          for path in sorted(Path('config/contracts').glob('m04-*.json')):
+              json.loads(path.read_text(encoding='utf-8'))
+          PY
+          test -z "$(git -C components/fdkernel status --short --untracked-files=all)"
+          test -z "$(git -C components/freecom status --short --untracked-files=all)"
+          test -z "$(git -C components/country status --short --untracked-files=all)"
+          git diff --check
+
+      - name: Record private-source boundary
+        run: echo 'CI validated the derived public contract and did not inspect private source content.'

@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help submodules component-status verify-scaffold m01-host-portability m01-image-identity m01-preflight m01-image m01-build m01-compare m01-enroll-golden m01-verify m01-clean m02-preflight m02-clean m02-bundle m02-compare m02-verify m02-enroll-golden m02 m03-preflight m03-clean m03-scan m03-compare m03-enroll-golden m03-verify m03 verify
+.PHONY: help submodules component-status verify-scaffold m01-host-portability m01-image-identity m01-preflight m01-image m01-build m01-compare m01-enroll-golden m01-verify m01-clean m02-preflight m02-clean m02-bundle m02-compare m02-verify m02-enroll-golden m02 m03-preflight m03-clean m03-scan m03-compare m03-enroll-golden m03-verify m03 m04-private-evidence m04-verify m04 verify
 
 help:
 	@printf '%s\n' \
@@ -32,6 +32,9 @@ help:
 		'  m03-enroll-golden Enroll an M03 golden after a passing comparison' \
 		'  m03-verify        Verify M03 against its reviewed golden' \
 		'  m03               Run the complete non-destructive M03 sequence' \
+		'  m04-private-evidence  Validate local M04 TXT/Markdown locators' \
+		'  m04-verify        Verify the public provisional M04 contract' \
+		'  m04               Run the public non-destructive M04 verification' \
 		'  verify            Run scaffold and available M01 verification'
 
 submodules:
@@ -120,6 +123,15 @@ m03:
 	@$(MAKE) m03-scan
 	@$(MAKE) m03-compare
 	@$(MAKE) m03-verify
+
+m04-private-evidence:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m04/verify_m04.py --private-evidence
+
+m04-verify:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m04/verify_m04.py --verify
+
+m04:
+	@$(MAKE) m04-verify
 
 verify: verify-scaffold
 	@if test -f qa/golden/m01-baseline.json && test -d qa/results/m01/run-1 && test -d qa/results/m01/run-2; then \

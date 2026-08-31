@@ -1,0 +1,575 @@
+{
+  "claims": [
+    {
+      "basename": "N/A",
+      "claim_id": "DEC-DISK-PATH",
+      "claim_type": "design_choice",
+      "concise_claim": "The provisional loader prefers the documented FDD firmware interface; direct controller work is deferred unless that candidate fails.",
+      "confidence": "medium",
+      "contract_fields": [
+        "preferred_disk_access",
+        "disk_access_candidates"
+      ],
+      "corroborating_claim_ids": [
+        "TXT-FDD-READ-ABI",
+        "TXT-FDD-STATUS-ABI"
+      ],
+      "downstream_validation": "M07 must identify the call entry; M08 must validate reads and error handling.",
+      "encoding": "N/A",
+      "line_end": null,
+      "line_start": null,
+      "notes": "This does not claim that the firmware entry ABI is complete.",
+      "section": "disk access decision",
+      "source_id": "PROJECT-M04",
+      "source_kind": "project_decision",
+      "status": "design_choice",
+      "subsystem": "disk_access"
+    },
+    {
+      "basename": "N/A",
+      "claim_id": "DEC-EARLY-TRACE",
+      "claim_type": "design_choice",
+      "concise_claim": "M07 may use a trace-only observation gate while the complete console is deferred to M09.",
+      "confidence": "high",
+      "contract_fields": [
+        "early_diagnostics"
+      ],
+      "corroborating_claim_ids": [
+        "TXT-TEXT-CHAR-OUTPUT"
+      ],
+      "downstream_validation": "M07 defines the trace event; M09 implements visible console output.",
+      "encoding": "N/A",
+      "line_end": null,
+      "line_start": null,
+      "notes": "Trace-only is not console support.",
+      "section": "diagnostic decision",
+      "source_id": "PROJECT-M04",
+      "source_kind": "project_decision",
+      "status": "design_choice",
+      "subsystem": "early_diagnostics"
+    },
+    {
+      "basename": "N/A",
+      "claim_id": "DEC-FAT12-LAYOUT",
+      "claim_type": "design_choice",
+      "concise_claim": "The M05 candidate uses one reserved sector, two FATs, two sectors per FAT, 192 root entries, and one sector per cluster.",
+      "confidence": "high",
+      "contract_fields": [
+        "filesystem"
+      ],
+      "corroborating_claim_ids": [
+        "DER-FAT12-CAPACITY",
+        "TXT-FDD-2HD-GEOMETRY"
+      ],
+      "downstream_validation": "M05 recomputes and serializes the layout without a bootability claim.",
+      "encoding": "N/A",
+      "line_end": null,
+      "line_start": null,
+      "notes": "The FAT layout is a host-image design, not a firmware BPB fact.",
+      "section": "candidate FAT12 layout",
+      "source_id": "PROJECT-M04",
+      "source_kind": "project_decision",
+      "status": "design_choice",
+      "subsystem": "filesystem"
+    },
+    {
+      "basename": "N/A",
+      "claim_id": "DEC-KERNEL-ROLE",
+      "claim_type": "design_choice",
+      "concise_claim": "KERNEL.SYS is the image role name; M08 will consume a future M06 PC-88VA build, not execute the accepted NEC98 baseline.",
+      "confidence": "high",
+      "contract_fields": [
+        "kernel_payload_role",
+        "kernel_loading"
+      ],
+      "corroborating_claim_ids": [
+        "SRC-M02-KERNEL-IDENTITY"
+      ],
+      "downstream_validation": "M06 creates the compile-only VA payload; M08 fixes destination, entry, and handoff.",
+      "encoding": "N/A",
+      "line_end": null,
+      "line_start": null,
+      "notes": "The identical KWC8616.SYS alias is not staged by the candidate design.",
+      "section": "kernel payload role",
+      "source_id": "PROJECT-M04",
+      "source_kind": "project_decision",
+      "status": "design_choice",
+      "subsystem": "kernel_loading"
+    },
+    {
+      "basename": "N/A",
+      "claim_id": "DEC-MEDIUM-SELECTION",
+      "claim_type": "design_choice",
+      "concise_claim": "The first M05 candidate is the documented 2HD MFM geometry with 1024-byte sectors.",
+      "confidence": "medium",
+      "contract_fields": [
+        "selected_candidate_medium"
+      ],
+      "corroborating_claim_ids": [
+        "TXT-FDD-2HD-GEOMETRY",
+        "TXT-FDD-MEDIA-SUPPORT"
+      ],
+      "downstream_validation": "M05 validates deterministic layout; M07 validates firmware boot acceptance.",
+      "encoding": "N/A",
+      "line_end": null,
+      "line_start": null,
+      "notes": "Selection is provisional and does not establish bootability.",
+      "section": "candidate medium selection",
+      "source_id": "PROJECT-M04",
+      "source_kind": "project_decision",
+      "status": "design_choice",
+      "subsystem": "media"
+    },
+    {
+      "basename": "N/A",
+      "claim_id": "DEFER-KEYBOARD",
+      "claim_type": "deferred",
+      "concise_claim": "Keyboard input is unnecessary for M05-M08 and is deferred to M11, with Japanese input and filename behavior deferred to M17.",
+      "confidence": "high",
+      "contract_fields": [
+        "blocker_dispositions"
+      ],
+      "corroborating_claim_ids": [],
+      "downstream_validation": "M11 and M17",
+      "encoding": "N/A",
+      "line_end": null,
+      "line_start": null,
+      "notes": "No M05-M08 operation requires interactive input.",
+      "section": "readiness deferral",
+      "source_id": "PROJECT-M04",
+      "source_kind": "project_decision",
+      "status": "deferred",
+      "subsystem": "console_input"
+    },
+    {
+      "basename": "N/A",
+      "claim_id": "DEFER-TIMER",
+      "claim_type": "deferred",
+      "concise_claim": "Full DOS timer and clock behavior is unnecessary for static image construction, compile-only work, first-instruction proof, and a bounded loader read.",
+      "confidence": "high",
+      "contract_fields": [
+        "blocker_dispositions"
+      ],
+      "corroborating_claim_ids": [],
+      "downstream_validation": "M10",
+      "encoding": "N/A",
+      "line_end": null,
+      "line_start": null,
+      "notes": "M07 timeout instrumentation must not be confused with the DOS runtime clock.",
+      "section": "readiness deferral",
+      "source_id": "PROJECT-M04",
+      "source_kind": "project_decision",
+      "status": "deferred",
+      "subsystem": "timer_clock"
+    },
+    {
+      "basename": "N/A",
+      "claim_id": "DER-FAT12-CAPACITY",
+      "claim_type": "derived_value",
+      "concise_claim": "The selected geometry and FAT choices yield 1280 sectors, 1269 data clusters, and sufficient FAT12 table capacity.",
+      "confidence": "high",
+      "contract_fields": [
+        "selected_candidate_medium",
+        "filesystem",
+        "derived_invariants"
+      ],
+      "corroborating_claim_ids": [
+        "DEC-FAT12-LAYOUT",
+        "TXT-FDD-2HD-GEOMETRY"
+      ],
+      "downstream_validation": "M04 verifier and M05 image builder",
+      "encoding": "N/A",
+      "line_end": null,
+      "line_start": null,
+      "notes": "All calculations use integer arithmetic.",
+      "section": "filesystem arithmetic",
+      "source_id": "PROJECT-M04",
+      "source_kind": "integer_derivation",
+      "status": "design_choice",
+      "subsystem": "filesystem"
+    },
+    {
+      "basename": "PC88VA_テクニカルマニュアル_BNN.md",
+      "claim_id": "MD-IPL-STARTUP",
+      "claim_type": "text_export_fact",
+      "concise_claim": "The available manual export describes a one-sector IPL load, candidate execution at segment 3000H offset 0, and a candidate stack near segment 3000H offset FFFEH.",
+      "confidence": "medium",
+      "contract_fields": [
+        "firmware_to_ipl",
+        "boot_record"
+      ],
+      "corroborating_claim_ids": [],
+      "downstream_validation": "M07 must confirm entry, load extent, and non-overlap in VAEG.",
+      "encoding": "utf-8",
+      "line_end": 3448,
+      "line_start": 3389,
+      "notes": "A missing image reference prevents treating diagram-specific acceptance details as confirmed.",
+      "section": "system startup",
+      "source_id": "PRV-VA-MANUAL-EXPORT",
+      "source_kind": "markdown_export",
+      "status": "supported",
+      "subsystem": "boot"
+    },
+    {
+      "basename": "REDACTED",
+      "claim_id": "PRV-D88-FALLBACK",
+      "claim_type": "d88_observation",
+      "concise_claim": "Bounded local D88 parsing completed, but no exact private value is promoted to the public contract.",
+      "confidence": "low",
+      "contract_fields": [
+        "readiness.private_local"
+      ],
+      "corroborating_claim_ids": [],
+      "downstream_validation": "M07/M08 remain blocked; explicit promotion would require separate user approval.",
+      "encoding": "binary",
+      "line_end": null,
+      "line_start": null,
+      "notes": "Container identities, sector data, names, and hashes remain private.",
+      "section": "private fallback",
+      "source_id": "PRV-M04-D88-LOCAL",
+      "source_kind": "private_binary",
+      "status": "private_observation",
+      "subsystem": "media"
+    },
+    {
+      "basename": "REDACTED",
+      "claim_id": "PRV-ROM-FALLBACK",
+      "claim_type": "rom_observation",
+      "concise_claim": "Bounded local ROM inspection completed, but no exact private value is promoted to the public contract.",
+      "confidence": "low",
+      "contract_fields": [
+        "firmware_dependency",
+        "readiness.private_local"
+      ],
+      "corroborating_claim_ids": [],
+      "downstream_validation": "M07/M08 remain blocked; explicit promotion would require separate user approval.",
+      "encoding": "binary",
+      "line_end": null,
+      "line_start": null,
+      "notes": "Binary identities, addresses, strings, and disassembly remain private.",
+      "section": "private fallback",
+      "source_id": "PRV-M04-ROM-LOCAL",
+      "source_kind": "private_binary",
+      "status": "private_observation",
+      "subsystem": "firmware"
+    },
+    {
+      "basename": "bundle-manifest.json",
+      "claim_id": "SRC-M02-KERNEL-IDENTITY",
+      "claim_type": "source_fact",
+      "concise_claim": "The accepted M02 baseline records identical kernel and alias payloads of 83774 bytes with the locked SHA-256.",
+      "confidence": "high",
+      "contract_fields": [
+        "kernel_payload_role"
+      ],
+      "corroborating_claim_ids": [],
+      "downstream_validation": "M05 capacity check and M06 payload-role replacement",
+      "encoding": "utf-8",
+      "line_end": null,
+      "line_start": null,
+      "notes": "This is NEC98 build-reference evidence and not a VA execution claim.",
+      "section": "payload roles kernel and kernel-alias",
+      "source_id": "SRC-PARENT-M02R1",
+      "source_kind": "tracked_parent_contract",
+      "status": "confirmed",
+      "subsystem": "kernel_loading"
+    },
+    {
+      "basename": "600INDEX.TXT",
+      "claim_id": "TXT-BIOS-INDEX",
+      "claim_type": "electronic_document_fact",
+      "concise_claim": "The electronic index routes the BIOS chapters to separate FDD, keyboard, and text-interface documents.",
+      "confidence": "high",
+      "contract_fields": [
+        "source_registry_digest"
+      ],
+      "corroborating_claim_ids": [
+        "TXT-DOC-PROVENANCE"
+      ],
+      "downstream_validation": "M04 local evidence gate",
+      "encoding": "cp932",
+      "line_end": 23,
+      "line_start": 1,
+      "notes": "The index is used for source routing, not as a numeric hardware table.",
+      "section": "BIOS chapter index",
+      "source_id": "PRV-TEKUMANI-BIOS-INDEX",
+      "source_kind": "born_digital_text",
+      "status": "confirmed",
+      "subsystem": "evidence"
+    },
+    {
+      "basename": "TEKUMANI.DOC",
+      "claim_id": "TXT-DOC-PROVENANCE",
+      "claim_type": "electronic_document_fact",
+      "concise_claim": "The electronic distribution identifies itself as a PC-88VA technical-manual collection and records its own edition metadata.",
+      "confidence": "high",
+      "contract_fields": [
+        "source_registry_digest"
+      ],
+      "corroborating_claim_ids": [],
+      "downstream_validation": "M04 local evidence gate",
+      "encoding": "cp932",
+      "line_end": 7,
+      "line_start": 4,
+      "notes": "No printed-page identity is required for this born-digital source.",
+      "section": "distribution header",
+      "source_id": "PRV-TEKUMANI-DOC",
+      "source_kind": "born_digital_text",
+      "status": "confirmed",
+      "subsystem": "evidence"
+    },
+    {
+      "basename": "601FDD.TXT",
+      "claim_id": "TXT-FDD-2HD-GEOMETRY",
+      "claim_type": "electronic_document_fact",
+      "concise_claim": "The FDD BIOS tables describe the 1HD/2HD MFM case as 80 cylinders with eight 1024-byte sectors per track.",
+      "confidence": "high",
+      "contract_fields": [
+        "candidate_media",
+        "selected_candidate_medium"
+      ],
+      "corroborating_claim_ids": [
+        "TXT-FDD-LOGICAL-TRACK",
+        "TXT-FDD-SECTOR-SIZE"
+      ],
+      "downstream_validation": "M05 arithmetic; M07 firmware boot acceptance",
+      "encoding": "shift_jisx0213",
+      "line_end": 1009,
+      "line_start": 946,
+      "notes": "This establishes a supported geometry, not that every such disk is bootable.",
+      "section": "FDD parameter tables",
+      "source_id": "PRV-VA-FDD",
+      "source_kind": "born_digital_text",
+      "status": "confirmed",
+      "subsystem": "media"
+    },
+    {
+      "basename": "601FDD.TXT",
+      "claim_id": "TXT-FDD-LOGICAL-TRACK",
+      "claim_type": "electronic_document_fact",
+      "concise_claim": "The firmware interface numbers logical tracks as cylinder times two plus head.",
+      "confidence": "high",
+      "contract_fields": [
+        "addressing",
+        "selected_candidate_medium.heads"
+      ],
+      "corroborating_claim_ids": [],
+      "downstream_validation": "M05 CHS/LBA arithmetic and M08 firmware calls",
+      "encoding": "shift_jisx0213",
+      "line_end": 57,
+      "line_start": 50,
+      "notes": "The two-head ordering is explicit in the text interface.",
+      "section": "logical track convention",
+      "source_id": "PRV-VA-FDD",
+      "source_kind": "born_digital_text",
+      "status": "confirmed",
+      "subsystem": "addressing"
+    },
+    {
+      "basename": "601FDD.TXT",
+      "claim_id": "TXT-FDD-MEDIA-SUPPORT",
+      "claim_type": "electronic_document_fact",
+      "concise_claim": "The FDD BIOS document lists 1D/2D, 1DD/2DD, and 1HD/2HD media families.",
+      "confidence": "high",
+      "contract_fields": [
+        "candidate_media"
+      ],
+      "corroborating_claim_ids": [],
+      "downstream_validation": "M05 medium selection and M07 boot acceptance",
+      "encoding": "shift_jisx0213",
+      "line_end": 10,
+      "line_start": 1,
+      "notes": "Supported firmware media does not automatically mean bootable media.",
+      "section": "FDD BIOS overview",
+      "source_id": "PRV-VA-FDD",
+      "source_kind": "born_digital_text",
+      "status": "confirmed",
+      "subsystem": "media"
+    },
+    {
+      "basename": "601FDD.TXT",
+      "claim_id": "TXT-FDD-READ-ABI",
+      "claim_type": "electronic_document_fact",
+      "concise_claim": "The read-data operation documents count, logical drive/track, starting sector, format/size, and segmented buffer inputs.",
+      "confidence": "high",
+      "contract_fields": [
+        "disk_access_candidates"
+      ],
+      "corroborating_claim_ids": [
+        "TXT-FDD-STATUS-ABI"
+      ],
+      "downstream_validation": "M07 must locate the call entry; M08 validates transfer behavior.",
+      "encoding": "shift_jisx0213",
+      "line_end": 269,
+      "line_start": 230,
+      "notes": "The current text pass does not establish the common service entry mechanism.",
+      "section": "read data operation",
+      "source_id": "PRV-VA-FDD",
+      "source_kind": "born_digital_text",
+      "status": "confirmed",
+      "subsystem": "disk_access"
+    },
+    {
+      "basename": "601FDD.TXT",
+      "claim_id": "TXT-FDD-SECTOR-ID",
+      "claim_type": "electronic_document_fact",
+      "concise_claim": "The interface uses one-based physical sector IDs and continues with sector one on the next logical track.",
+      "confidence": "high",
+      "contract_fields": [
+        "addressing"
+      ],
+      "corroborating_claim_ids": [
+        "TXT-FDD-LOGICAL-TRACK"
+      ],
+      "downstream_validation": "M05 image offset formulas and M08 read loop",
+      "encoding": "shift_jisx0213",
+      "line_end": 61,
+      "line_start": 59,
+      "notes": "Logical LBA zero is a project convention layered over this physical ID base.",
+      "section": "sector traversal convention",
+      "source_id": "PRV-VA-FDD",
+      "source_kind": "born_digital_text",
+      "status": "confirmed",
+      "subsystem": "addressing"
+    },
+    {
+      "basename": "601FDD.TXT",
+      "claim_id": "TXT-FDD-SECTOR-SIZE",
+      "claim_type": "electronic_document_fact",
+      "concise_claim": "The FDD interface exposes format/sector-size codes including 128, 256, 512, and 1024 bytes.",
+      "confidence": "high",
+      "contract_fields": [
+        "candidate_media",
+        "disk_access_candidates"
+      ],
+      "corroborating_claim_ids": [],
+      "downstream_validation": "M05 geometry and M08 transfer parameter",
+      "encoding": "shift_jisx0213",
+      "line_end": 80,
+      "line_start": 63,
+      "notes": "The selected candidate uses the documented 1024-byte case.",
+      "section": "format and sector-size code",
+      "source_id": "PRV-VA-FDD",
+      "source_kind": "born_digital_text",
+      "status": "confirmed",
+      "subsystem": "media"
+    },
+    {
+      "basename": "601FDD.TXT",
+      "claim_id": "TXT-FDD-STATUS-ABI",
+      "claim_type": "electronic_document_fact",
+      "concise_claim": "The FDD operations report success or failure through the carry flag and an AH status value, with documented error categories.",
+      "confidence": "high",
+      "contract_fields": [
+        "disk_access_candidates"
+      ],
+      "corroborating_claim_ids": [],
+      "downstream_validation": "M08 error and retry implementation",
+      "encoding": "shift_jisx0213",
+      "line_end": 187,
+      "line_start": 99,
+      "notes": "No status code is guessed outside the documented table.",
+      "section": "FDD status codes",
+      "source_id": "PRV-VA-FDD",
+      "source_kind": "born_digital_text",
+      "status": "confirmed",
+      "subsystem": "disk_access"
+    },
+    {
+      "basename": "604TEXT.TXT",
+      "claim_id": "TXT-TEXT-CHAR-OUTPUT",
+      "claim_type": "electronic_document_fact",
+      "concise_claim": "The text BIOS document defines character and string output operations and their parameter fragments.",
+      "confidence": "high",
+      "contract_fields": [
+        "early_diagnostics"
+      ],
+      "corroborating_claim_ids": [],
+      "downstream_validation": "M07 must locate a callable entry if visible output is used; M09 owns the console.",
+      "encoding": "shift_jisx0213",
+      "line_end": 227,
+      "line_start": 148,
+      "notes": "A parameter description alone does not prove the earliest IPL can call it.",
+      "section": "character and string output",
+      "source_id": "PRV-VA-TEXT",
+      "source_kind": "born_digital_text",
+      "status": "confirmed",
+      "subsystem": "early_diagnostics"
+    },
+    {
+      "basename": "PC88VA_テクニカルマニュアル_BNN.md",
+      "claim_id": "UNKNOWN-BOOT-ACCEPTANCE",
+      "claim_type": "unknown_reported",
+      "concise_claim": "The current public text evidence does not establish a required signature, checksum, magic value, or complete firmware acceptance rule.",
+      "confidence": "none",
+      "contract_fields": [
+        "boot_record.signature",
+        "boot_record.acceptance_rule"
+      ],
+      "corroborating_claim_ids": [
+        "MD-IPL-STARTUP"
+      ],
+      "downstream_validation": "Blocks M07; inspect a complete primary boot specification or run a bounded VAEG acceptance experiment.",
+      "encoding": "utf-8",
+      "line_end": 3448,
+      "line_start": 3389,
+      "notes": "The missing startup image may contain additional detail.",
+      "section": "system startup and boot switch",
+      "source_id": "PRV-VA-MANUAL-EXPORT",
+      "source_kind": "corpus_search_result",
+      "status": "unknown_reported",
+      "subsystem": "boot"
+    },
+    {
+      "basename": "601FDD.TXT",
+      "claim_id": "UNKNOWN-DISK-ENTRY",
+      "claim_type": "unknown_reported",
+      "concise_claim": "The reviewed FDD operation text does not establish the common callable vector or entry address needed by a loader.",
+      "confidence": "none",
+      "contract_fields": [
+        "preferred_disk_access.call_entry"
+      ],
+      "corroborating_claim_ids": [
+        "TXT-FDD-READ-ABI",
+        "TXT-FDD-STATUS-ABI"
+      ],
+      "downstream_validation": "Blocks M08; locate authoritative common BIOS-call documentation or validate the candidate entry in M07.",
+      "encoding": "shift_jisx0213",
+      "line_end": 269,
+      "line_start": 1,
+      "notes": "Known parameter fragments are preserved separately.",
+      "section": "FDD BIOS overview and read data operation",
+      "source_id": "PRV-VA-FDD",
+      "source_kind": "corpus_search_result",
+      "status": "unknown_reported",
+      "subsystem": "disk_access"
+    },
+    {
+      "basename": "PC88VA_テクニカルマニュアル_BNN.md",
+      "claim_id": "UNKNOWN-KERNEL-HANDOFF",
+      "claim_type": "unknown_reported",
+      "concise_claim": "The current sources do not define a future VA kernel destination, entry point, or complete handoff register contract.",
+      "confidence": "none",
+      "contract_fields": [
+        "kernel_loading.destination",
+        "kernel_loading.entry",
+        "kernel_loading.handoff"
+      ],
+      "corroborating_claim_ids": [
+        "DEC-KERNEL-ROLE",
+        "SRC-M02-KERNEL-IDENTITY"
+      ],
+      "downstream_validation": "Blocks M08; M06 must first define the VA compile-only startup contract.",
+      "encoding": "utf-8",
+      "line_end": 3448,
+      "line_start": 3389,
+      "notes": "The accepted NEC98 kernel identity cannot resolve a VA handoff.",
+      "section": "system startup",
+      "source_id": "PRV-VA-MANUAL-EXPORT",
+      "source_kind": "corpus_search_result",
+      "status": "unknown_reported",
+      "subsystem": "kernel_loading"
+    }
+  ],
+  "schema_version": 1
+}

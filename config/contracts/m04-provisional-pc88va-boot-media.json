@@ -1,0 +1,1273 @@
+{
+  "addressing": {
+    "interval_convention": {
+      "claim_ids": [
+        "DEC-FAT12-LAYOUT"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M05 and M08",
+      "value": "start_inclusive_end_exclusive"
+    },
+    "lba_to_chs_formula": {
+      "claim_ids": [
+        "DER-FAT12-CAPACITY",
+        "TXT-FDD-LOGICAL-TRACK",
+        "TXT-FDD-SECTOR-ID"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M04 verifier and M05",
+      "value": "c=lba//(heads*spt); rem=lba%(heads*spt); h=rem//spt; r=rem%spt+1"
+    },
+    "logical_sector_numbering": {
+      "claim_ids": [
+        "DEC-FAT12-LAYOUT"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M05",
+      "value": "zero_based_lba"
+    },
+    "physical_sector_id_base": {
+      "claim_ids": [
+        "TXT-FDD-SECTOR-ID"
+      ],
+      "confidence": "high",
+      "status": "confirmed",
+      "validation_target": "M05 and M08",
+      "value": 1
+    },
+    "raw_image_offset_formula": {
+      "claim_ids": [
+        "DEC-FAT12-LAYOUT"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M05",
+      "value": "byte_offset=lba*bytes_per_sector"
+    },
+    "track_order": {
+      "claim_ids": [
+        "TXT-FDD-LOGICAL-TRACK"
+      ],
+      "confidence": "high",
+      "status": "confirmed",
+      "validation_target": "M05 and M08",
+      "value": "cylinder_major_head_minor"
+    }
+  },
+  "blocker_dispositions": [
+    {
+      "disposition": {
+        "claim_ids": [
+          "MD-IPL-STARTUP",
+          "UNKNOWN-BOOT-ACCEPTANCE"
+        ],
+        "confidence": "medium",
+        "status": "working_assumption",
+        "validation_target": "M07 records and normalizes entry state.",
+        "value": "working_assumption"
+      },
+      "question_id": "M04-BOOT-ENTRY-STATE"
+    },
+    {
+      "disposition": {
+        "claim_ids": [
+          "UNKNOWN-BOOT-ACCEPTANCE"
+        ],
+        "confidence": "none",
+        "status": "unknown_reported",
+        "validation_target": "M07 entry-state experiment.",
+        "value": "unknown_reported"
+      },
+      "question_id": "M04-BOOT-INTERRUPTS"
+    },
+    {
+      "disposition": {
+        "claim_ids": [
+          "MD-IPL-STARTUP"
+        ],
+        "confidence": "medium",
+        "status": "supported",
+        "validation_target": "M07.",
+        "value": "supported"
+      },
+      "question_id": "M04-BOOT-IPL-LOAD"
+    },
+    {
+      "disposition": {
+        "claim_ids": [
+          "UNKNOWN-BOOT-ACCEPTANCE"
+        ],
+        "confidence": "none",
+        "status": "unknown_reported",
+        "validation_target": "Blocks M07 until acceptance rules are observed or documented.",
+        "value": "unknown_reported"
+      },
+      "question_id": "M04-BOOT-SECTOR-FORMAT"
+    },
+    {
+      "disposition": {
+        "claim_ids": [
+          "DEFER-TIMER"
+        ],
+        "confidence": "high",
+        "status": "deferred",
+        "validation_target": "M10.",
+        "value": "deferred_m10"
+      },
+      "question_id": "M04-BOOT-TIMER"
+    },
+    {
+      "disposition": {
+        "claim_ids": [
+          "DEC-FAT12-LAYOUT",
+          "UNKNOWN-BOOT-ACCEPTANCE"
+        ],
+        "confidence": "medium",
+        "status": "design_choice",
+        "validation_target": "M05 uses project layout; M07 tests firmware visibility.",
+        "value": "design_choice"
+      },
+      "question_id": "M04-BPB-MEDIA"
+    },
+    {
+      "disposition": {
+        "claim_ids": [
+          "DEC-DISK-PATH",
+          "UNKNOWN-DISK-ENTRY"
+        ],
+        "confidence": "medium",
+        "status": "working_assumption",
+        "validation_target": "M07/M08.",
+        "value": "working_assumption"
+      },
+      "question_id": "M04-DISK-SERVICE"
+    },
+    {
+      "disposition": {
+        "claim_ids": [
+          "DEC-EARLY-TRACE",
+          "TXT-TEXT-CHAR-OUTPUT"
+        ],
+        "confidence": "high",
+        "status": "design_choice",
+        "validation_target": "M07 trace; M09 console.",
+        "value": "design_choice"
+      },
+      "question_id": "M04-EARLY-CONSOLE"
+    },
+    {
+      "disposition": {
+        "claim_ids": [
+          "DEC-DISK-PATH"
+        ],
+        "confidence": "medium",
+        "status": "deferred",
+        "validation_target": "M12 read path and M14 write/media change; reopen earlier only if firmware candidate fails.",
+        "value": "deferred_m12"
+      },
+      "question_id": "M04-FDC-DMA-IRQ"
+    },
+    {
+      "disposition": {
+        "claim_ids": [
+          "TXT-FDD-2HD-GEOMETRY",
+          "TXT-FDD-LOGICAL-TRACK"
+        ],
+        "confidence": "high",
+        "status": "confirmed",
+        "validation_target": "M05 arithmetic and M07 boot acceptance.",
+        "value": "confirmed"
+      },
+      "question_id": "M04-FLOPPY-GEOMETRY"
+    },
+    {
+      "disposition": {
+        "claim_ids": [
+          "DEFER-KEYBOARD"
+        ],
+        "confidence": "high",
+        "status": "deferred",
+        "validation_target": "M11 and M17.",
+        "value": "deferred_m11"
+      },
+      "question_id": "M04-KEYBOARD-ENCODING"
+    },
+    {
+      "disposition": {
+        "claim_ids": [
+          "UNKNOWN-KERNEL-HANDOFF"
+        ],
+        "confidence": "none",
+        "status": "unknown_reported",
+        "validation_target": "Blocks M08; M06 must first define a VA startup contract.",
+        "value": "unknown_reported"
+      },
+      "question_id": "M04-KERNEL-LOAD"
+    }
+  ],
+  "boot_record": {
+    "acceptance_rule": {
+      "claim_ids": [
+        "UNKNOWN-BOOT-ACCEPTANCE"
+      ],
+      "confidence": "none",
+      "status": "unknown_reported",
+      "validation_target": "Blocks M07.",
+      "value": null
+    },
+    "bpb_status": {
+      "claim_ids": [
+        "DEC-FAT12-LAYOUT",
+        "UNKNOWN-BOOT-ACCEPTANCE"
+      ],
+      "confidence": "medium",
+      "status": "design_choice",
+      "validation_target": "M05 serializes the project layout; M07 determines firmware visibility.",
+      "value": "project_fat12_layout_only_firmware_visibility_unknown"
+    },
+    "candidate_location": {
+      "claim_ids": [
+        "DEC-FAT12-LAYOUT",
+        "MD-IPL-STARTUP"
+      ],
+      "confidence": "medium",
+      "status": "design_choice",
+      "validation_target": "M05 constructs the reserved sector; M07 tests firmware selection.",
+      "value": "logical_sector_0_of_selected_medium"
+    },
+    "code_and_reserved_ranges": {
+      "claim_ids": [
+        "UNKNOWN-BOOT-ACCEPTANCE"
+      ],
+      "confidence": "none",
+      "status": "unknown_reported",
+      "validation_target": "M07",
+      "value": null
+    },
+    "failure_or_fallback": {
+      "claim_ids": [
+        "UNKNOWN-BOOT-ACCEPTANCE"
+      ],
+      "confidence": "none",
+      "status": "unknown_reported",
+      "validation_target": "M07 records firmware behavior without relying on it for recovery.",
+      "value": null
+    },
+    "firmware_loaded_extent": {
+      "claim_ids": [
+        "MD-IPL-STARTUP"
+      ],
+      "confidence": "medium",
+      "status": "supported",
+      "validation_target": "M07",
+      "value": 1
+    },
+    "physical_sector_size": {
+      "claim_ids": [
+        "TXT-FDD-2HD-GEOMETRY"
+      ],
+      "confidence": "high",
+      "status": "confirmed",
+      "validation_target": "M05",
+      "value": 1024
+    },
+    "signature": {
+      "claim_ids": [
+        "UNKNOWN-BOOT-ACCEPTANCE"
+      ],
+      "confidence": "none",
+      "status": "unknown_reported",
+      "validation_target": "Blocks M07 until a complete source or bounded acceptance experiment resolves it.",
+      "value": null
+    }
+  },
+  "candidate_media": [
+    {
+      "candidate_id": "pc88va-2hd-mfm-1024-provisional",
+      "firmware_boot_support": {
+        "claim_ids": [
+          "UNKNOWN-BOOT-ACCEPTANCE"
+        ],
+        "confidence": "none",
+        "status": "unknown_reported",
+        "validation_target": "M07",
+        "value": null
+      },
+      "selection": {
+        "claim_ids": [
+          "DEC-MEDIUM-SELECTION"
+        ],
+        "confidence": "medium",
+        "status": "design_choice",
+        "validation_target": "M05 and M07",
+        "value": "selected_for_m05_candidate"
+      }
+    }
+  ],
+  "component_gitlinks": {
+    "country": "23f189cca3420606eae8723884fa92ccd65eb307",
+    "fdkernel": "6523acdb87f4665e6068ea331859885267242005",
+    "freecom": "855281a3114b43ad4b8d9a320f2aca39be046bba"
+  },
+  "consumed_identities": {
+    "components_lock_sha256": "440e481b28c740875489a6953a246ce5370c44074053c7aad3f80e79ec40c19c",
+    "m01_contract_sha256": "7d66be32b508395d8c36a902389f368e9f38d9abab08085bda89e3d2c5d6d578",
+    "m01_golden_sha256": "6fcfe834f90ffc602589ddc63b50d90eba33bbc1802b6bff3c9ef6b9d397c7c3",
+    "m02_golden_sha256": "4d4e92f92911130109b5b140b2202fc1dfc3abb9af3cd7501b685894d0cb78fd",
+    "m02_sidecar_sha256": "0ffe8a10fd1c430fc876a7387e44fe6084be5b21deaf93bb8826a3b13b278fbb",
+    "m02_tar_sha256": "00fb02b03ea16423b5987d455a8ea11a8a567c699484656228722119c6239e51",
+    "m02_tar_size": 399360,
+    "m03r1_census_entries": 14455,
+    "m03r1_golden_sha256": "d871c7f188313218c2c9481ea9fe7c6abf6acd6369f996b2641021ad27c80550",
+    "m03r1_projection_sha256": "70bee9fedaa526f58a795c2acd43e3492a23e1554bcf843160bce7316120a42c",
+    "m03r1_projection_size": 10039882,
+    "m03r1_routing_sha256": "dbb28f45c16d59b97fab8defa21ce4a866d51c701826987ce26a3b50ad8c938e",
+    "m03r1_ruleset_sha256": "57b8b299537bb9ca226e48cbd5bbf5dfe19da87d89ca3250c56a008fb9b0934c",
+    "m03r1_schema_sha256": "08af162ec4c6def748ebc57e1b48aa7e38a82e203615feb736458b53c8b35548",
+    "toolchain_lock_sha256": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162"
+  },
+  "contract_id": "m04-provisional-pc88va-boot-media",
+  "contract_status": "provisional",
+  "derived_invariants": [
+    {
+      "formula": "80*2*8*1024=1310720",
+      "name": "media_capacity",
+      "status": "evaluated_pass"
+    },
+    {
+      "formula": "1269 clusters; 1907 required FAT bytes; 2048 available",
+      "name": "fat12_capacity",
+      "status": "evaluated_pass"
+    },
+    {
+      "formula": "checked at first, track boundary, head boundary, and last sector",
+      "name": "chs_lba_round_trip",
+      "status": "evaluated_pass"
+    },
+    {
+      "formula": "83774 bytes is less than the candidate data-region capacity",
+      "name": "kernel_payload_fit",
+      "status": "evaluated_pass"
+    },
+    {
+      "formula": "signature and acceptance rule are unknown",
+      "name": "boot_acceptance",
+      "status": "not_evaluable"
+    },
+    {
+      "formula": "destination and entry are unknown",
+      "name": "kernel_memory_overlap",
+      "status": "not_evaluable"
+    }
+  ],
+  "disk_access_candidates": {
+    "direct_fdc_dma_irq": {
+      "controller_contract": {
+        "claim_ids": [
+          "DEC-DISK-PATH"
+        ],
+        "confidence": "none",
+        "status": "deferred",
+        "validation_target": "M12 and M14",
+        "value": null
+      },
+      "selection": {
+        "claim_ids": [
+          "DEC-DISK-PATH"
+        ],
+        "confidence": "medium",
+        "status": "deferred",
+        "validation_target": "M12 read-only driver and M14 write/media-change work",
+        "value": "not_selected_for_provisional_loader"
+      }
+    },
+    "firmware_fdd_bios": {
+      "availability": {
+        "claim_ids": [
+          "TXT-FDD-READ-ABI",
+          "TXT-FDD-STATUS-ABI"
+        ],
+        "confidence": "high",
+        "status": "confirmed",
+        "validation_target": "M07 and M08",
+        "value": "documented_operation_family"
+      },
+      "call_entry": {
+        "claim_ids": [
+          "UNKNOWN-DISK-ENTRY"
+        ],
+        "confidence": "none",
+        "status": "unknown_reported",
+        "validation_target": "Blocks M08.",
+        "value": null
+      },
+      "parameter_fragment": {
+        "claim_ids": [
+          "TXT-FDD-READ-ABI"
+        ],
+        "confidence": "high",
+        "status": "confirmed",
+        "validation_target": "M08",
+        "value": "command/count, logical drive/track, starting sector, format/size, segmented buffer"
+      },
+      "result_fragment": {
+        "claim_ids": [
+          "TXT-FDD-STATUS-ABI"
+        ],
+        "confidence": "high",
+        "status": "confirmed",
+        "validation_target": "M08",
+        "value": "carry flag and AH status"
+      },
+      "rom_dependency": {
+        "claim_ids": [
+          "DEC-DISK-PATH",
+          "PRV-ROM-FALLBACK"
+        ],
+        "confidence": "medium",
+        "status": "working_assumption",
+        "validation_target": "M07 and M08",
+        "value": "user_supplied_pc88va_firmware_required_for_emulator_validation"
+      }
+    }
+  },
+  "early_diagnostics": {
+    "firmware_text_alternative": {
+      "claim_ids": [
+        "TXT-TEXT-CHAR-OUTPUT"
+      ],
+      "confidence": "medium",
+      "status": "supported",
+      "validation_target": "M07 or M09",
+      "value": "documented_character_output_operation_with_entry_still_unknown"
+    },
+    "full_console": {
+      "claim_ids": [
+        "DEC-EARLY-TRACE"
+      ],
+      "confidence": "high",
+      "status": "deferred",
+      "validation_target": "M09",
+      "value": "deferred_to_M09"
+    },
+    "m07_strategy": {
+      "claim_ids": [
+        "DEC-EARLY-TRACE"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M07",
+      "value": "trace_only_candidate"
+    }
+  },
+  "evidence_matrix_digest": "0612699d305738f2db131cb87c5fa7e9393b206672d6bec27483a602e7e91770",
+  "filesystem": {
+    "byte_order": {
+      "claim_ids": [
+        "DEC-FAT12-LAYOUT"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M05",
+      "value": "little_endian_on_disk"
+    },
+    "cluster_to_sector_formula": {
+      "claim_ids": [
+        "DEC-FAT12-LAYOUT"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M05 and M08",
+      "value": "first_data_sector+(cluster-2)*sectors_per_cluster"
+    },
+    "data_clusters": {
+      "claim_ids": [
+        "DER-FAT12-CAPACITY"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M04 verifier and M05",
+      "value": 1269
+    },
+    "data_sectors": {
+      "claim_ids": [
+        "DER-FAT12-CAPACITY"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M04 verifier and M05",
+      "value": 1269
+    },
+    "directory_name_rule": {
+      "claim_ids": [
+        "DEC-KERNEL-ROLE"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M05 and M08",
+      "value": "uppercase_ASCII_8_3_space_padded"
+    },
+    "fat12_entry_packing": {
+      "claim_ids": [
+        "DEC-FAT12-LAYOUT"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M05",
+      "value": "two_12_bit_entries_in_three_little_endian_bytes"
+    },
+    "fat12_markers": {
+      "claim_ids": [
+        "DEC-FAT12-LAYOUT"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M05 and M08",
+      "value": "free=000H; reserved=FF0H-FF6H; bad=FF7H; end=FF8H-FFFH"
+    },
+    "fat_bytes_required": {
+      "claim_ids": [
+        "DER-FAT12-CAPACITY"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M04 verifier and M05",
+      "value": 1907
+    },
+    "fat_count": {
+      "claim_ids": [
+        "DEC-FAT12-LAYOUT"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M05",
+      "value": 2
+    },
+    "fat_type": {
+      "claim_ids": [
+        "DEC-FAT12-LAYOUT",
+        "DER-FAT12-CAPACITY"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M05",
+      "value": "FAT12"
+    },
+    "first_data_sector": {
+      "claim_ids": [
+        "DER-FAT12-CAPACITY"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M04 verifier and M05",
+      "value": 11
+    },
+    "hidden_sectors": {
+      "claim_ids": [
+        "DEC-FAT12-LAYOUT"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M05",
+      "value": 0
+    },
+    "media_descriptor": {
+      "claim_ids": [
+        "DEC-FAT12-LAYOUT"
+      ],
+      "confidence": "medium",
+      "status": "design_choice",
+      "validation_target": "M05 serializes it; M07 determines whether firmware observes it.",
+      "value": 254
+    },
+    "reserved_sectors": {
+      "claim_ids": [
+        "DEC-FAT12-LAYOUT"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M05",
+      "value": 1
+    },
+    "root_directory_sectors": {
+      "claim_ids": [
+        "DER-FAT12-CAPACITY"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M04 verifier and M05",
+      "value": 6
+    },
+    "root_entries": {
+      "claim_ids": [
+        "DEC-FAT12-LAYOUT"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M05",
+      "value": 192
+    },
+    "sectors_per_cluster": {
+      "claim_ids": [
+        "DEC-FAT12-LAYOUT"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M05",
+      "value": 1
+    },
+    "sectors_per_fat": {
+      "claim_ids": [
+        "DEC-FAT12-LAYOUT",
+        "DER-FAT12-CAPACITY"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M05",
+      "value": 2
+    }
+  },
+  "firmware_dependency": {
+    "distribution": {
+      "claim_ids": [
+        "DEC-DISK-PATH"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M19 provenance gate",
+      "value": "firmware_bytes_are_neither_distributed_nor_generated"
+    },
+    "local_requirement": {
+      "claim_ids": [
+        "DEC-DISK-PATH",
+        "PRV-ROM-FALLBACK"
+      ],
+      "confidence": "medium",
+      "status": "working_assumption",
+      "validation_target": "M07 and M08",
+      "value": "user_supplied_pc88va_firmware_for_future_emulator_validation"
+    },
+    "private_observation": {
+      "claim_ids": [
+        "PRV-ROM-FALLBACK"
+      ],
+      "confidence": "low",
+      "status": "private_observation",
+      "validation_target": "M07/M08 remain blocked; promotion requires separate user approval.",
+      "value": null
+    },
+    "public_ci_scope": {
+      "claim_ids": [
+        "DEC-DISK-PATH"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M04 CI",
+      "value": "static_public_contract_only"
+    }
+  },
+  "firmware_to_ipl": {
+    "boot_drive_identity": {
+      "claim_ids": [
+        "UNKNOWN-DISK-ENTRY"
+      ],
+      "confidence": "none",
+      "status": "unknown_reported",
+      "validation_target": "M07 records incoming state; M08 defines drive selection explicitly.",
+      "value": null
+    },
+    "boot_selection": {
+      "claim_ids": [
+        "MD-IPL-STARTUP",
+        "TXT-FDD-MEDIA-SUPPORT"
+      ],
+      "confidence": "medium",
+      "status": "supported",
+      "validation_target": "M07",
+      "value": "internal_fdd_candidate"
+    },
+    "cpu_mode": {
+      "claim_ids": [
+        "UNKNOWN-BOOT-ACCEPTANCE"
+      ],
+      "confidence": "none",
+      "status": "unknown_reported",
+      "validation_target": "M07 entry-state inspection",
+      "value": null
+    },
+    "execution_offset": {
+      "claim_ids": [
+        "MD-IPL-STARTUP"
+      ],
+      "confidence": "medium",
+      "status": "supported",
+      "validation_target": "M07",
+      "value": 0
+    },
+    "execution_segment": {
+      "claim_ids": [
+        "MD-IPL-STARTUP"
+      ],
+      "confidence": "medium",
+      "status": "supported",
+      "validation_target": "M07",
+      "value": 12288
+    },
+    "incoming_data_segments": {
+      "claim_ids": [
+        "UNKNOWN-BOOT-ACCEPTANCE"
+      ],
+      "confidence": "none",
+      "status": "unknown_reported",
+      "validation_target": "M07 must record DS and ES before normalizing them.",
+      "value": null
+    },
+    "incoming_interrupt_state": {
+      "claim_ids": [
+        "UNKNOWN-BOOT-ACCEPTANCE"
+      ],
+      "confidence": "none",
+      "status": "unknown_reported",
+      "validation_target": "M07 must record flags before the controlled prologue.",
+      "value": null
+    },
+    "initial_load_bytes": {
+      "claim_ids": [
+        "MD-IPL-STARTUP",
+        "TXT-FDD-2HD-GEOMETRY"
+      ],
+      "confidence": "medium",
+      "status": "working_assumption",
+      "validation_target": "M07 must prove the one-sector statement uses the selected 1024-byte medium.",
+      "value": 1024
+    },
+    "initial_load_sectors": {
+      "claim_ids": [
+        "MD-IPL-STARTUP"
+      ],
+      "confidence": "medium",
+      "status": "supported",
+      "validation_target": "M07",
+      "value": 1
+    },
+    "load_offset": {
+      "claim_ids": [
+        "MD-IPL-STARTUP"
+      ],
+      "confidence": "medium",
+      "status": "supported",
+      "validation_target": "M07",
+      "value": 0
+    },
+    "load_physical_address": {
+      "claim_ids": [
+        "MD-IPL-STARTUP"
+      ],
+      "confidence": "medium",
+      "status": "supported",
+      "validation_target": "M07; derived as segment times 16 plus offset",
+      "value": 196608
+    },
+    "load_segment": {
+      "claim_ids": [
+        "MD-IPL-STARTUP"
+      ],
+      "confidence": "medium",
+      "status": "supported",
+      "validation_target": "M07; segmented address 3000H",
+      "value": 12288
+    },
+    "normalization_policy": {
+      "claim_ids": [
+        "DEC-EARLY-TRACE",
+        "MD-IPL-STARTUP"
+      ],
+      "confidence": "medium",
+      "status": "design_choice",
+      "validation_target": "M07 must prove the sequence does not overwrite the loaded IPL or firmware-owned memory.",
+      "value": "record incoming state, disable interrupts, clear direction, then establish project-owned data and stack segments before use"
+    },
+    "stack_offset": {
+      "claim_ids": [
+        "MD-IPL-STARTUP"
+      ],
+      "confidence": "medium",
+      "status": "supported",
+      "validation_target": "M07",
+      "value": 65534
+    },
+    "stack_segment": {
+      "claim_ids": [
+        "MD-IPL-STARTUP"
+      ],
+      "confidence": "medium",
+      "status": "supported",
+      "validation_target": "M07",
+      "value": 12288
+    },
+    "usable_memory_ranges": {
+      "claim_ids": [
+        "UNKNOWN-KERNEL-HANDOFF"
+      ],
+      "confidence": "none",
+      "status": "unknown_reported",
+      "validation_target": "M06 link-map planning and M07 memory observation",
+      "value": null
+    }
+  },
+  "kernel_loading": {
+    "destination": {
+      "claim_ids": [
+        "UNKNOWN-KERNEL-HANDOFF"
+      ],
+      "confidence": "none",
+      "status": "unknown_reported",
+      "validation_target": "Blocks M08.",
+      "value": null
+    },
+    "entry": {
+      "claim_ids": [
+        "UNKNOWN-KERNEL-HANDOFF"
+      ],
+      "confidence": "none",
+      "status": "unknown_reported",
+      "validation_target": "Blocks M08.",
+      "value": null
+    },
+    "failure_behavior": {
+      "claim_ids": [
+        "DEC-EARLY-TRACE"
+      ],
+      "confidence": "medium",
+      "status": "design_choice",
+      "validation_target": "M08",
+      "value": "bounded_trace_failure_then_halt_candidate"
+    },
+    "fat_chain_policy": {
+      "claim_ids": [
+        "DEC-FAT12-LAYOUT",
+        "DEC-KERNEL-ROLE"
+      ],
+      "confidence": "medium",
+      "status": "design_choice",
+      "validation_target": "M08",
+      "value": "follow_FAT12_chain_contiguity_not_required"
+    },
+    "filesystem_location": {
+      "claim_ids": [
+        "DEC-KERNEL-ROLE"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M05 and M08",
+      "value": "root_directory"
+    },
+    "handoff": {
+      "claim_ids": [
+        "UNKNOWN-KERNEL-HANDOFF"
+      ],
+      "confidence": "none",
+      "status": "unknown_reported",
+      "validation_target": "Blocks M08.",
+      "value": null
+    },
+    "loader_size_limit": {
+      "claim_ids": [
+        "UNKNOWN-KERNEL-HANDOFF"
+      ],
+      "confidence": "none",
+      "status": "unknown_reported",
+      "validation_target": "M08",
+      "value": null
+    },
+    "memory_overlap": {
+      "claim_ids": [
+        "UNKNOWN-KERNEL-HANDOFF"
+      ],
+      "confidence": "none",
+      "status": "unknown_reported",
+      "validation_target": "M06 link map and M08 loader memory plan",
+      "value": null
+    }
+  },
+  "kernel_payload_role": {
+    "accepted_baseline_sha256": {
+      "claim_ids": [
+        "SRC-M02-KERNEL-IDENTITY"
+      ],
+      "confidence": "high",
+      "status": "confirmed",
+      "validation_target": "M05 provenance reference only",
+      "value": "3ebddb01abe5e39f16d27439836be283c57d454f012d3c990f01fa8a2b14101d"
+    },
+    "accepted_baseline_size": {
+      "claim_ids": [
+        "SRC-M02-KERNEL-IDENTITY"
+      ],
+      "confidence": "high",
+      "status": "confirmed",
+      "validation_target": "M05 capacity reference only",
+      "value": 83774
+    },
+    "alias_policy": {
+      "claim_ids": [
+        "DEC-KERNEL-ROLE",
+        "SRC-M02-KERNEL-IDENTITY"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M05",
+      "value": "KWC8616.SYS_is_identical_but_not_staged"
+    },
+    "baseline_platform": {
+      "claim_ids": [
+        "SRC-M02-KERNEL-IDENTITY"
+      ],
+      "confidence": "high",
+      "status": "confirmed",
+      "validation_target": "M06 replaces runtime payload bytes",
+      "value": "nec98_baseline_build_reference_only"
+    },
+    "on_disk_name": {
+      "claim_ids": [
+        "DEC-KERNEL-ROLE"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M05 and M08",
+      "value": "KERNEL.SYS"
+    },
+    "payload_source": {
+      "claim_ids": [
+        "DEC-KERNEL-ROLE"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M06",
+      "value": "future_M06_pc88va_compile_only_kernel"
+    }
+  },
+  "open_questions": [
+    {
+      "field": {
+        "claim_ids": [
+          "UNKNOWN-BOOT-ACCEPTANCE"
+        ],
+        "confidence": "none",
+        "status": "unknown_reported",
+        "validation_target": "Blocks M07; search a complete boot specification or run a bounded VAEG acceptance matrix.",
+        "value": null
+      },
+      "question_id": "M04-OPEN-BOOT-ACCEPTANCE",
+      "sources_searched": [
+        "PC88VA_technical_manual_text_export",
+        "Tekumani_FDD_and_misc_text"
+      ]
+    },
+    {
+      "field": {
+        "claim_ids": [
+          "MD-IPL-STARTUP",
+          "UNKNOWN-BOOT-ACCEPTANCE"
+        ],
+        "confidence": "none",
+        "status": "unknown_reported",
+        "validation_target": "Blocks M07 prologue finalization; record CPU/register/flag state before normalization.",
+        "value": null
+      },
+      "question_id": "M04-OPEN-ENTRY-STATE",
+      "sources_searched": [
+        "PC88VA_technical_manual_text_export",
+        "Tekumani_misc_text"
+      ]
+    },
+    {
+      "field": {
+        "claim_ids": [
+          "TXT-FDD-READ-ABI",
+          "UNKNOWN-DISK-ENTRY"
+        ],
+        "confidence": "none",
+        "status": "unknown_reported",
+        "validation_target": "Blocks M08; locate authoritative BIOS entry documentation or validate in M07.",
+        "value": null
+      },
+      "question_id": "M04-OPEN-DISK-CALL-ENTRY",
+      "sources_searched": [
+        "Tekumani_FDD_text",
+        "Tekumani_indices"
+      ]
+    },
+    {
+      "field": {
+        "claim_ids": [
+          "UNKNOWN-KERNEL-HANDOFF"
+        ],
+        "confidence": "none",
+        "status": "unknown_reported",
+        "validation_target": "Blocks M08; M06 defines the compile-only VA startup surface first.",
+        "value": null
+      },
+      "question_id": "M04-OPEN-KERNEL-HANDOFF",
+      "sources_searched": [
+        "PC88VA_technical_manual_text_export",
+        "accepted_M02_contract"
+      ]
+    }
+  ],
+  "parent_commit": "5bb5e1f47b0fdb954056532412889cee1123ef1b",
+  "preferred_disk_access": {
+    "call_entry": {
+      "claim_ids": [
+        "UNKNOWN-DISK-ENTRY"
+      ],
+      "confidence": "none",
+      "status": "unknown_reported",
+      "validation_target": "Blocks M08.",
+      "value": null
+    },
+    "candidate": {
+      "claim_ids": [
+        "DEC-DISK-PATH",
+        "TXT-FDD-READ-ABI"
+      ],
+      "confidence": "medium",
+      "status": "working_assumption",
+      "validation_target": "M07 identifies the entry; M08 validates one or more reads.",
+      "value": "firmware_fdd_bios_candidate"
+    },
+    "fallback": {
+      "claim_ids": [
+        "DEC-DISK-PATH"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M07/M08 contradiction evidence",
+      "value": "reopen M04R1 and specify the minimum direct controller path if firmware access fails"
+    }
+  },
+  "readiness": {
+    "private_local": {
+      "M05": {
+        "claim_ids": [
+          "DEC-FAT12-LAYOUT",
+          "PRV-D88-FALLBACK"
+        ],
+        "confidence": "medium",
+        "status": "working_assumption",
+        "validation_target": "M05 public candidate remains based on text, not private bytes.",
+        "value": "ready_with_assumptions"
+      },
+      "M06": {
+        "claim_ids": [
+          "DEC-KERNEL-ROLE",
+          "PRV-ROM-FALLBACK"
+        ],
+        "confidence": "medium",
+        "status": "working_assumption",
+        "validation_target": "M06 compile-only.",
+        "value": "ready_with_assumptions"
+      },
+      "M07": {
+        "claim_ids": [
+          "PRV-ROM-FALLBACK",
+          "UNKNOWN-BOOT-ACCEPTANCE"
+        ],
+        "confidence": "none",
+        "status": "unknown_reported",
+        "validation_target": "Private fallback did not establish a publishable complete acceptance contract.",
+        "value": "blocked"
+      },
+      "M08": {
+        "claim_ids": [
+          "PRV-D88-FALLBACK",
+          "PRV-ROM-FALLBACK",
+          "UNKNOWN-DISK-ENTRY",
+          "UNKNOWN-KERNEL-HANDOFF"
+        ],
+        "confidence": "none",
+        "status": "unknown_reported",
+        "validation_target": "Private fallback did not establish a complete callable ABI and handoff.",
+        "value": "blocked"
+      }
+    },
+    "public": {
+      "M05": {
+        "claim_ids": [
+          "DEC-FAT12-LAYOUT",
+          "DEC-MEDIUM-SELECTION",
+          "DER-FAT12-CAPACITY"
+        ],
+        "confidence": "medium",
+        "status": "working_assumption",
+        "validation_target": "M05 must not claim bootability.",
+        "value": "ready_with_assumptions"
+      },
+      "M06": {
+        "claim_ids": [
+          "DEC-KERNEL-ROLE",
+          "MD-IPL-STARTUP"
+        ],
+        "confidence": "medium",
+        "status": "working_assumption",
+        "validation_target": "M06 compile/link only; runtime addresses remain provisional.",
+        "value": "ready_with_assumptions"
+      },
+      "M07": {
+        "claim_ids": [
+          "UNKNOWN-BOOT-ACCEPTANCE"
+        ],
+        "confidence": "none",
+        "status": "unknown_reported",
+        "validation_target": "Resolve boot acceptance and record entry state in VAEG.",
+        "value": "blocked"
+      },
+      "M08": {
+        "claim_ids": [
+          "UNKNOWN-DISK-ENTRY",
+          "UNKNOWN-KERNEL-HANDOFF"
+        ],
+        "confidence": "none",
+        "status": "unknown_reported",
+        "validation_target": "Resolve firmware call entry, kernel destination, entry, and handoff.",
+        "value": "blocked"
+      }
+    }
+  },
+  "schema_version": 1,
+  "selected_candidate_medium": {
+    "bytes_per_sector": {
+      "claim_ids": [
+        "TXT-FDD-2HD-GEOMETRY",
+        "TXT-FDD-SECTOR-SIZE"
+      ],
+      "confidence": "high",
+      "status": "confirmed",
+      "validation_target": "M05",
+      "value": 1024
+    },
+    "cylinders": {
+      "claim_ids": [
+        "TXT-FDD-2HD-GEOMETRY"
+      ],
+      "confidence": "high",
+      "status": "confirmed",
+      "validation_target": "M05",
+      "value": 80
+    },
+    "data_rate": {
+      "claim_ids": [
+        "TXT-FDD-2HD-GEOMETRY"
+      ],
+      "confidence": "none",
+      "status": "unknown_reported",
+      "validation_target": "M07; not required for host image arithmetic",
+      "value": null
+    },
+    "encoding": {
+      "claim_ids": [
+        "TXT-FDD-2HD-GEOMETRY"
+      ],
+      "confidence": "high",
+      "status": "confirmed",
+      "validation_target": "M05",
+      "value": "MFM"
+    },
+    "firmware_boot_support": {
+      "claim_ids": [
+        "UNKNOWN-BOOT-ACCEPTANCE"
+      ],
+      "confidence": "none",
+      "status": "unknown_reported",
+      "validation_target": "M07",
+      "value": null
+    },
+    "firmware_media_support": {
+      "claim_ids": [
+        "TXT-FDD-MEDIA-SUPPORT"
+      ],
+      "confidence": "high",
+      "status": "confirmed",
+      "validation_target": "M07 must separately establish boot acceptance.",
+      "value": "2HD_family_supported_by_fdd_interface"
+    },
+    "heads": {
+      "claim_ids": [
+        "TXT-FDD-LOGICAL-TRACK"
+      ],
+      "confidence": "high",
+      "status": "confirmed",
+      "validation_target": "M05",
+      "value": 2
+    },
+    "medium_name": {
+      "claim_ids": [
+        "DEC-MEDIUM-SELECTION"
+      ],
+      "confidence": "medium",
+      "status": "design_choice",
+      "validation_target": "M07",
+      "value": "PC-88VA 2HD MFM 1024-byte-sector candidate"
+    },
+    "physical_sector_id_base": {
+      "claim_ids": [
+        "TXT-FDD-SECTOR-ID"
+      ],
+      "confidence": "high",
+      "status": "confirmed",
+      "validation_target": "M05 and M08",
+      "value": 1
+    },
+    "sectors_per_track": {
+      "claim_ids": [
+        "TXT-FDD-2HD-GEOMETRY"
+      ],
+      "confidence": "high",
+      "status": "confirmed",
+      "validation_target": "M05",
+      "value": 8
+    },
+    "total_bytes": {
+      "claim_ids": [
+        "DER-FAT12-CAPACITY"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M04 verifier and M05",
+      "value": 1310720
+    },
+    "total_sectors": {
+      "claim_ids": [
+        "DER-FAT12-CAPACITY"
+      ],
+      "confidence": "high",
+      "status": "design_choice",
+      "validation_target": "M04 verifier and M05",
+      "value": 1280
+    }
+  },
+  "source_registry_digest": "c6c9ec0984413d548d2e1e686598a45ce6c3fc68852c5ed39cfd7d154fd1886c",
+  "target_model": {
+    "primary": {
+      "claim_ids": [
+        "DEC-MEDIUM-SELECTION"
+      ],
+      "confidence": "medium",
+      "status": "design_choice",
+      "validation_target": "M07",
+      "value": "pc88va"
+    },
+    "va2_compatibility": {
+      "claim_ids": [
+        "DEFER-TIMER"
+      ],
+      "confidence": "high",
+      "status": "deferred",
+      "validation_target": "A later model-compatibility milestone must establish differences explicitly.",
+      "value": "later_compatibility_review"
+    }
+  }
+}
