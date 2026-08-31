@@ -13,6 +13,9 @@ import sys
 import tarfile
 from pathlib import Path, PurePosixPath
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "qa"))
+from current_components import CurrentComponentError, resolve_current_components
+
 
 M01R1_PARENT_COMMIT = "0ad3b0e33da66c552113c7389c8c81010a50f1f2"
 PARENT_REPOSITORY = "https://github.com/nakatamaho/freedos-pc88va.git"
@@ -660,6 +663,11 @@ def validate_repository_identity(root):
     if origin not in accepted_origins:
         raise ValidationError(f"parent origin mismatch: {origin!r}")
     authority = component_identity(root)
+    historical = {path: item["commit"] for path, item in authority["lock_by_path"].items()}
+    try:
+        current = resolve_current_components(root, historical)
+    except CurrentComponentError as exc:
+        raise ValidationError(str(exc)) from exc
     for component_key, item in ((PurePosixPath(path).name, value) for path, value in authority["lock_by_path"].items()):
         component_path = root / item["path"]
         try:
@@ -672,7 +680,8 @@ def validate_repository_identity(root):
             raise ValidationError(f"component identity check failed for {component_key}: {exc}") from exc
         if gitmodules_url != item.get("repository") or gitmodules_branch != item.get("branch"):
             raise ValidationError(f".gitmodules component policy mismatch for {component_key}")
-        if len(stage) < 2 or stage[0] != "160000" or stage[1] != item["commit"] or actual != item["commit"]:
+        expected_current = current[item["path"]]
+        if len(stage) < 2 or stage[0] != "160000" or stage[1] != expected_current or actual != expected_current:
             raise ValidationError(f"parent gitlink mismatch for {component_key}")
         if status:
             raise ValidationError(f"component worktree is dirty: {item['path']}: {status.strip()}")

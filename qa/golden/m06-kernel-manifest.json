@@ -1,0 +1,585 @@
+{
+  "component_lock_sha256": "58a900d0ad838f3eacfd8c2f32835634dd96cccc19649a276dc8dee6d5622bc8",
+  "contract_sha256": "77bc415336ead1a6e7734ca35b49ef235744745c1f60fd482f376fec90c3fdf3",
+  "kernel": {
+    "artifact": {
+      "sha256": "d7c864d29bf772b0bb167ac9b0a2c77d391d6c5a32102ba005f0043d981885a2",
+      "size": 4414
+    },
+    "build_evidence": {
+      "alias": {
+        "path": "pc88va/bin/KVA8616.SYS",
+        "sha256": "d7c864d29bf772b0bb167ac9b0a2c77d391d6c5a32102ba005f0043d981885a2",
+        "size": 4414
+      },
+      "artifact": {
+        "path": "pc88va/bin/KERNEL.SYS",
+        "sha256": "d7c864d29bf772b0bb167ac9b0a2c77d391d6c5a32102ba005f0043d981885a2",
+        "size": 4414
+      },
+      "build_plan_sha256": "c6ff8b2a8f31e6110546a650abc642984f832e18cfca659e7be7f627da2b6e9e",
+      "compile_manifest_sha256": "f834c0b5002b8f9afb16b3f289a18e2b843d12f26c4d31043e2a79d93f3dd57e",
+      "kernel_interface_sha256": "bc3a85d7d1ab62b607c0662ffc79d78c297fb34915d66ad89a4e0df617d9dd8d",
+      "schema_version": 1,
+      "stub_count": 10,
+      "stub_ledger_sha256": "cfb4f6054e9628494beda48e91c03625c63d0e15ff3117b41b62ecef47333c45",
+      "symbol_evidence_sha256": "67fa73155a12bce10fda9a8b35af5356ef9b658a874290ea24b1981227febd04"
+    },
+    "interface": {
+      "artifact": {
+        "path": "pc88va/bin/KERNEL.SYS",
+        "sha256": "d7c864d29bf772b0bb167ac9b0a2c77d391d6c5a32102ba005f0043d981885a2",
+        "size": 4414
+      },
+      "artifact_role": "pc88va-compile-only-kernel-scaffold",
+      "binary": {
+        "body_size": 4382,
+        "checksum": 0,
+        "container": "dos-mz",
+        "entry": {
+          "cs_relative": 0,
+          "ip": 0
+        },
+        "file_size": 4414,
+        "header_bytes": 32,
+        "maximum_allocation_paragraphs": 65535,
+        "minimum_allocation_paragraphs": 0,
+        "overlay": 0,
+        "relocation_count": 0,
+        "relocation_table_offset": 32,
+        "required_initial_stack": {
+          "sp": 4109,
+          "ss_relative": 0
+        }
+      },
+      "boot_drive_identity": {
+        "required_by": "M08",
+        "status": "unknown"
+      },
+      "cpu_mode": "8086-compatible-real-mode-code",
+      "entry_symbol": "_pc88va_compile_only_entry",
+      "firmware_entry_state": {
+        "required_by": "M07",
+        "status": "unknown"
+      },
+      "initial_register_contract": {
+        "required": [],
+        "unknown": [
+          "AX",
+          "BX",
+          "CX",
+          "DX",
+          "SI",
+          "DI",
+          "BP",
+          "DS",
+          "ES",
+          "FLAGS"
+        ]
+      },
+      "loader_responsibilities": [
+        "Load the complete MZ container or define a reviewed transformation.",
+        "Apply MZ relocations before entry.",
+        "Provide the MZ-declared stack allocation.",
+        "Define physical load address and memory ownership."
+      ],
+      "memory_model": "16-bit small model for C; segmented DOS MZ",
+      "physical_load_address": {
+        "required_by": "M08",
+        "status": "unknown"
+      },
+      "relocation_policy": "DOS MZ relocation records must be applied by a future loader",
+      "schema_version": 1,
+      "stub_ledger_sha256": "cfb4f6054e9628494beda48e91c03625c63d0e15ff3117b41b62ecef47333c45",
+      "target": "pc88va"
+    }
+  },
+  "media": {
+    "build_manifest_sha256": "7764ec05c98209136cd7e86aec749d1a00da07b7f895e1fa54f660f173a646f9",
+    "builder_regions": {
+      "allocations": [
+        {
+          "clusters": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "dos_name": "KERNEL.SYS",
+          "fat_timestamp": {
+            "fat_date": 23835,
+            "fat_time": 14775,
+            "utc": "2026-08-27T07:13:46Z"
+          },
+          "first_cluster": 2,
+          "sha256": "d7c864d29bf772b0bb167ac9b0a2c77d391d6c5a32102ba005f0043d981885a2",
+          "size": 4414,
+          "source_date_epoch": 1787814827
+        },
+        {
+          "clusters": [
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96
+          ],
+          "dos_name": "COMMAND.COM",
+          "fat_timestamp": {
+            "fat_date": 23126,
+            "fat_time": 29242,
+            "utc": "2025-02-22T14:17:52Z"
+          },
+          "first_cluster": 7,
+          "sha256": "fabe7744cc7c51c6f72519cc39d89bf77beaf908f994675a97a1e34c93549da1",
+          "size": 91143,
+          "source_date_epoch": 1740233872
+        },
+        {
+          "clusters": [
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            137,
+            138
+          ],
+          "dos_name": "COUNTRY.SYS",
+          "fat_timestamp": {
+            "fat_date": 23730,
+            "fat_time": 34548,
+            "utc": "2026-05-18T16:55:40Z"
+          },
+          "first_cluster": 97,
+          "sha256": "04b2d2bc8df382090686f00e547d718d6706d22fb34c34dd77cd55083d5c34d5",
+          "size": 42614,
+          "source_date_epoch": 1779123341
+        }
+      ],
+      "boot_record": {
+        "sha256": "439e19a8eeba360e1c64f56d3f97f2c5fe302c55a98b2ff827422d7e1b2e9587",
+        "size": 1024
+      },
+      "fat_1": {
+        "sha256": "6d7a8a5a65a6e2b62a18f548a7a72e0b4c3b8dbb54818cb77056fe9a90f5bac6",
+        "size": 2048
+      },
+      "fat_2": {
+        "sha256": "6d7a8a5a65a6e2b62a18f548a7a72e0b4c3b8dbb54818cb77056fe9a90f5bac6",
+        "size": 2048
+      },
+      "root_directory": {
+        "sha256": "f7afd996e11aadd280202daaeaf138519313d11655e39fac207eed35783a18d6",
+        "size": 6144
+      }
+    },
+    "d88": {
+      "populated_tracks": 160,
+      "sector_count": 1280,
+      "sha256": "141959c7fe8ddbaf2d37e9c3078404380cbb27198bfe650a17e6f0aa37c92004",
+      "size": 1331888
+    },
+    "inspected_regions": {
+      "allocations": [
+        {
+          "clusters": [
+            2,
+            3,
+            4,
+            5,
+            6
+          ],
+          "dos_name": "KERNEL.SYS",
+          "fat_timestamp": {
+            "fat_date": 23835,
+            "fat_time": 14775,
+            "utc": "2026-08-27T07:13:46Z"
+          },
+          "first_cluster": 2,
+          "sha256": "d7c864d29bf772b0bb167ac9b0a2c77d391d6c5a32102ba005f0043d981885a2",
+          "size": 4414,
+          "source_date_epoch": 1787814827
+        },
+        {
+          "clusters": [
+            7,
+            8,
+            9,
+            10,
+            11,
+            12,
+            13,
+            14,
+            15,
+            16,
+            17,
+            18,
+            19,
+            20,
+            21,
+            22,
+            23,
+            24,
+            25,
+            26,
+            27,
+            28,
+            29,
+            30,
+            31,
+            32,
+            33,
+            34,
+            35,
+            36,
+            37,
+            38,
+            39,
+            40,
+            41,
+            42,
+            43,
+            44,
+            45,
+            46,
+            47,
+            48,
+            49,
+            50,
+            51,
+            52,
+            53,
+            54,
+            55,
+            56,
+            57,
+            58,
+            59,
+            60,
+            61,
+            62,
+            63,
+            64,
+            65,
+            66,
+            67,
+            68,
+            69,
+            70,
+            71,
+            72,
+            73,
+            74,
+            75,
+            76,
+            77,
+            78,
+            79,
+            80,
+            81,
+            82,
+            83,
+            84,
+            85,
+            86,
+            87,
+            88,
+            89,
+            90,
+            91,
+            92,
+            93,
+            94,
+            95,
+            96
+          ],
+          "dos_name": "COMMAND.COM",
+          "fat_timestamp": {
+            "fat_date": 23126,
+            "fat_time": 29242,
+            "utc": "2025-02-22T14:17:52Z"
+          },
+          "first_cluster": 7,
+          "sha256": "fabe7744cc7c51c6f72519cc39d89bf77beaf908f994675a97a1e34c93549da1",
+          "size": 91143,
+          "source_date_epoch": 1740233872
+        },
+        {
+          "clusters": [
+            97,
+            98,
+            99,
+            100,
+            101,
+            102,
+            103,
+            104,
+            105,
+            106,
+            107,
+            108,
+            109,
+            110,
+            111,
+            112,
+            113,
+            114,
+            115,
+            116,
+            117,
+            118,
+            119,
+            120,
+            121,
+            122,
+            123,
+            124,
+            125,
+            126,
+            127,
+            128,
+            129,
+            130,
+            131,
+            132,
+            133,
+            134,
+            135,
+            136,
+            137,
+            138
+          ],
+          "dos_name": "COUNTRY.SYS",
+          "fat_timestamp": {
+            "fat_date": 23730,
+            "fat_time": 34548,
+            "utc": "2026-05-18T16:55:40Z"
+          },
+          "first_cluster": 97,
+          "sha256": "04b2d2bc8df382090686f00e547d718d6706d22fb34c34dd77cd55083d5c34d5",
+          "size": 42614,
+          "source_date_epoch": 1779123341
+        }
+      ],
+      "boot_record": {
+        "bpb": {
+          "bytes_per_sector": 1024,
+          "fat_count": 2,
+          "heads": 2,
+          "hidden_sectors": 0,
+          "media_descriptor": 254,
+          "reserved_sectors": 1,
+          "root_entries": 192,
+          "sectors_per_cluster": 1,
+          "sectors_per_fat": 2,
+          "sectors_per_track": 8,
+          "total_sectors": 1280
+        },
+        "sha256": "439e19a8eeba360e1c64f56d3f97f2c5fe302c55a98b2ff827422d7e1b2e9587",
+        "size": 1024
+      },
+      "fat_1": {
+        "sha256": "6d7a8a5a65a6e2b62a18f548a7a72e0b4c3b8dbb54818cb77056fe9a90f5bac6",
+        "size": 2048
+      },
+      "fat_2": {
+        "sha256": "6d7a8a5a65a6e2b62a18f548a7a72e0b4c3b8dbb54818cb77056fe9a90f5bac6",
+        "size": 2048
+      },
+      "root_directory": {
+        "sha256": "f7afd996e11aadd280202daaeaf138519313d11655e39fac207eed35783a18d6",
+        "size": 6144
+      }
+    },
+    "inspection_manifest_sha256": "d91caa44f034b2dbcd071df50c3041ae5369c39e166706f769baf6f97ef2a20e",
+    "payloads": [
+      {
+        "dos_name": "COMMAND.COM",
+        "sha256": "fabe7744cc7c51c6f72519cc39d89bf77beaf908f994675a97a1e34c93549da1",
+        "size": 91143
+      },
+      {
+        "dos_name": "COUNTRY.SYS",
+        "sha256": "04b2d2bc8df382090686f00e547d718d6706d22fb34c34dd77cd55083d5c34d5",
+        "size": 42614
+      },
+      {
+        "dos_name": "KERNEL.SYS",
+        "sha256": "d7c864d29bf772b0bb167ac9b0a2c77d391d6c5a32102ba005f0043d981885a2",
+        "size": 4414
+      }
+    ],
+    "raw": {
+      "sha256": "333f1a7fd1385ba347e64ae7511f2ed060b057f3b73e1cec94e0532bc9916f66",
+      "size": 1310720
+    }
+  },
+  "milestone": "M06-pc88va-kernel-compile-target",
+  "nec98_regression": [
+    {
+      "name": "KWC8616.sys",
+      "sha256": "3ebddb01abe5e39f16d27439836be283c57d454f012d3c990f01fa8a2b14101d",
+      "size": 83774
+    },
+    {
+      "name": "b_fat12.bin",
+      "sha256": "5a480da31b43cde006614d8c3be6fff4d5f227f83055e4ee6ac82665bf6c1212",
+      "size": 512
+    },
+    {
+      "name": "b_fat12f.bin",
+      "sha256": "abc12598f215502ff18fdefb5fb961d82573e31860f34bfd555265e4d04ac559",
+      "size": 512
+    },
+    {
+      "name": "b_fat16.bin",
+      "sha256": "a233d5b7360b5fbee4f4e449d89a77c4adf9cea8210689a64dd5a79fcd75844d",
+      "size": 512
+    },
+    {
+      "name": "b_fat32.bin",
+      "sha256": "607c68fe41ebc150d59078fad7fb859a33b7edfd8f12a5c82c019c9cebcd4ca7",
+      "size": 512
+    },
+    {
+      "name": "country.sys",
+      "sha256": "541f5abefd8d0fd9f4f3eeef7741f36f666eaaa5b0020203a5786a1bc270048f",
+      "size": 30250
+    },
+    {
+      "name": "kernel.sys",
+      "sha256": "3ebddb01abe5e39f16d27439836be283c57d454f012d3c990f01fa8a2b14101d",
+      "size": 83774
+    },
+    {
+      "name": "sys.com",
+      "sha256": "356f6dce5fa5fb2877a79dd4b7fcc0ff3bc3b00f9c77739fb2c7d2e9f1ae8528",
+      "size": 17930
+    }
+  ],
+  "schema_sha256": "cce4891a304ba372fc61e48d5809da939b0341d2fc1bf832e03d544f12d8212f",
+  "schema_version": 1,
+  "source_archive_sha256": "d9cc6113cfe297040a7e94f9df70320c52b1f09bf59fb2e7b30e59ddc5001535"
+}

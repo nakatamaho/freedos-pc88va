@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help submodules component-status verify-scaffold m01-host-portability m01-image-identity m01-preflight m01-image m01-build m01-compare m01-enroll-golden m01-verify m01-clean m02-preflight m02-clean m02-bundle m02-compare m02-verify m02-enroll-golden m02 m03-preflight m03-clean m03-scan m03-compare m03-enroll-golden m03-verify m03 m04-preflight m04-private-evidence m04-verify m04 m04r1-license-verify m05-preflight m05-clean m05-build m05-compare m05-enroll-golden m05-negative-tests m05-verify m05 verify
+.PHONY: help submodules component-status verify-scaffold m01-host-portability m01-image-identity m01-preflight m01-image m01-build m01-compare m01-enroll-golden m01-verify m01-clean m02-preflight m02-clean m02-bundle m02-compare m02-verify m02-enroll-golden m02 m03-preflight m03-clean m03-scan m03-compare m03-enroll-golden m03-verify m03 m04-preflight m04-private-evidence m04-verify m04 m04r1-license-verify m05-preflight m05-clean m05-build m05-compare m05-enroll-golden m05-negative-tests m05-verify m05 m06-preflight m06-prepare-m05 m06-clean m06-build m06-nec98-regression m06-media m06-compare m06-enroll-golden m06-negative-tests m06-verify m06 verify
 
 help:
 	@printf '%s\n' \
@@ -45,6 +45,17 @@ help:
 		'  m05-negative-tests  Run M05 fail-closed media tests' \
 		'  m05-verify        Verify M05 runs against the committed golden' \
 		'  m05               Run the complete deterministic M05 sequence' \
+		'  m06-preflight     Verify M06 child, historical identities, M05 bytes, and toolchain' \
+		'  m06-prepare-m05   Regenerate accepted M05 prerequisites under the M06 gitlink overlay' \
+		'  m06-clean         Remove only generated M06 result paths' \
+		'  m06-build         Build two PC-88VA targets and two NEC98 regressions' \
+		'  m06-nec98-regression  Verify all accepted fdkernel NEC98 artifact hashes' \
+		'  m06-media         Build and inspect two derived compile-only media runs' \
+		'  m06-compare       Compare complete M06 result trees byte-for-byte' \
+		'  m06-enroll-golden Explicitly enroll a passing M06 textual golden' \
+		'  m06-negative-tests  Run M06 fail-closed parent tests' \
+		'  m06-verify        Verify M06 runs against the committed golden' \
+		'  m06               Run the complete deterministic M06 sequence' \
 		'  verify            Run scaffold and available M01 verification'
 
 submodules:
@@ -180,6 +191,46 @@ m05:
 	@$(MAKE) m05-compare
 	@$(MAKE) m05-negative-tests
 	@$(MAKE) m05-verify
+
+m06-preflight:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m06/m06.py --preflight
+
+m06-prepare-m05:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m06/m06.py --prepare-m05
+
+m06-clean:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m06/m06.py --clean
+
+m06-build:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m06/m06.py --build
+
+m06-nec98-regression:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m06/m06.py --nec98-regression
+
+m06-media:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m06/m06.py --media
+
+m06-compare:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m06/m06.py --compare
+
+m06-enroll-golden:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m06/m06.py --enroll-golden
+
+m06-negative-tests:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m06/m06.py --negative-tests
+
+m06-verify:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m06/m06.py --verify
+
+m06:
+	@$(MAKE) m06-preflight
+	@$(MAKE) m06-clean
+	@$(MAKE) m06-build
+	@$(MAKE) m06-nec98-regression
+	@$(MAKE) m06-media
+	@$(MAKE) m06-compare
+	@$(MAKE) m06-negative-tests
+	@$(MAKE) m06-verify
 
 verify: verify-scaffold
 	@if test -f qa/golden/m01-baseline.json && test -d qa/results/m01/run-1 && test -d qa/results/m01/run-2; then \

@@ -128,6 +128,8 @@ from pathlib import Path
 
 root = Path(sys.argv[1])
 contract_path = Path(sys.argv[2])
+sys.path.insert(0, str(root / "tools/qa"))
+from current_components import CurrentComponentError, resolve_current_components
 expected_paths = {
     "components/fdkernel",
     "components/freecom",
@@ -214,6 +216,10 @@ def validate_submodule_policy():
 
 
 def validate_parent_gitlinks(lock_mapping):
+    try:
+        current_mapping = resolve_current_components(root, lock_mapping)
+    except CurrentComponentError as exc:
+        raise SystemExit(str(exc)) from exc
     actual = {}
     for path in sorted(expected_paths):
         stage = subprocess.check_output(
@@ -222,16 +228,16 @@ def validate_parent_gitlinks(lock_mapping):
         if len(stage) < 2 or stage[0] != "160000":
             raise SystemExit(f"parent gitlink mode is not 160000 for {path}")
         actual[path] = stage[1]
-        if actual[path] != lock_mapping[path]:
+        if actual[path] != current_mapping[path]:
             raise SystemExit(
-                f"parent gitlink mismatch for {path}: {actual[path]} != {lock_mapping[path]}"
+                f"parent gitlink mismatch for {path}: {actual[path]} != {current_mapping[path]}"
             )
         head = subprocess.check_output(
             ["git", "-C", str(root / path), "rev-parse", "HEAD"], text=True
         ).strip()
-        if head != lock_mapping[path]:
+        if head != current_mapping[path]:
             raise SystemExit(
-                f"checked-out component mismatch for {path}: {head} != {lock_mapping[path]}"
+                f"checked-out component mismatch for {path}: {head} != {current_mapping[path]}"
             )
 
 

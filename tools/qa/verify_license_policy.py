@@ -10,6 +10,8 @@ import subprocess
 import sys
 from pathlib import Path
 
+from current_components import CurrentComponentError, resolve_current_components
+
 
 SPDX_EXPRESSION = "GPL-2.0-or-later"
 M04_START_COMMIT = "f099b8ec1ca7edfdef3619ddea59369b44e49014"
@@ -154,7 +156,11 @@ def verify_m04_identities(root: Path) -> None:
 
 
 def verify_components(root: Path) -> None:
-    for relative, expected in EXPECTED_GITLINKS.items():
+    try:
+        current = resolve_current_components(root, EXPECTED_GITLINKS)
+    except CurrentComponentError as exc:
+        raise VerificationError(str(exc)) from exc
+    for relative, expected in current.items():
         fields = run_git(root, "ls-files", "--stage", "--", relative).strip().split()
         if len(fields) < 4 or fields[0] != "160000" or fields[1] != expected:
             actual = fields[1] if len(fields) >= 2 else "missing"

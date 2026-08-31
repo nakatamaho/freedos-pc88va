@@ -9,6 +9,9 @@ import subprocess
 import sys
 from pathlib import Path
 
+sys.path.insert(0, str(Path(__file__).resolve().parent / "qa"))
+from current_components import CurrentComponentError, resolve_current_components
+
 
 EXPECTED_SUBMODULES = {
     "components/fdkernel": {
@@ -245,6 +248,7 @@ def verify_lock(root: Path, shas: dict[str, str]) -> None:
         "freecom": "experimental-fork",
         "country": "upstream",
     }
+    historical_shas: dict[str, str] = {}
     for component in components:
         if not isinstance(component, dict):
             raise VerificationError("each lock component must be an object")
@@ -261,10 +265,15 @@ def verify_lock(root: Path, shas: dict[str, str]) -> None:
             raise VerificationError(f"lock commit for {name} is not a 40-character SHA")
         if component.get("stability") != expected_stability[name]:
             raise VerificationError(f"lock stability mismatch for {name}")
-        if commit != shas[path]:
-            raise VerificationError(f"lock SHA for {name} does not match parent gitlink")
+        historical_shas[path] = commit
     if seen != {value["name"] for value in EXPECTED_SUBMODULES.values()}:
         raise VerificationError("lock component set is incomplete")
+    try:
+        current_shas = resolve_current_components(root, historical_shas)
+    except CurrentComponentError as exc:
+        raise VerificationError(str(exc)) from exc
+    if current_shas != shas:
+        raise VerificationError("current component lock does not match parent gitlinks")
 
 
 def verify_remotes(root: Path) -> None:

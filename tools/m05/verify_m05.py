@@ -10,6 +10,7 @@ import stat
 import sys
 from pathlib import Path
 
+import common as m05_common
 from build_media import serializable_record
 from common import (
     GOLDEN_RELATIVE,
@@ -31,6 +32,29 @@ from common import (
 )
 from compare_media import compare_runs, tree_snapshot
 from inspect_media import inspect_run
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "qa"))
+from current_components import CurrentComponentError, resolve_current_components
+
+
+def validate_descendant_spec(root: Path) -> tuple[dict, dict]:
+    """Validate immutable M05 data while accepting an exact M06 gitlink overlay."""
+    historical = dict(m05_common.EXPECTED_GITLINKS)
+    historical_by_path = {f"components/{name}": commit for name, commit in historical.items()}
+    try:
+        current_by_path = resolve_current_components(root, historical_by_path)
+    except CurrentComponentError as exc:
+        raise ValidationError(str(exc)) from exc
+    if current_by_path == historical_by_path:
+        return validate_spec(root)
+    current_by_name = {Path(path).name: commit for path, commit in current_by_path.items()}
+    def validate_historical_contract(component_gitlinks: dict) -> None:
+        if component_gitlinks != historical:
+            raise ValidationError("component identities in the M05 specification differ")
+
+    m05_common.EXPECTED_GITLINKS = current_by_name
+    m05_common.validate_component_contract = validate_historical_contract
+    return validate_spec(root)
 
 
 def verify_tracked_safety(root: Path) -> None:
@@ -62,15 +86,32 @@ def validate_changed_paths(root: Path) -> None:
         "qa/golden/m05-media-manifest.json",
         "tests/m04/test_verify_m04.py",
         "tools/m04/verify_m04.py",
+        ".github/workflows/m06-kernel.yml",
+        "components/fdkernel",
+        "manifests/README.md",
+        "manifests/m06-components.lock.json",
+        "qa/golden/m06-kernel-manifest.json",
+        "schema/m06-kernel-interface.schema.json",
+        "tools/m01/build_baseline.sh",
+        "tools/m01/verify_m01.py",
+        "tools/m02/common.py",
+        "tools/m05/common.py",
+        "tools/m05/verify_m05.py",
+        "tools/qa/current_components.py",
+        "tools/qa/verify_license_policy.py",
+        "tools/verify_scaffold.py",
     }
-    prefixes = ("config/m05/", "tests/m05/", "tools/m05/")
+    prefixes = (
+        "config/m05/", "tests/m05/", "tools/m05/", "config/m06/",
+        "docs/porting/m06-", "tests/m06/", "tools/m06/",
+    )
     for relative in sorted(item for item in changed if item):
         if relative not in exact and not relative.startswith(prefixes):
             raise ValidationError(f"path is outside M05 parent-only scope: {relative}")
 
 
 def preflight(root: Path, run_m02: bool = True) -> tuple[dict, dict, list[dict]]:
-    spec, derived = validate_spec(root)
+    spec, derived = validate_descendant_spec(root)
     validate_chs_round_trip(spec["geometry"])
     if run_m02:
         run_m02_verifier(root)

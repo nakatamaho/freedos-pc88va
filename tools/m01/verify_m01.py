@@ -7,7 +7,11 @@ import json
 import os
 import re
 import subprocess
+import sys
 from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "qa"))
+from current_components import CurrentComponentError, resolve_current_components
 
 
 EXPECTED_FIXED_COMMITS = {
@@ -135,6 +139,11 @@ def main():
     expected_commits = component_commits(root, errors)
     if "components/fdkernel" not in expected_commits:
         fail(errors, "components lock is missing the fdkernel commit")
+    try:
+        current_commits = resolve_current_components(root, expected_commits)
+    except CurrentComponentError as exc:
+        current_commits = expected_commits
+        fail(errors, str(exc))
 
     if root.name != "freedos-pc88va":
         fail(errors, f"repository basename is not freedos-pc88va: {root.name}")
@@ -204,9 +213,9 @@ def main():
                 fail(errors, f"submodule gitlink is missing: {path}")
             else:
                 assert_equal(errors, f"gitlink mode for {path}", stage[0], "160000")
-                assert_equal(errors, f"gitlink SHA for {path}", stage[1], expected_commits.get(path))
+                assert_equal(errors, f"gitlink SHA for {path}", stage[1], current_commits.get(path))
             head = run_git(root / path, "rev-parse", "HEAD").stdout.strip()
-            assert_equal(errors, f"checked-out submodule SHA for {path}", head, expected_commits.get(path))
+            assert_equal(errors, f"checked-out submodule SHA for {path}", head, current_commits.get(path))
             status = run_git(root / path, "status", "--short", "--untracked-files=all").stdout
             if status:
                 fail(errors, f"component is not clean: {path}: {status.strip()}")

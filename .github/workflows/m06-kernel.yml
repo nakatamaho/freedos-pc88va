@@ -1,0 +1,101 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+name: M06 PC-88VA kernel compile target
+
+on:
+  push:
+    paths:
+      - ".github/workflows/m06-kernel.yml"
+      - ".gitignore"
+      - "Makefile"
+      - "components/fdkernel"
+      - "config/m06/**"
+      - "docs/porting/m06-*.md"
+      - "manifests/m06-components.lock.json"
+      - "qa/golden/m06-kernel-manifest.json"
+      - "schema/m06-*.json"
+      - "tests/m06/**"
+      - "tools/m01/**"
+      - "tools/m02/**"
+      - "tools/m04/**"
+      - "tools/m05/**"
+      - "tools/m06/**"
+      - "tools/qa/**"
+      - "tools/verify_scaffold.py"
+  pull_request:
+    paths:
+      - ".github/workflows/m06-kernel.yml"
+      - ".gitignore"
+      - "Makefile"
+      - "components/fdkernel"
+      - "config/m06/**"
+      - "docs/porting/m06-*.md"
+      - "manifests/m06-components.lock.json"
+      - "qa/golden/m06-kernel-manifest.json"
+      - "schema/m06-*.json"
+      - "tests/m06/**"
+      - "tools/m01/**"
+      - "tools/m02/**"
+      - "tools/m04/**"
+      - "tools/m05/**"
+      - "tools/m06/**"
+      - "tools/qa/**"
+      - "tools/verify_scaffold.py"
+
+jobs:
+  compile-only-kernel:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out parent and exact submodules
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Assert native x64 and configure component remotes
+        run: |
+          test "$(uname -m)" = x86_64
+          test "$(dpkg --print-architecture)" = amd64
+          bash tools/configure_component_remotes.sh
+
+      - name: Verify static parent and child boundaries
+        run: |
+          git diff --check
+          make verify-scaffold
+          make m04r1-license-verify
+          make m04-verify
+          PYTHONPYCACHEPREFIX="$RUNNER_TEMP/m06-pycache" python3 -m compileall -q tools/m06 tests/m06 tools/qa
+          PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s components/fdkernel/pc88va/tests -p 'test_*.py'
+
+      - name: Rebuild historical M01 and M02 prerequisites
+        run: |
+          make m01-host-portability
+          make m01-image-identity
+          make m01-preflight
+          make m01-image
+          M01_DIAGNOSTICS=1 make m01-build
+          make m01-compare
+          make m01-verify
+          PYTHONDONTWRITEBYTECODE=1 python3 tools/m01/test_kernel_reproducibility.py --repo-root .
+          PYTHONDONTWRITEBYTECODE=1 python3 tools/m02/test_bundle_contract.py
+          make m02-preflight
+          make m02-clean
+          make m02-bundle
+          make m02-compare
+          make m02-verify
+
+      - name: Regenerate and verify immutable M05 prerequisites
+        run: |
+          make m06-prepare-m05
+          make m05-verify
+
+      - name: Build and verify the reproducible M06 target
+        run: make m06
+
+      - name: Audit unchanged public boundary
+        run: |
+          git diff --check
+          git diff --exit-code
+          test -z "$(git -C components/fdkernel status --short --untracked-files=all)"
+          test -z "$(git -C components/freecom status --short --untracked-files=all)"
+          test -z "$(git -C components/country status --short --untracked-files=all)"
+          echo 'M06 generated no tracked binary or image and consumed no private input.'

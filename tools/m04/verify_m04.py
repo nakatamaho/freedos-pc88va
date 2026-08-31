@@ -11,6 +11,9 @@ import subprocess
 import sys
 from pathlib import Path, PurePosixPath
 
+sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "qa"))
+from current_components import CurrentComponentError, resolve_current_components
+
 
 ACCEPTED_PARENT = "5bb5e1f47b0fdb954056532412889cee1123ef1b"
 COMPONENTS = {
@@ -242,6 +245,17 @@ def validate_changed_paths(paths):
         "qa/golden/m05-media-manifest.json",
     }
     m05_prefixes = ("config/m05/", "tests/m05/", "tools/m05/")
+    m06_paths = {
+        ".github/workflows/m06-kernel.yml", ".gitignore", "Makefile",
+        "components/fdkernel", "manifests/README.md",
+        "manifests/m06-components.lock.json", "qa/golden/m06-kernel-manifest.json",
+        "schema/m06-kernel-interface.schema.json", "tools/verify_scaffold.py",
+        "tools/m01/build_baseline.sh", "tools/m01/verify_m01.py",
+        "tools/m02/common.py", "tools/m04/verify_m04.py", "tools/m05/common.py",
+        "tools/m05/verify_m05.py", "tools/qa/current_components.py",
+        "tools/qa/verify_license_policy.py",
+    }
+    m06_prefixes = ("config/m06/", "docs/porting/m06-", "tests/m06/", "tools/m06/")
     protected = (
         "components/", "manifests/", "qa/golden/m01", "qa/golden/m02",
         "qa/golden/m03", "config/m03/", "tools/m01/", "tools/m02/", "tools/m03/",
@@ -253,6 +267,8 @@ def validate_changed_paths(paths):
         if item in m04r1_license_paths:
             continue
         if item in m05_paths or item.startswith(m05_prefixes):
+            continue
+        if item in m06_paths or item.startswith(m06_prefixes):
             continue
         if item == "tools/m03/verify_m03.py":
             continue
@@ -272,9 +288,14 @@ def verify_baseline(root):
     for _, (relative, expected) in IDENTITIES.items():
         if sha256_file(root / relative) != expected:
             raise VerificationError(f"accepted identity mismatch: {relative}")
-    for name, expected in COMPONENTS.items():
-        relative = f"components/{name}"
-        if git_text(root, "rev-parse", f"HEAD:{relative}") != expected:
+    historical = {f"components/{name}": commit for name, commit in COMPONENTS.items()}
+    try:
+        current = resolve_current_components(root, historical)
+    except CurrentComponentError as exc:
+        raise VerificationError(str(exc)) from exc
+    for relative, expected in current.items():
+        name = PurePosixPath(relative).name
+        if git_text(root, "rev-parse", f":{relative}") != expected:
             raise VerificationError(f"component gitlink mismatch: {name}")
         component = root / relative
         if git_text(component, "rev-parse", "HEAD") != expected:
