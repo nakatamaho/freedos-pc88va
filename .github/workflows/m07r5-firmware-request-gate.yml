@@ -10,6 +10,8 @@ on:
       - "qa/golden/m07r5-public-status.sha256"
       - "schema/m07r5-public-status.schema.json"
       - "tests/m07/test_m07r5.py"
+      - "tools/m04/verify_m04.py"
+      - "tools/m05/verify_m05.py"
       - "tools/m07/verify_m07r5.py"
   pull_request:
     paths:
@@ -20,7 +22,10 @@ on:
       - "qa/golden/m07r5-public-status.sha256"
       - "schema/m07r5-public-status.schema.json"
       - "tests/m07/test_m07r5.py"
+      - "tools/m04/verify_m04.py"
+      - "tools/m05/verify_m05.py"
       - "tools/m07/verify_m07r5.py"
+  workflow_dispatch:
 
 jobs:
   public-request-gate-record:
