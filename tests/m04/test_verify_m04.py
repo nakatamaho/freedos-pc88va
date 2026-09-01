@@ -241,6 +241,16 @@ class ContractNegativeTests(unittest.TestCase):
         with self.assertRaises(verifier.VerificationError):
             verifier.validate_changed_paths(["components/fdkernel"])
 
+    def test_m07r1_descendant_paths_are_narrowly_allowed(self):
+        verifier.validate_changed_paths([
+            "docs/porting/m07r1-production-trace-rerun.md",
+            "schema/m07r1-public-status.schema.json",
+        ], m06_active=True)
+        with self.assertRaises(verifier.VerificationError):
+            verifier.validate_changed_paths([
+                "docs/porting/m07r1-unreviewed-result.md",
+            ], m06_active=True)
+
     def test_component_gitlink_drift_is_rejected(self):
         data = self.invalid()
         data["component_gitlinks"]["fdkernel"] = "0" * 40

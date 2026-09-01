@@ -35,6 +35,7 @@ from common import (  # noqa: E402
 )
 from compare_media import compare_runs  # noqa: E402
 from inspect_media import inspect_raw, parse_d88, validate_d88_round_trip  # noqa: E402
+from verify_m05 import validate_descendant_paths  # noqa: E402
 
 
 def load_spec():
@@ -293,6 +294,16 @@ class MediaNegativeTests(MediaFixture):
             (run1 / "candidate.img").write_bytes(b"one")
             (run2 / "candidate.img").write_bytes(b"two")
             self.assertEqual(compare_runs(run1, run2)["status"], "fail")
+
+    def test_m07r1_descendant_paths_are_narrowly_allowed(self):
+        validate_descendant_paths([
+            "docs/porting/m07r1-production-trace-rerun.md",
+            "schema/m07r1-public-status.schema.json",
+        ])
+        with self.assertRaises(ValidationError):
+            validate_descendant_paths([
+                "docs/porting/m07r1-unreviewed-result.md",
+            ])
 
 
 def accepted_contract_records():

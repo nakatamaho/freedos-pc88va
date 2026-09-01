@@ -75,9 +75,7 @@ def verify_tracked_safety(root: Path) -> None:
         raise ValidationError("forbidden tracked M05 input or output: " + ", ".join(sorted(set(forbidden))))
 
 
-def validate_changed_paths(root: Path) -> None:
-    changed = set(run_git(root, "diff", "--name-only", "8b33ee3c6eece05ac4e810726d4dce90372ab4b3").splitlines())
-    changed.update(run_git(root, "diff", "--cached", "--name-only").splitlines())
+def validate_descendant_paths(paths) -> None:
     exact = {
         ".github/workflows/m05-media.yml",
         ".gitignore",
@@ -105,16 +103,24 @@ def validate_changed_paths(root: Path) -> None:
         "tools/qa/verify_license_policy.py",
         "tools/verify_scaffold.py",
         ".github/workflows/m07-probe.yml",
+        "docs/porting/m07r1-production-trace-rerun.md",
         "qa/golden/m07-probe-manifest.json",
+        "schema/m07r1-public-status.schema.json",
     }
     prefixes = (
         "config/m05/", "tests/m05/", "tools/m05/", "config/m06/",
         "docs/porting/m06-", "tests/m06/", "tools/m06/",
         "config/m07/", "docs/porting/m07-", "schema/m07-", "tests/m07/", "tools/m07/",
     )
-    for relative in sorted(item for item in changed if item):
+    for relative in sorted(item for item in paths if item):
         if relative not in exact and not relative.startswith(prefixes):
             raise ValidationError(f"path is outside M05 parent-only scope: {relative}")
+
+
+def validate_changed_paths(root: Path) -> None:
+    changed = set(run_git(root, "diff", "--name-only", "8b33ee3c6eece05ac4e810726d4dce90372ab4b3").splitlines())
+    changed.update(run_git(root, "diff", "--cached", "--name-only").splitlines())
+    validate_descendant_paths(changed)
 
 
 def preflight(root: Path, run_m02: bool = True) -> tuple[dict, dict, list[dict]]:

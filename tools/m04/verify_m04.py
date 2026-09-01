@@ -260,7 +260,9 @@ def validate_changed_paths(paths, m06_active=False):
     m06_prefixes = ("config/m06/", "docs/porting/m06-", "tests/m06/", "tools/m06/")
     m07_paths = {
         ".github/workflows/m07-probe.yml", ".gitignore", "Makefile",
+        "docs/porting/m07r1-production-trace-rerun.md",
         "qa/golden/m07-probe-manifest.json",
+        "schema/m07r1-public-status.schema.json",
     }
     m07_prefixes = ("config/m07/", "docs/porting/m07-", "schema/m07-", "tests/m07/", "tools/m07/")
     protected = (
