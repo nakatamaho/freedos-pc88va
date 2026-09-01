@@ -1,5 +1,5 @@
 # SPDX-License-Identifier: GPL-2.0-or-later
-name: M07 public boot-acceptance probe harness
+name: M07 and M07R2 public boot-diagnosis harness
 
 on:
   push:
@@ -12,13 +12,16 @@ on:
       - "config/m07/**"
       - "docs/porting/m06-*.md"
       - "docs/porting/m07-*.md"
+      - "docs/porting/m07r2-*.md"
       - "manifests/m06-components.lock.json"
       - "qa/golden/m06-kernel-manifest.json"
       - "qa/golden/m07-probe-manifest.json"
+      - "qa/golden/m07r2-public-status.sha256"
       - "schema/m06-*.json"
       - "schema/m07*.json"
       - "tests/m06/**"
       - "tests/m07/**"
+      - "tests/m07r2/**"
       - "tools/m01/**"
       - "tools/m02/**"
       - "tools/m03/**"
@@ -26,6 +29,7 @@ on:
       - "tools/m05/**"
       - "tools/m06/**"
       - "tools/m07/**"
+      - "tools/m07r2/**"
       - "tools/qa/**"
       - "tools/verify_scaffold.py"
   pull_request:
@@ -38,13 +42,16 @@ on:
       - "config/m07/**"
       - "docs/porting/m06-*.md"
       - "docs/porting/m07-*.md"
+      - "docs/porting/m07r2-*.md"
       - "manifests/m06-components.lock.json"
       - "qa/golden/m06-kernel-manifest.json"
       - "qa/golden/m07-probe-manifest.json"
+      - "qa/golden/m07r2-public-status.sha256"
       - "schema/m06-*.json"
       - "schema/m07*.json"
       - "tests/m06/**"
       - "tests/m07/**"
+      - "tests/m07r2/**"
       - "tools/m01/**"
       - "tools/m02/**"
       - "tools/m03/**"
@@ -52,6 +59,7 @@ on:
       - "tools/m05/**"
       - "tools/m06/**"
       - "tools/m07/**"
+      - "tools/m07r2/**"
       - "tools/qa/**"
       - "tools/verify_scaffold.py"
 
@@ -77,7 +85,7 @@ jobs:
           make verify-scaffold
           make m04r1-license-verify
           make m04-verify
-          PYTHONPYCACHEPREFIX="$RUNNER_TEMP/m07-pycache" python3 -m compileall -q tools/m06 tools/m07 tests/m06 tests/m07 tools/qa
+          PYTHONPYCACHEPREFIX="$RUNNER_TEMP/m07-pycache" python3 -m compileall -q tools/m06 tools/m07 tools/m07r2 tests/m06 tests/m07 tests/m07r2 tools/qa
           PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s components/fdkernel/pc88va/tests -p 'test_*.py'
 
       - name: Verify the public VAEG production-trace pin is reachable
@@ -114,7 +122,9 @@ jobs:
           make m06
 
       - name: Build and verify the ROM-free M07 public harness
-        run: make m07-public
+        run: |
+          make m07-public
+          make m07r2-public
 
       - name: Audit the public-only result
         run: |
@@ -123,4 +133,4 @@ jobs:
           test -z "$(git -C components/fdkernel status --short --untracked-files=all)"
           test -z "$(git -C components/freecom status --short --untracked-files=all)"
           test -z "$(git -C components/country status --short --untracked-files=all)"
-          echo 'M07R1 public CI verified the public VAEG pin but did not run VAEG or inspect private firmware, traces, or results.'
+          echo 'M07R2 public CI verified the public VAEG pin and redacted status but did not run VAEG or inspect private firmware, disks, traces, or results.'
