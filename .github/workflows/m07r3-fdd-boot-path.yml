@@ -1,0 +1,84 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+name: M07R3 public FDD boot-path diagnosis record
+
+on:
+  push:
+    paths:
+      - ".github/workflows/m07r3-fdd-boot-path.yml"
+      - "Makefile"
+      - "config/m07/m07r3-public-status.json"
+      - "config/m07/**"
+      - "docs/porting/m07r3-*.md"
+      - "qa/golden/m07r3-public-status.sha256"
+      - "schema/m07r3-public-status.schema.json"
+      - "tests/m07r3/**"
+      - "tools/m07r3/**"
+  pull_request:
+    paths:
+      - ".github/workflows/m07r3-fdd-boot-path.yml"
+      - "Makefile"
+      - "config/m07/m07r3-public-status.json"
+      - "config/m07/**"
+      - "docs/porting/m07r3-*.md"
+      - "qa/golden/m07r3-public-status.sha256"
+      - "schema/m07r3-public-status.schema.json"
+      - "tests/m07r3/**"
+      - "tools/m07r3/**"
+
+jobs:
+  public-diagnosis-record:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out parent and exact submodules
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Configure component remotes and verify public boundaries
+        run: |
+          test "$(uname -m)" = x86_64
+          test "$(dpkg --print-architecture)" = amd64
+          bash tools/configure_component_remotes.sh
+          git diff --check
+          make verify-scaffold
+          make m04r1-license-verify
+          make m04-verify
+
+      - name: Rebuild accepted public prerequisites
+        run: |
+          make m01-host-portability
+          make m01-image-identity
+          make m01-preflight
+          make m01-image
+          M01_DIAGNOSTICS=1 make m01-build
+          make m01-compare
+          make m01-verify
+          PYTHONDONTWRITEBYTECODE=1 python3 tools/m01/test_kernel_reproducibility.py --repo-root .
+          PYTHONDONTWRITEBYTECODE=1 python3 tools/m02/test_bundle_contract.py
+          make m02-preflight
+          make m02-clean
+          make m02-bundle
+          make m02-compare
+          make m02-verify
+          make m06-prepare-m05
+          make m05-verify
+          make m06
+
+      - name: Run the public M07 through M07R3 checks
+        run: |
+          make m07-public
+          make m07r2-public
+          make m07r3-public
+          PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/m07 -p 'test_*.py'
+          PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/m07r2 -p 'test_*.py'
+
+      - name: Confirm no private VAEG execution was requested
+        run: |
+          private_marker="m07r3-"
+          private_marker="${private_marker}private"
+          trace_marker="trace-"
+          trace_marker="${trace_marker}cpu"
+          ! grep -F -n "$private_marker" .github/workflows/m07r3-fdd-boot-path.yml
+          ! grep -F -n "$trace_marker" .github/workflows/m07r3-fdd-boot-path.yml
+          echo 'M07R3 CI validates public abstract status only; private trials and firmware were not inspected.'

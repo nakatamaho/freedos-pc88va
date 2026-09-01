@@ -1,0 +1,77 @@
+{
+  "classification": "U",
+  "comparison": {
+    "first_unobserved_boundary": "B2",
+    "last_common_boundary": "B1",
+    "m07_variants_compared": [
+      "V00",
+      "V01",
+      "V02",
+      "V03",
+      "V04"
+    ],
+    "paired_projection_result": "byte-identical",
+    "reached_boundaries": [
+      "B0",
+      "B1"
+    ],
+    "unreached_boundaries": [
+      "B2",
+      "B3",
+      "B4",
+      "B5",
+      "B6",
+      "B7"
+    ]
+  },
+  "components": {
+    "clean": true,
+    "gitlinks": {
+      "components/country": "23f189cca3420606eae8723884fa92ccd65eb307",
+      "components/fdkernel": "69ccdd8699895722fc537d647ec490685532bdc4",
+      "components/freecom": "855281a3114b43ad4b8d9a320f2aca39be046bba"
+    }
+  },
+  "m07r2": {
+    "resumed": false,
+    "status": "blocked_positive_control_failed",
+    "status_schema_sha256": "fc0ca205d3fdbb8f30c7cc7c7e45f037d32429ceb4e6f36b105ee40397d9767f",
+    "status_sha256": "a1c7a30cac60b5e725b21dec98f79d1f5fb08881c37efcae509d2ac44e7a538b"
+  },
+  "m08": {
+    "mandatory_resolved_count": 0,
+    "mandatory_unresolved_fields": [
+      "accepted_signature_profile",
+      "boot_drive_identity",
+      "entry_cs_ip",
+      "firmware_attempts_m05_geometry",
+      "initial_load_extent",
+      "initial_register_state",
+      "initial_sector_reads",
+      "physical_load_address"
+    ],
+    "promotion_status": "prohibited_pending_user_approval"
+  },
+  "milestone": "M07R3",
+  "private_gate": {
+    "concrete_values_published": false,
+    "input_preservation": "passed",
+    "result": "inconclusive",
+    "status": "performed"
+  },
+  "schema_version": 1,
+  "trial_summary": {
+    "fresh_trial_count": 18,
+    "paired_projection_count": 9,
+    "variant_count": 5
+  },
+  "vaeg": {
+    "accepted_ci": {
+      "attempt": 2,
+      "conclusion": "success",
+      "run_id": 33455847870
+    },
+    "commit": "16ad2e0619bf4ed82a739325f7291eba4a6ed8ad",
+    "repository": "https://github.com/nakatamaho/vaeg.git"
+  }
+}
