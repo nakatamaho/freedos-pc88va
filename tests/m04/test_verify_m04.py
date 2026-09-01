@@ -266,6 +266,19 @@ class ContractNegativeTests(unittest.TestCase):
                 "docs/porting/m07r2-unreviewed-private-result.md",
             ], m06_active=True)
 
+    def test_m07r4_descendant_paths_are_narrowly_allowed(self):
+        verifier.validate_changed_paths([
+            "config/m07/m07r4-public-status.json",
+            "docs/porting/m07r4-rom-d88-reconstruction.md",
+            "qa/golden/m07r4-public-status.sha256",
+            "schema/m07r4-public-status.schema.json",
+            "tools/m07/verify_m07r4.py",
+        ], m06_active=True)
+        with self.assertRaises(verifier.VerificationError):
+            verifier.validate_changed_paths([
+                "docs/porting/m07r4-private-result.md",
+            ], m06_active=True)
+
     def test_component_gitlink_drift_is_rejected(self):
         data = self.invalid()
         data["component_gitlinks"]["fdkernel"] = "0" * 40

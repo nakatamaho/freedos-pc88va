@@ -1,0 +1,60 @@
+name: M07R4 public boot-path reconstruction record
+
+on:
+  push:
+    paths:
+      - ".github/workflows/m07r4-boot-reconstruction.yml"
+      - "Makefile"
+      - "config/m07/m07r4-public-status.json"
+      - "docs/porting/m07r4-*.md"
+      - "qa/golden/m07r4-public-status.sha256"
+      - "schema/m07r4-public-status.schema.json"
+      - "tests/m07/test_m07r4.py"
+      - "tools/m07/verify_m07r4.py"
+  pull_request:
+    paths:
+      - ".github/workflows/m07r4-boot-reconstruction.yml"
+      - "Makefile"
+      - "config/m07/m07r4-public-status.json"
+      - "docs/porting/m07r4-*.md"
+      - "qa/golden/m07r4-public-status.sha256"
+      - "schema/m07r4-public-status.schema.json"
+      - "tests/m07/test_m07r4.py"
+      - "tools/m07/verify_m07r4.py"
+
+jobs:
+  public-reconstruction-record:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out parent and exact submodules
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Configure component remotes and run public gates
+        run: |
+          test "$(uname -m)" = x86_64
+          test "$(dpkg --print-architecture)" = amd64
+          bash tools/configure_component_remotes.sh
+          git diff --check
+          make verify-scaffold
+          make m04r1-license-verify
+          make m04-verify
+          make m07r2-public
+          make m07r3-public
+          make m07r4-public
+
+      - name: Run focused public tests
+        run: |
+          PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/m07 -p 'test_*.py'
+          PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/m07r2 -p 'test_*.py'
+          PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/m07r3 -p 'test_*.py'
+
+      - name: Confirm private analysis is not a CI dependency
+        run: |
+          private_marker="pc88va-"
+          private_marker="${private_marker}private-docs"
+          ! grep -F -n "$private_marker" .github/workflows/m07r4-boot-reconstruction.yml
+          ! grep -F -n 'trace-cpu' .github/workflows/m07r4-boot-reconstruction.yml
+          echo 'M07R4 CI validates the abstract public record; private source contents were not inspected.'
