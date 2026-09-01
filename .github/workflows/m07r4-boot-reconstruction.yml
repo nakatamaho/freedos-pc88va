@@ -41,12 +41,33 @@ jobs:
           make verify-scaffold
           make m04r1-license-verify
           make m04-verify
-          make m07r2-public
-          make m07r3-public
-          make m07r4-public
+
+      - name: Rebuild accepted public prerequisites
+        run: |
+          make m01-host-portability
+          make m01-image-identity
+          make m01-preflight
+          make m01-image
+          M01_DIAGNOSTICS=1 make m01-build
+          make m01-compare
+          make m01-verify
+          PYTHONDONTWRITEBYTECODE=1 python3 tools/m01/test_kernel_reproducibility.py --repo-root .
+          PYTHONDONTWRITEBYTECODE=1 python3 tools/m02/test_bundle_contract.py
+          make m02-preflight
+          make m02-clean
+          make m02-bundle
+          make m02-compare
+          make m02-verify
+          make m06-prepare-m05
+          make m05-verify
+          make m06
 
       - name: Run focused public tests
         run: |
+          make m07-public
+          make m07r2-public
+          make m07r3-public
+          make m07r4-public
           PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/m07 -p 'test_*.py'
           PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/m07r2 -p 'test_*.py'
           PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/m07r3 -p 'test_*.py'
