@@ -1,0 +1,68 @@
+name: M07R6 subsystem FDC command-gate record
+
+on:
+  push:
+    paths:
+      - ".github/workflows/m07r6-subsystem-fdc-command-gate.yml"
+      - "Makefile"
+      - "config/m07/m07r6-public-status.json"
+      - "docs/porting/m07r6-*.md"
+      - "qa/golden/m07r6-public-status.sha256"
+      - "schema/m07r6-public-status.schema.json"
+      - "tests/m07/test_m07r6.py"
+      - "tools/m04/verify_m04.py"
+      - "tools/m05/verify_m05.py"
+      - "tools/m07/verify_m07r6.py"
+  pull_request:
+    paths:
+      - ".github/workflows/m07r6-subsystem-fdc-command-gate.yml"
+      - "Makefile"
+      - "config/m07/m07r6-public-status.json"
+      - "docs/porting/m07r6-*.md"
+      - "qa/golden/m07r6-public-status.sha256"
+      - "schema/m07r6-public-status.schema.json"
+      - "tests/m07/test_m07r6.py"
+      - "tools/m04/verify_m04.py"
+      - "tools/m05/verify_m05.py"
+      - "tools/m07/verify_m07r6.py"
+  workflow_dispatch:
+
+jobs:
+  public-command-gate-record:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out parent and exact submodules
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Run accepted public regression gates
+        run: |
+          test "$(uname -m)" = x86_64
+          test "$(dpkg --print-architecture)" = amd64
+          bash tools/configure_component_remotes.sh
+          git diff --check
+          make verify-scaffold
+          make m04r1-license-verify
+          make m04-verify
+          make m07r4-public
+          make m07r5-public
+          make m07r6-public
+
+      - name: Confirm the record is public and abstract
+        run: |
+          private_marker="m07r6-"
+          private_marker="${private_marker}private"
+          ! grep -F -n "$private_marker" .github/workflows/m07r6-subsystem-fdc-command-gate.yml
+          trace_marker="trace-"
+          trace_marker="${trace_marker}cpu"
+          ! grep -F -n "$trace_marker" .github/workflows/m07r6-subsystem-fdc-command-gate.yml
+          emulator_marker="va"
+          emulator_marker="${emulator_marker}eg"
+          ! grep -E -n "(^|[[:space:]])${emulator_marker}([[:space:]]|$)" .github/workflows/m07r6-subsystem-fdc-command-gate.yml
+          git diff --exit-code
+          test -z "$(git -C components/fdkernel status --short --untracked-files=all)"
+          test -z "$(git -C components/freecom status --short --untracked-files=all)"
+          test -z "$(git -C components/country status --short --untracked-files=all)"
+          echo 'M07R6 CI validates the abstract public record; local firmware and trace evidence were not inspected.'
