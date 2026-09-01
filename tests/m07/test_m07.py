@@ -217,6 +217,35 @@ class M07Tests(unittest.TestCase):
         self.assertNotIn("--roms", lower)
         self.assertNotIn("m07_private_result", workflow)
 
+    def test_m07r1_public_status_accepts_the_production_trace_pin(self) -> None:
+        value = M07.load_json(ROOT / M07.M07R1_STATUS)
+        M07.validate_m07r1_status(value)
+
+    def test_m07r1_old_vaeg_commit_cannot_satisfy_the_capability_gate(self) -> None:
+        value = copy.deepcopy(M07.load_json(ROOT / M07.M07R1_STATUS))
+        value["vaeg"]["final_commit"] = "f2117aa2ae3b3c09687365e9eb15c69e7dd82390"
+        with self.assertRaisesRegex(M07.M07Error, "pin"):
+            M07.validate_m07r1_status(value)
+
+    def test_m07r1_test_memory_cannot_satisfy_the_capability_gate(self) -> None:
+        value = copy.deepcopy(M07.load_json(ROOT / M07.M07R1_STATUS))
+        value["vaeg"]["capability"]["memory_backend"] = "test-flat"
+        value["vaeg"]["capability"]["flat_test_memory_present"] = True
+        with self.assertRaisesRegex(M07.M07Error, "production memory"):
+            M07.validate_m07r1_status(value)
+
+    def test_m07r1_historical_trials_cannot_be_reused(self) -> None:
+        value = copy.deepcopy(M07.load_json(ROOT / M07.M07R1_STATUS))
+        value["private_gate"]["historical_m07_evidence_accepted"] = True
+        with self.assertRaisesRegex(M07.M07Error, "private-gate result"):
+            M07.validate_m07r1_status(value)
+
+    def test_m07r1_public_status_rejects_private_values(self) -> None:
+        value = copy.deepcopy(M07.load_json(ROOT / M07.M07R1_STATUS))
+        value["private_gate"]["winning_variant"] = "synthetic"
+        with self.assertRaisesRegex(M07.M07Error, "schema"):
+            M07.validate_m07r1_status(value)
+
     @staticmethod
     def private_result() -> dict:
         return {

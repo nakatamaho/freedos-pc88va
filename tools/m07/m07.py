@@ -22,6 +22,8 @@ CONFIG = Path("config/m07/variants.json")
 PUBLIC_SCHEMA = Path("schema/m07-public-result.schema.json")
 PRIVATE_SCHEMA = Path("schema/m07-private-overlay.schema.json")
 PUBLIC_RESULT = Path("config/m07/public-result.json")
+M07R1_SCHEMA = Path("schema/m07r1-public-status.schema.json")
+M07R1_STATUS = Path("config/m07/m07r1-public-status.json")
 GOLDEN = Path("qa/golden/m07-probe-manifest.json")
 RESULTS = Path("qa/results/m07")
 START_COMMIT = "655d716099d94e94d63f15a9f1c63d85f04f27ec"
@@ -71,6 +73,18 @@ QUESTION_FIELDS = (
     "initial_register_state",
     "boot_drive_identity",
 )
+M07R1_VAEG_COMMIT = "16ad2e0619bf4ed82a739325f7291eba4a6ed8ad"
+M07R1_VAEG_RUN_ID = 33455847870
+M07R1_PUBLIC_IDENTITIES = {
+    "compiled_probe_sha256": "b7f629baec854f9c14776328df12833ba484317968f9cbd94614b33f02a9b03b",
+    "compiled_probe_size": 9,
+    "private_overlay_schema_sha256": "e4b6e3eb67280e197c89f142e4e4d29ddc1705476eaebc868839e79de4c7e2a4",
+    "probe_source_sha256": "ae17a5dcd461e80b2a0ca6db73333eebb461d81a0bb9589e464731c4f5bdfa7b",
+    "public_golden_sha256": "fb7637082efeb2d4f57437d723d22453b6493904b7d3e805230e6d00d93aeadd",
+    "public_result_schema_sha256": "4a314a29b243660d9fe796811cfe62f8799646551c4c53a08b410cb01c9fdc73",
+    "prior_blocked_public_result_sha256": "c0bdee67a1b0e54a286df9236cb6e9ff48fb699277e3e5aefb3c804721eb3584",
+    "variant_definition_sha256": "fdc75b8353c2d1c8a858a86cbabd47eecd6327133c47184c8606f00c4a62768e",
+}
 FORBIDDEN_SUFFIXES = {".rom", ".bin", ".img", ".d88", ".log", ".obj", ".o", ".exe", ".sys", ".map"}
 
 
@@ -517,6 +531,86 @@ def validate_public_result(value: dict) -> None:
         raise M07Error("public result contains a private-only field value")
 
 
+def validate_m07r1_status(value: dict) -> None:
+    if set(value) != {"schema_version", "status", "vaeg", "public_harness", "private_gate"}:
+        raise M07Error("M07R1 public status schema differs")
+    if value.get("schema_version") != 1 or value.get("status") != "blocked_no_controlled_probe_execution":
+        raise M07Error("M07R1 public status label differs")
+
+    vaeg = value.get("vaeg")
+    if not isinstance(vaeg, dict) or set(vaeg) != {
+        "repository", "branch", "starting_commit", "final_commit", "ci", "capability", "artifacts",
+    }:
+        raise M07Error("M07R1 VAEG capability record differs")
+    if vaeg.get("repository") != "https://github.com/nakatamaho/vaeg.git" or \
+            vaeg.get("branch") != "topic/freedos-m07-production-trace-r1" or \
+            vaeg.get("starting_commit") != "f2117aa2ae3b3c09687365e9eb15c69e7dd82390" or \
+            vaeg.get("final_commit") != M07R1_VAEG_COMMIT:
+        raise M07Error("M07R1 VAEG public pin differs")
+    if vaeg.get("ci") != {
+        "all_required_jobs_passed": True,
+        "attempt": 2,
+        "conclusion": "success",
+        "first_attempt_conclusion": "failure",
+        "run_id": M07R1_VAEG_RUN_ID,
+    }:
+        raise M07Error("M07R1 VAEG full-CI record differs")
+    if vaeg.get("capability") != {
+        "flat_test_memory_present": False,
+        "memory_backend": "production",
+        "tests_enabled": False,
+        "trace_enabled": True,
+    }:
+        raise M07Error("M07R1 VAEG does not prove trace-on production memory with tests off")
+    if vaeg.get("artifacts") != {
+        "canonical_trace_sha256": "6a253f9f0b25e74cf0c95f27d378586c141f821b2f77c8704f3237436f515d9b",
+        "commit_identity_embedded": True,
+        "p0_prior_sha256": "e6f7ef541f5c4d6102ed239727c764300e03d0ee8db659b7af3ea65701dd37d3",
+        "p0_sha256": "529a7a20e0dd7ad127ef6037c1c355558e5eb42d6b7fa5a145aa3a14caf9e58a",
+        "p0_size": 8113816,
+        "p1_prior_sha256": "71d2f5231625c103dce5ad299ebf08073fae169360355869e4be5b7aeae6a481",
+        "p1_sha256": "ed44c3f618d38daed634f4e53d559f65919e19700a1994c9b087effe9e9d592b",
+        "p1_size": 8131880,
+        "two_clean_builds": "byte-identical",
+    }:
+        raise M07Error("M07R1 VAEG artifact identities differ")
+
+    harness = value.get("public_harness")
+    if harness != M07R1_PUBLIC_IDENTITIES:
+        raise M07Error("M07R1 changed an accepted M07 public harness identity")
+    actual = {
+        "probe_source_sha256": identity(ROOT / "tools/m07/probe.asm")["sha256"],
+        "variant_definition_sha256": identity(ROOT / CONFIG)["sha256"],
+        "public_result_schema_sha256": identity(ROOT / PUBLIC_SCHEMA)["sha256"],
+        "private_overlay_schema_sha256": identity(ROOT / PRIVATE_SCHEMA)["sha256"],
+        "public_golden_sha256": identity(ROOT / GOLDEN)["sha256"],
+        "prior_blocked_public_result_sha256": identity(ROOT / PUBLIC_RESULT)["sha256"],
+    }
+    for key, digest in actual.items():
+        if harness.get(key) != digest:
+            raise M07Error(f"M07R1 public harness file identity differs: {key}")
+
+    gate = value.get("private_gate")
+    if not isinstance(gate, dict) or set(gate) != {
+        "bounded_instruction_count_per_trial", "evidence_generation",
+        "historical_m07_evidence_accepted", "input_preservation", "private_gate_result",
+        "public_promotion_status", "repeated_projections", "resolved_fields", "trial_count",
+        "unresolved_fields", "variant_count",
+    }:
+        raise M07Error("M07R1 redacted private-gate schema differs")
+    if gate.get("bounded_instruction_count_per_trial") != 1_000_000 or \
+            gate.get("evidence_generation") != "fresh_m07r1" or \
+            gate.get("historical_m07_evidence_accepted") is not False or \
+            gate.get("input_preservation") != "passed" or \
+            gate.get("private_gate_result") != "inconclusive" or \
+            gate.get("public_promotion_status") != "prohibited_pending_user_approval" or \
+            gate.get("repeated_projections") != "byte-identical" or \
+            gate.get("resolved_fields") != [] or gate.get("trial_count") != 10 or \
+            gate.get("variant_count") != 5 or \
+            gate.get("unresolved_fields") != sorted(QUESTION_FIELDS):
+        raise M07Error("M07R1 redacted private-gate result differs")
+
+
 def redact_private_result(private: dict) -> dict:
     if private.get("schema_version") != 1 or private.get("public_promotion_status") != "prohibited_pending_user_approval":
         raise M07Error("private result cannot be redacted safely")
@@ -550,9 +644,11 @@ def scan_public_text(text: str) -> None:
 
 
 def public_data_paths() -> list[Path]:
-    paths = [ROOT / CONFIG, ROOT / PUBLIC_SCHEMA, ROOT / PRIVATE_SCHEMA]
+    paths = [ROOT / CONFIG, ROOT / PUBLIC_SCHEMA, ROOT / PRIVATE_SCHEMA, ROOT / M07R1_SCHEMA]
     if (ROOT / PUBLIC_RESULT).exists():
         paths.append(ROOT / PUBLIC_RESULT)
+    if (ROOT / M07R1_STATUS).exists():
+        paths.append(ROOT / M07R1_STATUS)
     paths.extend(sorted((ROOT / "docs/porting").glob("m07-*.md")))
     paths.extend(sorted((ROOT / "qa/golden").glob("m07-*.json")))
     return paths
@@ -582,6 +678,8 @@ def verify_or_enroll(enroll: bool) -> str:
         raise M07Error("M07 public result differs from the committed golden")
     if (ROOT / PUBLIC_RESULT).exists():
         validate_public_result(load_json(ROOT / PUBLIC_RESULT))
+    if (ROOT / M07R1_STATUS).exists():
+        validate_m07r1_status(load_json(ROOT / M07R1_STATUS))
     validate_public_workflow()
     for path in public_data_paths():
         scan_public_text(path.read_text(encoding="utf-8", errors="strict"))

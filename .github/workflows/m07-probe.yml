@@ -16,7 +16,7 @@ on:
       - "qa/golden/m06-kernel-manifest.json"
       - "qa/golden/m07-probe-manifest.json"
       - "schema/m06-*.json"
-      - "schema/m07-*.json"
+      - "schema/m07*.json"
       - "tests/m06/**"
       - "tests/m07/**"
       - "tools/m01/**"
@@ -42,7 +42,7 @@ on:
       - "qa/golden/m06-kernel-manifest.json"
       - "qa/golden/m07-probe-manifest.json"
       - "schema/m06-*.json"
-      - "schema/m07-*.json"
+      - "schema/m07*.json"
       - "tests/m06/**"
       - "tests/m07/**"
       - "tools/m01/**"
@@ -80,6 +80,16 @@ jobs:
           PYTHONPYCACHEPREFIX="$RUNNER_TEMP/m07-pycache" python3 -m compileall -q tools/m06 tools/m07 tests/m06 tests/m07 tools/qa
           PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s components/fdkernel/pc88va/tests -p 'test_*.py'
 
+      - name: Verify the public VAEG production-trace pin is reachable
+        run: |
+          vaeg_verify_dir="$RUNNER_TEMP/m07r1-vaeg-public"
+          git init "$vaeg_verify_dir"
+          git -C "$vaeg_verify_dir" fetch --depth=1 \
+            https://github.com/nakatamaho/vaeg.git \
+            16ad2e0619bf4ed82a739325f7291eba4a6ed8ad
+          test "$(git -C "$vaeg_verify_dir" rev-parse FETCH_HEAD)" = \
+            16ad2e0619bf4ed82a739325f7291eba4a6ed8ad
+
       - name: Rebuild historical M01 and M02 prerequisites
         run: |
           make m01-host-portability
@@ -113,4 +123,4 @@ jobs:
           test -z "$(git -C components/fdkernel status --short --untracked-files=all)"
           test -z "$(git -C components/freecom status --short --untracked-files=all)"
           test -z "$(git -C components/country status --short --untracked-files=all)"
-          echo 'M07 public CI did not run VAEG or inspect private firmware, traces, or results.'
+          echo 'M07R1 public CI verified the public VAEG pin but did not run VAEG or inspect private firmware, traces, or results.'
