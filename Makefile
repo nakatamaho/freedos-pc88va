@@ -1,6 +1,6 @@
 .DEFAULT_GOAL := help
 
-.PHONY: help submodules component-status verify-scaffold m01-host-portability m01-image-identity m01-preflight m01-image m01-build m01-compare m01-enroll-golden m01-verify m01-clean m02-preflight m02-clean m02-bundle m02-compare m02-verify m02-enroll-golden m02 m03-preflight m03-clean m03-scan m03-compare m03-enroll-golden m03-verify m03 m04-preflight m04-private-evidence m04-verify m04 m04r1-license-verify m05-preflight m05-clean m05-build m05-compare m05-enroll-golden m05-negative-tests m05-verify m05 m06-preflight m06-prepare-m05 m06-clean m06-build m06-nec98-regression m06-media m06-compare m06-enroll-golden m06-negative-tests m06-verify m06 m07-preflight m07-clean m07-probe m07-variants m07-public-tests m07-public-verify m07-enroll-golden m07-redact m07-public m07r2-tests m07r2-verify m07r2-private-evidence m07r2-public m07r3-tests m07r3-verify m07r3-public m07r4-tests m07r4-verify m07r4-public verify
+.PHONY: help submodules component-status verify-scaffold m01-host-portability m01-image-identity m01-preflight m01-image m01-build m01-compare m01-enroll-golden m01-verify m01-clean m02-preflight m02-clean m02-bundle m02-compare m02-verify m02-enroll-golden m02 m03-preflight m03-clean m03-scan m03-compare m03-enroll-golden m03-verify m03 m04-preflight m04-private-evidence m04-verify m04 m04r1-license-verify m05-preflight m05-clean m05-build m05-compare m05-enroll-golden m05-negative-tests m05-verify m05 m06-preflight m06-prepare-m05 m06-clean m06-build m06-nec98-regression m06-media m06-compare m06-enroll-golden m06-negative-tests m06-verify m06 m07-preflight m07-clean m07-probe m07-variants m07-public-tests m07-public-verify m07-enroll-golden m07-redact m07-public m07r2-tests m07r2-verify m07r2-private-evidence m07r2-public m07r3-tests m07r3-verify m07r3-public m07r4-tests m07r4-verify m07r4-public m07r5-tests m07r5-verify m07r5-public verify
 
 help:
 	@printf '%s\n' \
@@ -73,6 +73,9 @@ help:
 		'  m07r4-tests       Run M07R4 public reconstruction-status tests' \
 		'  m07r4-verify      Verify the M07R4 abstract B2 reconstruction record' \
 		'  m07r4-public      Run the ROM-free M07R4 public gate' \
+		'  m07r5-tests       Run M07R5 abstract request-gate tests' \
+		'  m07r5-verify      Verify the M07R5 abstract request-gate record' \
+		'  m07r5-public      Run the ROM-free M07R5 public gate' \
 		'  verify            Run scaffold and available M01 verification'
 
 submodules:
@@ -314,6 +317,16 @@ m07r4-verify:
 m07r4-public:
 	@$(MAKE) m07r4-tests
 	@$(MAKE) m07r4-verify
+
+m07r5-tests:
+	@PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/m07/test_m07r5.py
+
+m07r5-verify:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m07/verify_m07r5.py
+
+m07r5-public:
+	@$(MAKE) m07r5-tests
+	@$(MAKE) m07r5-verify
 
 verify: verify-scaffold
 	@if test -f qa/golden/m01-baseline.json && test -d qa/results/m01/run-1 && test -d qa/results/m01/run-2; then \

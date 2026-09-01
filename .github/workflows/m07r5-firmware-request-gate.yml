@@ -1,0 +1,54 @@
+name: M07R5 firmware request-gate record
+
+on:
+  push:
+    paths:
+      - ".github/workflows/m07r5-firmware-request-gate.yml"
+      - "Makefile"
+      - "config/m07/m07r5-public-status.json"
+      - "docs/porting/m07r5-*.md"
+      - "qa/golden/m07r5-public-status.sha256"
+      - "schema/m07r5-public-status.schema.json"
+      - "tests/m07/test_m07r5.py"
+      - "tools/m07/verify_m07r5.py"
+  pull_request:
+    paths:
+      - ".github/workflows/m07r5-firmware-request-gate.yml"
+      - "Makefile"
+      - "config/m07/m07r5-public-status.json"
+      - "docs/porting/m07r5-*.md"
+      - "qa/golden/m07r5-public-status.sha256"
+      - "schema/m07r5-public-status.schema.json"
+      - "tests/m07/test_m07r5.py"
+      - "tools/m07/verify_m07r5.py"
+
+jobs:
+  public-request-gate-record:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out parent and exact submodules
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Run accepted public regression gates
+        run: |
+          test "$(uname -m)" = x86_64
+          test "$(dpkg --print-architecture)" = amd64
+          bash tools/configure_component_remotes.sh
+          git diff --check
+          make verify-scaffold
+          make m04r1-license-verify
+          make m04-verify
+          make m07r4-public
+          make m07r5-public
+
+      - name: Confirm this gate is public and ROM-free
+        run: |
+          private_marker="pc88va-"
+          private_marker="${private_marker}private-docs"
+          ! grep -F -n "$private_marker" .github/workflows/m07r5-firmware-request-gate.yml
+          ! grep -F -n 'trace-cpu' .github/workflows/m07r5-firmware-request-gate.yml
+          ! grep -F -n 'm07r5-private' .github/workflows/m07r5-firmware-request-gate.yml
+          echo 'M07R5 CI validates the abstract public record; private source contents were not inspected.'

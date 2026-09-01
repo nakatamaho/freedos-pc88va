@@ -1,0 +1,366 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "boundaries": {
+      "additionalProperties": false,
+      "properties": {
+        "first_blocked": {
+          "const": "B3"
+        },
+        "last_reached": {
+          "const": "B2"
+        },
+        "reached": {
+          "const": [
+            "B0",
+            "B1",
+            "B2"
+          ]
+        },
+        "unreached": {
+          "const": [
+            "B3",
+            "B4",
+            "B5",
+            "B6",
+            "B7"
+          ]
+        }
+      },
+      "required": [
+        "first_blocked",
+        "last_reached",
+        "reached",
+        "unreached"
+      ],
+      "type": "object"
+    },
+    "classification": {
+      "const": "HANDSHAKE_INIT"
+    },
+    "components": {
+      "additionalProperties": false,
+      "properties": {
+        "clean": {
+          "const": true
+        },
+        "gitlinks": {
+          "additionalProperties": false,
+          "properties": {
+            "components/country": {
+              "const": "23f189cca3420606eae8723884fa92ccd65eb307"
+            },
+            "components/fdkernel": {
+              "const": "69ccdd8699895722fc537d647ec490685532bdc4"
+            },
+            "components/freecom": {
+              "const": "855281a3114b43ad4b8d9a320f2aca39be046bba"
+            }
+          },
+          "required": [
+            "components/country",
+            "components/fdkernel",
+            "components/freecom"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "clean",
+        "gitlinks"
+      ],
+      "type": "object"
+    },
+    "fields": {
+      "additionalProperties": false,
+      "properties": {
+        "promotion_status": {
+          "const": "prohibited_pending_user_approval"
+        },
+        "resolved": {
+          "const": []
+        },
+        "resolved_count": {
+          "const": 0
+        },
+        "unresolved": {
+          "const": [
+            "accepted_signature_profile",
+            "boot_drive_identity",
+            "entry_cs_ip",
+            "firmware_attempts_m05_geometry",
+            "initial_load_extent",
+            "initial_register_state",
+            "initial_sector_reads",
+            "physical_load_address"
+          ]
+        }
+      },
+      "required": [
+        "promotion_status",
+        "resolved",
+        "resolved_count",
+        "unresolved"
+      ],
+      "type": "object"
+    },
+    "irq": {
+      "additionalProperties": false,
+      "properties": {
+        "architectural_reconvergence": {
+          "const": true
+        },
+        "classification": {
+          "const": "NONCAUSAL_IRQ"
+        },
+        "repeated": {
+          "const": true
+        }
+      },
+      "required": [
+        "architectural_reconvergence",
+        "classification",
+        "repeated"
+      ],
+      "type": "object"
+    },
+    "m07r4": {
+      "additionalProperties": false,
+      "properties": {
+        "classification": {
+          "const": "U"
+        },
+        "public_status_sha256": {
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "status": {
+          "const": "historical_b2_unresolved"
+        }
+      },
+      "required": [
+        "classification",
+        "public_status_sha256",
+        "status"
+      ],
+      "type": "object"
+    },
+    "m08": {
+      "additionalProperties": false,
+      "properties": {
+        "mandatory_resolved_count": {
+          "const": 0
+        },
+        "mandatory_unresolved_fields": {
+          "const": [
+            "accepted_signature_profile",
+            "boot_drive_identity",
+            "entry_cs_ip",
+            "firmware_attempts_m05_geometry",
+            "initial_load_extent",
+            "initial_register_state",
+            "initial_sector_reads",
+            "physical_load_address"
+          ]
+        },
+        "promotion_status": {
+          "const": "prohibited_pending_user_approval"
+        }
+      },
+      "required": [
+        "mandatory_resolved_count",
+        "mandatory_unresolved_fields",
+        "promotion_status"
+      ],
+      "type": "object"
+    },
+    "milestone": {
+      "const": "M07R5"
+    },
+    "observations": {
+      "additionalProperties": false,
+      "properties": {
+        "controlled_marker": {
+          "const": false
+        },
+        "drive_motor_stable": {
+          "const": true
+        },
+        "fdc_command": {
+          "const": false
+        },
+        "main_subsystem_request": {
+          "const": true
+        },
+        "sector_transfer": {
+          "const": false
+        },
+        "subsystem_executed": {
+          "const": true
+        },
+        "subsystem_scheduled": {
+          "const": true
+        }
+      },
+      "required": [
+        "controlled_marker",
+        "drive_motor_stable",
+        "fdc_command",
+        "main_subsystem_request",
+        "sector_transfer",
+        "subsystem_scheduled",
+        "subsystem_executed"
+      ],
+      "type": "object"
+    },
+    "predicate": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "const": "HANDSHAKE_INIT"
+        },
+        "producer_fully_identified": {
+          "const": false
+        },
+        "wait_loop_identified": {
+          "const": true
+        }
+      },
+      "required": [
+        "category",
+        "producer_fully_identified",
+        "wait_loop_identified"
+      ],
+      "type": "object"
+    },
+    "private_gate": {
+      "additionalProperties": false,
+      "properties": {
+        "concrete_values_published": {
+          "const": false
+        },
+        "input_preservation": {
+          "const": "passed"
+        },
+        "projection_determinism": {
+          "const": "byte-identical"
+        },
+        "result": {
+          "const": "conclusive_for_b2_only"
+        },
+        "status": {
+          "const": "performed"
+        }
+      },
+      "required": [
+        "concrete_values_published",
+        "input_preservation",
+        "projection_determinism",
+        "result",
+        "status"
+      ],
+      "type": "object"
+    },
+    "promotion_status": {
+      "const": "prohibited_pending_user_approval"
+    },
+    "status": {
+      "const": "M07R5 BLOCKED \u2014 FIRMWARE PREDICATE PRODUCER UNOBSERVABLE"
+    },
+    "supersedes": {
+      "additionalProperties": false,
+      "properties": {
+        "historical_no_request_admissible": {
+          "const": false
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "historical_no_request_admissible",
+        "reason"
+      ],
+      "type": "object"
+    },
+    "trial_summary": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_backed_changed_predicate_trials": {
+          "const": 0
+        },
+        "extended_same_condition_pairs": {
+          "const": 1
+        },
+        "primary_comparison_pairs": {
+          "const": 1
+        },
+        "repeated_projection_result": {
+          "const": "byte-identical"
+        }
+      },
+      "required": [
+        "evidence_backed_changed_predicate_trials",
+        "extended_same_condition_pairs",
+        "primary_comparison_pairs",
+        "repeated_projection_result"
+      ],
+      "type": "object"
+    },
+    "vaeg": {
+      "additionalProperties": false,
+      "properties": {
+        "accepted_ci_run_id": {
+          "const": 33489650578
+        },
+        "commit": {
+          "const": "6bdaae109c92d26a65f0b0b1a9a50eeae5c1385a"
+        },
+        "production_memory": {
+          "const": true
+        },
+        "repository": {
+          "const": "https://github.com/nakatamaho/vaeg.git"
+        },
+        "source_changed": {
+          "const": false
+        },
+        "tests_disabled": {
+          "const": true
+        }
+      },
+      "required": [
+        "accepted_ci_run_id",
+        "commit",
+        "production_memory",
+        "repository",
+        "source_changed",
+        "tests_disabled"
+      ],
+      "type": "object"
+    },
+    "version": {
+      "const": 1
+    }
+  },
+  "required": [
+    "boundaries",
+    "classification",
+    "components",
+    "fields",
+    "irq",
+    "m07r4",
+    "m08",
+    "milestone",
+    "observations",
+    "predicate",
+    "private_gate",
+    "promotion_status",
+    "status",
+    "supersedes",
+    "trial_summary",
+    "vaeg",
+    "version"
+  ],
+  "type": "object"
+}
