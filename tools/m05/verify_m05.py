@@ -104,13 +104,17 @@ def validate_descendant_paths(paths) -> None:
         "tools/verify_scaffold.py",
         ".github/workflows/m07-probe.yml",
         "docs/porting/m07r1-production-trace-rerun.md",
+        "docs/porting/m07r2-positive-control-diagnosis.md",
         "qa/golden/m07-probe-manifest.json",
+        "qa/golden/m07r2-public-status.sha256",
         "schema/m07r1-public-status.schema.json",
+        "schema/m07r2-public-status.schema.json",
     }
     prefixes = (
         "config/m05/", "tests/m05/", "tools/m05/", "config/m06/",
         "docs/porting/m06-", "tests/m06/", "tools/m06/",
         "config/m07/", "docs/porting/m07-", "schema/m07-", "tests/m07/", "tools/m07/",
+        "tests/m07r2/", "tools/m07r2/",
     )
     for relative in sorted(item for item in paths if item):
         if relative not in exact and not relative.startswith(prefixes):

@@ -305,6 +305,21 @@ class MediaNegativeTests(MediaFixture):
                 "docs/porting/m07r1-unreviewed-result.md",
             ])
 
+    def test_m07r2_descendant_paths_are_narrowly_allowed(self):
+        validate_descendant_paths([
+            ".github/workflows/m07-probe.yml",
+            "config/m07/m07r2-public-status.json",
+            "docs/porting/m07r2-positive-control-diagnosis.md",
+            "qa/golden/m07r2-public-status.sha256",
+            "schema/m07r2-public-status.schema.json",
+            "tests/m07r2/test_m07r2.py",
+            "tools/m07r2/verify_m07r2.py",
+        ])
+        with self.assertRaises(ValidationError):
+            validate_descendant_paths([
+                "docs/porting/m07r2-unreviewed-private-result.md",
+            ])
+
 
 def accepted_contract_records():
     return [

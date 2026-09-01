@@ -253,10 +253,18 @@ def verify_private() -> None:
         path = ROOT / relative
         if not path.is_file() or path.is_symlink():
             continue
-        data = path.read_bytes()
-        if b"\0" in data:
-            continue
-        text = data.decode("utf-8", errors="ignore")
+        tracked_path = run(["git", "ls-files", "--error-unmatch", "--", relative], check=False).returncode == 0
+        if tracked_path:
+            patch = git("diff", "--unified=0", "--no-color", START_COMMIT, "--", relative)
+            text = "\n".join(
+                line[1:] for line in patch.splitlines()
+                if line.startswith("+") and not line.startswith("+++")
+            )
+        else:
+            data = path.read_bytes()
+            if b"\0" in data:
+                continue
+            text = data.decode("utf-8", errors="ignore")
         if any(token in text for token in needles):
             raise M07R2Error("tracked content contains a private identity")
     print("M07R2 local private-evidence gate passed without exposing private values")
