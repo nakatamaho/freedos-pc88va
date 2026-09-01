@@ -262,6 +262,7 @@ def validate_changed_paths(paths, m06_active=False):
         ".github/workflows/m07-probe.yml", ".gitignore", "Makefile",
         ".github/workflows/m07r3-fdd-boot-path.yml",
         ".github/workflows/m07r4-boot-reconstruction.yml",
+        ".github/workflows/m07r5-firmware-request-gate.yml",
         "docs/porting/m07r1-production-trace-rerun.md",
         "docs/porting/m07r2-positive-control-diagnosis.md",
         "docs/porting/m07r4-rom-d88-reconstruction.md",
@@ -269,9 +270,12 @@ def validate_changed_paths(paths, m06_active=False):
         "qa/golden/m07r2-public-status.sha256",
         "qa/golden/m07r3-public-status.sha256",
         "qa/golden/m07r4-public-status.sha256",
+        "qa/golden/m07r5-public-status.sha256",
         "schema/m07r1-public-status.schema.json",
         "schema/m07r2-public-status.schema.json",
         "schema/m07r4-public-status.schema.json",
+        "schema/m07r5-public-status.schema.json",
+        "docs/porting/m07r5-firmware-no-request-gate.md",
     }
     m07_prefixes = (
         "config/m07/", "docs/porting/m07-", "docs/porting/m07r3-", "schema/m07-",
