@@ -279,6 +279,21 @@ class ContractNegativeTests(unittest.TestCase):
                 "docs/porting/m07r4-private-result.md",
             ], m06_active=True)
 
+    def test_m07_completion_paths_are_narrowly_allowed(self):
+        verifier.validate_changed_paths([
+            ".github/workflows/m07-completion.yml",
+            "config/m07/m07-completion-public-status.json",
+            "docs/porting/m07-report.md",
+            "qa/golden/m07-completion-public-status.sha256",
+            "schema/m07-completion-public-status.schema.json",
+            "tests/m07/test_m07_completion.py",
+            "tools/m07/verify_m07_completion.py",
+        ], m06_active=True)
+        with self.assertRaises(verifier.VerificationError):
+            verifier.validate_changed_paths([
+                "qa/golden/m07-private-result.json",
+            ], m06_active=True)
+
     def test_component_gitlink_drift_is_rejected(self):
         data = self.invalid()
         data["component_gitlinks"]["fdkernel"] = "0" * 40

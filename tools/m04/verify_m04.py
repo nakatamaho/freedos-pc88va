@@ -260,6 +260,7 @@ def validate_changed_paths(paths, m06_active=False):
     m06_prefixes = ("config/m06/", "docs/porting/m06-", "tests/m06/", "tools/m06/")
     m07_paths = {
         ".github/workflows/m07-probe.yml", ".gitignore", "Makefile",
+        ".github/workflows/m07-completion.yml",
         ".github/workflows/m07r3-fdd-boot-path.yml",
         ".github/workflows/m07r4-boot-reconstruction.yml",
         ".github/workflows/m07r5-firmware-request-gate.yml",
@@ -268,6 +269,7 @@ def validate_changed_paths(paths, m06_active=False):
         "docs/porting/m07r2-positive-control-diagnosis.md",
         "docs/porting/m07r4-rom-d88-reconstruction.md",
         "qa/golden/m07-probe-manifest.json",
+        "qa/golden/m07-completion-public-status.sha256",
         "qa/golden/m07r2-public-status.sha256",
         "qa/golden/m07r3-public-status.sha256",
         "qa/golden/m07r4-public-status.sha256",

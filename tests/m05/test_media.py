@@ -333,6 +333,21 @@ class MediaNegativeTests(MediaFixture):
                 "docs/porting/m07r4-private-result.md",
             ])
 
+    def test_m07_completion_paths_are_narrowly_allowed(self):
+        validate_descendant_paths([
+            ".github/workflows/m07-completion.yml",
+            "config/m07/m07-completion-public-status.json",
+            "docs/porting/m07-report.md",
+            "qa/golden/m07-completion-public-status.sha256",
+            "schema/m07-completion-public-status.schema.json",
+            "tests/m07/test_m07_completion.py",
+            "tools/m07/verify_m07_completion.py",
+        ])
+        with self.assertRaises(ValidationError):
+            validate_descendant_paths([
+                "qa/golden/m07-private-result.json",
+            ])
+
 
 def accepted_contract_records():
     return [
