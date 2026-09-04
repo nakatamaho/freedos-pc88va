@@ -1,0 +1,127 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+name: M07 firmware boot-acceptance completion
+
+on:
+  push:
+    paths:
+      - ".github/workflows/m07-completion.yml"
+      - "Makefile"
+      - "config/m07/m07-completion-public-status.json"
+      - "docs/porting/m07-report.md"
+      - "qa/golden/m07-completion-public-status.sha256"
+      - "schema/m07-completion-public-status.schema.json"
+      - "tests/m07/test_m07_completion.py"
+      - "tools/m07/verify_m07_completion.py"
+  pull_request:
+    paths:
+      - ".github/workflows/m07-completion.yml"
+      - "Makefile"
+      - "config/m07/m07-completion-public-status.json"
+      - "docs/porting/m07-report.md"
+      - "qa/golden/m07-completion-public-status.sha256"
+      - "schema/m07-completion-public-status.schema.json"
+      - "tests/m07/test_m07_completion.py"
+      - "tools/m07/verify_m07_completion.py"
+  workflow_dispatch:
+
+jobs:
+  public-completion-contract:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out parent and exact submodules
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Assert native x64 and configure component remotes
+        run: |
+          test "$(uname -m)" = x86_64
+          test "$(dpkg --print-architecture)" = amd64
+          bash tools/configure_component_remotes.sh
+
+      - name: Verify accepted VAEG descendant and full workflow
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          VAEG_COMMIT: d68b1ab7392cedc7080927c24a8aa4b35c6756cb
+          VAEG_RUN: "33887608335"
+        run: |
+          vaeg_verify_dir="$RUNNER_TEMP/m07-vaeg-public"
+          git init "$vaeg_verify_dir"
+          git -C "$vaeg_verify_dir" fetch --depth=1 \
+            https://github.com/nakatamaho/vaeg.git "$VAEG_COMMIT"
+          test "$(git -C "$vaeg_verify_dir" rev-parse FETCH_HEAD)" = "$VAEG_COMMIT"
+          python3 - <<'PY'
+          import json
+          import os
+          import urllib.request
+
+          url = "https://api.github.com/repos/nakatamaho/vaeg/actions/runs/" + os.environ["VAEG_RUN"]
+          request = urllib.request.Request(
+              url,
+              headers={
+                  "Accept": "application/vnd.github+json",
+                  "Authorization": "Bearer " + os.environ["GITHUB_TOKEN"],
+                  "X-GitHub-Api-Version": "2022-11-28",
+              },
+          )
+          with urllib.request.urlopen(request, timeout=30) as response:
+              result = json.load(response)
+          if result.get("head_sha") != os.environ["VAEG_COMMIT"]:
+              raise SystemExit("accepted VAEG workflow commit differs")
+          if result.get("status") != "completed" or result.get("conclusion") != "success":
+              raise SystemExit("accepted VAEG workflow is not successful")
+          PY
+
+      - name: Verify static public boundaries
+        run: |
+          git diff --check
+          make verify-scaffold
+          make m04r1-license-verify
+          make m04-verify
+          PYTHONPYCACHEPREFIX="$RUNNER_TEMP/m07-pycache" \
+            python3 -m compileall -q tools/m06 tools/m07 tools/m07r2 tests/m06 tests/m07 tests/m07r2 tools/qa
+          PYTHONDONTWRITEBYTECODE=1 \
+            python3 -m unittest discover -s components/fdkernel/pc88va/tests -p 'test_*.py'
+
+      - name: Rebuild historical M01 and M02 prerequisites
+        run: |
+          make m01-host-portability
+          make m01-image-identity
+          make m01-preflight
+          make m01-image
+          M01_DIAGNOSTICS=1 make m01-build
+          make m01-compare
+          make m01-verify
+          PYTHONDONTWRITEBYTECODE=1 python3 tools/m01/test_kernel_reproducibility.py --repo-root .
+          PYTHONDONTWRITEBYTECODE=1 python3 tools/m02/test_bundle_contract.py
+          make m02-preflight
+          make m02-clean
+          make m02-bundle
+          make m02-compare
+          make m02-verify
+
+      - name: Regenerate immutable M05 and M06 prerequisites
+        run: |
+          make m06-prepare-m05
+          make m05-verify
+          make m06
+
+      - name: Run all public M07 gates
+        run: |
+          make m07-public
+          make m07r2-public
+          make m07r3-public
+          make m07r4-public
+          make m07r5-public
+          make m07r6-public
+          make m07-completion-public
+
+      - name: Audit the public-only completion record
+        run: |
+          git diff --check
+          git diff --exit-code
+          test -z "$(git -C components/fdkernel status --short --untracked-files=all)"
+          test -z "$(git -C components/freecom status --short --untracked-files=all)"
+          test -z "$(git -C components/country status --short --untracked-files=all)"
+          echo 'M07 CI validated public contracts only; private firmware, media, traces, and values were not inspected.'
