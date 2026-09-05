@@ -4,6 +4,8 @@
 import hashlib
 import json
 from pathlib import Path
+from jsonschema import Draft202012Validator
+from jsonschema.exceptions import SchemaError, ValidationError
 
 ROOT = Path(__file__).resolve().parents[2]
 CHILD = ROOT / "components/fdkernel/pc88va"
@@ -18,9 +20,9 @@ FDKERNEL_COMMIT = "105d49a72ec41afe07fc1e7b080bdbd1b3026ae2"
 VAEG_COMMIT = "7463f9501d84701f50f3243d5067b6a9dfd0c2e7"
 VAEG_CI = 33937050536
 ARTIFACT_MANIFEST_SHA256 = "2210a590a7d705f3936a9053e197d05eb94888254b708f4435a1e7c89d3ef5e0"
-ARTIFACT_SCHEMA_SHA256 = "9e81fef8a5668525e521df9ae322c8dc3029cc336edd34a62b8455f141c7d682"
+ARTIFACT_SCHEMA_SHA256 = "575086b668fb7f2439f17b63a33675978fef00861eb0b30f66a7b22d3279e7fe"
 VAEG_QUALIFICATION_SHA256 = "3ebbf58e18ea2acf0f92ba755cca99c3082b5ed419e6bfa51a5bd2d2fd8dbe47"
-GOLDEN_SHA256 = "b7661bcfddd9ab45748a530dac3d8fe07b86eb16254f075ea24c346bd57bad60"
+GOLDEN_SHA256 = "bd611f5d6a0cb37c16114aec5b7382cb3bf7c18d340b762501d8bc2a574ad2a7"
 
 
 class VerificationError(RuntimeError):
@@ -52,6 +54,16 @@ def _require_digest(root: Path, record: dict, key: str, expected_path: str) -> P
     return path
 
 
+def validate_artifact_schema(data: dict, schema: dict) -> None:
+    """Validate the schema and instance, independently of identity checks."""
+    try:
+        Draft202012Validator.check_schema(schema)
+        Draft202012Validator(schema).validate(data)
+    except (SchemaError, ValidationError) as exc:
+        # Do not echo instance values into diagnostics.
+        raise VerificationError("M08 artifact schema conformance failed") from exc
+
+
 def validate_acceptance_evidence(contract: dict, root: Path = ROOT) -> None:
     """Require every public acceptance identity before accepting M08."""
     if contract.get("status") != "accepted":
@@ -68,6 +80,7 @@ def validate_acceptance_evidence(contract: dict, root: Path = ROOT) -> None:
     if _digest(manifest) != ARTIFACT_MANIFEST_SHA256 or _digest(golden) != GOLDEN_SHA256 or _digest(qualification) != VAEG_QUALIFICATION_SHA256:
         raise VerificationError("M08 acceptance evidence identity differs")
     data = _json(manifest)
+    validate_artifact_schema(data, _json(schema))
     if data.get("schema_version") != 1 or data.get("milestone") != "M08":
         raise VerificationError("M08 artifact manifest identity differs")
     source = data.get("source", {})

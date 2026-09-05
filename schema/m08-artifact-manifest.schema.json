@@ -1,5 +1,18 @@
 {
   "$defs": {
+    "kernel_artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "format": {"const": "dos-mz", "type": "string"},
+        "size": {"type": "integer", "minimum": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "compile_manifest_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "kernel_interface_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "symbol_evidence_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "required": ["format", "size", "sha256", "compile_manifest_sha256", "kernel_interface_sha256", "symbol_evidence_sha256"]
+    },
     "artifact": {
       "additionalProperties": false,
       "properties": {
@@ -60,7 +73,7 @@
           "$ref": "#/$defs/artifact_no_format"
         },
         "kernel_sys": {
-          "$ref": "#/$defs/artifact"
+          "$ref": "#/$defs/kernel_artifact"
         },
         "loader_stage1": {
           "$ref": "#/$defs/artifact"

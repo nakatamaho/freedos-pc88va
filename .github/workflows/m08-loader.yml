@@ -9,6 +9,7 @@ on:
       - "config/m08/**"
       - "docs/adr/0003-pc88va-parameterized-kernel-loader.md"
       - "docs/porting/m08-report.md"
+      - "docs/porting/m08r2-report.md"
       - "manifests/m08-components.lock.json"
       - "qa/golden/m08-artifact-manifest.json"
       - "qa/golden/m08-golden.json"
@@ -25,6 +26,7 @@ on:
       - "config/m08/**"
       - "docs/adr/0003-pc88va-parameterized-kernel-loader.md"
       - "docs/porting/m08-report.md"
+      - "docs/porting/m08r2-report.md"
       - "manifests/m08-components.lock.json"
       - "qa/golden/m08-artifact-manifest.json"
       - "qa/golden/m08-golden.json"
@@ -54,6 +56,7 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq nasm
+          python3 -m pip install --disable-pip-version-check -r tools/m08/requirements.txt
           python3 -m pip install --disable-pip-version-check --require-hashes -r components/fdkernel/pc88va/tests/m08-requirements.txt
       - name: Run M08 public source and synthetic gates
         run: |

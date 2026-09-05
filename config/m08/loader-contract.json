@@ -56,7 +56,7 @@
   },
   "public_golden": {
     "path": "qa/golden/m08-golden.json",
-    "sha256": "b7661bcfddd9ab45748a530dac3d8fe07b86eb16254f075ea24c346bd57bad60"
+    "sha256": "bd611f5d6a0cb37c16114aec5b7382cb3bf7c18d340b762501d8bc2a574ad2a7"
   },
   "replace_stubs": [
     "pc88va_disk_read",

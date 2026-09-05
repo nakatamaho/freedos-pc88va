@@ -5,7 +5,7 @@
   },
   "artifact_manifest_schema": {
     "path": "schema/m08-artifact-manifest.schema.json",
-    "sha256": "9e81fef8a5668525e521df9ae322c8dc3029cc336edd34a62b8455f141c7d682"
+    "sha256": "575086b668fb7f2439f17b63a33675978fef00861eb0b30f66a7b22d3279e7fe"
   },
   "milestone": "M08",
   "qualification_summary": {

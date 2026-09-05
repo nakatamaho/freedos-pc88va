@@ -65,6 +65,66 @@ class M08AcceptanceTests(unittest.TestCase):
             with self.assertRaises(VERIFY.VerificationError):
                 VERIFY.validate_acceptance_evidence(self.contract)
 
+    def test_schema_digest_drift_is_rejected(self) -> None:
+        with mock.patch.object(VERIFY, "ARTIFACT_SCHEMA_SHA256", "0" * 64):
+            with self.assertRaisesRegex(VERIFY.VerificationError, "schema is missing or differs"):
+                VERIFY.validate_acceptance_evidence(self.contract)
+
+
+class M08ArtifactSchemaTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.data = json.loads(VERIFY.ARTIFACT_MANIFEST_PATH.read_text())
+        self.schema = json.loads(VERIFY.ARTIFACT_SCHEMA_PATH.read_text())
+
+    def reject(self) -> None:
+        with self.assertRaisesRegex(VERIFY.VerificationError, "schema conformance"):
+            VERIFY.validate_artifact_schema(self.data, self.schema)
+
+    def test_accepted_manifest_conforms(self) -> None:
+        VERIFY.validate_artifact_schema(self.data, self.schema)
+
+    def test_kernel_fields_are_required(self) -> None:
+        for field in ("format", "size", "sha256", "compile_manifest_sha256",
+                      "kernel_interface_sha256", "symbol_evidence_sha256"):
+            with self.subTest(field=field):
+                value = self.data["artifacts"]["kernel_sys"].pop(field)
+                self.reject()
+                self.data["artifacts"]["kernel_sys"][field] = value
+
+    def test_kernel_unknown_field_rejected(self) -> None:
+        self.data["artifacts"]["kernel_sys"]["unregistered"] = True
+        self.reject()
+
+    def test_kernel_digest_type_and_pattern(self) -> None:
+        for field in ("sha256", "compile_manifest_sha256", "kernel_interface_sha256",
+                      "symbol_evidence_sha256"):
+            original = self.data["artifacts"]["kernel_sys"][field]
+            for value in (None, 123, "a" * 63, "g" * 64, "A" * 64):
+                with self.subTest(field=field, value=value):
+                    self.data["artifacts"]["kernel_sys"][field] = value
+                    self.reject()
+            self.data["artifacts"]["kernel_sys"][field] = original
+
+    def test_generic_artifacts_reject_kernel_fields(self) -> None:
+        for name in ("loader_stage1", "loader_stage2", "raw_media", "d88_media"):
+            with self.subTest(artifact=name):
+                self.data["artifacts"][name]["compile_manifest_sha256"] = "a" * 64
+                self.reject()
+                del self.data["artifacts"][name]["compile_manifest_sha256"]
+
+    def test_invalid_schema_rejected(self) -> None:
+        self.schema["$defs"]["kernel_artifact"]["type"] = "not-a-json-type"
+        self.reject()
+
+    def test_acceptance_verifier_calls_schema_validation(self) -> None:
+        original_json = VERIFY._json
+        self.data["artifacts"]["kernel_sys"]["extra"] = 1
+        def altered(path):
+            return self.data if path == VERIFY.ARTIFACT_MANIFEST_PATH else original_json(path)
+        with mock.patch.object(VERIFY, "_json", side_effect=altered):
+            with self.assertRaisesRegex(VERIFY.VerificationError, "schema conformance"):
+                VERIFY.validate_acceptance_evidence(json.loads(VERIFY.CONTRACT_PATH.read_text()))
+
 
 if __name__ == "__main__":
     unittest.main()
