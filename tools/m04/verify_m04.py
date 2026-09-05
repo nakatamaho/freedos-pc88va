@@ -299,7 +299,7 @@ def validate_changed_paths(paths, m06_active=False):
     binary_suffixes = {".rom", ".d88", ".bin", ".obj", ".o", ".img", ".ima", ".tar", ".zip", ".log"}
     for item in paths:
         path = PurePosixPath(item)
-        if item in m04r1_license_paths:
+        if item in m04r1_license_paths or item == "AGENTS.md":
             continue
         if item in m05_paths or item.startswith(m05_prefixes):
             continue
@@ -308,6 +308,8 @@ def validate_changed_paths(paths, m06_active=False):
         if m06_active and (item in m07_paths or item.startswith(m07_prefixes)):
             continue
         if m06_active and (item.startswith(m08_prefixes) or item == "Makefile"):
+            continue
+        if m06_active and item == "manifests/m08-components.lock.json":
             continue
         if item == "tools/m03/verify_m03.py":
             continue

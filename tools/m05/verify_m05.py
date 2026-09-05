@@ -137,7 +137,7 @@ def validate_descendant_paths(paths) -> None:
                     "schema/m08-", "tests/test_m08_", "tools/m08/",
                     ".github/workflows/m08-")
     for relative in sorted(item for item in paths if item):
-        if relative not in exact and not relative.startswith(prefixes) and not relative.startswith(m08_prefixes) and relative != "Makefile":
+        if relative not in exact and relative != "AGENTS.md" and not relative.startswith(prefixes) and not relative.startswith(m08_prefixes) and relative not in ("Makefile", "manifests/m08-components.lock.json"):
             raise ValidationError(f"path is outside M05 parent-only scope: {relative}")
 
 
