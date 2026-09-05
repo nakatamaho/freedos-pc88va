@@ -1,6 +1,10 @@
 # M08R2 artifact schema conformance closure
 
-Status: validation complete locally; publication and native CI pending.
+Status: M08R2 PASS — M08 ARTIFACT SCHEMA CONFORMANCE CLOSED.
+
+Evidence label: HOST PASS. The accepted contract is retained after the local
+and native public gates below succeeded. No new private VAEG or hardware gate
+was run for this schema-only acceptance correction.
 
 Parent start: `0bbefb97e6233283053ecb301c84a7688fb39101`.
 Branch: `topic/m08r2-artifact-schema-conformance`.
@@ -83,6 +87,35 @@ the existing M08 historical-regression job. Current source/static checks and
 component audits remain on the current checkout; historical verifiers retain
 their strict original identities. Runs 33956944843 and 33956944838 record the
 unfixed M07R5/M07R6 failures; they are not relabeled as successful runs.
+
+## Publication and native CI
+
+Validated implementation tip: `062900ad76fa023dc06a6a6234c5babce6a15932`.
+The topic branch was pushed without force. This archival report is finalized
+in a subsequent documentation-only commit; its final tip is reported at handoff
+to avoid a self-referential commit hash in this file.
+
+All jobs in each listed successful workflow completed:
+
+| Workflow | Successful run |
+| --- | --- |
+| M08 public loader and M01–M07 historical regression | [33957136635](https://github.com/nakatamaho/freedos-pc88va/actions/runs/33957136635) |
+| M06 historical compile target | [33957136629](https://github.com/nakatamaho/freedos-pc88va/actions/runs/33957136629) |
+| M07 public harness | [33957136623](https://github.com/nakatamaho/freedos-pc88va/actions/runs/33957136623) |
+| M07R5 public record | [33957136640](https://github.com/nakatamaho/freedos-pc88va/actions/runs/33957136640) |
+| M07R6 public record | [33957136627](https://github.com/nakatamaho/freedos-pc88va/actions/runs/33957136627) |
+| M03 integration | [33957136622](https://github.com/nakatamaho/freedos-pc88va/actions/runs/33957136622) |
+| Scaffold | [33957136644](https://github.com/nakatamaho/freedos-pc88va/actions/runs/33957136644) |
+| M05 immutable media | [33956944870](https://github.com/nakatamaho/freedos-pc88va/actions/runs/33956944870) |
+| M04 provisional contract | [33956944804](https://github.com/nakatamaho/freedos-pc88va/actions/runs/33956944804) |
+| M04R1 license policy | [33956944821](https://github.com/nakatamaho/freedos-pc88va/actions/runs/33956944821) |
+
+The last three workflows ran at `35eced2e17fa89192544e3b214f5423518f09df7`;
+their tested implementation is unchanged by the later historical-workflow
+selection correction. M08 also passed at runs 33956713628 and 33956944814.
+No failed workflow run is counted as a success. Shell, Python, JSON and YAML
+syntax checks, whitespace checks, component cleanliness and added-public-text
+privacy audits passed. No unresolved M08R2 schema-conformance item remains.
 
 ## Preservation and limitations
 
