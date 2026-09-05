@@ -77,6 +77,8 @@ def verify_tracked_safety(root: Path) -> None:
 
 def validate_descendant_paths(paths) -> None:
     exact = {
+        "qa/golden/m08-artifact-manifest.json", "qa/golden/m08-golden.json",
+        "docs/porting/m08r2-report.md",
         ".github/workflows/m05-media.yml",
         ".gitignore",
         "Makefile",

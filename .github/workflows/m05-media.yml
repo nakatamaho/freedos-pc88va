@@ -123,7 +123,11 @@ jobs:
 
       - name: Build, compare, and verify deterministic M05 media
         run: |
-          if test -f manifests/m06-components.lock.json; then
+          if test -f manifests/m08-components.lock.json; then
+            PYTHONDONTWRITEBYTECODE=1 python3 tools/m08/prepare_m05.py
+            make m05-negative-tests
+            make m05-verify
+          elif test -f manifests/m06-components.lock.json; then
             make m06-prepare-m05
             make m05-negative-tests
             make m05-verify

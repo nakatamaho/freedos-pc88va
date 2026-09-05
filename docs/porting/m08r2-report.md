@@ -53,7 +53,7 @@ COMMAND.COM COUNTRY.SYS`, with the accepted M01 container image selected by
 `M08_BUILD_IMAGE` and the optional host adapter by `M08_DOCKER_CONTEXT`.
 Generated results remain ignored under `build/`.
 
-ROM-free child tests: 164 passed. Parent tests: 18 passed, including 13
+ROM-free child tests: 164 passed. Parent tests: 19 passed, including 14
 acceptance/schema tests. Negative checks reject missing required kernel fields,
 unknown fields, invalid hash types/patterns, kernel fields on generic artifacts,
 invalid schema definitions, schema digest drift, manifest digest drift, and
@@ -61,10 +61,20 @@ incomplete acceptance references. An integration test proves acceptance calls
 the instance validator rather than only checking digests.
 
 Local M01/M02/M05/M06/M07 golden verifiers and M04/M07 completion checks passed
-at the accepted historical checkout. The historical M04 scope validator rejects
-later M08 files when run directly on the M08R2 tree; it was not relaxed. Native
-CI uses its existing accepted historical checkout for M01 through M07 regression.
+at the accepted historical checkout. The first M05 CI run (33956713641) rejected
+the new report at its historical path gate. M04/M05 descendant path checks now
+allow exactly the M08 artifact manifest, golden and M08R2 report; adjacent
+unreviewed paths remain rejected by negative tests. Current-tree M04 validation
+and all 39 M04 tests pass. No geometry, golden artifact, or historical contract
+validation was weakened. Native M08 CI uses its existing accepted historical
+checkout for M01 through M07 regression.
 M08 source/schema gates and synthetic tests run on the current branch.
+
+The standalone M05 workflow previously selected M06's fixed-child preflight
+even with an M08 lock. For the M08 case it now uses the existing M05 descendant
+validator and unchanged builder/inspector, rebuilds twice, and verifies the
+original golden. This path passed locally using verified retained M01/M02
+public inputs; 36 M05 tests passed. No component checkout is changed by it.
 
 ## Preservation and limitations
 

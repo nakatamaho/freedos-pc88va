@@ -309,7 +309,11 @@ def validate_changed_paths(paths, m06_active=False):
             continue
         if m06_active and (item.startswith(m08_prefixes) or item == "Makefile"):
             continue
-        if m06_active and item == "manifests/m08-components.lock.json":
+        if m06_active and item in {
+            "manifests/m08-components.lock.json",
+            "qa/golden/m08-artifact-manifest.json", "qa/golden/m08-golden.json",
+            "docs/porting/m08r2-report.md",
+        }:
             continue
         if item == "tools/m03/verify_m03.py":
             continue

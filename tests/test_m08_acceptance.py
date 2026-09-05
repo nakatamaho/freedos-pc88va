@@ -70,6 +70,17 @@ class M08AcceptanceTests(unittest.TestCase):
             with self.assertRaisesRegex(VERIFY.VerificationError, "schema is missing or differs"):
                 VERIFY.validate_acceptance_evidence(self.contract)
 
+    def test_m05_descendant_evidence_paths_remain_narrow(self) -> None:
+        import sys
+        sys.path.insert(0, str(ROOT / "tools/m05"))
+        import verify_m05
+        verify_m05.validate_descendant_paths([
+            "qa/golden/m08-artifact-manifest.json", "qa/golden/m08-golden.json",
+            "docs/porting/m08r2-report.md"])
+        for path in ("qa/golden/m08-unreviewed.json", "docs/porting/m08r2-unreviewed.md"):
+            with self.assertRaises(verify_m05.ValidationError):
+                verify_m05.validate_descendant_paths([path])
+
 
 class M08ArtifactSchemaTests(unittest.TestCase):
     def setUp(self) -> None:

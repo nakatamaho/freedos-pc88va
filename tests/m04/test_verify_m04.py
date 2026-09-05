@@ -251,6 +251,14 @@ class ContractNegativeTests(unittest.TestCase):
                 "docs/porting/m07r1-unreviewed-result.md",
             ], m06_active=True)
 
+    def test_m08r2_evidence_paths_are_exact(self):
+        paths = ["qa/golden/m08-artifact-manifest.json", "qa/golden/m08-golden.json",
+                 "docs/porting/m08r2-report.md"]
+        verifier.validate_changed_paths(paths, m06_active=True)
+        for path in ("qa/golden/m08-unreviewed.json", "docs/porting/m08r2-unreviewed.md"):
+            with self.assertRaises(verifier.VerificationError):
+                verifier.validate_changed_paths([path], m06_active=True)
+
     def test_m07r2_descendant_paths_are_narrowly_allowed(self):
         verifier.validate_changed_paths([
             ".github/workflows/m07-probe.yml",
