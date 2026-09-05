@@ -76,6 +76,14 @@ validator and unchanged builder/inspector, rebuilds twice, and verifies the
 original golden. This path passed locally using verified retained M01/M02
 public inputs; 36 M05 tests passed. No component checkout is changed by it.
 
+Standalone M06/M07/M07R5/M07R6 workflows also attempted historical fixed-child
+gates against the M08 child. On M08 descendants they now use a separate checkout
+of accepted M07 completion `f0edeaa35126cf6d027adac0316df5056f7b1ddb`, matching
+the existing M08 historical-regression job. Current source/static checks and
+component audits remain on the current checkout; historical verifiers retain
+their strict original identities. Runs 33956944843 and 33956944838 record the
+unfixed M07R5/M07R6 failures; they are not relabeled as successful runs.
+
 ## Preservation and limitations
 
 - fdkernel: `105d49a72ec41afe07fc1e7b080bdbd1b3026ae2`.

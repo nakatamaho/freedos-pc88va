@@ -101,7 +101,17 @@ jobs:
           test "$(git -C "$vaeg_verify_dir" rev-parse FETCH_HEAD)" = \
             16ad2e0619bf4ed82a739325f7291eba4a6ed8ad
 
+      - name: Select immutable historical contract checkout
+        run: |
+          if test -f manifests/m08-components.lock.json; then
+            git worktree add --detach "$RUNNER_TEMP/freedos-pc88va" f0edeaa35126cf6d027adac0316df5056f7b1ddb
+            git -C "$RUNNER_TEMP/freedos-pc88va" submodule update --init --recursive
+            (cd "$RUNNER_TEMP/freedos-pc88va" && bash tools/configure_component_remotes.sh)
+            echo "HISTORICAL_ROOT=$RUNNER_TEMP/freedos-pc88va" >> "$GITHUB_ENV"
+          fi
+
       - name: Rebuild historical M01 and M02 prerequisites
+        working-directory: ${{ env.HISTORICAL_ROOT || github.workspace }}
         run: |
           make m01-host-portability
           make m01-image-identity
@@ -119,12 +129,14 @@ jobs:
           make m02-verify
 
       - name: Regenerate immutable M05 and M06 prerequisites
+        working-directory: ${{ env.HISTORICAL_ROOT || github.workspace }}
         run: |
           make m06-prepare-m05
           make m05-verify
           make m06
 
       - name: Build and verify the ROM-free M07 public harness
+        working-directory: ${{ env.HISTORICAL_ROOT || github.workspace }}
         run: |
           make m07-public
           make m07r2-public

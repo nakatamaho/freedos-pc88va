@@ -71,7 +71,17 @@ jobs:
           PYTHONPYCACHEPREFIX="$RUNNER_TEMP/m06-pycache" python3 -m compileall -q tools/m06 tests/m06 tools/qa
           PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s components/fdkernel/pc88va/tests -p 'test_*.py'
 
+      - name: Select immutable historical contract checkout
+        run: |
+          if test -f manifests/m08-components.lock.json; then
+            git worktree add --detach "$RUNNER_TEMP/freedos-pc88va" f0edeaa35126cf6d027adac0316df5056f7b1ddb
+            git -C "$RUNNER_TEMP/freedos-pc88va" submodule update --init --recursive
+            (cd "$RUNNER_TEMP/freedos-pc88va" && bash tools/configure_component_remotes.sh)
+            echo "HISTORICAL_ROOT=$RUNNER_TEMP/freedos-pc88va" >> "$GITHUB_ENV"
+          fi
+
       - name: Rebuild historical M01 and M02 prerequisites
+        working-directory: ${{ env.HISTORICAL_ROOT || github.workspace }}
         run: |
           make m01-host-portability
           make m01-image-identity
@@ -89,11 +99,13 @@ jobs:
           make m02-verify
 
       - name: Regenerate and verify immutable M05 prerequisites
+        working-directory: ${{ env.HISTORICAL_ROOT || github.workspace }}
         run: |
           make m06-prepare-m05
           make m05-verify
 
       - name: Build and verify the reproducible M06 target
+        working-directory: ${{ env.HISTORICAL_ROOT || github.workspace }}
         run: make m06
 
       - name: Audit unchanged public boundary

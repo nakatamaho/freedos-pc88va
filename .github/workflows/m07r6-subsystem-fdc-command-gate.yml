@@ -46,6 +46,13 @@ jobs:
           make verify-scaffold
           make m04r1-license-verify
           make m04-verify
+          # Historical contracts retain their original component identities.
+          if test -f manifests/m08-components.lock.json; then
+            git worktree add --detach "$RUNNER_TEMP/freedos-pc88va" f0edeaa35126cf6d027adac0316df5056f7b1ddb
+            git -C "$RUNNER_TEMP/freedos-pc88va" submodule update --init --recursive
+            cd "$RUNNER_TEMP/freedos-pc88va"
+            bash tools/configure_component_remotes.sh
+          fi
           make m07r4-public
           make m07r5-public
           make m07r6-public
