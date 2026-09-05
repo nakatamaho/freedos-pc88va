@@ -9,10 +9,13 @@ accepted `105d49a72ec41afe07fc1e7b080bdbd1b3026ae2` export on
 `topic/m08-pc88va-disk-loader-handoff`; FreeCOM and Country remain unchanged.
 The qualified public VAEG identity is `7463f9501d84701f50f3243d5067b6a9dfd0c2e7`,
 with successful VAEG CI run `33937050536`.
+The public evidence-closure commit is `0bbefb97e6233283053ecb301c84a7688fb39101`.
 
 ## Accepted identities
 
-- M08 contract: `config/m08/loader-contract.json` (accepted status).
+- M08 contract: `config/m08/loader-contract.json`, SHA-256
+  `f383a4f4e71b00fd0bcf5e69a00aeef5068f0c55c788b610fcd431f3e29db54c`
+  (accepted status).
 - Artifact manifest: `qa/golden/m08-artifact-manifest.json`, SHA-256
   `2210a590a7d705f3936a9053e197d05eb94888254b708f4435a1e7c89d3ef5e0`.
 - Artifact-manifest schema: `schema/m08-artifact-manifest.schema.json`,
@@ -21,7 +24,9 @@ with successful VAEG CI run `33937050536`.
   `b7661bcfddd9ab45748a530dac3d8fe07b86eb16254f075ea24c346bd57bad60`.
 - VAEG qualification record: `config/m08/vaeg-qualification.json`, SHA-256
   `3ebbf58e18ea2acf0f92ba755cca99c3082b5ed419e6bfa51a5bd2d2fd8dbe47`.
-- M08 component lock preserves the historical component lock identity
+- Current M08 component lock: `manifests/m08-components.lock.json`, SHA-256
+  `c3e736596ce63ce006ba0363682259260f30a1792e59a04e3250ac9821544f07`.
+  It preserves the historical component lock identity
   `440e481b28c740875489a6953a246ce5370c44074053c7aad3f80e79ec40c19c` and
   pins fdkernel, FreeCOM and Country to the accepted gitlinks.
 
@@ -77,6 +82,8 @@ collapsed into an unsupported single-run claim. The accepted VAEG workflow is
 - M08 public verifier: PASS, including artifact/golden/VAEG identity checks.
 - Historical M01–M07 regression workflow: PASS in the successful M08 workflow
   runs listed above.
+- M08R1 closure workflow `33953289513`: success; both `public-loader` and
+  `historical-regression` jobs passed.
 - Local public artifact builds: two-build byte equality PASS.
 - Evidence labels: HOST PASS for deterministic public build/tests; VAEG PASS
   for the retained two-run qualification; HARDWARE PASS: not claimed.
