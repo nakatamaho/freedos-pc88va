@@ -8,10 +8,12 @@ PC-88VA disk-read and loader-handoff fail-closed stubs. The public boundary
 preserves the accepted M05 FAT12/D88 layout and keeps FreeCOM and Country
 unchanged.
 
-Public verification passed in the M08 loader workflow, including the historical
-M07 regression checkout. The fdkernel PC-88VA QA workflow passed, and the
-loader source/build tests passed with deterministic output checks. The final
-parent branch is `topic/m08-pc88va-disk-loader-handoff`.
+Public verification passed in M08 workflow run `33947694791`, including the
+historical M07 regression checkout. The fdkernel PC-88VA QA workflow passed,
+and the loader source/build tests passed with deterministic output checks. The
+parent branch is `topic/m08-pc88va-disk-loader-handoff` at
+`3b2b203fd04765d2236594b2c39a03bf4c31a68f`; its fdkernel gitlink resolves to
+`105d49a72ec41afe07fc1e7b080bdbd1b3026ae2`.
 
 Private qualification used two fresh, clean VAEG runs with persistent ignored
 evidence. Both runs confirmed disk read, FAT12 file selection, MZ validation
