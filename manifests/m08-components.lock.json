@@ -1,14 +1,14 @@
 {
   "components": [
     {
-      "branch": "necpc88va",
-      "commit": "69ccdd8699895722fc537d647ec490685532bdc4",
+      "branch": "topic/m08-pc88va-disk-loader-handoff",
+      "commit": "105d49a72ec41afe07fc1e7b080bdbd1b3026ae2",
       "name": "fdkernel",
-      "parent_commit": "6523acdb87f4665e6068ea331859885267242005",
+      "parent_commit": "69ccdd8699895722fc537d647ec490685532bdc4",
       "path": "components/fdkernel",
       "repository": "https://github.com/nakatamaho/fdkernel.git",
-      "role": "Compile-only independent PC-88VA kernel target",
-      "source_archive_sha256": "d9cc6113cfe297040a7e94f9df70320c52b1f09bf59fb2e7b30e59ddc5001535"
+      "role": "Parameterized PC-88VA disk loader and MZ handoff",
+      "source_archive_sha256": "b74331b27a62faeab870da704ad2086cd4831cd015d38fe4d869a13e80360cbb"
     },
     {
       "branch": "deterministic-build-timestamp",
@@ -36,5 +36,5 @@
     "sha256": "440e481b28c740875489a6953a246ce5370c44074053c7aad3f80e79ec40c19c"
   },
   "schema_version": 1,
-  "status": "current-m06"
+  "status": "current-m08"
 }

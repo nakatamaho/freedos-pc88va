@@ -288,6 +288,9 @@ def validate_changed_paths(paths, m06_active=False):
         "schema/m07r3-", "tests/m07/", "tools/m07/", "tests/m07r2/", "tools/m07r2/",
         "tests/m07r3/", "tools/m07r3/", "tests/m07r4/", "tools/m07r4/",
     )
+    m08_prefixes = ("config/m08/", "docs/adr/0003-", "docs/porting/m08-",
+                    "schema/m08-", "tests/test_m08_", "tools/m08/",
+                    ".github/workflows/m08-")
     protected = (
         "components/", "manifests/", "qa/golden/m01", "qa/golden/m02",
         "qa/golden/m03", "config/m03/", "tools/m01/", "tools/m02/", "tools/m03/",
@@ -303,6 +306,8 @@ def validate_changed_paths(paths, m06_active=False):
         if m06_active and (item in m06_paths or item.startswith(m06_prefixes)):
             continue
         if m06_active and (item in m07_paths or item.startswith(m07_prefixes)):
+            continue
+        if m06_active and (item.startswith(m08_prefixes) or item == "Makefile"):
             continue
         if item == "tools/m03/verify_m03.py":
             continue

@@ -11,7 +11,7 @@ import subprocess
 from pathlib import Path
 
 
-M06_LOCK = Path("manifests/m06-components.lock.json")
+M06_LOCK = Path("manifests/m08-components.lock.json")
 HISTORICAL_LOCK = Path("manifests/components.lock.json")
 HISTORICAL_LOCK_SHA256 = "440e481b28c740875489a6953a246ce5370c44074053c7aad3f80e79ec40c19c"
 EXPECTED_PATHS = {
@@ -63,7 +63,7 @@ def resolve_current_components(root: Path, historical: dict[str, str]) -> dict[s
     if _sha256(root / HISTORICAL_LOCK) != HISTORICAL_LOCK_SHA256:
         raise CurrentComponentError("historical component lock identity changed")
     data = _load_canonical_json(lock_path)
-    if data.get("schema_version") != 1 or data.get("status") not in ("current-m06", "current-m08"):
+    if data.get("schema_version") != 1 or data.get("status") != "current-m08":
         raise CurrentComponentError("current component lock schema or status is invalid")
     historical_record = data.get("historical_components_lock")
     if historical_record != {"path": HISTORICAL_LOCK.as_posix(), "sha256": HISTORICAL_LOCK_SHA256}:
@@ -81,7 +81,7 @@ def resolve_current_components(root: Path, historical: dict[str, str]) -> dict[s
     current = {}
     for path in sorted(EXPECTED_PATHS):
         expected_name, expected_repository, expected_branch = EXPECTED_POLICY[path]
-        if path == "components/fdkernel" and data.get("status") == "current-m08":
+        if path == "components/fdkernel":
             expected_branch = "topic/m08-pc88va-disk-loader-handoff"
         if (
             by_path[path].get("name") != expected_name
@@ -98,9 +98,10 @@ def resolve_current_components(root: Path, historical: dict[str, str]) -> dict[s
             raise CurrentComponentError(f"M06 unexpectedly changes {path}")
     fdkernel = by_path["components/fdkernel"]
     archive = fdkernel.get("source_archive_sha256")
+    expected_parent = historical["components/fdkernel"] if data.get("status") == "current-m06" else "69ccdd8699895722fc537d647ec490685532bdc4"
     if (
-        fdkernel.get("parent_commit") != historical["components/fdkernel"]
-        or fdkernel.get("branch") not in ("necpc88va", "topic/m08-pc88va-disk-loader-handoff")
+        fdkernel.get("parent_commit") != expected_parent
+        or fdkernel.get("branch") != "topic/m08-pc88va-disk-loader-handoff"
         or not isinstance(archive, str)
         or HEX64.fullmatch(archive) is None
     ):

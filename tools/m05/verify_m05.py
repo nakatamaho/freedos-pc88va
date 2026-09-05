@@ -133,8 +133,11 @@ def validate_descendant_paths(paths) -> None:
         "tests/m07/", "tools/m07/", "tests/m07r2/", "tools/m07r2/",
         "tests/m07r3/", "tools/m07r3/", "tests/m07r4/", "tools/m07r4/",
     )
+    m08_prefixes = ("config/m08/", "docs/adr/0003-", "docs/porting/m08-",
+                    "schema/m08-", "tests/test_m08_", "tools/m08/",
+                    ".github/workflows/m08-")
     for relative in sorted(item for item in paths if item):
-        if relative not in exact and not relative.startswith(prefixes):
+        if relative not in exact and not relative.startswith(prefixes) and not relative.startswith(m08_prefixes) and relative != "Makefile":
             raise ValidationError(f"path is outside M05 parent-only scope: {relative}")
 
 
