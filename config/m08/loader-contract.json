@@ -1,0 +1,50 @@
+{
+  "contract_version": 1,
+  "status": "implementation_in_progress",
+  "platform": "pc88va",
+  "implementation_owner": "fdkernel",
+  "private_parameters": "local_regular_file_overlay_only",
+  "promotion_status": "prohibited_pending_user_approval",
+  "memory_intervals": "half_open_overflow_checked",
+  "firmware_workspace_reuse": false,
+  "initial_extent_source": "accepted_m07_private_overlay",
+  "stage2_location_source": "validated_builder_extent",
+  "kernel_location_source": "fat12_root_directory_and_cluster_chain",
+  "disk": {
+    "adapter": "parameterized_firmware_interrupt",
+    "qualification": "complete_loader_sector_sequence_and_return_bytes_observed_twice",
+    "fallback": "none",
+    "request_fields": ["logical_sector", "sector_count", "destination", "capacity", "geometry", "boot_drive_context"],
+    "default_retry_ceiling": 0,
+    "short_transfer": "error",
+    "final_partial_sector": "scratch_then_exact_copy"
+  },
+  "fat12": {
+    "filename": "KERNEL.SYS",
+    "duplicate_match": "reject",
+    "cycle_detection": "bounded_visited_bitmap",
+    "chain_length": "exact_file_cluster_count",
+    "final_cluster": "require_end_of_chain"
+  },
+  "mz": {
+    "format": "dos_mz",
+    "relocations": "zero_only_reject_nonzero",
+    "file_size": "require_exact_header_encoding_match",
+    "placement": "strip_header_copy_body_zero_required_allocation",
+    "entry": "validated_body_relative_far_address",
+    "stack": "validated_allocation_relative_address",
+    "handoff": "one_way_far_transfer"
+  },
+  "interrupt_policy": {
+    "entry": "capture",
+    "firmware_call": "qualified_overlay_requirement",
+    "stack_replacement_and_handoff": "disabled"
+  },
+  "boot_drive_source": "qualified_private_overlay_context_without_invented_guest_register_abi",
+  "replace_stubs": ["pc88va_disk_read", "pc88va_loader_handoff"],
+  "other_stubs": "remain_fail_closed",
+  "terminal_observation": "m06_kernel_entry_marker",
+  "private_repetitions_required": 2,
+  "hardware_claim": false,
+  "dos_runtime_claim": false
+}

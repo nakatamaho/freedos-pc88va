@@ -354,6 +354,14 @@ m07-completion-public:
 	@$(MAKE) m07-completion-tests
 	@$(MAKE) m07-completion-verify
 
+.PHONY: m08-public-verify m08-tests
+
+m08-public-verify:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m08/verify_m08_public.py
+
+m08-tests:
+	@PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s components/fdkernel/pc88va/tests -p 'test_m08_*.py'
+
 verify: verify-scaffold
 	@if test -f qa/golden/m01-baseline.json && test -d qa/results/m01/run-1 && test -d qa/results/m01/run-2; then \
 		bash tools/m01/build_baseline.sh verify; \

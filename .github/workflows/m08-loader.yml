@@ -1,0 +1,56 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+name: M08 PC-88VA loader public contract
+
+on:
+  push:
+    paths:
+      - ".github/workflows/m08-loader.yml"
+      - "Makefile"
+      - "config/m08/**"
+      - "docs/adr/0003-pc88va-parameterized-kernel-loader.md"
+      - "docs/porting/m08-report.md"
+      - "schema/m08-loader-overlay.schema.json"
+      - "tests/test_m08_media.py"
+      - "tools/m08/**"
+      - "components/fdkernel"
+  pull_request:
+    paths:
+      - ".github/workflows/m08-loader.yml"
+      - "Makefile"
+      - "config/m08/**"
+      - "docs/adr/0003-pc88va-parameterized-kernel-loader.md"
+      - "docs/porting/m08-report.md"
+      - "schema/m08-loader-overlay.schema.json"
+      - "tests/test_m08_media.py"
+      - "tools/m08/**"
+      - "components/fdkernel"
+  workflow_dispatch:
+
+jobs:
+  public-loader:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out exact components
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - name: Assert native x64 and configure remotes
+        run: |
+          test "$(uname -m)" = x86_64
+          test "$(dpkg --print-architecture)" = amd64
+          bash tools/configure_component_remotes.sh
+      - name: Install ROM-free QA dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq nasm
+          python3 -m pip install --disable-pip-version-check --require-hashes -r components/fdkernel/pc88va/tests/m08-requirements.txt
+      - name: Run M08 public source and synthetic gates
+        run: |
+          git diff --check
+          make m08-public-verify
+          PYTHONDONTWRITEBYTECODE=1 make m08-tests
+      - name: Verify no private or generated material is staged
+        run: |
+          test -z "$(git status --short --untracked-files=all | grep -E 'private|\.img$|\.d88$|\.bin$|trace|rom' || true)"
+          test -z "$(git -C components/fdkernel status --short --untracked-files=all)"

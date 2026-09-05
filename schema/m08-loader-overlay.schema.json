@@ -1,0 +1,79 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "M08 single-source parameterized loader overlay",
+  "description": "Only the synthetic_rom_free profile may appear in public build evidence. Private profiles and every derived identity remain local. The child validator additionally enforces arithmetic, ownership, instruction-token and file-permission rules.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "layout", "bootstrap", "firmware_callback"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "firmware_callback": {"type": "string", "minLength": 1, "maxLength": 16384},
+    "bootstrap": {
+      "type": "object", "additionalProperties": false,
+      "required": ["image_segment", "image_offset", "loaded_bytes", "drive_context", "call_flags"],
+      "properties": {
+        "image_segment": {"$ref": "#/$defs/word"},
+        "image_offset": {"$ref": "#/$defs/word"},
+        "loaded_bytes": {"type": "integer", "minimum": 1024, "maximum": 65535},
+        "drive_context": {"$ref": "#/$defs/word"},
+        "call_flags": {"$ref": "#/$defs/word"}
+      }
+    },
+    "layout": {
+      "type": "object", "additionalProperties": false,
+      "required": ["schema_version", "profile_class", "regions", "firmware_regions", "stack", "disk", "cache"],
+      "properties": {
+        "schema_version": {"const": 1},
+        "profile_class": {"enum": ["synthetic_rom_free", "private_observation_overlay"]},
+        "firmware_regions": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/interval"}},
+        "regions": {
+          "type": "object", "additionalProperties": false,
+          "required": ["stage2", "loader_stack", "scratch", "kernel_file", "kernel_allocation"],
+          "properties": {
+            "stage2": {"$ref": "#/$defs/interval"},
+            "loader_stack": {"$ref": "#/$defs/interval"},
+            "scratch": {"$ref": "#/$defs/interval"},
+            "kernel_file": {"$ref": "#/$defs/interval"},
+            "kernel_allocation": {"$ref": "#/$defs/interval"}
+          }
+        },
+        "stack": {
+          "type": "object", "additionalProperties": false,
+          "required": ["segment", "pointer", "reserve"],
+          "properties": {
+            "segment": {"$ref": "#/$defs/word"},
+            "pointer": {"$ref": "#/$defs/word"},
+            "reserve": {"type": "integer", "minimum": 1024, "maximum": 65535}
+          }
+        },
+        "disk": {
+          "type": "object", "additionalProperties": false,
+          "required": ["sector_bytes", "total_sectors", "sectors_track", "heads"],
+          "properties": {
+            "sector_bytes": {"enum": [128, 256, 512, 1024, 2048, 4096]},
+            "total_sectors": {"type": "integer", "minimum": 1, "maximum": 65535},
+            "sectors_track": {"type": "integer", "minimum": 1, "maximum": 255},
+            "heads": {"type": "integer", "minimum": 1, "maximum": 256}
+          }
+        },
+        "cache": {
+          "type": "object", "additionalProperties": false,
+          "required": ["fat_bytes", "root_bytes", "bitmap_bytes"],
+          "properties": {
+            "fat_bytes": {"$ref": "#/$defs/positive_word"},
+            "root_bytes": {"$ref": "#/$defs/positive_word"},
+            "bitmap_bytes": {"$ref": "#/$defs/positive_word"}
+          }
+        }
+      }
+    }
+  },
+  "$defs": {
+    "word": {"type": "integer", "minimum": 0, "maximum": 65535},
+    "positive_word": {"type": "integer", "minimum": 1, "maximum": 65535},
+    "interval": {
+      "type": "array", "minItems": 2, "maxItems": 2,
+      "items": {"type": "integer", "minimum": 0, "maximum": 1048576}
+    }
+  }
+}
