@@ -85,6 +85,7 @@ jobs:
           make verify-scaffold
           make m04r1-license-verify
           make m04-verify
+          python3 -m pip install --disable-pip-version-check -r components/fdkernel/pc88va/tests/m08-requirements.txt
           PYTHONPYCACHEPREFIX="$RUNNER_TEMP/m07-pycache" python3 -m compileall -q tools/m06 tools/m07 tools/m07r2 tests/m06 tests/m07 tests/m07r2 tools/qa
           PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s components/fdkernel/pc88va/tests -p 'test_*.py'
 
