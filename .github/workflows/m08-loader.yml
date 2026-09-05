@@ -54,3 +54,46 @@ jobs:
         run: |
           test -z "$(git status --short --untracked-files=all | grep -E 'private|\.img$|\.d88$|\.bin$|trace|rom' || true)"
           test -z "$(git -C components/fdkernel status --short --untracked-files=all)"
+
+  historical-regression:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out current repository metadata
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - name: Install historical gate dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq nasm
+      - name: Run M01 through M07 from accepted completion commit
+        run: |
+          git fetch origin f0edeaa35126cf6d027adac0316df5056f7b1ddb
+          git worktree add --detach "$RUNNER_TEMP/m08-history" f0edeaa35126cf6d027adac0316df5056f7b1ddb
+          git -C "$RUNNER_TEMP/m08-history" submodule update --init --recursive
+          cd "$RUNNER_TEMP/m08-history"
+          make verify-scaffold
+          make m04r1-license-verify
+          make m04-verify
+          make m01-host-portability
+          make m01-image-identity
+          make m01-preflight
+          make m01-image
+          M01_DIAGNOSTICS=1 make m01-build
+          make m01-compare
+          make m01-verify
+          make m02-preflight
+          make m02-clean
+          make m02-bundle
+          make m02-compare
+          make m02-verify
+          make m06-prepare-m05
+          make m05-verify
+          make m06
+          make m07-public
+          make m07r2-public
+          make m07r3-public
+          make m07r4-public
+          make m07r5-public
+          make m07r6-public
+          make m07-completion-public
