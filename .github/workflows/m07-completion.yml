@@ -79,6 +79,8 @@ jobs:
           make verify-scaffold
           make m04r1-license-verify
           make m04-verify
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq nasm
           python3 -m pip install --disable-pip-version-check -r components/fdkernel/pc88va/tests/m08-requirements.txt
           PYTHONPYCACHEPREFIX="$RUNNER_TEMP/m07-pycache" \
             python3 -m compileall -q tools/m06 tools/m07 tools/m07r2 tests/m06 tests/m07 tests/m07r2 tools/qa
