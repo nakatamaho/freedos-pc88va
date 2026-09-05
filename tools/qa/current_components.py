@@ -63,7 +63,7 @@ def resolve_current_components(root: Path, historical: dict[str, str]) -> dict[s
     if _sha256(root / HISTORICAL_LOCK) != HISTORICAL_LOCK_SHA256:
         raise CurrentComponentError("historical component lock identity changed")
     data = _load_canonical_json(lock_path)
-    if data.get("schema_version") != 1 or data.get("status") != "current-m06":
+    if data.get("schema_version") != 1 or data.get("status") not in ("current-m06", "current-m08"):
         raise CurrentComponentError("current component lock schema or status is invalid")
     historical_record = data.get("historical_components_lock")
     if historical_record != {"path": HISTORICAL_LOCK.as_posix(), "sha256": HISTORICAL_LOCK_SHA256}:
@@ -81,6 +81,8 @@ def resolve_current_components(root: Path, historical: dict[str, str]) -> dict[s
     current = {}
     for path in sorted(EXPECTED_PATHS):
         expected_name, expected_repository, expected_branch = EXPECTED_POLICY[path]
+        if path == "components/fdkernel" and data.get("status") == "current-m08":
+            expected_branch = "topic/m08-pc88va-disk-loader-handoff"
         if (
             by_path[path].get("name") != expected_name
             or by_path[path].get("repository") != expected_repository
@@ -98,7 +100,7 @@ def resolve_current_components(root: Path, historical: dict[str, str]) -> dict[s
     archive = fdkernel.get("source_archive_sha256")
     if (
         fdkernel.get("parent_commit") != historical["components/fdkernel"]
-        or fdkernel.get("branch") != "necpc88va"
+        or fdkernel.get("branch") not in ("necpc88va", "topic/m08-pc88va-disk-loader-handoff")
         or not isinstance(archive, str)
         or HEX64.fullmatch(archive) is None
     ):
