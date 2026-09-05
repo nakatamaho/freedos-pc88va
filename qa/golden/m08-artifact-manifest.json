@@ -1,0 +1,78 @@
+{
+  "artifacts": {
+    "d88_media": {
+      "format": "D88",
+      "sha256": "7ff2169271f4f101a8b53bb36be0343f3272d50051c2616b05d0ed4e10fa1260",
+      "size": 1331888
+    },
+    "extracted_command_com": {
+      "sha256": "fabe7744cc7c51c6f72519cc39d89bf77beaf908f994675a97a1e34c93549da1",
+      "size": 91143
+    },
+    "extracted_country_sys": {
+      "sha256": "04b2d2bc8df382090686f00e547d718d6706d22fb34c34dd77cd55083d5c34d5",
+      "size": 42614
+    },
+    "extracted_kernel_sys": {
+      "sha256": "461e55d6983a944d35749eb658a5e11ba0316ff0bcd7da65982228aefce17253",
+      "size": 5771
+    },
+    "kernel_sys": {
+      "compile_manifest_sha256": "bb29abdd2299303dae3c1e0103a464c6c752430b5bc13e9a16de9ae8ac1f3c10",
+      "format": "dos-mz",
+      "kernel_interface_sha256": "b6317114a6e7970eba52c17357902b6d2a6100342beaa695c9fe647d7ab5bf51",
+      "sha256": "461e55d6983a944d35749eb658a5e11ba0316ff0bcd7da65982228aefce17253",
+      "size": 5771,
+      "symbol_evidence_sha256": "aa2d636513237eb0fed61a918f6fcadba4a06c4bd7643f3087f5e1a1f62958ae"
+    },
+    "loader_stage1": {
+      "format": "flat-binary",
+      "sha256": "20efd8a66dde7feac3f48df4bd6e8c4564d70e80a5a8871a8293e735c1585f24",
+      "size": 1024
+    },
+    "loader_stage2": {
+      "format": "flat-binary",
+      "sha256": "db324cbdae11fd1e6085a7957ef171ccf9d6a9be6ea05f3df0eedf83d8f594f7",
+      "size": 4304
+    },
+    "raw_media": {
+      "format": "M05-derived-raw",
+      "sha256": "d19ec41d30973229df0d4e91b0344159b284f17243989a5e712eb40de5fe5724",
+      "size": 1310720
+    }
+  },
+  "build_reproducibility": {
+    "artifact_comparison": "byte-identical",
+    "canonical_json_comparison": "byte-identical",
+    "clean_build_count": 2,
+    "generated_outputs_not_tracked": true
+  },
+  "handoff_validation": {
+    "entry_observation": "private qualification observed the M06 kernel-entry marker twice",
+    "mz_policy": "zero relocations, exact header encoding, validated body-relative entry and stack",
+    "placement": "builder-derived stage-2 extent and disjoint ownership intervals",
+    "private_values": "not included"
+  },
+  "media_validation": {
+    "boot_record_overlay": "parameterized M08 stage-1 over the accepted M05 BPB",
+    "fat12": "two mirrored FATs, deterministic root directory and cluster chains",
+    "geometry": "MFM, 1024-byte sectors, 8 sectors per track, 2 heads, 80 cylinders",
+    "raw_d88_round_trip": "byte-identical",
+    "signature_slots": "explicitly disabled in the public synthetic build"
+  },
+  "milestone": "M08",
+  "schema_version": 1,
+  "source": {
+    "fdkernel_commit": "105d49a72ec41afe07fc1e7b080bdbd1b3026ae2",
+    "fdkernel_source_archive_sha256": "599da73e96e08118b199dbcb3540f1da8fd639c0eee03e49d5ddc58f5d4064f4",
+    "m05_media_spec_sha256": "f8ba0e41300ee6e11d7a1f0cf646e335a09df243afc8e1235efade3d17cd06bc",
+    "parent_commit": "3b2b203fd04765d2236594b2c39a03bf4c31a68f",
+    "synthetic_overlay_sha256": "109ed5ca8d8e3da944630d3b2926655c01f2c3d5148d8850a7bd7040ec864596",
+    "toolchain_lock_sha256": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162"
+  },
+  "toolchain": {
+    "nasm_sha256": "ffcfd989c0879f868c6b654d554e0c497c8946061ef3972df16de0c2a3b9f838",
+    "nasm_size": 1739504,
+    "open_watcom": "1.9-linux-i386-in-linux-amd64"
+  }
+}

@@ -1,7 +1,7 @@
 # ADR 0003: Parameterized PC-88VA kernel loader
 
-Status: implementation and two-run private execution verified; final public
-build, regression, publication and CI gates pending.
+Status: accepted after deterministic public artifact closure, two-run private
+qualification, regression, publication and native CI verification.
 
 ## Scope and evidence boundary
 

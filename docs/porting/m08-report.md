@@ -1,45 +1,90 @@
-# M08 report
+# M08 acceptance evidence closure report
 
-Status: M08 PASS — PC-88VA DISK READ, KERNEL LOAD, AND ENTRY HANDOFF COMPLETE.
+Status: M08R1 PASS — M08 PUBLIC ACCEPTANCE EVIDENCE CLOSED.
 
-The parameterized PC-88VA loader is published through the fdkernel child
-commit recorded by the parent M08 component lock. It replaces only the M06
-PC-88VA disk-read and loader-handoff fail-closed stubs. The public boundary
-preserves the accepted M05 FAT12/D88 layout and keeps FreeCOM and Country
-unchanged.
+This report closes the public M08 evidence record from the fixed parent
+commit `3b2b203fd04765d2236594b2c39a03bf4c31a68f`. The current parent branch
+is `topic/m08r1-acceptance-evidence-closure`. The fdkernel child remains the
+accepted `105d49a72ec41afe07fc1e7b080bdbd1b3026ae2` export on
+`topic/m08-pc88va-disk-loader-handoff`; FreeCOM and Country remain unchanged.
+The qualified public VAEG identity is `7463f9501d84701f50f3243d5067b6a9dfd0c2e7`,
+with successful VAEG CI run `33937050536`.
 
-Public verification passed in the M08 loader workflow, including the historical
-M07 regression checkout. The fdkernel PC-88VA QA workflow passed, and the
-loader source/build tests passed with deterministic output checks. The final
-parent branch is `topic/m08-pc88va-disk-loader-handoff`.
+## Accepted identities
 
-Private qualification used two fresh, clean VAEG runs with persistent ignored
-evidence. Both runs confirmed disk read, FAT12 file selection, MZ validation
-and transformation, byte checks, transfer ownership, and the M06 kernel-entry
-marker. Canonical private projections and ownership audits were byte-identical.
-Private values, firmware, media, traces, and derived addresses are not
-recorded here.
+- M08 contract: `config/m08/loader-contract.json` (accepted status).
+- Artifact manifest: `qa/golden/m08-artifact-manifest.json`, SHA-256
+  `2210a590a7d705f3936a9053e197d05eb94888254b708f4435a1e7c89d3ef5e0`.
+- Artifact-manifest schema: `schema/m08-artifact-manifest.schema.json`,
+  SHA-256 `9e81fef8a5668525e521df9ae322c8dc3029cc336edd34a62b8455f141c7d682`.
+- M08 golden: `qa/golden/m08-golden.json`, SHA-256
+  `b7661bcfddd9ab45748a530dac3d8fe07b86eb16254f075ea24c346bd57bad60`.
+- VAEG qualification record: `config/m08/vaeg-qualification.json`, SHA-256
+  `3ebbf58e18ea2acf0f92ba755cca99c3082b5ed419e6bfa51a5bd2d2fd8dbe47`.
+- M08 component lock preserves the historical component lock identity
+  `440e481b28c740875489a6953a246ce5370c44074053c7aad3f80e79ec40c19c` and
+  pins fdkernel, FreeCOM and Country to the accepted gitlinks.
 
-The eight M08 handoff fields are resolved in the private contract. This is a
-VAEG/private-evidence result, not a hardware result. Full DOS boot,
-COMMAND.COM execution, and hardware validation are not claimed. M09 has not
-started.
+## Public artifact closure
 
-## Verification summary
+Two independent clean builds from the fixed source archive and Open Watcom
+1.9 Linux/i386 tools in the pinned Linux/amd64 container were byte-identical,
+including objects, link/map evidence, generated inputs and final artifacts.
 
-- Public fdkernel QA: PASS; 163 ROM-free loader tests.
-- Parent M08 public workflow: PASS in both clean workflow runs.
-- Historical M01–M07 regression checkout: PASS within the M08 workflow.
-- Private loader qualification: two runs, byte-identical canonical projections.
-- Private L0–L9 ownership audit: two runs, byte-identical projections.
-- FreeCOM and Country gitlinks remain unchanged; the fdkernel update is the
-  intended M08 child commit.
-- Generated binaries, images, traces, ROMs, and private reports: not committed.
+| Artifact | Size | SHA-256 |
+| --- | ---: | --- |
+| loader stage 1 | 1,024 | `20efd8a66dde7feac3f48df4bd6e8c4564d70e80a5a8871a8293e735c1585f24` |
+| loader stage 2 | 4,304 | `db324cbdae11fd1e6085a7957ef171ccf9d6a9be6ea05f3df0eedf83d8f594f7` |
+| `KERNEL.SYS` | 5,771 | `461e55d6983a944d35749eb658a5e11ba0316ff0bcd7da65982228aefce17253` |
+| raw M05-derived media | 1,310,720 | `d19ec41d30973229df0d4e91b0344159b284f17243989a5e712eb40de5fe5724` |
+| D88 media | 1,331,888 | `7ff2169271f4f101a8b53bb36be0343f3272d50051c2616b05d0ed4e10fa1260` |
+| extracted `KERNEL.SYS` | 5,771 | `461e55d6983a944d35749eb658a5e11ba0316ff0bcd7da65982228aefce17253` |
+| extracted `COMMAND.COM` | 91,143 | `fabe7744cc7c51c6f72519cc39d89bf77beaf908f994675a97a1e34c93549da1` |
+| extracted `COUNTRY.SYS` | 42,614 | `04b2d2bc8df382090686f00e547d718d6706d22fb34c34dd77cd55083d5c34d5` |
 
-## Deferred boundaries
+The loader preserves the accepted M05 geometry and FAT12 layout, locates the
+exact `KERNEL.SYS` root entry and chain, applies the zero-relocation DOS MZ
+policy, validates body-relative placement and stack ownership, and performs a
+one-way entry handoff. The D88-to-raw projection is byte-identical. FreeCOM
+and Country payloads are unchanged.
 
-Firmware boot acceptance, real hardware validation, full DOS startup,
-device services, console/keyboard operation, and COMMAND.COM execution remain
-outside this milestone. M09 has not started.
+The verifier now requires the accepted contract to reference and digest the
+artifact manifest, M08 golden, and VAEG qualification record. Negative tests
+prove that removing any of those identities is rejected; an accepted-status
+string alone cannot pass.
 
-M08 PASS — PC-88VA DISK READ, KERNEL LOAD, AND ENTRY HANDOFF COMPLETE.
+## Private qualification summary
+
+The retained private qualification used two clean VAEG runs under the same
+launch contract. Both runs observed L0–L9 twice, produced byte-identical
+canonical projections, preserved inputs, and reached the M06 kernel-entry
+marker. Private values remain in persistent ignored local evidence and are not
+represented in this report. Temporary raw traces and intermediate build
+products are disposable; manifests, projections, input-preservation records,
+qualification identity and cleanup records are retained.
+
+M07 established firmware boot acceptance. M08 consumed and regression-checked
+that accepted handoff contract; it did not newly claim hardware validation.
+The two successful public workflow runs are `33947694791` and `33947807789`;
+the latter is recorded as the second clean workflow result rather than being
+collapsed into an unsupported single-run claim. The accepted VAEG workflow is
+`33937050536`.
+
+## Verification and boundaries
+
+- Public synthetic fdkernel tests: 164 passed.
+- Parent public media and acceptance tests: 10 passed.
+- M08 public verifier: PASS, including artifact/golden/VAEG identity checks.
+- Historical M01–M07 regression workflow: PASS in the successful M08 workflow
+  runs listed above.
+- Local public artifact builds: two-build byte equality PASS.
+- Evidence labels: HOST PASS for deterministic public build/tests; VAEG PASS
+  for the retained two-run qualification; HARDWARE PASS: not claimed.
+- Private evidence and generated artifacts: not committed, uploaded, or put in
+  public CI.
+
+Full DOS startup, COMMAND.COM execution, console/keyboard/timer/interrupt
+services, unrestricted firmware use, and hardware validation remain outside
+M08. M09 has not started.
+
+M08R1 PASS — M08 PUBLIC ACCEPTANCE EVIDENCE CLOSED.

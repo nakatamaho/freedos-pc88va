@@ -8,7 +8,7 @@
       "path": "components/fdkernel",
       "repository": "https://github.com/nakatamaho/fdkernel.git",
       "role": "Parameterized PC-88VA disk loader and MZ handoff",
-      "source_archive_sha256": "b74331b27a62faeab870da704ad2086cd4831cd015d38fe4d869a13e80360cbb"
+      "source_archive_sha256": "599da73e96e08118b199dbcb3540f1da8fd639c0eee03e49d5ddc58f5d4064f4"
     },
     {
       "branch": "deterministic-build-timestamp",

@@ -1,0 +1,241 @@
+{
+  "$defs": {
+    "artifact": {
+      "additionalProperties": false,
+      "properties": {
+        "format": {
+          "type": "string"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "size": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "format",
+        "size",
+        "sha256"
+      ],
+      "type": "object"
+    },
+    "artifact_no_format": {
+      "additionalProperties": false,
+      "properties": {
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "size": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "size",
+        "sha256"
+      ],
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "artifacts": {
+      "additionalProperties": false,
+      "properties": {
+        "d88_media": {
+          "$ref": "#/$defs/artifact"
+        },
+        "extracted_command_com": {
+          "$ref": "#/$defs/artifact_no_format"
+        },
+        "extracted_country_sys": {
+          "$ref": "#/$defs/artifact_no_format"
+        },
+        "extracted_kernel_sys": {
+          "$ref": "#/$defs/artifact_no_format"
+        },
+        "kernel_sys": {
+          "$ref": "#/$defs/artifact"
+        },
+        "loader_stage1": {
+          "$ref": "#/$defs/artifact"
+        },
+        "loader_stage2": {
+          "$ref": "#/$defs/artifact"
+        },
+        "raw_media": {
+          "$ref": "#/$defs/artifact"
+        }
+      },
+      "required": [
+        "loader_stage1",
+        "loader_stage2",
+        "kernel_sys",
+        "raw_media",
+        "d88_media",
+        "extracted_kernel_sys",
+        "extracted_command_com",
+        "extracted_country_sys"
+      ],
+      "type": "object"
+    },
+    "build_reproducibility": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact_comparison": {
+          "const": "byte-identical"
+        },
+        "canonical_json_comparison": {
+          "const": "byte-identical"
+        },
+        "clean_build_count": {
+          "const": 2
+        },
+        "generated_outputs_not_tracked": {
+          "const": true
+        }
+      },
+      "required": [
+        "clean_build_count",
+        "artifact_comparison",
+        "canonical_json_comparison",
+        "generated_outputs_not_tracked"
+      ],
+      "type": "object"
+    },
+    "handoff_validation": {
+      "additionalProperties": false,
+      "properties": {
+        "entry_observation": {
+          "type": "string"
+        },
+        "mz_policy": {
+          "type": "string"
+        },
+        "placement": {
+          "type": "string"
+        },
+        "private_values": {
+          "const": "not included"
+        }
+      },
+      "required": [
+        "mz_policy",
+        "placement",
+        "entry_observation",
+        "private_values"
+      ],
+      "type": "object"
+    },
+    "media_validation": {
+      "additionalProperties": false,
+      "properties": {
+        "boot_record_overlay": {
+          "type": "string"
+        },
+        "fat12": {
+          "type": "string"
+        },
+        "geometry": {
+          "type": "string"
+        },
+        "raw_d88_round_trip": {
+          "const": "byte-identical"
+        },
+        "signature_slots": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "geometry",
+        "fat12",
+        "raw_d88_round_trip",
+        "boot_record_overlay",
+        "signature_slots"
+      ],
+      "type": "object"
+    },
+    "milestone": {
+      "const": "M08"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "source": {
+      "additionalProperties": false,
+      "properties": {
+        "fdkernel_commit": {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": "string"
+        },
+        "fdkernel_source_archive_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "m05_media_spec_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "parent_commit": {
+          "pattern": "^[0-9a-f]{40}$",
+          "type": "string"
+        },
+        "synthetic_overlay_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "toolchain_lock_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        }
+      },
+      "required": [
+        "parent_commit",
+        "fdkernel_commit",
+        "fdkernel_source_archive_sha256",
+        "toolchain_lock_sha256",
+        "m05_media_spec_sha256",
+        "synthetic_overlay_sha256"
+      ],
+      "type": "object"
+    },
+    "toolchain": {
+      "additionalProperties": false,
+      "properties": {
+        "nasm_sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "nasm_size": {
+          "minimum": 1,
+          "type": "integer"
+        },
+        "open_watcom": {
+          "const": "1.9-linux-i386-in-linux-amd64"
+        }
+      },
+      "required": [
+        "open_watcom",
+        "nasm_size",
+        "nasm_sha256"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_version",
+    "milestone",
+    "source",
+    "build_reproducibility",
+    "toolchain",
+    "artifacts",
+    "media_validation",
+    "handoff_validation"
+  ],
+  "type": "object"
+}

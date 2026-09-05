@@ -1,0 +1,36 @@
+{
+  "artifact_manifest": {
+    "path": "qa/golden/m08-artifact-manifest.json",
+    "sha256": "2210a590a7d705f3936a9053e197d05eb94888254b708f4435a1e7c89d3ef5e0"
+  },
+  "artifact_manifest_schema": {
+    "path": "schema/m08-artifact-manifest.schema.json",
+    "sha256": "9e81fef8a5668525e521df9ae322c8dc3029cc336edd34a62b8455f141c7d682"
+  },
+  "milestone": "M08",
+  "qualification_summary": {
+    "canonical_projection": "byte-identical",
+    "firmware_acceptance": "established by M07 and consumed/regressed by M08",
+    "full_dos_runtime": "not claimed",
+    "hardware": "not run",
+    "input_preservation": "pass",
+    "loader_boundaries": "L0-L9 observed twice",
+    "private_clean_runs": 2
+  },
+  "schema_version": 1,
+  "status": "accepted",
+  "two_clean_public_workflows": {
+    "conclusion": "success",
+    "run_ids": [
+      33947694791,
+      33947807789
+    ],
+    "scope": "M08 public loader contract and synthetic gates"
+  },
+  "vaeg_qualification": {
+    "accepted_ci_run": 33937050536,
+    "path": "config/m08/vaeg-qualification.json",
+    "sha256": "3ebbf58e18ea2acf0f92ba755cca99c3082b5ed419e6bfa51a5bd2d2fd8dbe47",
+    "vaeg_commit": "7463f9501d84701f50f3243d5067b6a9dfd0c2e7"
+  }
+}
