@@ -69,9 +69,9 @@ jobs:
       - name: Run M01 through M07 from accepted completion commit
         run: |
           git fetch origin f0edeaa35126cf6d027adac0316df5056f7b1ddb
-          git worktree add --detach "$RUNNER_TEMP/m08-history" f0edeaa35126cf6d027adac0316df5056f7b1ddb
-          git -C "$RUNNER_TEMP/m08-history" submodule update --init --recursive
-          cd "$RUNNER_TEMP/m08-history"
+          git worktree add --detach "$RUNNER_TEMP/freedos-pc88va" f0edeaa35126cf6d027adac0316df5056f7b1ddb
+          git -C "$RUNNER_TEMP/freedos-pc88va" submodule update --init --recursive
+          cd "$RUNNER_TEMP/freedos-pc88va"
           bash tools/configure_component_remotes.sh
           make verify-scaffold
           make m04r1-license-verify
