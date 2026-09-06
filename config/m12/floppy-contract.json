@@ -4,7 +4,7 @@
   "status": "in_progress",
   "start_sha": "c5ddf7c87cac46d357cfe75d132a819c7cf3fbe4",
   "qualified_implementation_sha": null,
-  "child_commit": "7bf08395eafd3458e43a7a424114541162bc1ab7",
+  "child_commit": "d2f2ed4e9070ab42ad15cd1df056e714ed819a86",
   "vaeg_commit": "7dd453cbd36014ba453a26765b00cd0cc9a99655",
   "route": "accepted M08 firmware read callback retained by resident kernel entry",
   "abi": {

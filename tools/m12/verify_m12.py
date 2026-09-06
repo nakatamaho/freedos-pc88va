@@ -11,7 +11,7 @@ import tempfile
 
 ROOT = Path(__file__).resolve().parents[2]
 START = "c5ddf7c87cac46d357cfe75d132a819c7cf3fbe4"
-CHILD = "7bf08395eafd3458e43a7a424114541162bc1ab7"
+CHILD = "d2f2ed4e9070ab42ad15cd1df056e714ed819a86"
 VAEG = "7dd453cbd36014ba453a26765b00cd0cc9a99655"
 FREECOM = "855281a3114b43ad4b8d9a320f2aca39be046bba"
 COUNTRY = "23f189cca3420606eae8723884fa92ccd65eb307"

@@ -1,8 +1,8 @@
 {
   "schema_version": 1,
   "source": {
-    "commit": "7bf08395eafd3458e43a7a424114541162bc1ab7",
-    "archive_sha256": "6208f582134ae9be3c9430184aa9cc4d02c3d130942948a178b8f858cbc0c6b1"
+    "commit": "d2f2ed4e9070ab42ad15cd1df056e714ed819a86",
+    "archive_sha256": "892c4402a72a2d40cee4e229b149d5519bdc373c3a701b814eb2ab816398d2bf"
   },
   "two_clean_builds_equal": true,
   "artifacts": {
