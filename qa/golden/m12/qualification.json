@@ -5,7 +5,7 @@
   "vaeg_commit": "7dd453cbd36014ba453a26765b00cd0cc9a99655",
   "artifact_manifest": {
     "path": "qa/golden/m12/manifest.json",
-    "sha256": "6d1518062e0e6d5bbf82f2f63fee729c8d6ee794990743721c8defef21ec2052"
+    "sha256": "a60c707a3a5b593c74e205e9d74a63b2a10f65cf337c3d213ccecb84f391e2ed"
   },
   "main_runs": [
     {
