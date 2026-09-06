@@ -41,7 +41,18 @@ for n in 1 2; do
   "${docker_cmd[@]}" cp "$3" "$container:/input/COUNTRY.SYS"
   "${docker_cmd[@]}" inspect "$container" > "$result/container-$n.json"
   "${docker_cmd[@]}" image inspect "$image" > "$result/image-$n.json"
+  set +e
   "${docker_cmd[@]}" start -a "$container" > "$result/run-$n.log" 2>&1
+  start_rc=$?
+  set -e
+  if [ "$start_rc" -ne 0 ]; then
+    "${docker_cmd[@]}" inspect "$container" > "$result/container-$n-failure.json" || true
+    mkdir -p "$result/run-$n"
+    "${docker_cmd[@]}" cp "$container:/output" "$result/run-$n" 2>/dev/null || true
+    tail -200 "$result/run-$n.log" >&2 || true
+    echo "M12 container run $n failed with rc=$start_rc" >&2
+    exit "$start_rc"
+  fi
   "${docker_cmd[@]}" cp "$container:/output" "$result/run-$n"
   "${docker_cmd[@]}" rm "$container" >/dev/null; container=''
 done
