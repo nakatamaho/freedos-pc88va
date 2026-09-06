@@ -23,8 +23,11 @@ def show(path):
 
 
 def main():
-    remote = git("ls-remote", "origin", f"refs/heads/{BRANCH}").split()
-    if remote[:1] != [START]:
+    # fetch-depth=0 checkout provides the named remote ref; avoid a second
+    # credentialed network round-trip from CI while still checking the exact
+    # fetched remote tip.
+    remote_ref = f"refs/remotes/origin/{BRANCH}"
+    if git("rev-parse", remote_ref) != START:
         raise SystemExit("M12_PREFLIGHT_M11_REMOTE_TIP_MISMATCH")
     # The exact M11 acceptance records are read from the verified publication,
     # not from mutable M12 files.
