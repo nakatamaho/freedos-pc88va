@@ -7,7 +7,7 @@
   "child_commit": "7ee01776d0acfdb08b0aee0b2b4a8446e0efbb57",
   "vaeg_commit": "7dd453cbd36014ba453a26765b00cd0cc9a99655",
   "artifact_manifest": {"path": "qa/golden/m12/manifest.json", "sha256": "c61cf6b7ea1bbd067019290b1916dc1bec53c36f7c3d56051e6d4e09e94cda30"},
-  "qualification": {"path": "qa/golden/m12/qualification.json", "sha256": "6b964fca0658b7098209da3bfcde94cd76f48d1eed53c7854bb9be5d9bdda8b9"},
+  "qualification": {"path": "qa/golden/m12/qualification.json", "sha256": "46e650555a263b2d284aeab2a900b0b64aeefed171627ae13c4a346472e0cb11"},
   "component_lock": {"path": "manifests/m12-components.lock.json", "sha256": "3b24ea62fa314592e9f94bbdcd9a30429b7bd49a8443b9a30ae4c999bf83c238"},
   "acceptance_verifier": "tools/m12/verify_m12.py",
   "child_ci": {"repository": "nakatamaho/fdkernel", "run_id": 34066196296, "attempt": 1, "head_sha": "7ee01776d0acfdb08b0aee0b2b4a8446e0efbb57", "workflow_path": ".github/workflows/ci-build.yml", "required_jobs": ["build"]},
