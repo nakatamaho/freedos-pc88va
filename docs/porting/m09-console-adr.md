@@ -1,6 +1,6 @@
 # M09 early console mechanism
 
-Status: selected for implementation; acceptance remains pending.
+Status: accepted after final-artifact two-run qualification and native public CI.
 
 The mechanism is the preserved PC-88VA Text BIOS string-output service, called
 with a one-byte NUL-terminated string. No direct text-plane or controller
@@ -47,7 +47,7 @@ no PIC initialization command, and no disk, keyboard, clock-query or DMA path.
 This is an inherited firmware-state dependency, not a claim of zero device IO.
 The diagnostic validates its service precondition before the first putc; each
 standalone putc also validates its own vector. Stack headroom and dependencies
-must be checked again for the final artifact before PASS.
+were checked in both final-artifact runs; see the qualification report.
 
 Unsupported bytes fail before invoking firmware. A successful return means
 the firmware call returned, not an invented hardware-ready result. Guest
@@ -61,7 +61,9 @@ logical column; LF retains the logical column while advancing the row. At the
 bottom, the firmware scrolls the previous row upward and clears the new row.
 The exact clearing representation and display layout stay in the local-only
 overlay. The renderer raster extent is not used as the logical wrapping width.
-These selection experiments do not replace final-artifact C0-C9 qualification.
+These selection experiments did not replace final-artifact C0-C9 qualification.
+The final kernel completed C0-C9 twice with equal complete causal projections;
+the same final source also passed a fresh two-run bottom-row control test.
 The public ABI contract distinguishes return from independent output evidence.
 M10 still owns general machine initialization, M11 input,
 and M17 Japanese/NLS. No full DOS character-device or shell is implemented.

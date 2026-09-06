@@ -1,18 +1,25 @@
 # M09 early console qualification report
 
-Status: IN PROGRESS — local guest qualification complete; parent regression
-and native CI/publication gates remain pending. This is not M09 PASS.
+Status: M09 PASS — PC-88VA EARLY CONSOLE OUTPUT AND DIAGNOSTIC MARKER COMPLETE.
+HOST PASS applies to the native x64 public gates; VAEG PASS applies to the
+private two-run console/loader qualification. DEFERRED HARDWARE VALIDATION.
 
 ## Source and publication
 
 - Parent start: `cfdf5841857f9633a20bdb7b6edb0c1e35275969`.
 - Parent branch: `topic/m09-pc88va-early-console-output-after-m08r1`.
-- Parent final commit, push and native CI: pending.
+- Qualified parent implementation: `b2e766d91403635bed3e2434cebe093109a5554b`,
+  pushed and remotely reachable. The report publication revision adds only
+  acceptance metadata, documentation and Make help to that qualified source.
+- Initial parent implementation: `5ae8f0a9230365751d8a5cae06b135123505d466`.
+- Native M09 workflows: [34003391977](https://github.com/nakatamaho/freedos-pc88va/actions/runs/34003391977)
+  and [34003567110](https://github.com/nakatamaho/freedos-pc88va/actions/runs/34003567110),
+  both success; each independently rebuilt the public artifacts twice.
 - Child start: `105d49a72ec41afe07fc1e7b080bdbd1b3026ae2`.
 - Child final: `ef46a7ad4b381cf7a301899bee00fec99f5e37a7`.
 - Child branch: `topic/m09-pc88va-early-console-output`; pushed, fetched,
   and reachable before the parent gitlink was staged.
-- VAEG: `7463f9501d84701f50f3243d5067b6a9dfd0c2e7`, unchanged;
+- VAEG: `7463f9501d84701f50f3243d5067b6a9dfd0c2e7`, detached and clean, unchanged;
   [accepted CI](https://github.com/nakatamaho/vaeg/actions/runs/33937050536).
 - FreeCOM: `855281a3114b43ad4b8d9a320f2aca39be046bba`.
 - Country: `23f189cca3420606eae8723884fa92ccd65eb307`.
@@ -138,7 +145,7 @@ only abstract qualification and public artifact identities. Promotion remains
 
 ## Public evidence identities
 
-- `config/m09/console-contract.json`: `695afa7dffde6a256bb66dc4cdfa3c492d9cbf3402df5cee302787b9cd2bb049`.
+- `config/m09/console-contract.json`: `1bbd08cbedb4793624c7a438ed436508c759af0917063384bec244e886b6e348`.
 - `schema/m09-artifact-manifest.schema.json`: `9534b9f088bb4dd3db8a6489e2f0d3c31f1fd026af16d586d41c21533873bba4`.
 - `schema/m09-public-qualification.schema.json`: `3ea6d2c252884bc86b0a8b06093ec4087c8156bf900acb04217f427dc1ff3c8a`.
 - `qa/golden/m09/manifest.json`: `19db1c0056b3153f9584359f7eb51293f99a4ca40871162d79d909c1df854497`.
@@ -147,22 +154,69 @@ only abstract qualification and public artifact identities. Promotion remains
 
 The schema validates the actual manifest instance, not only its digest.
 Qualification uses a closed schema and strict public projection. Parent M09
-synthetic tests: 52 passed. Worktree/staged text privacy checks and the current
-scaffold/license/M04 structural checks passed. Full historical regression and
-native parent CI are still pending; unrun gates are not successes.
+synthetic tests: 55 passed. Worktree/staged text privacy checks and the current
+scaffold/license/M04 structural checks passed. M01R1-M08R2 native historical regressions passed, including the full M08
+historical-regression job and its accepted M08 source/schema gate. Local M08
+acceptance/media tests additionally passed 19 tests. Unrun hardware is not a success.
 
-## Remaining closure
+## Consumed M08 evidence
 
-Finish historical regression, native parent CI, final staging/commit-object
-privacy audit and report final parent commit/CI. Only then may M09 be accepted.
-The local historical build failed twice in the unchanged FreeCOM host string
-utility with a segmentation fault. Both bounded failure logs were preserved;
-neither attempt is counted as successful. Native x64 regression remains
-required, and no source/toolchain pin was changed to hide this failure.
+- `config/m08/loader-contract.json`: `c163ab5a1f1d1a3c3ae76e93bd24da7535393ea923f1d891cdbc1ab4460dae19`.
+- `qa/golden/m08-artifact-manifest.json`: `2210a590a7d705f3936a9053e197d05eb94888254b708f4435a1e7c89d3ef5e0`.
+- `schema/m08-artifact-manifest.schema.json`: `575086b668fb7f2439f17b63a33675978fef00861eb0b30f66a7b22d3279e7fe`.
+- `qa/golden/m08-golden.json`: `bd611f5d6a0cb37c16114aec5b7382cb3bf7c18d340b762501d8bc2a574ad2a7`.
+- `config/m08/vaeg-qualification.json`: `3ebbf58e18ea2acf0f92ba755cca99c3082b5ed419e6bfa51a5bd2d2fd8dbe47`.
+- `manifests/m08-components.lock.json`: `c3e736596ce63ce006ba0363682259260f30a1792e59a04e3250ac9821544f07`.
+
+These accepted records, their artifact content and M08 source are unchanged.
+The accepted NEC98 regression kernel remains 83,774 bytes,
+`3ebddb01abe5e39f16d27439836be283c57d454f012d3c990f01fa8a2b14101d`.
+
+## Native CI and recoverable diagnostics
+
+| Workflow | Qualified run | Conclusion |
+| --- | --- | --- |
+| Scaffold validation | [34003567169](https://github.com/nakatamaho/freedos-pc88va/actions/runs/34003567169) | success |
+| M07R3 public FDD boot-path diagnosis record | [34003567118](https://github.com/nakatamaho/freedos-pc88va/actions/runs/34003567118) | success |
+| M07R4 public boot-path reconstruction record | [34003567123](https://github.com/nakatamaho/freedos-pc88va/actions/runs/34003567123) | success |
+| M07 firmware boot-acceptance completion | [34003567161](https://github.com/nakatamaho/freedos-pc88va/actions/runs/34003567161) | success |
+| M09 PC-88VA early console public gate | [34003567110](https://github.com/nakatamaho/freedos-pc88va/actions/runs/34003567110) | success |
+| M04 provisional boot and media contract | [34003391946](https://github.com/nakatamaho/freedos-pc88va/actions/runs/34003391946) | success |
+| M04R1 root license policy | [34003391931](https://github.com/nakatamaho/freedos-pc88va/actions/runs/34003391931) | success |
+| M07R5 firmware request-gate record | [34003391975](https://github.com/nakatamaho/freedos-pc88va/actions/runs/34003391975) | success |
+| M07R6 subsystem FDC command-gate record | [34003391986](https://github.com/nakatamaho/freedos-pc88va/actions/runs/34003391986) | success |
+| M03 port surface and integration ADR | [34003391943](https://github.com/nakatamaho/freedos-pc88va/actions/runs/34003391943) | success |
+| M05 deterministic candidate media | [34003391920](https://github.com/nakatamaho/freedos-pc88va/actions/runs/34003391920) | success |
+| M01 upstream baseline | [34003391980](https://github.com/nakatamaho/freedos-pc88va/actions/runs/34003391980) | success |
+| M02 baseline artifact bundle | [34003391972](https://github.com/nakatamaho/freedos-pc88va/actions/runs/34003391972) | success |
+| M06 PC-88VA kernel compile target | [34003391947](https://github.com/nakatamaho/freedos-pc88va/actions/runs/34003391947) | success |
+| M08 PC-88VA loader public contract | [34003391987](https://github.com/nakatamaho/freedos-pc88va/actions/runs/34003391987) | success |
+| M07 public boot-acceptance probe harness | [34003391978](https://github.com/nakatamaho/freedos-pc88va/actions/runs/34003391978) | success |
+
+The native workflows above are the latest successful result for each required
+gate on the qualified source lineage. The M07R3/M07R4/completion workflows
+initially failed by running M06 against the M09 gitlink. Their recovery uses an
+independent accepted M07 checkout; no validator or historical golden was relaxed.
+The earlier failed runs remain historical failures, not relabeled successes.
+
+The local ARM host-adapter historical build failed twice in the unchanged
+FreeCOM host string utility with a segmentation fault. Both bounded diagnostics
+were retained; neither local attempt is counted as passing. The same fixed
+source/toolchain passed the native x64 M01/M02 and complete historical CI gates,
+which are the canonical HOST PASS evidence. No pin or FreeCOM source was changed.
+The owned historical scratch worktree was removed after retaining diagnostics;
+it is reproducible from the accepted commit. No active M09 build container remains.
 
 Existing user worktrees and reports, FreeCOM/Country sources and accepted M08
-evidence remain unchanged. No generated binary/image/log/private evidence is
-intended for commit.
+evidence remain unchanged. No generated binary/image/log/private evidence was
+committed. The staged public blobs were also scanned against registered private
+input tokens, without printing or exporting those tokens.
 
+M09 PASS — PC-88VA EARLY CONSOLE OUTPUT AND DIAGNOSTIC MARKER COMPLETE.
+M08 DISK, FAT12, MZ LOAD, AND KERNEL-ENTRY HANDOFF REGRESSION PASSES.
+PRIVATE ROM, D88, MANUAL CONTENT, RAW TRACES, DISASSEMBLY, PATHS, IDENTITIES, AND DERIVED CONCRETE VALUES NOT DISTRIBUTED.
+GUEST-ORIGINATED ASCII DIAGNOSTIC OUTPUT OBSERVED TWICE IN VAEG.
+JAPANESE/NLS, CONSOLE INPUT, COMMAND.COM, FULL DOS RUNTIME, AND REAL HARDWARE NOT CLAIMED.
+FREECOM AND COUNTRY SOURCES AND GITLINKS UNCHANGED.
 HARDWARE NOT RUN.
 M10 NOT STARTED.

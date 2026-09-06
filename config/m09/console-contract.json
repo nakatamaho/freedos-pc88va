@@ -21,7 +21,11 @@
     "path": "components/fdkernel/pc88va/config/console-contract.json",
     "sha256": "8d955931b527e66c7db3b857e293173682544161f5470365f70c93d1603dd9ce"
   },
-  "parent_ci": null,
+  "parent_ci": {
+    "commit": "b2e766d91403635bed3e2434cebe093109a5554b",
+    "conclusion": "success",
+    "run": 34003567110
+  },
   "parent_start": "cfdf5841857f9633a20bdb7b6edb0c1e35275969",
   "private_execution_in_ci": false,
   "qualification": {
@@ -34,7 +38,7 @@
   },
   "schema_version": 1,
   "scope": "early ASCII diagnostic only; no input, NLS, ANSI, machine initialization or full DOS boot",
-  "status": "qualification_complete_ci_pending",
+  "status": "accepted",
   "toolchain_lock_sha256": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162",
   "vaeg_accepted_ci": 33937050536,
   "vaeg_commit": "7463f9501d84701f50f3243d5067b6a9dfd0c2e7"

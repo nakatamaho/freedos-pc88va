@@ -82,6 +82,9 @@ help:
 		'  m07-completion-tests  Run privacy-safe M07 completion tests' \
 		'  m07-completion-verify Verify the final M07 completion record' \
 		'  m07-completion-public Run the final ROM-free M07 completion gate' \
+		'  m09-tests         Run ROM-free early-console and privacy tests' \
+		'  m09-public-verify Verify bound early-console acceptance records' \
+		'  m09-public        Run public M09 gates; never execute private trials' \
 		'  verify            Run scaffold and available M01 verification'
 
 submodules:
