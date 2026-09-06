@@ -2,7 +2,7 @@
   "schema_version": 1,
   "status": "current-m12",
   "components": [
-    {"name": "fdkernel", "path": "components/fdkernel", "commit": "d2f2ed4e9070ab42ad15cd1df056e714ed819a86", "branch": "topic/m12-pc88va-kernel-floppy-readonly", "repository": "https://github.com/nakatamaho/fdkernel.git", "role": "PC-88VA resident kernel service", "source_archive_sha256": "892c4402a72a2d40cee4e229b149d5519bdc373c3a701b814eb2ab816398d2bf"},
+    {"name": "fdkernel", "path": "components/fdkernel", "commit": "7ee01776d0acfdb08b0aee0b2b4a8446e0efbb57", "branch": "topic/m12-pc88va-kernel-floppy-readonly", "repository": "https://github.com/nakatamaho/fdkernel.git", "role": "PC-88VA resident kernel service", "source_archive_sha256": "6eac44b66ef30a032368780973c04ae36c53600b0463ad577034f0388cee02c5"},
     {"name": "freecom", "path": "components/freecom", "commit": "855281a3114b43ad4b8d9a320f2aca39be046bba", "branch": "deterministic-build-timestamp", "repository": "https://github.com/nakatamaho/freecom_dbcs2.git", "role": "Unchanged accepted FreeCOM component", "source_archive_sha256": null},
     {"name": "country", "path": "components/country", "commit": "23f189cca3420606eae8723884fa92ccd65eb307", "branch": "master", "repository": "https://github.com/FDOS/country.git", "role": "Unchanged accepted COUNTRY.SYS component", "source_archive_sha256": null}
   ]
