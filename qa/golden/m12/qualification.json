@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "status": "M12 PRIVATE VAEG QUALIFICATION PENDING",
-  "child_commit": "7ee01776d0acfdb08b0aee0b2b4a8446e0efbb57",
+  "child_commit": "21d9f3450276d42e5fedd1ddb9e80485b888cc07",
   "vaeg_commit": "7dd453cbd36014ba453a26765b00cd0cc9a99655",
   "artifact_manifest": {
     "path": "qa/golden/m12/manifest.json",

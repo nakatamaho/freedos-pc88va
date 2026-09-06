@@ -57,7 +57,7 @@ m11-accept:
 m11: m11-accept
 
 M12_PYTHON ?= python3
-M12_CHILD_SHA ?= 7ee01776d0acfdb08b0aee0b2b4a8446e0efbb57
+M12_CHILD_SHA ?= 21d9f3450276d42e5fedd1ddb9e80485b888cc07
 M12_COMMAND ?= $(CURDIR)/build/payload/COMMAND.COM
 M12_COUNTRY ?= $(CURDIR)/build/payload/COUNTRY.SYS
 M12_BUILD_ROOT ?=
