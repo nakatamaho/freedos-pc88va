@@ -1,0 +1,3241 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "build-evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "alias": {
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "sha256": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "size": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "path",
+            "sha256",
+            "size"
+          ],
+          "type": "object"
+        },
+        "artifact": {
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "sha256": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "size": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "path",
+            "sha256",
+            "size"
+          ],
+          "type": "object"
+        },
+        "build_plan_sha256": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "compile_manifest_sha256": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "kernel_interface_sha256": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "schema_version": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "stub_count": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "stub_ledger_sha256": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "symbol_evidence_sha256": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "alias",
+        "artifact",
+        "build_plan_sha256",
+        "compile_manifest_sha256",
+        "kernel_interface_sha256",
+        "schema_version",
+        "stub_count",
+        "stub_ledger_sha256",
+        "symbol_evidence_sha256"
+      ],
+      "type": "object"
+    },
+    "compile-manifest": {
+      "additionalProperties": false,
+      "properties": {
+        "commands": {
+          "items": false,
+          "maxItems": 8,
+          "minItems": 8,
+          "prefixItems": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ],
+          "type": "array"
+        },
+        "component_commit": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "generated_inputs": {
+          "const": []
+        },
+        "libraries": {
+          "items": false,
+          "maxItems": 1,
+          "minItems": 1,
+          "prefixItems": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "sha256": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "size": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "path",
+                "sha256",
+                "size"
+              ],
+              "type": "object"
+            }
+          ],
+          "type": "array"
+        },
+        "link_inputs_in_order": {
+          "items": false,
+          "maxItems": 5,
+          "minItems": 5,
+          "prefixItems": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ],
+          "type": "array"
+        },
+        "link_response": {
+          "additionalProperties": false,
+          "properties": {
+            "lines": {
+              "items": false,
+              "maxItems": 10,
+              "minItems": 10,
+              "prefixItems": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            },
+            "path": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "sha256": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "size": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "lines",
+            "path",
+            "sha256",
+            "size"
+          ],
+          "type": "object"
+        },
+        "link_symbol_evidence_sha256": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "objects": {
+          "items": false,
+          "maxItems": 5,
+          "minItems": 5,
+          "prefixItems": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "classification": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "object": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "reason": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "sha256": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "size": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "source": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "source_inputs": {
+                  "items": false,
+                  "maxItems": 1,
+                  "minItems": 1,
+                  "prefixItems": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "path": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "sha256": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "size": {
+                          "minimum": 0,
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "sha256",
+                        "size"
+                      ],
+                      "type": "object"
+                    }
+                  ],
+                  "type": "array"
+                },
+                "stub_removal_milestone": {
+                  "const": null
+                }
+              },
+              "required": [
+                "classification",
+                "object",
+                "reason",
+                "sha256",
+                "size",
+                "source",
+                "source_inputs",
+                "stub_removal_milestone"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "classification": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "includes": {
+                  "items": false,
+                  "maxItems": 5,
+                  "minItems": 5,
+                  "prefixItems": [
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    {
+                      "minLength": 1,
+                      "type": "string"
+                    }
+                  ],
+                  "type": "array"
+                },
+                "object": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "reason": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "sha256": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "size": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "source": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "source_inputs": {
+                  "items": false,
+                  "maxItems": 6,
+                  "minItems": 6,
+                  "prefixItems": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "path": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "sha256": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "size": {
+                          "minimum": 0,
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "sha256",
+                        "size"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "path": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "sha256": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "size": {
+                          "minimum": 0,
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "sha256",
+                        "size"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "path": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "sha256": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "size": {
+                          "minimum": 0,
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "sha256",
+                        "size"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "path": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "sha256": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "size": {
+                          "minimum": 0,
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "sha256",
+                        "size"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "path": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "sha256": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "size": {
+                          "minimum": 0,
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "sha256",
+                        "size"
+                      ],
+                      "type": "object"
+                    },
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "path": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "sha256": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "size": {
+                          "minimum": 0,
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "sha256",
+                        "size"
+                      ],
+                      "type": "object"
+                    }
+                  ],
+                  "type": "array"
+                },
+                "stub_removal_milestone": {
+                  "const": null
+                }
+              },
+              "required": [
+                "classification",
+                "includes",
+                "object",
+                "reason",
+                "sha256",
+                "size",
+                "source",
+                "source_inputs",
+                "stub_removal_milestone"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "classification": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "object": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "reason": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "sha256": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "size": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "source": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "source_inputs": {
+                  "items": false,
+                  "maxItems": 1,
+                  "minItems": 1,
+                  "prefixItems": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "path": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "sha256": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "size": {
+                          "minimum": 0,
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "sha256",
+                        "size"
+                      ],
+                      "type": "object"
+                    }
+                  ],
+                  "type": "array"
+                },
+                "stub_removal_milestone": {
+                  "const": null
+                }
+              },
+              "required": [
+                "classification",
+                "object",
+                "reason",
+                "sha256",
+                "size",
+                "source",
+                "source_inputs",
+                "stub_removal_milestone"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "classification": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "object": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "reason": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "sha256": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "size": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "source": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "source_inputs": {
+                  "items": false,
+                  "maxItems": 1,
+                  "minItems": 1,
+                  "prefixItems": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "path": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "sha256": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "size": {
+                          "minimum": 0,
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "sha256",
+                        "size"
+                      ],
+                      "type": "object"
+                    }
+                  ],
+                  "type": "array"
+                },
+                "stub_removal_milestone": {
+                  "const": null
+                }
+              },
+              "required": [
+                "classification",
+                "object",
+                "reason",
+                "sha256",
+                "size",
+                "source",
+                "source_inputs",
+                "stub_removal_milestone"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "classification": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "object": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "reason": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "sha256": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "size": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "source": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "source_inputs": {
+                  "items": false,
+                  "maxItems": 1,
+                  "minItems": 1,
+                  "prefixItems": [
+                    {
+                      "additionalProperties": false,
+                      "properties": {
+                        "path": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "sha256": {
+                          "minLength": 1,
+                          "type": "string"
+                        },
+                        "size": {
+                          "minimum": 0,
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "path",
+                        "sha256",
+                        "size"
+                      ],
+                      "type": "object"
+                    }
+                  ],
+                  "type": "array"
+                },
+                "stub_removal_milestone": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "classification",
+                "object",
+                "reason",
+                "sha256",
+                "size",
+                "source",
+                "source_inputs",
+                "stub_removal_milestone"
+              ],
+              "type": "object"
+            }
+          ],
+          "type": "array"
+        },
+        "schema_version": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "source_archive_sha256": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "source_date_epoch": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "target_macros": {
+          "items": false,
+          "maxItems": 3,
+          "minItems": 3,
+          "prefixItems": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ],
+          "type": "array"
+        },
+        "tools": {
+          "additionalProperties": false,
+          "properties": {
+            "nasm": {
+              "additionalProperties": false,
+              "properties": {
+                "sha256": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "size": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "sha256",
+                "size"
+              ],
+              "type": "object"
+            },
+            "wcc": {
+              "additionalProperties": false,
+              "properties": {
+                "sha256": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "size": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "sha256",
+                "size"
+              ],
+              "type": "object"
+            },
+            "wlib": {
+              "additionalProperties": false,
+              "properties": {
+                "sha256": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "size": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "sha256",
+                "size"
+              ],
+              "type": "object"
+            },
+            "wlink": {
+              "additionalProperties": false,
+              "properties": {
+                "sha256": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "size": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "sha256",
+                "size"
+              ],
+              "type": "object"
+            },
+            "wmake": {
+              "additionalProperties": false,
+              "properties": {
+                "sha256": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "size": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "sha256",
+                "size"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "nasm",
+            "wcc",
+            "wlib",
+            "wlink",
+            "wmake"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "commands",
+        "component_commit",
+        "generated_inputs",
+        "libraries",
+        "link_inputs_in_order",
+        "link_response",
+        "link_symbol_evidence_sha256",
+        "objects",
+        "schema_version",
+        "source_archive_sha256",
+        "source_date_epoch",
+        "target_macros",
+        "tools"
+      ],
+      "type": "object"
+    },
+    "composition": {
+      "additionalProperties": false,
+      "properties": {
+        "artifacts": {
+          "additionalProperties": false,
+          "properties": {
+            "d88_media": {
+              "additionalProperties": false,
+              "properties": {
+                "sha256": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "size": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "sha256",
+                "size"
+              ],
+              "type": "object"
+            },
+            "extracted_command_com": {
+              "additionalProperties": false,
+              "properties": {
+                "sha256": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "size": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "sha256",
+                "size"
+              ],
+              "type": "object"
+            },
+            "extracted_country_sys": {
+              "additionalProperties": false,
+              "properties": {
+                "sha256": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "size": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "sha256",
+                "size"
+              ],
+              "type": "object"
+            },
+            "extracted_kernel_sys": {
+              "additionalProperties": false,
+              "properties": {
+                "sha256": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "size": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "sha256",
+                "size"
+              ],
+              "type": "object"
+            },
+            "kernel_sys": {
+              "additionalProperties": false,
+              "properties": {
+                "sha256": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "size": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "sha256",
+                "size"
+              ],
+              "type": "object"
+            },
+            "loader_stage1": {
+              "additionalProperties": false,
+              "properties": {
+                "sha256": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "size": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "sha256",
+                "size"
+              ],
+              "type": "object"
+            },
+            "loader_stage2": {
+              "additionalProperties": false,
+              "properties": {
+                "sha256": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "size": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "sha256",
+                "size"
+              ],
+              "type": "object"
+            },
+            "raw_media": {
+              "additionalProperties": false,
+              "properties": {
+                "sha256": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "size": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "sha256",
+                "size"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "d88_media",
+            "extracted_command_com",
+            "extracted_country_sys",
+            "extracted_kernel_sys",
+            "kernel_sys",
+            "loader_stage1",
+            "loader_stage2",
+            "raw_media"
+          ],
+          "type": "object"
+        },
+        "composition": {
+          "additionalProperties": false,
+          "properties": {
+            "allocations": {
+              "items": false,
+              "maxItems": 4,
+              "minItems": 4,
+              "prefixItems": [
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "clusters": {
+                      "items": false,
+                      "maxItems": 9,
+                      "minItems": 9,
+                      "prefixItems": [
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        }
+                      ],
+                      "type": "array"
+                    },
+                    "dos_name": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "fat_timestamp": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "fat_date": {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "fat_time": {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "utc": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "fat_date",
+                        "fat_time",
+                        "utc"
+                      ],
+                      "type": "object"
+                    },
+                    "first_cluster": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "sha256": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "size": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "source_date_epoch": {
+                      "minimum": 0,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "clusters",
+                    "dos_name",
+                    "fat_timestamp",
+                    "first_cluster",
+                    "sha256",
+                    "size",
+                    "source_date_epoch"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "clusters": {
+                      "items": false,
+                      "maxItems": 90,
+                      "minItems": 90,
+                      "prefixItems": [
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        }
+                      ],
+                      "type": "array"
+                    },
+                    "dos_name": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "fat_timestamp": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "fat_date": {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "fat_time": {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "utc": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "fat_date",
+                        "fat_time",
+                        "utc"
+                      ],
+                      "type": "object"
+                    },
+                    "first_cluster": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "sha256": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "size": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "source_date_epoch": {
+                      "minimum": 0,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "clusters",
+                    "dos_name",
+                    "fat_timestamp",
+                    "first_cluster",
+                    "sha256",
+                    "size",
+                    "source_date_epoch"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "clusters": {
+                      "items": false,
+                      "maxItems": 42,
+                      "minItems": 42,
+                      "prefixItems": [
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        }
+                      ],
+                      "type": "array"
+                    },
+                    "dos_name": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "fat_timestamp": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "fat_date": {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "fat_time": {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "utc": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "fat_date",
+                        "fat_time",
+                        "utc"
+                      ],
+                      "type": "object"
+                    },
+                    "first_cluster": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "sha256": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "size": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "source_date_epoch": {
+                      "minimum": 0,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "clusters",
+                    "dos_name",
+                    "fat_timestamp",
+                    "first_cluster",
+                    "sha256",
+                    "size",
+                    "source_date_epoch"
+                  ],
+                  "type": "object"
+                },
+                {
+                  "additionalProperties": false,
+                  "properties": {
+                    "clusters": {
+                      "items": false,
+                      "maxItems": 5,
+                      "minItems": 5,
+                      "prefixItems": [
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        {
+                          "minimum": 0,
+                          "type": "integer"
+                        }
+                      ],
+                      "type": "array"
+                    },
+                    "dos_name": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "fat_timestamp": {
+                      "additionalProperties": false,
+                      "properties": {
+                        "fat_date": {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "fat_time": {
+                          "minimum": 0,
+                          "type": "integer"
+                        },
+                        "utc": {
+                          "minLength": 1,
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "fat_date",
+                        "fat_time",
+                        "utc"
+                      ],
+                      "type": "object"
+                    },
+                    "first_cluster": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "sha256": {
+                      "minLength": 1,
+                      "type": "string"
+                    },
+                    "size": {
+                      "minimum": 0,
+                      "type": "integer"
+                    },
+                    "source_date_epoch": {
+                      "minimum": 0,
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "clusters",
+                    "dos_name",
+                    "fat_timestamp",
+                    "first_cluster",
+                    "sha256",
+                    "size",
+                    "source_date_epoch"
+                  ],
+                  "type": "object"
+                }
+              ],
+              "type": "array"
+            },
+            "bootstrap_sha256": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "d88_sha256": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "payloads_verified": {
+              "const": true
+            },
+            "raw_sha256": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "round_trip_byte_identical": {
+              "const": true
+            },
+            "stage2_extent": {
+              "additionalProperties": false,
+              "properties": {
+                "file_size": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "first_lba": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "sector_count": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "file_size",
+                "first_lba",
+                "sector_count"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "allocations",
+            "bootstrap_sha256",
+            "d88_sha256",
+            "payloads_verified",
+            "raw_sha256",
+            "round_trip_byte_identical",
+            "stage2_extent"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "artifacts",
+        "composition"
+      ],
+      "type": "object"
+    },
+    "kernel-interface": {
+      "additionalProperties": false,
+      "properties": {
+        "artifact": {
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "sha256": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "size": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "path",
+            "sha256",
+            "size"
+          ],
+          "type": "object"
+        },
+        "artifact_role": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "binary": {
+          "additionalProperties": false,
+          "properties": {
+            "body_size": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "checksum": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "container": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "entry": {
+              "additionalProperties": false,
+              "properties": {
+                "cs_relative": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "ip": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "cs_relative",
+                "ip"
+              ],
+              "type": "object"
+            },
+            "file_size": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "header_bytes": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "maximum_allocation_paragraphs": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "minimum_allocation_paragraphs": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "overlay": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "relocation_count": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "relocation_table_offset": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "required_initial_stack": {
+              "additionalProperties": false,
+              "properties": {
+                "sp": {
+                  "minimum": 0,
+                  "type": "integer"
+                },
+                "ss_relative": {
+                  "minimum": 0,
+                  "type": "integer"
+                }
+              },
+              "required": [
+                "sp",
+                "ss_relative"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "body_size",
+            "checksum",
+            "container",
+            "entry",
+            "file_size",
+            "header_bytes",
+            "maximum_allocation_paragraphs",
+            "minimum_allocation_paragraphs",
+            "overlay",
+            "relocation_count",
+            "relocation_table_offset",
+            "required_initial_stack"
+          ],
+          "type": "object"
+        },
+        "boot_drive_identity": {
+          "additionalProperties": false,
+          "properties": {
+            "concrete_value": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "status": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "concrete_value",
+            "status"
+          ],
+          "type": "object"
+        },
+        "cpu_mode": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "entry_symbol": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "firmware_entry_state": {
+          "additionalProperties": false,
+          "properties": {
+            "source": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "status": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "source",
+            "status"
+          ],
+          "type": "object"
+        },
+        "initial_register_contract": {
+          "additionalProperties": false,
+          "properties": {
+            "CS_IP": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "DS_ES": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "DX": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "IF_DF": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "SS_SP": {
+              "minLength": 1,
+              "type": "string"
+            },
+            "zero": {
+              "items": false,
+              "maxItems": 6,
+              "minItems": 6,
+              "prefixItems": [
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              ],
+              "type": "array"
+            }
+          },
+          "required": [
+            "CS_IP",
+            "DS_ES",
+            "DX",
+            "IF_DF",
+            "SS_SP",
+            "zero"
+          ],
+          "type": "object"
+        },
+        "loader_responsibilities": {
+          "items": false,
+          "maxItems": 5,
+          "minItems": 5,
+          "prefixItems": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ],
+          "type": "array"
+        },
+        "memory_model": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "physical_load_address": {
+          "additionalProperties": false,
+          "properties": {
+            "status": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "status"
+          ],
+          "type": "object"
+        },
+        "relocation_policy": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "schema_version": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "service_markers": {
+          "items": false,
+          "maxItems": 8,
+          "minItems": 8,
+          "prefixItems": [
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            },
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ],
+          "type": "array"
+        },
+        "stub_ledger_sha256": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "target": {
+          "minLength": 1,
+          "type": "string"
+        }
+      },
+      "required": [
+        "artifact",
+        "artifact_role",
+        "binary",
+        "boot_drive_identity",
+        "cpu_mode",
+        "entry_symbol",
+        "firmware_entry_state",
+        "initial_register_contract",
+        "loader_responsibilities",
+        "memory_model",
+        "physical_load_address",
+        "relocation_policy",
+        "schema_version",
+        "service_markers",
+        "stub_ledger_sha256",
+        "target"
+      ],
+      "type": "object"
+    },
+    "symbol-evidence": {
+      "additionalProperties": false,
+      "properties": {
+        "entry_point": {
+          "minLength": 1,
+          "type": "string"
+        },
+        "libraries": {
+          "items": false,
+          "maxItems": 1,
+          "minItems": 1,
+          "prefixItems": [
+            {
+              "minLength": 1,
+              "type": "string"
+            }
+          ],
+          "type": "array"
+        },
+        "memory": {
+          "additionalProperties": false,
+          "properties": {
+            "bytes": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "hex": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "bytes",
+            "hex"
+          ],
+          "type": "object"
+        },
+        "schema_version": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "stack": {
+          "additionalProperties": false,
+          "properties": {
+            "bytes": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "hex": {
+              "minLength": 1,
+              "type": "string"
+            }
+          },
+          "required": [
+            "bytes",
+            "hex"
+          ],
+          "type": "object"
+        },
+        "symbols": {
+          "items": false,
+          "maxItems": 42,
+          "minItems": 42,
+          "prefixItems": [
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            },
+            {
+              "additionalProperties": false,
+              "properties": {
+                "address": {
+                  "minLength": 1,
+                  "type": "string"
+                },
+                "name": {
+                  "minLength": 1,
+                  "type": "string"
+                }
+              },
+              "required": [
+                "address",
+                "name"
+              ],
+              "type": "object"
+            }
+          ],
+          "type": "array"
+        }
+      },
+      "required": [
+        "entry_point",
+        "libraries",
+        "memory",
+        "schema_version",
+        "stack",
+        "symbols"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "compile-manifest",
+    "kernel-interface",
+    "symbol-evidence",
+    "build-evidence",
+    "composition"
+  ],
+  "title": "M10 actual clean-build evidence records",
+  "type": "object"
+}

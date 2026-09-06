@@ -36,20 +36,23 @@ were schema-validated. M08 load/handoff, M09 guest-originated console output,
 register/architectural FLAGS/stack preservation and intentional guest quiescence
 were checked. Canonical evidence remains in persistent ignored local storage.
 
-The five M10 services have a first implementation in the independent child
+The five M10 services have a qualified runtime implementation in the independent child
 topic branch. The ADR documents the selected conservative arena map, read-only
 interrupt-state adoption, bounded observed-VRTC-edge clock, single-shot
 transaction and separate nonreturning fatal path. M08 loader source and M09
 console implementation are unchanged. Platform probe, input and NLS remain
 fail-closed; no new DOS runtime is introduced.
 
-Initial child implementation `e2c995e36c768cd58d688ff73fbaa329660621eb` is
-development history, not QUALIFIED_IMPLEMENTATION_SHA. Its 202 ROM-free child
-tests passed in a network-disabled Linux/amd64 QA container. The reusable
-acceptance checker passed 26 focused tests. The new fixed-loader-extent media
-allocator passed eight positive/negative tests.
+Current child implementation is `54c067af9764ace07459b0c2f5df4f70294d0c50`.
+Its 205 ROM-free child tests passed in a network-disabled Linux/amd64 QA
+container. The reusable acceptance checker passed 29 focused tests. M10
+parent media, scope, actual-contract and private-entry tests passed (21 tests).
+Child publication
+preceded the parent gitlink update: exact fork-branch reachability was checked.
+Child CI runs 34019124058 and 34019124154, attempt 1, succeeded at that exact
+child SHA. Earlier child commits are superseded development history.
 
-Two clean network-disabled Open Watcom 1.9 builds of that development commit
+Two clean network-disabled Open Watcom 1.9 builds of the current child commit
 matched in objects, artifacts and canonical manifests. The strict existing
 map comparator alone excludes the allowed map timing lines. Both accepted
 loader stages and the FreeCOM/Country payloads remained byte-identical.
@@ -57,21 +60,37 @@ Kernel growth initially moved the bootstrap extent under sequential allocation;
 M10 now reserves the accepted loader extent and independently validates the
 remaining FAT chains. Historical allocator and loader code were not changed.
 
-The first exploratory M10 guest run preserved inputs, completed M08/M09 and
-correctly failed its initialization entry guard. The guard had confused the
-stack's segment base with the linker's actual intra-paragraph stack start.
-That failure is retained. A correction deriving the stack offset from the
-public MZ stack contract and live caller state is under regression test.
-This exploratory stop is not M10 initialization acceptance.
+Exploration exposed a stack-interval assumption and an unnecessary clock wait.
+Both were corrected and retested within M10. Failed observations and rejected
+ownership hypotheses remain retained and are not accepted evidence. No disk
+activity exception was introduced to obtain a pass.
+
+Two formal clean main runs established I0-I9; two separate fatal controls
+established F0-F4. Complete raw evidence, guest display, launch/input/result
+records and canonical projections were byte-identical within each pair.
+Production-memory tracing, executable identity, input preservation, register,
+segment, architectural FLAGS and stack preservation, memory ownership, IVT,
+PIC masks, memory banks, observed clock progress, exact post-init guest display,
+disk ownership and intentional nonreturning guest halt were checked. M08 L0-L9
+and M09 console behavior were independently rechecked in the immutable traces.
+Actual private schemas and instances passed; a final closure audit also passed
+58 missing/unknown-field and digest rejection controls. This is VAEG evidence,
+not hardware evidence, and does not recreate lost historical M09 evidence.
+
+The closed public contract binds actual service, component, main-artifact,
+fatal-control and abstract qualification instances. The shared verifier checks
+schemas, closed references, source/object/library and artifact identities,
+component cleanliness, isolation metadata and positive/negative tests. Public
+CI consumes only ROM-free artifacts and abstract qualification assertions.
 
 ## Outstanding mandatory gates
 
-The corrected child needs clean rebuild and private qualification. Two formal
-I0-I9 main runs and two separate F0-F4 fatal controls have not passed. M10's
-closed public contract, evidence schemas, qualified golden and qualification
-record are not final. Full M01R1-M09 parent regressions, final privacy/cleanup,
-child-first publication, parent gitlink update and native/final-tip M10 CI
-remain pending. No unrun gate is counted as successful.
+Local M01R1-M09 historical regressions have passed at their exact accepted
+checkouts, including fresh M09 two-build golden comparison. The shared local
+acceptance rerun passed, as did registered-private-identity privacy checks of
+parent/child text, staged blobs and commit objects. Parent publication,
+native/final-tip M10 CI and the final closure audit remain pending. No unrun
+gate is counted as successful.
 
 QUALIFIED_IMPLEMENTATION_SHA is not established. PUBLICATION_TIP_SHA and
 DOWNSTREAM_BASE_SHA will be recorded only in the post-push handoff after exact

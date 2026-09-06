@@ -1,6 +1,7 @@
 # M10 machine-services mechanism decision
 
-Status: proposed implementation; runtime qualification pending.
+Status: runtime-qualified implementation. Public acceptance and handoff are
+separate gates recorded in the milestone report.
 
 ## Scope and ABI
 
@@ -19,7 +20,7 @@ Fatal stop is the documented non-returning exception.
 
 | Service | Mechanism | Failure and ownership policy |
 | --- | --- | --- |
-| machine_init | Single-shot transaction: entry checks, bounded memory map, read-only interrupt adoption, two edge-clock samples, M09 output, final preservation checks, commit readiness | IF and DF must be clear; stack and kernel must fit disjointly below the public display window. Readiness remains false on failure; repeat calls are rejected. Temporary records belong to the kernel. |
+| machine_init | Single-shot transaction: entry checks, bounded memory map, read-only interrupt adoption, clock origin and observed progress, M09 output, final preservation checks, commit readiness | IF and DF must be clear; stack and kernel must fit disjointly below the public display window. Readiness remains false on failure; repeat calls are rejected. Temporary records belong to the kernel. |
 | memory_query | Conservative map of an explicitly linked kernel-owned arena | Only the arena is allocatable. Everything else in the 20-bit address space remains reserved, including unclaimed conventional RAM. No RAM-size inference or destructive probe. Validate arena bounds and linear-address overflow before exposing it. |
 | interrupts_init | Validate and snapshot inherited IVT and PIC masks with IF clear | No IVT, mask, mode, EOI or nesting-state writes. The already exercised M09 Text BIOS vector must remain nonzero and unchanged. Compare the complete IVT and both masks again before readiness. Hardware interrupts remain disabled. |
 | clock_read | Source observation establishes origin zero; subsequent reads require a bounded low-to-high VRTC transition | Origin is not a claim of progress. Each subsequent tick requires an observed edge. This is a monotonic count of observed edges, not elapsed time or calendar time; edges between calls are not counted. Poll low then high, each with a finite instruction budget; failure leaves the previous count and output untouched. |
@@ -92,8 +93,8 @@ origin-sample clock contract avoids waiting for an unnecessary first edge.
 
 Private launch values stay in the ignored schema-validated local overlay.
 No private-derived constant is embedded in target code or this ADR. Private
-qualification must verify the proposed ownership and clock behavior before this
-decision becomes accepted; a failed observation is retained, not normalized.
+qualification verified the ownership and clock behavior in two clean main and
+two clean fatal runs; failed exploratory observations remain retained, not normalized.
 
 ## Acceptance boundary
 

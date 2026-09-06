@@ -14,6 +14,7 @@ from pathlib import Path, PurePosixPath
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "qa"))
 from current_components import CurrentComponentError, resolve_current_components
 from m09_scope import is_public_m09_path
+from m10_scope import is_public_m10_path
 
 
 ACCEPTED_PARENT = "5bb5e1f47b0fdb954056532412889cee1123ef1b"
@@ -300,7 +301,7 @@ def validate_changed_paths(paths, m06_active=False):
     binary_suffixes = {".rom", ".d88", ".bin", ".obj", ".o", ".img", ".ima", ".tar", ".zip", ".log"}
     for item in paths:
         path = PurePosixPath(item)
-        if m06_active and is_public_m09_path(item):
+        if m06_active and (is_public_m09_path(item) or is_public_m10_path(item)):
             continue
         if item in m04r1_license_paths or item == "AGENTS.md":
             continue

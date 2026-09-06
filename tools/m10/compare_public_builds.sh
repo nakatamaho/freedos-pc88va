@@ -43,6 +43,8 @@ for n in 1 2; do
   done
   "${docker_cmd[@]}" cp "$2" "$container:/input/COMMAND.COM"
   "${docker_cmd[@]}" cp "$3" "$container:/input/COUNTRY.SYS"
+  "${docker_cmd[@]}" inspect "$container" > "$result/container-$n.json"
+  "${docker_cmd[@]}" image inspect "$image" > "$result/image-$n.json"
   "${docker_cmd[@]}" start -a "$container" > "$result/run-$n.log" 2>&1
   "${docker_cmd[@]}" cp "$container:/output" "$result/run-$n"
   "${docker_cmd[@]}" rm "$container" >/dev/null

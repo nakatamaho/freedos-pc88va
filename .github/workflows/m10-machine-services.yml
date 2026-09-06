@@ -1,0 +1,68 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+name: M10 PC-88VA minimal machine services
+
+on:
+  push:
+    branches: ['topic/m10-pc88va-machine-services-init']
+  pull_request:
+    paths: ['tools/m10/**', 'config/m10/**', 'schema/m10-*', 'qa/golden/m10/**', 'tests/m10/**', 'tools/qa/**', 'components/fdkernel', 'Makefile', '.github/workflows/m10-machine-services.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  public-machine-services:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - name: Native x64 public environment
+        run: |
+          test "$(uname -m)" = x86_64
+          test "$(dpkg --print-architecture)" = amd64
+          bash tools/configure_component_remotes.sh
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq nasm
+          python3 -m pip install --disable-pip-version-check -r tools/m08/requirements.txt
+          python3 -m pip install --disable-pip-version-check --require-hashes -r components/fdkernel/pc88va/tests/m08-requirements.txt
+      - name: Verify public M09 start and reproduce historical baseline
+        run: |
+          make m10-preflight
+          python3 -B tools/m10/historical.py
+      - name: Two isolated Watcom builds and fatal controls
+        run: |
+          bundle=build/m10-history-baseline/freedos-pc88va/qa/results/m02/run-1/baseline-artifact-bundle/payload
+          make m10-build M10_CHILD_SHA=54c067af9764ace07459b0c2f5df4f70294d0c50 M10_COMMAND="$bundle/freecom/COMMAND.COM" M10_COUNTRY="$bundle/fdos-country/COUNTRY.SYS"
+          roots=(build/m10-public.*)
+          test "${#roots[@]}" = 1
+          echo "M10_BUILD_ROOT=${roots[0]}" >> "$GITHUB_ENV"
+          make m10-media M10_BUILD_ROOT="${roots[0]}"
+      - name: Shared local and native acceptance verifier
+        run: |
+          make m10-accept
+          git diff --exit-code
+          test -z "$(git status --porcelain --untracked-files=all)"
+          echo 'Private qualification is attested by the bound public record; no private execution or hardware validation occurs here.'
+
+  historical-regression:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - name: M08 and M09 immutable source and actual-instance regressions
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq nasm
+          python3 -m pip install --disable-pip-version-check -r tools/m08/requirements.txt
+          python3 -B tools/m10/historical.py --loader-console-only

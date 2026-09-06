@@ -3,7 +3,7 @@
 .PHONY: help submodules component-status verify-scaffold m01-host-portability m01-image-identity m01-preflight m01-image m01-build m01-compare m01-enroll-golden m01-verify m01-clean m02-preflight m02-clean m02-bundle m02-compare m02-verify m02-enroll-golden m02 m03-preflight m03-clean m03-scan m03-compare m03-enroll-golden m03-verify m03 m04-preflight m04-private-evidence m04-verify m04 m04r1-license-verify m05-preflight m05-clean m05-build m05-compare m05-enroll-golden m05-negative-tests m05-verify m05 m06-preflight m06-prepare-m05 m06-clean m06-build m06-nec98-regression m06-media m06-compare m06-enroll-golden m06-negative-tests m06-verify m06 m07-preflight m07-clean m07-probe m07-variants m07-public-tests m07-public-verify m07-enroll-golden m07-redact m07-public m07r2-tests m07r2-verify m07r2-private-evidence m07r2-public m07r3-tests m07r3-verify m07r3-public m07r4-tests m07r4-verify m07r4-public m07r5-tests m07r5-verify m07r5-public m07r6-tests m07r6-verify m07r6-public m07-completion-tests m07-completion-verify m07-completion-public verify
 
 M10_PYTHON ?= python3
-.PHONY: m10-preflight m10-tests m10-build m10-compare
+.PHONY: m10-preflight m10-tests m10-build m10-compare m10-media m10-private-run m10-verify m10-accept m10
 m10-preflight:
 	@$(M10_PYTHON) -B tools/m10/preflight.py $(if $(M10_ACCEPTED_ROOT),--accepted-root "$(M10_ACCEPTED_ROOT)")
 
@@ -12,13 +12,40 @@ m10-tests:
 	@$(M10_PYTHON) -B -m unittest discover -s tests/m10 -p 'test_*.py'
 	@$(M10_PYTHON) -B -m unittest discover -s components/fdkernel/pc88va/tests -p 'test_*.py'
 
-m10-build m10-compare:
+m10-build:
 	@test -n "$(M10_CHILD_SHA)" -a -n "$(M10_COMMAND)" -a -n "$(M10_COUNTRY)" || { echo 'M10_CHILD_SHA, M10_COMMAND and M10_COUNTRY are required'; exit 2; }
 	@bash tools/m10/compare_public_builds.sh "$(M10_CHILD_SHA)" "$(M10_COMMAND)" "$(M10_COUNTRY)"
+
+m10-media:
+	@test -n "$(M10_BUILD_ROOT)" || { echo 'M10_BUILD_ROOT is required'; exit 2; }
+	@$(M10_PYTHON) -B tools/m10/build_controls.py "$(M10_BUILD_ROOT)" --output "$(M10_BUILD_ROOT)/fatal-controls.json"
+
+m10-compare:
+	@test -n "$(M10_BUILD_ROOT)" || { echo 'M10_BUILD_ROOT is required'; exit 2; }
+	@$(M10_PYTHON) -B tools/m10/verify_m10.py --build-root "$(M10_BUILD_ROOT)"
+
+m10-verify:
+	@$(M10_PYTHON) -B tools/m10/verify_m10.py
+
+m10-private-run:
+	@$(M10_PYTHON) -B tools/m10/private_run.py
+
+m10-accept:
+	@test -n "$(M10_BUILD_ROOT)" || { echo 'M10_BUILD_ROOT is required'; exit 2; }
+	@$(M10_PYTHON) -B tools/m10/verify_m10.py --accept --build-root "$(M10_BUILD_ROOT)"
+
+m10: m10-accept
 
 help:
 	@printf '%s\n' \
 		'Available targets:' \
+		'  m10-preflight     Verify the exact M09 public handoff and CI identities' \
+		'  m10-build         Build two isolated M10 source exports' \
+		'  m10-media         Generate both public fatal selector controls' \
+		'  m10-compare       Validate actual build records and golden identities' \
+		'  m10-private-run   Invoke an explicit digest-bound local private runner' \
+		'  m10-verify        Validate closed public schemas, instances and sources' \
+		'  m10-accept        Run shared acceptance including historical regression' \
 		'  help              Show this help' \
 		'  submodules        Initialize/update locked submodules' \
 		'  component-status  Show submodule status' \
