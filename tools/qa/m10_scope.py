@@ -8,7 +8,7 @@ def is_public_m10_path(value):
     if path.is_absolute() or '..' in path.parts:return False
     exact={'manifests/m10-components.lock.json','docs/porting/m10-report.md',
            'docs/porting/m10-machine-services-adr.md','.github/workflows/m10-machine-services.yml',
-           '.github/workflows/m09-console.yml','tools/qa/milestone_acceptance.py',
+           '.github/workflows/m09-console.yml','.github/workflows/m04r1-license.yml','tools/qa/milestone_acceptance.py',
            'tools/qa/m10_scope.py','tests/qa/test_milestone_acceptance.py'}
     if value in exact:return True
     if value.startswith('schema/m10-') and value.endswith('.schema.json') and len(path.parts)==2:return True

@@ -57,6 +57,7 @@ jobs:
 
       - name: Run focused license-policy tests
         run: |
+          python3 -m pip install --disable-pip-version-check -r tools/m08/requirements.txt
           python3 -m unittest discover -s tests/qa -p 'test_*.py'
           python3 -m unittest discover -s tests/m04 -p 'test_*.py'
 
