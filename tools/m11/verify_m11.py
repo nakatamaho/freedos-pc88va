@@ -77,7 +77,10 @@ def main():
     ap=argparse.ArgumentParser(); ap.add_argument('--build-root',type=Path); ap.add_argument('--accept',action='store_true'); a=ap.parse_args()
     try:
         if a.accept: accept(a.build_root.resolve() if a.build_root else None)
-        else: content(); sources(); print('M11 public content and live VAEG CI passed')
+        else:
+            content(); sources()
+            if a.build_root: generated(a.build_root.resolve())
+            print('M11 public content, live VAEG CI and build bindings passed')
     except (gate.Rejected,ValueError,KeyError,TypeError,OSError,subprocess.CalledProcessError): print('M11_PUBLIC_GATE_REJECTED'); return 1
     return 0
 if __name__=='__main__': raise SystemExit(main())
