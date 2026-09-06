@@ -3,8 +3,9 @@
 # Two clean, network-disabled M12 builds using the accepted M01 container.
 set -euo pipefail
 root=$(git rev-parse --show-toplevel); cd "$root"
+echo "M12 public build inputs: argc=$# child=$1 command=$2 country=$3" >&2
 test "$#" = 3 || { echo 'usage: compare_public_builds.sh CHILD_SHA COMMAND.COM COUNTRY.SYS' >&2; exit 2; }
-child=$1; [[ "$child" =~ ^[0-9a-f]{40}$ ]]
+child=$1; [[ "$child" =~ ^[0-9a-f]{40}$ ]] || { echo "M12 child SHA syntax rejected: [$child]" >&2; exit 2; }
 test "$(git -C components/fdkernel rev-parse "$child^{commit}")" = "$child" || { echo "M12 child checkout does not contain $child" >&2; exit 2; }
 test -f "$2" -a -f "$3" || { echo "M12 payload inputs are missing" >&2; exit 2; }
 mkdir -p build
