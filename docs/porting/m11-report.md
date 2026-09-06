@@ -21,9 +21,10 @@ verified. Historical M10 evidence was not rewritten or replaced.
 
 ## Implementation and contract
 
-The five assigned M06 stubs are implemented in the child: machine
-initialization support remains unchanged and `pc88va_console_getc` now uses a
-small read-only fifteen-port PC-88VA matrix poll. It preserves the documented
+M10 implemented the five assigned M06 machine-service stubs. M11 replaces
+only `pc88va_console_getc` in the child; machine-service initialization remains
+unchanged, and the new input path uses a small read-only fifteen-port PC-88VA
+matrix poll. It preserves the documented
 near ABI, stack, segments and flags; returns status 0/1/2/FFFF for success,
 no-input, unsupported/ambiguous input and invalid preconditions; and owns only
 its exported snapshot storage. It does not call firmware, program a
