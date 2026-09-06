@@ -78,6 +78,7 @@ def accept(build=None,root=ROOT):
     if build: generated(build,root)
     subprocess.run([sys.executable,'-B','tools/m11/preflight.py'],cwd=root,check=True)
     subprocess.run([sys.executable,'-B','-m','unittest','discover','-s','tests/m11','-p','test_*.py'],cwd=root,check=True)
+    subprocess.run([sys.executable,'-B','tools/m10/privacy_guard.py','--root',str(root),'--start',START],cwd=root,check=True)
     print('M11 public schemas, actual instances, component identities and VAEG CI passed')
 def main():
     ap=argparse.ArgumentParser(); ap.add_argument('--build-root',type=Path); ap.add_argument('--accept',action='store_true'); a=ap.parse_args()
