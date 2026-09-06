@@ -75,5 +75,16 @@ class ContractTests(unittest.TestCase):
         p=subprocess.run([sys.executable,'-B','tools/m10/private_run.py'],cwd=ROOT,env=env,capture_output=True)
         self.assertNotEqual(p.returncode,0);self.assertIn(b'prohibited',p.stderr)
 
+    def test_fresh_history_requires_m01r1_diagnostics(self):
+        with patch.dict(os.environ,clear=False):
+            hs=importlib.util.spec_from_file_location('m10_history',ROOT/'tools/m10/historical.py')
+            h=importlib.util.module_from_spec(hs);hs.loader.exec_module(h)
+            with patch.object(h,'checkout',return_value=ROOT),patch.object(h,'run') as run:
+                h.baseline()
+                self.assertEqual(os.environ['M01_DIAGNOSTICS'],'1')
+                commands=[c.args[1:] for c in run.call_args_list]
+                self.assertTrue(any('m01-build' in c and 'm02-preflight' in c for c in commands))
+                self.assertTrue(any('m02-preflight' in c and 'm06-verify' in c for c in commands))
+
 
 if __name__=='__main__':unittest.main()

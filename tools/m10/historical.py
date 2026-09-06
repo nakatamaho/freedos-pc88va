@@ -30,6 +30,9 @@ def checkout(role,sha):
 
 
 def baseline():
+    # M01R1 requires the real object diagnostics, including on a fresh native
+    # runner. Never accept an artifact-only M01 build as that regression.
+    os.environ['M01_DIAGNOSTICS']='1'
     root=checkout('baseline','f0edeaa35126cf6d027adac0316df5056f7b1ddb')
     run(root,'make','verify-scaffold','m04r1-license-verify','m04-verify','m01-host-portability','m01-image-identity')
     if not (root/'qa/results/m06/run-2').exists():
@@ -37,7 +40,7 @@ def baseline():
             'm02-preflight','m02-bundle','m02-compare','m02-verify',
             'm03-preflight','m03-scan','m03-compare','m03-verify',
             'm06-prepare-m05','m05-verify','m06')
-    run(root,'make','m01-compare','m01-verify','m02-compare','m02-verify','m03-compare','m03-verify',
+    run(root,'make','m01-compare','m01-verify','m02-preflight','m02-compare','m02-verify','m03-compare','m03-verify',
         'm05-compare','m05-negative-tests','m05-verify','m06-compare','m06-negative-tests','m06-verify',
         'm07-public','m07r2-public','m07r3-public','m07r4-public','m07r5-public','m07r6-public','m07-completion-public')
 
