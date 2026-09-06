@@ -39,7 +39,7 @@ jobs:
       - name: Two isolated network-disabled M12 builds
         run: |
           bundle=build/m10-history-baseline/freedos-pc88va/qa/results/m02/run-1/baseline-artifact-bundle/payload
-          make m12-build M12_CHILD_SHA=d2f2ed4e9070ab42ad15cd1df056e714ed819a86 M12_COMMAND="$bundle/freecom/COMMAND.COM" M12_COUNTRY="$bundle/fdos-country/COUNTRY.SYS"
+          make m12-build M12_CHILD_SHA=7ee01776d0acfdb08b0aee0b2b4a8446e0efbb57 M12_COMMAND="$bundle/freecom/COMMAND.COM" M12_COUNTRY="$bundle/fdos-country/COUNTRY.SYS"
           roots=(build/m12-public.*); test "${#roots[@]}" = 1
           echo "M12_BUILD_ROOT=${roots[0]}" >> "$GITHUB_ENV"
       - name: Retain public build evidence for manifest enrollment
