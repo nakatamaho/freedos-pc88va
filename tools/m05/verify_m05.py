@@ -35,6 +35,7 @@ from inspect_media import inspect_run
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "qa"))
 from current_components import CurrentComponentError, resolve_current_components
+from m09_scope import is_public_m09_path
 
 
 def validate_descendant_spec(root: Path) -> tuple[dict, dict]:
@@ -139,6 +140,8 @@ def validate_descendant_paths(paths) -> None:
                     "schema/m08-", "tests/test_m08_", "tools/m08/",
                     ".github/workflows/m08-")
     for relative in sorted(item for item in paths if item):
+        if is_public_m09_path(relative):
+            continue
         if relative not in exact and relative != "AGENTS.md" and not relative.startswith(prefixes) and not relative.startswith(m08_prefixes) and relative not in ("Makefile", "manifests/m08-components.lock.json"):
             raise ValidationError(f"path is outside M05 parent-only scope: {relative}")
 

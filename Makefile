@@ -363,6 +363,15 @@ m08-tests:
 	@PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s components/fdkernel/pc88va/tests -p 'test_m08_*.py'
 	@PYTHONDONTWRITEBYTECODE=1 python3 -m unittest tests/test_m08_media.py tests/test_m08_acceptance.py
 
+.PHONY: m09-tests m09-public-verify m09-public
+m09-tests:
+	@PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/m09 -p 'test_*.py'
+
+m09-public-verify:
+	@PYTHONDONTWRITEBYTECODE=1 python3 tools/m09/verify_m09.py
+
+m09-public: m09-tests m09-public-verify
+
 verify: verify-scaffold
 	@if test -f qa/golden/m01-baseline.json && test -d qa/results/m01/run-1 && test -d qa/results/m01/run-2; then \
 		bash tools/m01/build_baseline.sh verify; \

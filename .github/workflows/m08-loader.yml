@@ -61,6 +61,12 @@ jobs:
       - name: Run M08 public source and synthetic gates
         run: |
           git diff --check
+          if test -f manifests/m09-components.lock.json; then
+            git worktree add --detach "$RUNNER_TEMP/m08-accepted/freedos-pc88va" cfdf5841857f9633a20bdb7b6edb0c1e35275969
+            git -C "$RUNNER_TEMP/m08-accepted/freedos-pc88va" submodule update --init --recursive
+            cd "$RUNNER_TEMP/m08-accepted/freedos-pc88va"
+            bash tools/configure_component_remotes.sh
+          fi
           make m08-public-verify
           PYTHONDONTWRITEBYTECODE=1 make m08-tests
       - name: Verify no private or generated material is staged
@@ -101,6 +107,11 @@ jobs:
           make m02-bundle
           make m02-compare
           make m02-verify
+          make m03-preflight
+          make m03-clean
+          make m03-scan
+          make m03-compare
+          make m03-verify
           make m06-prepare-m05
           make m05-verify
           make m06

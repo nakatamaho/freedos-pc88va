@@ -12,6 +12,7 @@ from pathlib import Path
 
 
 M06_LOCK = Path("manifests/m08-components.lock.json")
+M09_LOCK = Path("manifests/m09-components.lock.json")
 HISTORICAL_LOCK = Path("manifests/components.lock.json")
 HISTORICAL_LOCK_SHA256 = "440e481b28c740875489a6953a246ce5370c44074053c7aad3f80e79ec40c19c"
 EXPECTED_PATHS = {
@@ -57,13 +58,18 @@ def resolve_current_components(root: Path, historical: dict[str, str]) -> dict[s
     root = root.resolve()
     if set(historical) != EXPECTED_PATHS:
         raise CurrentComponentError("historical component path set is invalid")
-    lock_path = root / M06_LOCK
+    is_m09 = (root / M09_LOCK).exists()
+    lock_path = root / (M09_LOCK if is_m09 else M06_LOCK)
     if not lock_path.exists():
         return dict(historical)
     if _sha256(root / HISTORICAL_LOCK) != HISTORICAL_LOCK_SHA256:
         raise CurrentComponentError("historical component lock identity changed")
     data = _load_canonical_json(lock_path)
-    if data.get("schema_version") != 1 or data.get("status") != "current-m08":
+    if is_m09 and _sha256(root / M06_LOCK) != "c3e736596ce63ce006ba0363682259260f30a1792e59a04e3250ac9821544f07":
+        raise CurrentComponentError("M09 changed its accepted M08 predecessor lock")
+    expected_status = "current-m09" if is_m09 else "current-m08"
+    kernel_branch = "topic/m09-pc88va-early-console-output" if is_m09 else "topic/m08-pc88va-disk-loader-handoff"
+    if data.get("schema_version") != 1 or data.get("status") != expected_status:
         raise CurrentComponentError("current component lock schema or status is invalid")
     historical_record = data.get("historical_components_lock")
     if historical_record != {"path": HISTORICAL_LOCK.as_posix(), "sha256": HISTORICAL_LOCK_SHA256}:
@@ -82,7 +88,7 @@ def resolve_current_components(root: Path, historical: dict[str, str]) -> dict[s
     for path in sorted(EXPECTED_PATHS):
         expected_name, expected_repository, expected_branch = EXPECTED_POLICY[path]
         if path == "components/fdkernel":
-            expected_branch = "topic/m08-pc88va-disk-loader-handoff"
+            expected_branch = kernel_branch
         if (
             by_path[path].get("name") != expected_name
             or by_path[path].get("repository") != expected_repository
@@ -99,15 +105,17 @@ def resolve_current_components(root: Path, historical: dict[str, str]) -> dict[s
     fdkernel = by_path["components/fdkernel"]
     archive = fdkernel.get("source_archive_sha256")
     expected_parent = historical["components/fdkernel"] if data.get("status") == "current-m06" else "69ccdd8699895722fc537d647ec490685532bdc4"
+    if is_m09:
+        expected_parent = "105d49a72ec41afe07fc1e7b080bdbd1b3026ae2"
     if (
         fdkernel.get("parent_commit") != expected_parent
-        or fdkernel.get("branch") != "topic/m08-pc88va-disk-loader-handoff"
+        or fdkernel.get("branch") != kernel_branch
         or not isinstance(archive, str)
         or HEX64.fullmatch(archive) is None
     ):
         raise CurrentComponentError("M06 fdkernel lineage or archive identity is invalid")
     result = subprocess.run(
-        ("git", "merge-base", "--is-ancestor", historical["components/fdkernel"], current["components/fdkernel"]),
+        ("git", "merge-base", "--is-ancestor", expected_parent, current["components/fdkernel"]),
         cwd=root / "components/fdkernel",
         check=False,
         stdout=subprocess.DEVNULL,

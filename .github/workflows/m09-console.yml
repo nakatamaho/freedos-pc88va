@@ -1,0 +1,75 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+name: M09 PC-88VA early console public gate
+
+on:
+  push:
+    paths:
+      - '.github/workflows/m09-console.yml'
+      - 'components/fdkernel'
+      - 'config/m09/**'
+      - 'schema/m09-*'
+      - 'qa/golden/m09/**'
+      - 'manifests/m09-components.lock.json'
+      - 'tools/m09/**'
+      - 'tools/qa/**'
+      - 'tests/m09/**'
+      - 'docs/porting/m09-*'
+      - 'Makefile'
+  pull_request:
+    paths:
+      - '.github/workflows/m09-console.yml'
+      - 'components/fdkernel'
+      - 'config/m09/**'
+      - 'schema/m09-*'
+      - 'qa/golden/m09/**'
+      - 'manifests/m09-components.lock.json'
+      - 'tools/m09/**'
+      - 'tools/qa/**'
+      - 'tests/m09/**'
+      - 'docs/porting/m09-*'
+      - 'Makefile'
+  workflow_dispatch:
+
+jobs:
+  public-console:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - name: Native ROM-free environment
+        run: |
+          test "$(uname -m)" = x86_64
+          test "$(dpkg --print-architecture)" = amd64
+          bash tools/configure_component_remotes.sh
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq nasm
+          python3 -m pip install --disable-pip-version-check -r tools/m08/requirements.txt
+          python3 -m pip install --disable-pip-version-check --require-hashes -r components/fdkernel/pc88va/tests/m08-requirements.txt
+      - name: Public source and synthetic checks
+        run: |
+          git diff --check
+          make verify-scaffold m04r1-license-verify m04-verify
+          make m09-public
+          python3 -B -m unittest discover -s components/fdkernel/pc88va/tests -p 'test_*.py'
+      - name: Reproduce accepted M01 and M02 payloads
+        run: |
+          make m01-host-portability m01-image-identity m01-preflight m01-image
+          M01_DIAGNOSTICS=1 make m01-build
+          make m01-compare m01-verify
+          make m02-preflight m02-clean m02-bundle m02-compare m02-verify
+      - name: Two clean M09 builds and golden comparison
+        run: |
+          child=$(git -C components/fdkernel rev-parse HEAD)
+          bundle=qa/results/m02/run-1/baseline-artifact-bundle/payload
+          bash tools/m09/compare_public_builds.sh "$child" "$bundle/freecom/COMMAND.COM" "$bundle/fdos-country/COUNTRY.SYS"
+          python3 tools/m09/check_generated.py
+      - name: Final public-only audit
+        run: |
+          python3 tools/m09/privacy_guard.py
+          git diff --exit-code
+          test -z "$(git -C components/fdkernel status --porcelain --untracked-files=all)"
+          test -z "$(git -C components/freecom status --porcelain --untracked-files=all)"
+          test -z "$(git -C components/country status --porcelain --untracked-files=all)"
+          echo 'ROM-free gate only; private VAEG qualification is not executed in CI.'
