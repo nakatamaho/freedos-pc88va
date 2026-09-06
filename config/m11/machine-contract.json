@@ -12,6 +12,7 @@
   "console_contract": {"path": "config/m11/console-contract.json", "sha256": "9bb203ea418b96a2e52f8d43fda80939fe489e2e756b63958b1a4c348ff4fedd"},
   "component_lock": {"path": "manifests/m11-components.lock.json", "sha256": "604bf498f1a4bfec2a15b120210aa4c608dde69e836d11c118e4a74905cc5d80"},
   "m10_handoff": {"publication_tip": "1acd1fbc0d556ec511ba71be833a1c7144eec841", "qualified_parent": "eaadb757c4c3e2a4a7d405c0e250e96c1f4c222c", "qualification_ci": 34020956366, "final_tip_ci": 34021647523},
+  "child_ci": {"repository": "nakatamaho/fdkernel", "run_id": 34028914548, "attempt": 1, "head_sha": "b08ace36670a05992d8ddaa4279727d9b17bd11e", "workflow_path": ".github/workflows/pc88va-compile.yml", "required_jobs": ["build"]},
   "private_execution_in_public_ci": false,
   "hardware_run": false,
   "publication_policy": {"docs/porting/m11-report.md": {"kind": "documentation", "fields": []}, "config/m11/machine-contract.json": {"kind": "json_fields", "fields": ["status", "parent_ci"]}},

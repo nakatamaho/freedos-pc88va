@@ -31,9 +31,14 @@ def check_ci(claim):
     run=json.loads(subprocess.check_output(['gh','api','repos/'+claim['repository']+'/actions/runs/'+str(claim['run_id'])],text=True))
     pages=json.loads(subprocess.check_output(['gh','api','--paginate','--slurp','repos/'+claim['repository']+'/actions/runs/'+str(claim['run_id'])+'/attempts/'+str(claim['attempt'])+'/jobs?per_page=100'],text=True))
     gate.verify_ci_claim({'repository':claim['repository'],'run_id':claim['run_id'],'attempt':claim['attempt'],'head_sha':claim['head_sha'],'workflow_path':claim['workflow_path'],'required_jobs':claim['required_jobs'],'manifest':{}},run,[j for p in pages for j in p['jobs']])
+def check_child_ci(claim):
+    run=json.loads(subprocess.check_output(['gh','api','repos/'+claim['repository']+'/actions/runs/'+str(claim['run_id'])],text=True))
+    pages=json.loads(subprocess.check_output(['gh','api','--paginate','--slurp','repos/'+claim['repository']+'/actions/runs/'+str(claim['run_id'])+'/attempts/'+str(claim['attempt'])+'/jobs?per_page=100'],text=True))
+    gate.verify_ci_claim({'repository':claim['repository'],'run_id':claim['run_id'],'attempt':claim['attempt'],'head_sha':claim['head_sha'],'workflow_path':claim['workflow_path'],'required_jobs':claim['required_jobs'],'manifest':{}},run,[j for p in pages for j in p['jobs']])
 def content(root=ROOT):
     mc=read(root/'config/m11/machine-contract.json'); gate.validate_instance(schema(root,'machine-contract'),mc)
     gate.require(mc['start_sha']==START and mc['child_commit']==CHILD and mc['vaeg_commit']==VAEG,'M11_IDENTITY_DRIFT')
+    check_child_ci(mc['child_ci'])
     cc=read(root/'config/m11/console-contract.json'); gate.validate_instance(schema(root,'console-contract'),cc)
     lock=read(root/'manifests/m11-components.lock.json'); gate.validate_instance(schema(root,'components'),lock)
     gate.require(lock['components'][0]['commit']==CHILD and lock['components'][1]['commit']==FREECOM and lock['components'][2]['commit']==COUNTRY,'COMPONENT_LOCK_DRIFT')
