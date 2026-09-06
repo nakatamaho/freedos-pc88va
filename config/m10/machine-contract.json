@@ -65,7 +65,18 @@
     }
   ],
   "milestone": "M10",
-  "parent_ci": null,
+  "parent_ci": {
+    "repository": "nakatamaho/freedos-pc88va",
+    "run_id": 34020956366,
+    "attempt": 1,
+    "head_sha": "eaadb757c4c3e2a4a7d405c0e250e96c1f4c222c",
+    "workflow_path": ".github/workflows/m10-machine-services.yml",
+    "required_jobs": ["public-machine-services", "historical-regression"],
+    "manifest": {
+      "path": "qa/golden/m10/manifest.json",
+      "sha256": "5ec22d0dd8bb700e2ecf46a0b5d166ae479717d3fe99d35b16e217a3e9e21046"
+    }
+  },
   "pins": [
     {
       "path": "manifests/components.lock.json",
@@ -100,6 +111,6 @@
   },
   "schema_version": 1,
   "start_sha": "6b29d4f9b2b732ced9bc25a9b33b453877cbd7f0",
-  "status": "qualification_complete_ci_pending",
+  "status": "accepted",
   "vaeg_commit": "7463f9501d84701f50f3243d5067b6a9dfd0c2e7"
 }
