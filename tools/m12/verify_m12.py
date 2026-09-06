@@ -54,10 +54,9 @@ def git(path, *args):
 
 def check_ci(claim):
     require(claim["repository"] == "nakatamaho/fdkernel", "child CI repository drift")
-    run = json.loads(subprocess.check_output(["gh", "api", f"repos/{claim['repository']}/actions/runs/{claim['run_id']}"], text=True))
-    pages = json.loads(subprocess.check_output(["gh", "api", "--paginate", "--slurp", f"repos/{claim['repository']}/actions/runs/{claim['run_id']}/attempts/{claim['attempt']}/jobs?per_page=100"], text=True))
-    require(run.get("head_sha") == claim["head_sha"] and run.get("conclusion") == "success" and run.get("run_attempt") == claim["attempt"], "child CI identity or conclusion drift")
-    jobs = {j["name"]: j.get("conclusion") for p in pages for j in p["jobs"]}
+    run = json.loads(subprocess.check_output(["gh", "run", "view", str(claim["run_id"]), "--repo", claim["repository"], "--json", "headSha,conclusion,attempt,jobs"], text=True))
+    require(run.get("headSha") == claim["head_sha"] and run.get("conclusion") == "success" and run.get("attempt") == claim["attempt"], "child CI identity or conclusion drift")
+    jobs = {j["name"]: j.get("conclusion") for j in run.get("jobs", [])}
     require(all(jobs.get(name) == "success" for name in claim["required_jobs"]), "child required job failure")
 
 

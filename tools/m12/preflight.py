@@ -34,11 +34,10 @@ def main():
     qual = show("qa/golden/m11/qualification.json")
     if qual["child_commit"] != M11_CHILD or not qual["actual_schema_instances_valid"]:
         raise SystemExit("M12_PREFLIGHT_M11_QUALIFICATION_DRIFT")
-    run = json.loads(subprocess.check_output(["gh", "api", f"repos/nakatamaho/freedos-pc88va/actions/runs/{M11_FINAL_CI}"], text=True))
-    if run.get("head_sha") != START or run.get("conclusion") != "success" or run.get("run_attempt") != 1:
+    run = json.loads(subprocess.check_output(["gh", "run", "view", str(M11_FINAL_CI), "--repo", "nakatamaho/freedos-pc88va", "--json", "headSha,conclusion,attempt,jobs"], text=True))
+    if run.get("headSha") != START or run.get("conclusion") != "success" or run.get("attempt") != 1:
         raise SystemExit("M12_PREFLIGHT_M11_FINAL_CI_DRIFT")
-    jobs = json.loads(subprocess.check_output(["gh", "api", "--paginate", "--slurp", f"repos/nakatamaho/freedos-pc88va/actions/runs/{M11_FINAL_CI}/attempts/1/jobs?per_page=100"], text=True))
-    names = {j["name"]: j.get("conclusion") for page in jobs for j in page["jobs"]}
+    names = {j["name"]: j.get("conclusion") for j in run.get("jobs", [])}
     if any(names.get(job) != "success" for job in JOBS):
         raise SystemExit("M12_PREFLIGHT_M11_REQUIRED_JOB_FAILURE")
     if subprocess.call(["git", "-C", str(ROOT), "merge-base", "--is-ancestor", START, "HEAD"]) != 0:
