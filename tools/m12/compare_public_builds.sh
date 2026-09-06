@@ -5,8 +5,8 @@ set -euo pipefail
 root=$(git rev-parse --show-toplevel); cd "$root"
 test "$#" = 3 || { echo 'usage: compare_public_builds.sh CHILD_SHA COMMAND.COM COUNTRY.SYS' >&2; exit 2; }
 child=$1; [[ "$child" =~ ^[0-9a-f]{40}$ ]]
-test "$(git -C components/fdkernel rev-parse "$child^{commit}")" = "$child"
-test -f "$2" -a -f "$3"
+test "$(git -C components/fdkernel rev-parse "$child^{commit}")" = "$child" || { echo "M12 child checkout does not contain $child" >&2; exit 2; }
+test -f "$2" -a -f "$3" || { echo "M12 payload inputs are missing" >&2; exit 2; }
 mkdir -p build
 result=$(mktemp -d "$root/build/m12-public.XXXXXX")
 image=${M12_BUILD_IMAGE:-${M10_BUILD_IMAGE:-freedos-pc88va-m01:local}}
