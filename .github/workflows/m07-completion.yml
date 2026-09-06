@@ -87,7 +87,19 @@ jobs:
           PYTHONDONTWRITEBYTECODE=1 \
             python3 -m unittest discover -s components/fdkernel/pc88va/tests -p 'test_*.py'
 
+      - name: Select immutable historical contract checkout
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq nasm
+          if test -f manifests/m08-components.lock.json; then
+            git worktree add --detach "$RUNNER_TEMP/freedos-pc88va" f0edeaa35126cf6d027adac0316df5056f7b1ddb
+            git -C "$RUNNER_TEMP/freedos-pc88va" submodule update --init --recursive
+            (cd "$RUNNER_TEMP/freedos-pc88va" && bash tools/configure_component_remotes.sh)
+            echo "HISTORICAL_ROOT=$RUNNER_TEMP/freedos-pc88va" >> "$GITHUB_ENV"
+          fi
+
       - name: Rebuild historical M01 and M02 prerequisites
+        working-directory: ${{ env.HISTORICAL_ROOT || github.workspace }}
         run: |
           make m01-host-portability
           make m01-image-identity
@@ -105,12 +117,14 @@ jobs:
           make m02-verify
 
       - name: Regenerate immutable M05 and M06 prerequisites
+        working-directory: ${{ env.HISTORICAL_ROOT || github.workspace }}
         run: |
           make m06-prepare-m05
           make m05-verify
           make m06
 
       - name: Run all public M07 gates
+        working-directory: ${{ env.HISTORICAL_ROOT || github.workspace }}
         run: |
           make m07-public
           make m07r2-public
