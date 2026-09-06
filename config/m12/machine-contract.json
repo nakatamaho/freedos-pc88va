@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "milestone": "M12",
+  "status": "in_progress",
+  "start_sha": "c5ddf7c87cac46d357cfe75d132a819c7cf3fbe4",
+  "qualified_implementation_sha": null,
+  "child_commit": "7bf08395eafd3458e43a7a424114541162bc1ab7",
+  "vaeg_commit": "7dd453cbd36014ba453a26765b00cd0cc9a99655",
+  "artifact_manifest": {"path": "qa/golden/m12/manifest.json", "sha256": "6d1518062e0e6d5bbf82f2f63fee729c8d6ee794990743721c8defef21ec2052"},
+  "qualification": {"path": "qa/golden/m12/qualification.json", "sha256": "6407df064d891907fc8a69e537673e1235f2187a06385f49c4abe8c3a332d9ec"},
+  "component_lock": {"path": "manifests/m12-components.lock.json", "sha256": "fc58d52c9002bb61c24c8b2eab56310e0f03bc8918330b112c4288b8a6e973e8"},
+  "acceptance_verifier": "tools/m12/verify_m12.py",
+  "child_ci": {"repository": "nakatamaho/fdkernel", "run_id": 34064059704, "attempt": 1, "head_sha": "7bf08395eafd3458e43a7a424114541162bc1ab7", "workflow_path": ".github/workflows/ci-build.yml", "required_jobs": ["build"]},
+  "parent_ci": null,
+  "publication_policy": {"tracked_report": "documentation", "metadata": "config/m12/machine-contract.json"}
+}

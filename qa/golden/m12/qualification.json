@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "status": "M12 PRIVATE VAEG QUALIFICATION PENDING",
+  "child_commit": "7bf08395eafd3458e43a7a424114541162bc1ab7",
+  "vaeg_commit": "7dd453cbd36014ba453a26765b00cd0cc9a99655",
+  "artifact_manifest": {
+    "path": "qa/golden/m12/manifest.json",
+    "sha256": "6d1518062e0e6d5bbf82f2f63fee729c8d6ee794990743721c8defef21ec2052"
+  },
+  "main_runs": [
+    {
+      "boundaries": [
+        "R0",
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "R7",
+        "R8",
+        "R9"
+      ],
+      "projection_equal": false,
+      "inputs_preserved": false,
+      "exact_sector_bytes": false,
+      "no_write_commands": false
+    },
+    {
+      "boundaries": [
+        "R0",
+        "R1",
+        "R2",
+        "R3",
+        "R4",
+        "R5",
+        "R6",
+        "R7",
+        "R8",
+        "R9"
+      ],
+      "projection_equal": false,
+      "inputs_preserved": false,
+      "exact_sector_bytes": false,
+      "no_write_commands": false
+    }
+  ],
+  "error_runs": [
+    {
+      "boundaries": [
+        "E0",
+        "E1",
+        "E2",
+        "E3",
+        "E4"
+      ],
+      "projection_equal": false,
+      "inputs_preserved": false,
+      "exact_sector_bytes": false,
+      "no_write_commands": false
+    },
+    {
+      "boundaries": [
+        "E0",
+        "E1",
+        "E2",
+        "E3",
+        "E4"
+      ],
+      "projection_equal": false,
+      "inputs_preserved": false,
+      "exact_sector_bytes": false,
+      "no_write_commands": false
+    }
+  ],
+  "two_main_runs_equal": false,
+  "two_error_runs_equal": false,
+  "actual_schema_instances_valid": false,
+  "production_memory_trace": false,
+  "private_execution_in_public_ci": false,
+  "hardware_run": false,
+  "evidence_retention": "persistent_ignored",
+  "writes_attempted": false
+}

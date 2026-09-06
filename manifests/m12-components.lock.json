@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "status": "current-m12",
+  "components": [
+    {"name": "fdkernel", "path": "components/fdkernel", "commit": "7bf08395eafd3458e43a7a424114541162bc1ab7", "branch": "topic/m12-pc88va-kernel-floppy-readonly", "repository": "https://github.com/nakatamaho/fdkernel.git", "role": "PC-88VA resident kernel service", "source_archive_sha256": "6208f582134ae9be3c9430184aa9cc4d02c3d130942948a178b8f858cbc0c6b1"},
+    {"name": "freecom", "path": "components/freecom", "commit": "855281a3114b43ad4b8d9a320f2aca39be046bba", "branch": "deterministic-build-timestamp", "repository": "https://github.com/nakatamaho/freecom_dbcs2.git", "role": "Unchanged accepted FreeCOM component", "source_archive_sha256": null},
+    {"name": "country", "path": "components/country", "commit": "23f189cca3420606eae8723884fa92ccd65eb307", "branch": "master", "repository": "https://github.com/FDOS/country.git", "role": "Unchanged accepted COUNTRY.SYS component", "source_archive_sha256": null}
+  ]
+}

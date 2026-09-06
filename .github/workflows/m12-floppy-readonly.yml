@@ -1,0 +1,67 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+name: M12 PC-88VA resident read-only floppy service
+
+on:
+  push:
+    branches: ['topic/m12-pc88va-kernel-floppy-readonly']
+  pull_request:
+    paths: ['tools/m12/**', 'config/m12/**', 'schema/m12-*', 'qa/golden/m12/**', 'tests/m12/**', 'tools/m10/**', 'tools/m05/**', 'tools/qa/**', 'components/fdkernel', 'Makefile', '.github/workflows/m12-floppy-readonly.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  public-resident-floppy:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with: {submodules: recursive, fetch-depth: 0}
+      - name: Native x64 public environment
+        run: |
+          test "$(uname -m)" = x86_64
+          test "$(dpkg --print-architecture)" = amd64
+          bash tools/configure_component_remotes.sh
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq nasm
+          python3 -m pip install --disable-pip-version-check -r tools/m08/requirements.txt
+          python3 -m pip install --disable-pip-version-check --require-hashes -r components/fdkernel/pc88va/tests/m08-requirements.txt
+      - name: Verify exact M11 handoff and reproduce pinned public baseline
+        run: |
+          make m12-preflight
+          python3 -B tools/m10/historical.py
+      - name: Two isolated network-disabled M12 builds
+        run: |
+          bundle=build/m10-history-baseline/freedos-pc88va/qa/results/m02/run-1/baseline-artifact-bundle/payload
+          make m12-build M12_CHILD_SHA=7bf08395eafd3458e43a7a424114541162bc1ab7 M12_COMMAND="$bundle/freecom/COMMAND.COM" M12_COUNTRY="$bundle/fdos-country/COUNTRY.SYS"
+          roots=(build/m12-public.*); test "${#roots[@]}" = 1
+          echo "M12_BUILD_ROOT=${roots[0]}" >> "$GITHUB_ENV"
+      - name: Retain public build evidence for manifest enrollment
+        uses: actions/upload-artifact@65462800fd760344b1a7b4382951275a0abb4808
+        with:
+          name: m12-public-build-${{ github.sha }}
+          path: build/m12-public.*
+          if-no-files-found: error
+      - name: Shared M12 public verifier
+        run: |
+          make m12-accept M12_BUILD_ROOT="$M12_BUILD_ROOT"
+          git diff --exit-code
+          test -z "$(git status --porcelain --untracked-files=all)"
+  historical-regression:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with: {submodules: recursive, fetch-depth: 0}
+      - name: Immutable M08-M11 regression
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq nasm
+          python3 -m pip install --disable-pip-version-check -r tools/m08/requirements.txt
+          python3 -B tools/m10/historical.py --loader-console-only
+          python3 -B -m unittest discover -s tests/m12 -p 'test_*.py'

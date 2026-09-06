@@ -3,7 +3,7 @@
 .PHONY: help submodules component-status verify-scaffold m01-host-portability m01-image-identity m01-preflight m01-image m01-build m01-compare m01-enroll-golden m01-verify m01-clean m02-preflight m02-clean m02-bundle m02-compare m02-verify m02-enroll-golden m02 m03-preflight m03-clean m03-scan m03-compare m03-enroll-golden m03-verify m03 m04-preflight m04-private-evidence m04-verify m04 m04r1-license-verify m05-preflight m05-clean m05-build m05-compare m05-enroll-golden m05-negative-tests m05-verify m05 m06-preflight m06-prepare-m05 m06-clean m06-build m06-nec98-regression m06-media m06-compare m06-enroll-golden m06-negative-tests m06-verify m06 m07-preflight m07-clean m07-probe m07-variants m07-public-tests m07-public-verify m07-enroll-golden m07-redact m07-public m07r2-tests m07r2-verify m07r2-private-evidence m07r2-public m07r3-tests m07r3-verify m07r3-public m07r4-tests m07r4-verify m07r4-public m07r5-tests m07r5-verify m07r5-public m07r6-tests m07r6-verify m07r6-public m07-completion-tests m07-completion-verify m07-completion-public verify
 
 M10_PYTHON ?= python3
-.PHONY: m10-preflight m10-tests m10-build m10-compare m10-media m10-private-run m10-verify m10-accept m10 m11-preflight m11-build m11-compare m11-verify m11-accept m11
+.PHONY: m10-preflight m10-tests m10-build m10-compare m10-media m10-private-run m10-verify m10-accept m10 m11-preflight m11-build m11-compare m11-verify m11-accept m11 m12-preflight m12-build m12-compare m12-verify m12-accept m12
 m10-preflight:
 	@$(M10_PYTHON) -B tools/m10/preflight.py $(if $(M10_ACCEPTED_ROOT),--accepted-root "$(M10_ACCEPTED_ROOT)")
 
@@ -56,6 +56,25 @@ m11-accept:
 	@$(M11_PYTHON) -B tools/m11/verify_m11.py --accept --build-root "$(M11_BUILD_ROOT)"
 m11: m11-accept
 
+M12_PYTHON ?= python3
+M12_CHILD_SHA ?= 7bf08395eafd3458e43a7a424114541162bc1ab7
+M12_COMMAND ?= $(CURDIR)/build/payload/COMMAND.COM
+M12_COUNTRY ?= $(CURDIR)/build/payload/COUNTRY.SYS
+M12_BUILD_ROOT ?=
+m12-preflight:
+	@$(M12_PYTHON) -B tools/m12/preflight.py
+	@$(M12_PYTHON) -B tools/m12/verify_m12.py
+m12-build:
+	@test -f "$(M12_COMMAND)" -a -f "$(M12_COUNTRY)" || { echo 'M12_COMMAND and M12_COUNTRY are required'; exit 2; }
+	@bash tools/m12/compare_public_builds.sh "$(M12_CHILD_SHA)" "$(M12_COMMAND)" "$(M12_COUNTRY)"
+m12-compare:
+	@test -n "$(M12_BUILD_ROOT)" || { echo 'M12_BUILD_ROOT is required'; exit 2; }
+	@$(M12_PYTHON) -B tools/m12/verify_m12.py --build-root "$(M12_BUILD_ROOT)"
+m12-verify:
+	@$(M12_PYTHON) -B tools/m12/verify_m12.py
+m12-accept: m12-compare m12-verify
+m12: m12-accept
+
 help:
 	@printf '%s\n' \
 		'Available targets:' \
@@ -71,6 +90,11 @@ help:
 		'  m11-compare       Validate actual M11 build records and artifacts' \
 		'  m11-verify        Validate M11 schemas, bindings and component identities' \
 		'  m11-accept        Run the enforced M11 public acceptance gate' \
+		'  m12-preflight     Verify the exact M11 handoff and M12 source identities' \
+		'  m12-build         Build two isolated M12 source exports and fixture media' \
+		'  m12-compare       Validate the M12 build pair against its manifest' \
+		'  m12-verify        Validate M12 schemas, bindings and resident source' \
+		'  m12-accept        Run the enforced M12 public acceptance gate' \
 		'  help              Show this help' \
 		'  submodules        Initialize/update locked submodules' \
 		'  component-status  Show submodule status' \
