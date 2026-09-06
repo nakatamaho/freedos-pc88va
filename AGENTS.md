@@ -48,3 +48,44 @@ private-derived facts. Do not report skipped VAEG or hardware work as a pass.
 The exact evidence labels remain `HOST PASS`, `VAEG PASS`, `HARDWARE PASS`, and
 `DEFERRED HARDWARE VALIDATION`; M01 can use only `HOST PASS` after its local
 gates and native x64 GitHub Actions gate pass. VAEG and hardware are `NOT RUN`.
+
+## Milestone acceptance and handoff
+
+Keep START_SHA, QUALIFIED_IMPLEMENTATION_SHA, PUBLICATION_TIP_SHA, and
+DOWNSTREAM_BASE_SHA distinct, as full 40-hex identities. Before implementation,
+fetch the named predecessor branch, verify its exact required tip and ancestry,
+inspect its bounded publication diff, verify exact clean component gitlinks,
+validate actual prerequisite evidence and bindings, and check required CI run
+attempts, successful jobs, and exact tested head SHAs. Never substitute a pin.
+An explicit owner-authorized fresh private prerequisite may replace an
+unavailable historical private bundle; never call that historical recovery or
+change the predecessor's public acceptance state merely because its private
+bundle is unavailable.
+
+A digest establishes identity, not semantic validity. Validate schemas as
+schemas and actual JSON instances against them, close referenced evidence and
+artifact dependencies, and test missing/unknown fields, malformed hashes,
+digest drift, incomplete references, topology, and stale CI claims negatively.
+Rebind changed evidence in dependency order: schema, manifest, golden,
+qualification, contract, verifier pins, acceptance metadata. Do not hide drift.
+
+Provide preflight, clean build, two-build comparison, instance validation,
+negative tests, historical regression, privacy audit, and final acceptance
+operations. Local and native CI must call the same acceptance verifier.
+Use focused child commits, push and verify child reachability before updating
+the parent gitlink. Keep exact source and toolchain provenance.
+
+PASS and HANDOFF READY are separate. Qualify the implementation and its CI,
+then publish only acceptance metadata, the report, non-behavioral documentation,
+or Make help. Any behavioral/source/schema/contract/golden/verifier/workflow or
+gitlink change requires affected qualification gates and CI again. Verify the
+publication tip's own CI, remote equality, ancestry, and bounded publication
+diff before handoff. A committed report cannot contain its own SHA: record
+the exact final publication tip and downstream base in the post-push handoff.
+
+Every milestone outcome, including partial or blocked, requires a saved
+docs/porting/mNN-report.md with status, relevant commits, verification,
+unresolved work, and explicitly unrun gates. Retain canonical private evidence
+in persistent Git-excluded storage. Never publish private inputs, identities,
+paths, raw traces, or concrete derived values. Unrun hardware is NOT RUN.
+Fix recoverable harness, build, portability, and CI defects within the task.

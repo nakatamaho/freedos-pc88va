@@ -13,6 +13,7 @@ from pathlib import Path
 
 M06_LOCK = Path("manifests/m08-components.lock.json")
 M09_LOCK = Path("manifests/m09-components.lock.json")
+M10_LOCK = Path("manifests/m10-components.lock.json")
 HISTORICAL_LOCK = Path("manifests/components.lock.json")
 HISTORICAL_LOCK_SHA256 = "440e481b28c740875489a6953a246ce5370c44074053c7aad3f80e79ec40c19c"
 EXPECTED_PATHS = {
@@ -59,7 +60,8 @@ def resolve_current_components(root: Path, historical: dict[str, str]) -> dict[s
     if set(historical) != EXPECTED_PATHS:
         raise CurrentComponentError("historical component path set is invalid")
     is_m09 = (root / M09_LOCK).exists()
-    lock_path = root / (M09_LOCK if is_m09 else M06_LOCK)
+    is_m10 = (root / M10_LOCK).exists()
+    lock_path = root / (M10_LOCK if is_m10 else M09_LOCK if is_m09 else M06_LOCK)
     if not lock_path.exists():
         return dict(historical)
     if _sha256(root / HISTORICAL_LOCK) != HISTORICAL_LOCK_SHA256:
@@ -67,8 +69,13 @@ def resolve_current_components(root: Path, historical: dict[str, str]) -> dict[s
     data = _load_canonical_json(lock_path)
     if is_m09 and _sha256(root / M06_LOCK) != "c3e736596ce63ce006ba0363682259260f30a1792e59a04e3250ac9821544f07":
         raise CurrentComponentError("M09 changed its accepted M08 predecessor lock")
+    if is_m10 and _sha256(root / M09_LOCK) != "9f6fc653d22655ff797d722237994f1251b93306d3fbc4f0a145baaec565fa58":
+        raise CurrentComponentError("M10 changed its accepted M09 predecessor lock")
     expected_status = "current-m09" if is_m09 else "current-m08"
     kernel_branch = "topic/m09-pc88va-early-console-output" if is_m09 else "topic/m08-pc88va-disk-loader-handoff"
+    if is_m10:
+        expected_status = "current-m10"
+        kernel_branch = "topic/m10-pc88va-machine-services-init"
     if data.get("schema_version") != 1 or data.get("status") != expected_status:
         raise CurrentComponentError("current component lock schema or status is invalid")
     historical_record = data.get("historical_components_lock")
@@ -107,6 +114,8 @@ def resolve_current_components(root: Path, historical: dict[str, str]) -> dict[s
     expected_parent = historical["components/fdkernel"] if data.get("status") == "current-m06" else "69ccdd8699895722fc537d647ec490685532bdc4"
     if is_m09:
         expected_parent = "105d49a72ec41afe07fc1e7b080bdbd1b3026ae2"
+    if is_m10:
+        expected_parent = "ef46a7ad4b381cf7a301899bee00fec99f5e37a7"
     if (
         fdkernel.get("parent_commit") != expected_parent
         or fdkernel.get("branch") != kernel_branch
