@@ -3,7 +3,7 @@
   "milestone": "M11",
   "status": "accepted",
   "start_sha": "1acd1fbc0d556ec511ba71be833a1c7144eec841",
-  "qualified_implementation_sha": "46252bd514d26ddec06a7402f26591d6c6818919",
+  "qualified_implementation_sha": "c574a54d21bead23deeb907b03e3086a06565bcf",
   "vaeg_commit": "7dd453cbd36014ba453a26765b00cd0cc9a99655",
   "child_commit": "b08ace36670a05992d8ddaa4279727d9b17bd11e",
   "acceptance_verifier": "tools/m11/verify_m11.py",
@@ -16,5 +16,5 @@
   "private_execution_in_public_ci": false,
   "hardware_run": false,
   "publication_policy": {"docs/porting/m11-report.md": {"kind": "documentation", "fields": []}, "config/m11/machine-contract.json": {"kind": "json_fields", "fields": ["status", "qualified_implementation_sha", "parent_ci"]}},
-  "parent_ci": {"repository": "nakatamaho/freedos-pc88va", "run_id": 34030038333, "attempt": 1, "head_sha": "46252bd514d26ddec06a7402f26591d6c6818919", "workflow_path": ".github/workflows/m11-console-input.yml", "required_jobs": ["public-console-input", "historical-regression"]}
+  "parent_ci": {"repository": "nakatamaho/freedos-pc88va", "run_id": 34030563949, "attempt": 1, "head_sha": "c574a54d21bead23deeb907b03e3086a06565bcf", "workflow_path": ".github/workflows/m11-console-input.yml", "required_jobs": ["public-console-input", "historical-regression"]}
 }

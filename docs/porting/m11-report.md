@@ -11,8 +11,8 @@ M12 is NOT STARTED.
 - M10 qualification CI [34020956366](https://github.com/nakatamaho/freedos-pc88va/actions/runs/34020956366) and final-tip CI [34021647523](https://github.com/nakatamaho/freedos-pc88va/actions/runs/34021647523), attempt 1, exact heads and required jobs successful.
 - fdkernel M11 child: `b08ace36670a05992d8ddaa4279727d9b17bd11e`, FreeCOM unchanged at `855281a3114b43ad4b8d9a320f2aca39be046bba`, Country unchanged at `23f189cca3420606eae8723884fa92ccd65eb307`.
 - VAEG M11 observer: `7dd453cbd36014ba453a26765b00cd0cc9a99655`, exact workflow [34027160366](https://github.com/nakatamaho/vaeg/actions/runs/34027160366), attempt 1, all required jobs successful.
-- QUALIFIED_IMPLEMENTATION_SHA: `46252bd514d26ddec06a7402f26591d6c6818919`.
-- Native CI [34030038333](https://github.com/nakatamaho/freedos-pc88va/actions/runs/34030038333), attempt 1, exact qualified head, with public-console-input and historical-regression successful.
+- QUALIFIED_IMPLEMENTATION_SHA: `c574a54d21bead23deeb907b03e3086a06565bcf`.
+- Native CI [34030563949](https://github.com/nakatamaho/freedos-pc88va/actions/runs/34030563949), attempt 1, exact qualified head, with public-console-input and historical-regression successful.
 
 The M10 public handoff, actual schemas and instances, artifact bindings,
 component cleanliness and bounded publication diff were reverified before
@@ -64,7 +64,7 @@ verifier remain required; no hardware result is claimed.
 
 ## Handoff state
 
-The implementation is qualified at `46252bd514d26ddec06a7402f26591d6c6818919`.
+The implementation is qualified at `c574a54d21bead23deeb907b03e3086a06565bcf`.
 The documentation-only publication commit and exact final-tip CI remain before
 HANDOFF READY.
 Until those steps establish remote equality, ancestry, bounded publication
