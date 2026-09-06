@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # SPDX-License-Identifier: GPL-2.0-or-later
 # Two clean, network-disabled M12 builds using the accepted M01 container.
-set -euo pipefail
+set -euxo pipefail
 root=$(git rev-parse --show-toplevel); cd "$root"
 echo "M12 public build inputs: argc=$# child=$1 command=$2 country=$3" >&2
 test "$#" = 3 || { echo 'usage: compare_public_builds.sh CHILD_SHA COMMAND.COM COUNTRY.SYS' >&2; exit 2; }
