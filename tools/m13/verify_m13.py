@@ -7,7 +7,7 @@ from jsonschema import Draft202012Validator
 
 ROOT = Path(__file__).resolve().parents[2]
 START = "66138e6539e4220ae7b6d3ffee24581e0d674267"
-CHILD = "33da21f248fa7af25f9dd17a7a981c34f8ebec37"
+CHILD = "326c5481da09eafa9d1503e95c1339732bec20f5"
 VAEG = "7dd453cbd36014ba453a26765b00cd0cc9a99655"
 FREECOM = "855281a3114b43ad4b8d9a320f2aca39be046bba"
 COUNTRY = "23f189cca3420606eae8723884fa92ccd65eb307"

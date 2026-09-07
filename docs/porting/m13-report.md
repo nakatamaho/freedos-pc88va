@@ -13,7 +13,7 @@ be committed merely to record its own future SHA.
   `66138e6539e4220ae7b6d3ffee24581e0d674267`.
 - M12 qualified implementation:
   `9b508a80eb3c4d33e1bb683f7963ae350067fd14`.
-- fdkernel M13 child: `33da21f248fa7af25f9dd17a7a981c34f8ebec37`.
+- fdkernel M13 child: `326c5481da09eafa9d1503e95c1339732bec20f5`.
 - FreeCOM: `855281a3114b43ad4b8d9a320f2aca39be046bba`.
 - Country: `23f189cca3420606eae8723884fa92ccd65eb307`.
 - VAEG baseline: `7dd453cbd36014ba453a26765b00cd0cc9a99655`.
@@ -37,8 +37,15 @@ only public source/metadata and contain no private firmware values.
 - M12 publication, component pins, artifact/schema instances and exact parent
   CI runs 34068685333 and 34069044160 were revalidated before mutation.
 - Common and adapter NASM objects assemble with `PC88VA` and no IBMPC/NEC98
-  selector. Child CI run 34072626987 attempt 1 succeeded at the exact child
-  SHA with `build` success.
+  selector. Child CI run 34077732724 attempt 1 succeeded at exact child SHA
+  `326c5481da09eafa9d1503e95c1339732bec20f5` with `build` success.
+- A network-disabled Open Watcom 1.9 full common-core link at this child
+  produced a deterministic DOS MZ `KERNEL.SYS` of 91,575 bytes (body 91,239
+  bytes). The retained M08 loader ABI represents the kernel file and
+  allocation capacities as single bounded word/segment intervals, whose
+  maximum validated owned extent is 65,520 bytes. The kernel therefore cannot
+  be loaded or transformed through the accepted M08 path without an explicit
+  multi-segment loader/ABI change and fresh M08-M13 qualification.
 - Parent M13 public schema/instance, deterministic two-build, historical
   regression and implementation-tip CI gates pass. Parent CI run 34073545757
   attempt 1 tested implementation tip
@@ -49,13 +56,15 @@ only public source/metadata and contain no private firmware values.
 
 ## Explicitly not run / not claimed
 
-No private VAEG M13 session has been run. The pinned VAEG commit
-`7dd453cbd36014ba453a26765b00cd0cc9a99655` is unavailable in the retained
-VAEG checkout and configured remote; the checkout is on another topic. This is
-the first unresolved acceptance boundary and cannot be repaired by inventing
-records or substituting a moving VAEG build. Consequently S0-S9 and E0-E4,
-real FreeCOM startup, DIR/TYPE, COM/MZ execution, allocator recovery,
-alternate-fixture behavior and backend-fault recovery are not claimed.
+No private VAEG M13 session has been run. The pinned VAEG checkout at
+`7dd453cbd36014ba453a26765b00cd0cc9a99655` is available and builds, but the
+accepted M08 loader cannot accept the 91,575-byte common kernel: its validated
+single owned interval is capped at 65,520 bytes and its MZ/file records are
+bounded words. Running VAEG would therefore stop before kernel entry and would
+not establish S0-S9/E0-E4. Real FreeCOM startup, DIR/TYPE, COM/MZ execution,
+allocator recovery, alternate-fixture behavior and backend-fault recovery are
+not claimed. The required loader/ABI extension is a specification and
+qualification boundary, not a safe documentation-only repair.
 `M13 HANDOFF READY` and `DOWNSTREAM_BASE_SHA` are not established. Hardware
 was not run. Writable DOS, Japanese/NLS, ANSI, HDD, TSR, networking and broad
 DOS compatibility remain outside M13.
