@@ -13,7 +13,7 @@
   "m12_qualification_sha256": "7096190b41614dc207de32759e19ce93dbceb9efdc610b79142648f553af7ff6",
   "m12_component_lock_sha256": "62392e64c4ad36282dd530e3012773c5d17b9ee86947746bd34c92948e525570",
   "artifact_manifest": {"path": "qa/golden/m13/manifest.json", "sha256": "fa9f279b00e8921ee4fb689989e39003883c32a19a2485ad782cd19c2cf97960"},
-  "qualification": {"path": "qa/golden/m13/qualification.json", "sha256": "10818359b1146e1016e1ad827964a30b502765fb99163327db559322ddbc4705"},
+  "qualification": {"path": "qa/golden/m13/qualification.json", "sha256": "cdb171c013935faeba574cc6bcf4353bc702fb21bd6c1ac5db239959a22c41c1"},
   "component_lock": {"path": "manifests/m13-components.lock.json", "sha256": "dea306955d1afdcfb691be9c88a0715a0ffcccd503599079c779c739f91414b0"},
   "build_variant": "Open Watcom 1.9 PC-88VA common FreeDOS core with ASCII FreeCOM",
   "volume": {"sector_bytes": 1024, "sectors_track": 8, "heads": 2, "total_sectors": 1280, "filesystem": "FAT12", "read_only": true},
