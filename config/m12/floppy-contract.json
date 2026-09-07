@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "milestone": "M12",
-  "status": "in_progress",
+  "status": "qualified",
   "start_sha": "c5ddf7c87cac46d357cfe75d132a819c7cf3fbe4",
   "qualified_implementation_sha": null,
   "child_commit": "21d9f3450276d42e5fedd1ddb9e80485b888cc07",

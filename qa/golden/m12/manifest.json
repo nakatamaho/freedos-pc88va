@@ -8,10 +8,10 @@
   "artifacts": {
     "loader_stage1": {"size": 1024, "sha256": "20efd8a66dde7feac3f48df4bd6e8c4564d70e80a5a8871a8293e735c1585f24"},
     "loader_stage2": {"size": 4304, "sha256": "db324cbdae11fd1e6085a7957ef171ccf9d6a9be6ea05f3df0eedf83d8f594f7"},
-    "kernel_sys": {"format": "dos-mz", "size": 9032, "sha256": "3e45218b1ad87856cd7491edc436b4a26fa537440ce458cd3daa76830b88c76e", "compile_manifest_sha256": "2beab187c6cc33666ecce4d480e4e9d527b25c8ec884faeabd519e4b0cb6c2cd", "kernel_interface_sha256": "e7033fa3b341b3eff8e16d4f3f058943116c79b7b3a2737e5da34039933812af", "symbol_evidence_sha256": "c11804bd940f60cfecad6f9a1dd1f4bdb77bdb000023f687f7ee8715fa7fdcb3"},
-    "raw_media": {"size": 1310720, "sha256": "230772c2dee8308a5a0263c33917894076e880c5465f7ad445735ca1bfb3558a"},
-    "d88_media": {"size": 1331888, "sha256": "08e403def6d1999e751fe9347451faa6d67436889e9a4e3a121b5d64aed0d647"},
-    "extracted_kernel_sys": {"size": 9032, "sha256": "3e45218b1ad87856cd7491edc436b4a26fa537440ce458cd3daa76830b88c76e"},
+    "kernel_sys": {"format": "dos-mz", "size": 13980, "sha256": "611b1ee53268a6b7e3137396445211e41e3d0ddb3b60eff8500d8849e2ab0cd9", "compile_manifest_sha256": "c7c0e4e51624352620d08aa3b234151fb9215c1020e2008f30b46306130bc5e9", "kernel_interface_sha256": "ffeb0c54cb83727d8938857da386c62da1d6b6652c8af1343692918b8bbbd2c1", "symbol_evidence_sha256": "c84b5f7adb8a62c0f78fb4365441a41f94bf00884911a4b747d08bbe10769d92"},
+    "raw_media": {"size": 1310720, "sha256": "e529812d3d61e330a3eaf06f29bf85d923541bc20a833d9a0e10b6bbca09833a"},
+    "d88_media": {"size": 1331888, "sha256": "41cdae3ac69393a5e25b9d0dfa3caf7d35cd459f95bb6c65040adde59d0878b9"},
+    "extracted_kernel_sys": {"size": 13980, "sha256": "611b1ee53268a6b7e3137396445211e41e3d0ddb3b60eff8500d8849e2ab0cd9"},
     "extracted_command_com": {"size": 91143, "sha256": "fabe7744cc7c51c6f72519cc39d89bf77beaf908f994675a97a1e34c93549da1"},
     "extracted_country_sys": {"size": 42614, "sha256": "04b2d2bc8df382090686f00e547d718d6706d22fb34c34dd77cd55083d5c34d5"}
   },
