@@ -1,0 +1,60 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+name: M13 PC-88VA read-only FreeDOS and FreeCOM integration
+
+on:
+  push:
+    branches: ['topic/m13-pc88va-readonly-freecom']
+  pull_request:
+    paths: ['tools/m13/**', 'config/m13/**', 'schema/m13-*', 'qa/golden/m13/**', 'manifests/m13-components.lock.json', 'tests/m13/**', 'components/fdkernel', 'Makefile', 'docs/adr/0013-*', 'docs/porting/m13-*', '.github/workflows/m13-readonly-freecom.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+  GH_TOKEN: ${{ github.token }}
+
+jobs:
+  public-readonly-freecom:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with: {submodules: recursive, fetch-depth: 0}
+      - name: Install ROM-free validation dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq nasm
+          python3 -m pip install --disable-pip-version-check jsonschema
+      - name: Verify M12 prerequisite and actual M13 schemas
+        run: |
+          make m13-preflight
+          python3 -B -m unittest discover -s tests/m13 -p 'test_*.py'
+      - name: Two clean public source and probe builds
+        run: |
+          make m13-build M13_CHILD_SHA=33da21f248fa7af25f9dd17a7a981c34f8ebec37 | tee m13-build.log
+          root=$(sed -n 's/^M13_BUILD_ROOT=//p' m13-build.log)
+          test -n "$root"
+          echo "M13_BUILD_ROOT=$root" >> "$GITHUB_ENV"
+      - name: Validate build pair and private boundary
+        run: |
+          make m13-compare M13_BUILD_ROOT="$M13_BUILD_ROOT"
+          git diff --exit-code
+          test -z "$(git status --porcelain --untracked-files=all)"
+  historical-regression:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with: {submodules: recursive, fetch-depth: 0}
+      - name: Immutable M08-M12 public regression
+        run: |
+          python3 -m pip install --disable-pip-version-check -r tools/m08/requirements.txt
+          python3 -B -m unittest discover -s tests -p 'test_m08_*.py'
+          python3 -B -m unittest discover -s tests/m09 -p 'test_*.py'
+          python3 -B -m unittest discover -s tests/m10 -p 'test_*.py'
+          python3 -B -m unittest discover -s tests/m11 -p 'test_*.py'
+          python3 -B -m unittest discover -s tests/m12 -p 'test_*.py'
+          python3 -B -m unittest discover -s tests/m13 -p 'test_*.py'
+          git diff --exit-code
