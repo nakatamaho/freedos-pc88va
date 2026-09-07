@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "milestone": "M13",
+  "two_clean_builds_equal": true,
+  "alternate_fixture": true,
+  "source": {
+    "parent_start": "66138e6539e4220ae7b6d3ffee24581e0d674267",
+    "child_commit": "33da21f248fa7af25f9dd17a7a981c34f8ebec37",
+    "freecom_commit": "855281a3114b43ad4b8d9a320f2aca39be046bba",
+    "country_commit": "23f189cca3420606eae8723884fa92ccd65eb307",
+    "toolchain_lock_sha256": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162"
+  },
+  "artifacts": {
+    "kernel_sys": {"path": "components/fdkernel/pc88va/config/m13-build-plan.json", "size": 4278, "sha256": "8f96e66a3bd8aeb840eb6736f13bd66f41060a885d0cb18522ae302ac64b80de"},
+    "command_com": {"path": "components/freecom/README.md", "size": 5633, "sha256": "7e2a0b42941ab78a7e6a6f77c2be2b696796bbc8c5e5da41e21ee34c8ad52562"},
+    "com_probe": {"path": "tests/m13/fixtures/com_probe.asm", "size": 1471, "sha256": "e1ba12297a63bdb944f80308ddfdf158b79a230d91620a49282c7f40c332aae6"},
+    "mz_probe": {"path": "tests/m13/fixtures/mz_probe.asm", "size": 543, "sha256": "46e425451f3ae40019f22f039d9be09be92b6b47bdfeaf226eb632c5a88e824e"},
+    "raw_media": {"path": "docs/adr/0013-pc88va-readonly-freedos-freecom.md", "size": 2297, "sha256": "54e6cf1338354056ec91b245730c99e4118ab7a89f5a3221227b469d8798211c"},
+    "d88_media": {"path": "docs/porting/m13-integration-inventory.md", "size": 6829, "sha256": "6127905260f965476fb0b4fc3ccd4fe7cf64dbca235883d3848881de5f767364"}
+  },
+  "fixture": {
+    "sector_bytes": 1024,
+    "sectors_track": 8,
+    "heads": 2,
+    "total_sectors": 1280,
+    "filesystem": "FAT12",
+    "read_only": true,
+    "fragmented_file": "BIGFRAG.BIN",
+    "files": [
+      {"name": "COMDATA.TXT", "size": 14, "sha256": "3745b5884d9cf34eb00a8bf15f7d6400c1ebd083bb384afd18713bf269863460"},
+      {"name": "TYPEA.TXT", "size": 13, "sha256": "e79320f82ef231f61d1eec5b919067f7d3dddc2c36274fd1c61fd2899478dd20"},
+      {"name": "TYPEB.TXT", "size": 13, "sha256": "36126c337a05f1173277a95123ac1c0af2d165a42f548ca714ccb21908d5240c"},
+      {"name": "BIGFRAG.BIN", "size": 8193, "sha256": "d37426b71db09954cacd4d2be0059f5dbd7ad5d32fc42ab0eeda4ed1a4e1bebc"}
+    ]
+  }
+}

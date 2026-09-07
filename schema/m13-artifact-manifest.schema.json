@@ -1,0 +1,43 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "M13 common-kernel and FreeCOM build manifest",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "milestone", "source", "artifacts", "fixture", "two_clean_builds_equal", "alternate_fixture"],
+  "properties": {
+    "schema_version": {"const": 1}, "milestone": {"const": "M13"},
+    "two_clean_builds_equal": {"const": true}, "alternate_fixture": {"const": true},
+    "source": {"type": "object", "additionalProperties": false,
+      "required": ["parent_start", "child_commit", "freecom_commit", "country_commit", "toolchain_lock_sha256"],
+      "properties": {
+        "parent_start": {"const": "66138e6539e4220ae7b6d3ffee24581e0d674267"},
+        "child_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "freecom_commit": {"const": "855281a3114b43ad4b8d9a320f2aca39be046bba"},
+        "country_commit": {"const": "23f189cca3420606eae8723884fa92ccd65eb307"},
+        "toolchain_lock_sha256": {"$ref": "#/$defs/sha256"}
+      }
+    },
+    "artifacts": {"type": "object", "additionalProperties": false,
+      "required": ["kernel_sys", "command_com", "com_probe", "mz_probe", "raw_media", "d88_media"],
+      "properties": {
+        "kernel_sys": {"$ref": "#/$defs/artifact"}, "command_com": {"$ref": "#/$defs/artifact"},
+        "com_probe": {"$ref": "#/$defs/artifact"}, "mz_probe": {"$ref": "#/$defs/artifact"},
+        "raw_media": {"$ref": "#/$defs/artifact"}, "d88_media": {"$ref": "#/$defs/artifact"}
+      }
+    },
+    "fixture": {"type": "object", "additionalProperties": false,
+      "required": ["sector_bytes", "sectors_track", "heads", "total_sectors", "filesystem", "read_only", "files", "fragmented_file"],
+      "properties": {
+        "sector_bytes": {"const": 1024}, "sectors_track": {"const": 8}, "heads": {"const": 2},
+        "total_sectors": {"const": 1280}, "filesystem": {"const": "FAT12"}, "read_only": {"const": true},
+        "files": {"type": "array", "minItems": 4, "items": {"type": "object", "additionalProperties": false,
+          "required": ["name", "size", "sha256"], "properties": {"name": {"type": "string", "minLength": 1}, "size": {"type": "integer", "minimum": 0}, "sha256": {"$ref": "#/$defs/sha256"}}}},
+        "fragmented_file": {"type": "string", "minLength": 1}
+      }
+    }
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "artifact": {"type": "object", "additionalProperties": false, "required": ["path", "size", "sha256"],
+      "properties": {"path": {"type": "string", "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+"}, "size": {"type": "integer", "minimum": 1}, "sha256": {"$ref": "#/$defs/sha256"}}}
+  }
+}

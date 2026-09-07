@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "milestone": "M13",
+  "status": "M13 PRIVATE VAEG QUALIFICATION PENDING",
+  "child_commit": "33da21f248fa7af25f9dd17a7a981c34f8ebec37",
+  "vaeg_commit": "7dd453cbd36014ba453a26765b00cd0cc9a99655",
+  "artifact_manifest": {"path": "qa/golden/m13/manifest.json", "sha256": "b1c4d3222d2aac385d97da9bc1e785c6ecc8d1defb37e906bd9de2b11517bf2f"},
+  "main_runs": [
+    {"boundaries": ["S0", "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9"], "projection_equal": false, "executable_identity_equal": false, "stop_reason_equal": false, "inputs_preserved": false, "no_media_mutation": false, "real_dos_path": false, "recovered": false},
+    {"boundaries": ["S0", "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9"], "projection_equal": false, "executable_identity_equal": false, "stop_reason_equal": false, "inputs_preserved": false, "no_media_mutation": false, "real_dos_path": false, "recovered": false}
+  ],
+  "negative_runs": [
+    {"boundaries": ["E0", "E1", "E2", "E3", "E4"], "projection_equal": false, "executable_identity_equal": false, "stop_reason_equal": false, "inputs_preserved": false, "no_media_mutation": false, "real_dos_path": false, "recovered": false},
+    {"boundaries": ["E0", "E1", "E2", "E3", "E4"], "projection_equal": false, "executable_identity_equal": false, "stop_reason_equal": false, "inputs_preserved": false, "no_media_mutation": false, "real_dos_path": false, "recovered": false}
+  ],
+  "two_main_runs_equal": false,
+  "two_negative_runs_equal": false,
+  "actual_schema_instances_valid": true,
+  "production_memory": false,
+  "real_freecom": false,
+  "exec_forms": false,
+  "readonly_media": false,
+  "alternate_fixture": false,
+  "private_execution_in_public_ci": false,
+  "hardware_run": false,
+  "evidence_retention": "persistent_ignored",
+  "writes_attempted": false
+}

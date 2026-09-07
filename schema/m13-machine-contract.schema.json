@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "M13 machine acceptance contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "milestone", "status", "start_sha", "qualified_implementation_sha", "child_commit", "freecom_commit", "country_commit", "vaeg_commit", "toolchain_lock_sha256", "m12_manifest_sha256", "m12_qualification_sha256", "m12_component_lock_sha256", "artifact_manifest", "qualification", "component_lock", "build_variant", "volume", "common_core", "shell", "child_ci", "parent_ci", "publication_policy"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "milestone": {"const": "M13"},
+    "status": {"enum": ["in_progress", "qualified", "accepted"]},
+    "start_sha": {"const": "66138e6539e4220ae7b6d3ffee24581e0d674267"},
+    "qualified_implementation_sha": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
+    "child_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "freecom_commit": {"const": "855281a3114b43ad4b8d9a320f2aca39be046bba"},
+    "country_commit": {"const": "23f189cca3420606eae8723884fa92ccd65eb307"},
+    "vaeg_commit": {"const": "7dd453cbd36014ba453a26765b00cd0cc9a99655"},
+    "toolchain_lock_sha256": {"$ref": "#/$defs/sha256"},
+    "m12_manifest_sha256": {"$ref": "#/$defs/sha256"},
+    "m12_qualification_sha256": {"$ref": "#/$defs/sha256"},
+    "m12_component_lock_sha256": {"$ref": "#/$defs/sha256"},
+    "artifact_manifest": {"$ref": "#/$defs/ref"},
+    "qualification": {"$ref": "#/$defs/ref"},
+    "component_lock": {"$ref": "#/$defs/ref"},
+    "build_variant": {"type": "string", "minLength": 1},
+    "volume": {"type": "object", "additionalProperties": false, "required": ["sector_bytes", "sectors_track", "heads", "total_sectors", "filesystem", "read_only"], "properties": {"sector_bytes": {"const": 1024}, "sectors_track": {"const": 8}, "heads": {"const": 2}, "total_sectors": {"const": 1280}, "filesystem": {"const": "FAT12"}, "read_only": {"const": true}}},
+    "common_core": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}},
+    "shell": {"type": "object", "additionalProperties": false, "required": ["source", "variant", "loaded_from_volume"], "properties": {"source": {"const": "components/freecom"}, "variant": {"type": "string", "minLength": 1}, "loaded_from_volume": {"const": true}}},
+    "child_ci": {"type": ["object", "null"]},
+    "parent_ci": {"type": ["object", "null"]},
+    "publication_policy": {"type": "object", "additionalProperties": false, "required": ["tracked_report", "metadata"], "properties": {"tracked_report": {"const": "documentation"}, "metadata": {"const": "config/m13/machine-contract.json"}}}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "ref": {"type": "object", "additionalProperties": false, "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"$ref": "#/$defs/sha256"}}}}
+}

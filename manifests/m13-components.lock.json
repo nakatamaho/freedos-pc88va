@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "status": "current-m13",
+  "components": [
+    {"name": "fdkernel", "path": "components/fdkernel", "commit": "33da21f248fa7af25f9dd17a7a981c34f8ebec37", "branch": "topic/m13-pc88va-readonly-freecom", "repository": "https://github.com/nakatamaho/fdkernel.git", "role": "M13 common FreeDOS core and PC-88VA adapters", "source_archive_sha256": "4ff1a357b28ddc12db037ef32c6d51386e8a0fdc06cb61ecad02af894d669877"},
+    {"name": "freecom", "path": "components/freecom", "commit": "855281a3114b43ad4b8d9a320f2aca39be046bba", "branch": "deterministic-build-timestamp", "repository": "https://github.com/nakatamaho/freecom_dbcs2.git", "role": "Unchanged generic ASCII FreeCOM", "source_archive_sha256": null},
+    {"name": "country", "path": "components/country", "commit": "23f189cca3420606eae8723884fa92ccd65eb307", "branch": "master", "repository": "https://github.com/FDOS/country.git", "role": "Unchanged COUNTRY.SYS component", "source_archive_sha256": null}
+  ]
+}

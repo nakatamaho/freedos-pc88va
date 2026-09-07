@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "milestone": "M13",
+  "status": "in_progress",
+  "startup": {"entry": "FreeDOSmain", "machine_init": "pc88va_machine_init", "dos_vectors": ["0x20", "0x21", "0x22", "0x24", "0x25", "0x26", "0x27", "0x28", "0x29", "0x2f"]},
+  "resident": {"request": "pc88va_m12_request", "buffer_bytes": 4096, "callback": "pc88va_kernel_firmware_read_one", "ownership": "kernel", "reentrant": false},
+  "block": {"drive": "A:", "adapter": "FL_READ", "sector_bytes": 1024, "max_request_sectors": 4, "write_result": "DOS write-protect error before callback"},
+  "filesystem": {"implementation": "FreeDOS common FAT12", "directory": "root and ordinary 8.3 paths", "dta": "common DOS DTA", "handles": "common SFT/JFT"},
+  "process": {"implementation": "FreeDOS common MCB/PSP/EXEC", "formats": ["COM", "MZ with relocation"], "parent_restore": true},
+  "console": {"output": "M09 pc88va_console_putc", "input": "M11 pc88va_console_getc", "editing": ["Enter", "Backspace"], "encoding": "ASCII"},
+  "limits": ["disk_write", "format", "Japanese/NLS", "ANSI", "HDD", "XMS/EMS", "TSR", "networking", "broad DOS compatibility", "hardware validation"]
+}
