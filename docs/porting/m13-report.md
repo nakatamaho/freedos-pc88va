@@ -1,7 +1,7 @@
 # M13 common FreeDOS core and read-only FreeCOM session
 
-Status: **M13 IMPLEMENTATION IN PROGRESS — PRIVATE QUALIFICATION AND FINAL
-PUBLICATION HANDOFF PENDING.**
+Status: **M13 BLOCKED — PRIVATE QUALIFICATION AND FINAL PUBLICATION HANDOFF
+NOT ESTABLISHED.**
 
 This tracked report records the bounded implementation work. The separate
 local `M13-final-handoff.md` is the only post-push handoff record and must not
@@ -39,14 +39,23 @@ only public source/metadata and contain no private firmware values.
 - Common and adapter NASM objects assemble with `PC88VA` and no IBMPC/NEC98
   selector. Child CI run 34072626987 attempt 1 succeeded at the exact child
   SHA with `build` success.
-- Parent M13 public schema/instance, build-pair, VAEG private-session,
-  deterministic two-build, VAEG runtime, historical regression and final-tip
-  CI gates are not yet complete.
+- Parent M13 public schema/instance, deterministic two-build, historical
+  regression and implementation-tip CI gates pass. Parent CI run 34073545757
+  attempt 1 tested implementation tip
+  `80ea2814eb83b643d90d3d478b348bba117584f9` and both required jobs
+  (`public-readonly-freecom`, `historical-regression`) succeeded.
+- The generic checker passes content/topology/source checks and fails closed at
+  `PRIVATE_QUALIFICATION_PENDING` for `--accept`.
 
 ## Explicitly not run / not claimed
 
-No private VAEG M13 session has been run; therefore S0-S9 and E0-E4, real
-FreeCOM startup, DIR/TYPE, COM/MZ execution, allocator recovery, alternate
-fixture behavior and backend-fault recovery are not claimed. Hardware was not
-run. Writable DOS, Japanese/NLS, ANSI, HDD, TSR, networking and broad DOS
-compatibility remain outside M13.
+No private VAEG M13 session has been run. The pinned VAEG commit
+`7dd453cbd36014ba453a26765b00cd0cc9a99655` is unavailable in the retained
+VAEG checkout and configured remote; the checkout is on another topic. This is
+the first unresolved acceptance boundary and cannot be repaired by inventing
+records or substituting a moving VAEG build. Consequently S0-S9 and E0-E4,
+real FreeCOM startup, DIR/TYPE, COM/MZ execution, allocator recovery,
+alternate-fixture behavior and backend-fault recovery are not claimed.
+`M13 HANDOFF READY` and `DOWNSTREAM_BASE_SHA` are not established. Hardware
+was not run. Writable DOS, Japanese/NLS, ANSI, HDD, TSR, networking and broad
+DOS compatibility remain outside M13.
