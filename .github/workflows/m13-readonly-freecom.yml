@@ -27,7 +27,7 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq nasm
-          python3 -m pip install --disable-pip-version-check jsonschema
+          python3 -m pip install --disable-pip-version-check --user --upgrade --ignore-installed 'jsonschema>=4.18'
       - name: Verify M12 prerequisite and actual M13 schemas
         run: |
           make m13-preflight
@@ -55,6 +55,9 @@ jobs:
           python3 -B -m unittest discover -s tests/m09 -p 'test_*.py'
           python3 -B -m unittest discover -s tests/m10 -p 'test_*.py'
           python3 -B -m unittest discover -s tests/m11 -p 'test_*.py'
-          python3 -B -m unittest discover -s tests/m12 -p 'test_*.py'
+          baseline="$RUNNER_TEMP/m13-m12-baseline"
+          git worktree add --detach "$baseline" 66138e6539e4220ae7b6d3ffee24581e0d674267
+          git -C "$baseline" submodule update --init --recursive
+          python3 -B -m unittest discover -s "$baseline/tests/m12" -p 'test_*.py'
           python3 -B -m unittest discover -s tests/m13 -p 'test_*.py'
           git diff --exit-code
