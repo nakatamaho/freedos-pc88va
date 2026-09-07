@@ -3,7 +3,7 @@
   "milestone": "M12",
   "status": "qualified",
   "start_sha": "c5ddf7c87cac46d357cfe75d132a819c7cf3fbe4",
-  "qualified_implementation_sha": null,
+  "qualified_implementation_sha": "9b508a80eb3c4d33e1bb683f7963ae350067fd14",
   "child_commit": "21d9f3450276d42e5fedd1ddb9e80485b888cc07",
   "vaeg_commit": "7dd453cbd36014ba453a26765b00cd0cc9a99655",
   "route": "accepted M08 firmware read callback retained by resident kernel entry",
