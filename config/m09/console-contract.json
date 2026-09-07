@@ -1,0 +1,45 @@
+{
+  "artifact_manifest": {
+    "path": "qa/golden/m09/manifest.json",
+    "sha256": "19db1c0056b3153f9584359f7eb51293f99a4ca40871162d79d909c1df854497"
+  },
+  "artifact_schema": {
+    "path": "schema/m09-artifact-manifest.schema.json",
+    "sha256": "9534b9f088bb4dd3db8a6489e2f0d3c31f1fd026af16d586d41c21533873bba4"
+  },
+  "child_ci": {
+    "legacy_build": 34002178885,
+    "pc88va_qa": 34001962480,
+    "pc88va_tested_commit": "4b6c96b3c293176edd7d10cc061ca0365d1c36b6",
+    "pc88va_tree_unchanged_to_final": true
+  },
+  "component_lock": {
+    "path": "manifests/m09-components.lock.json",
+    "sha256": "9f6fc653d22655ff797d722237994f1251b93306d3fbc4f0a145baaec565fa58"
+  },
+  "console_abi": {
+    "path": "components/fdkernel/pc88va/config/console-contract.json",
+    "sha256": "8d955931b527e66c7db3b857e293173682544161f5470365f70c93d1603dd9ce"
+  },
+  "parent_ci": {
+    "commit": "b2e766d91403635bed3e2434cebe093109a5554b",
+    "conclusion": "success",
+    "run": 34003567110
+  },
+  "parent_start": "cfdf5841857f9633a20bdb7b6edb0c1e35275969",
+  "private_execution_in_ci": false,
+  "qualification": {
+    "path": "config/m09/vaeg-qualification.json",
+    "sha256": "fae44680924fcf63bb4ea79da612f2e96099342c5b165ea46f6363fceb239f71"
+  },
+  "qualification_schema": {
+    "path": "schema/m09-public-qualification.schema.json",
+    "sha256": "3ea6d2c252884bc86b0a8b06093ec4087c8156bf900acb04217f427dc1ff3c8a"
+  },
+  "schema_version": 1,
+  "scope": "early ASCII diagnostic only; no input, NLS, ANSI, machine initialization or full DOS boot",
+  "status": "accepted",
+  "toolchain_lock_sha256": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162",
+  "vaeg_accepted_ci": 33937050536,
+  "vaeg_commit": "7463f9501d84701f50f3243d5067b6a9dfd0c2e7"
+}

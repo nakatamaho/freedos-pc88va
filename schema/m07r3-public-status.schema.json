@@ -1,0 +1,245 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "classification": {
+      "enum": [
+        "U"
+      ]
+    },
+    "comparison": {
+      "additionalProperties": false,
+      "properties": {
+        "first_unobserved_boundary": {
+          "const": "B2"
+        },
+        "last_common_boundary": {
+          "const": "B1"
+        },
+        "m07_variants_compared": {
+          "const": [
+            "V00",
+            "V01",
+            "V02",
+            "V03",
+            "V04"
+          ]
+        },
+        "paired_projection_result": {
+          "const": "byte-identical"
+        },
+        "reached_boundaries": {
+          "const": [
+            "B0",
+            "B1"
+          ]
+        },
+        "unreached_boundaries": {
+          "const": [
+            "B2",
+            "B3",
+            "B4",
+            "B5",
+            "B6",
+            "B7"
+          ]
+        }
+      },
+      "required": [
+        "first_unobserved_boundary",
+        "last_common_boundary",
+        "m07_variants_compared",
+        "paired_projection_result",
+        "reached_boundaries",
+        "unreached_boundaries"
+      ],
+      "type": "object"
+    },
+    "components": {
+      "additionalProperties": false,
+      "properties": {
+        "clean": {
+          "const": true
+        },
+        "gitlinks": {
+          "additionalProperties": false,
+          "properties": {
+            "components/country": {
+              "const": "23f189cca3420606eae8723884fa92ccd65eb307"
+            },
+            "components/fdkernel": {
+              "const": "69ccdd8699895722fc537d647ec490685532bdc4"
+            },
+            "components/freecom": {
+              "const": "855281a3114b43ad4b8d9a320f2aca39be046bba"
+            }
+          },
+          "required": [
+            "components/country",
+            "components/fdkernel",
+            "components/freecom"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "clean",
+        "gitlinks"
+      ],
+      "type": "object"
+    },
+    "m07r2": {
+      "additionalProperties": false,
+      "properties": {
+        "resumed": {
+          "const": false
+        },
+        "status": {
+          "const": "blocked_positive_control_failed"
+        },
+        "status_schema_sha256": {
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "status_sha256": {
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      },
+      "required": [
+        "resumed",
+        "status",
+        "status_sha256",
+        "status_schema_sha256"
+      ],
+      "type": "object"
+    },
+    "m08": {
+      "additionalProperties": false,
+      "properties": {
+        "mandatory_resolved_count": {
+          "const": 0
+        },
+        "mandatory_unresolved_fields": {
+          "const": [
+            "accepted_signature_profile",
+            "boot_drive_identity",
+            "entry_cs_ip",
+            "firmware_attempts_m05_geometry",
+            "initial_load_extent",
+            "initial_register_state",
+            "initial_sector_reads",
+            "physical_load_address"
+          ]
+        },
+        "promotion_status": {
+          "const": "prohibited_pending_user_approval"
+        }
+      },
+      "required": [
+        "mandatory_resolved_count",
+        "mandatory_unresolved_fields",
+        "promotion_status"
+      ],
+      "type": "object"
+    },
+    "milestone": {
+      "const": "M07R3"
+    },
+    "private_gate": {
+      "additionalProperties": false,
+      "properties": {
+        "concrete_values_published": {
+          "const": false
+        },
+        "input_preservation": {
+          "const": "passed"
+        },
+        "result": {
+          "const": "inconclusive"
+        },
+        "status": {
+          "const": "performed"
+        }
+      },
+      "required": [
+        "concrete_values_published",
+        "input_preservation",
+        "result",
+        "status"
+      ],
+      "type": "object"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "trial_summary": {
+      "additionalProperties": false,
+      "properties": {
+        "fresh_trial_count": {
+          "const": 18
+        },
+        "paired_projection_count": {
+          "const": 9
+        },
+        "variant_count": {
+          "const": 5
+        }
+      },
+      "required": [
+        "fresh_trial_count",
+        "paired_projection_count",
+        "variant_count"
+      ],
+      "type": "object"
+    },
+    "vaeg": {
+      "additionalProperties": false,
+      "properties": {
+        "accepted_ci": {
+          "additionalProperties": false,
+          "properties": {
+            "attempt": {
+              "const": 2
+            },
+            "conclusion": {
+              "const": "success"
+            },
+            "run_id": {
+              "const": 33455847870
+            }
+          },
+          "required": [
+            "attempt",
+            "conclusion",
+            "run_id"
+          ],
+          "type": "object"
+        },
+        "commit": {
+          "const": "16ad2e0619bf4ed82a739325f7291eba4a6ed8ad"
+        },
+        "repository": {
+          "const": "https://github.com/nakatamaho/vaeg.git"
+        }
+      },
+      "required": [
+        "accepted_ci",
+        "commit",
+        "repository"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "classification",
+    "components",
+    "comparison",
+    "m07r2",
+    "m08",
+    "milestone",
+    "private_gate",
+    "schema_version",
+    "trial_summary",
+    "vaeg"
+  ],
+  "type": "object"
+}

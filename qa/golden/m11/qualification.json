@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "child_commit": "b08ace36670a05992d8ddaa4279727d9b17bd11e",
+  "vaeg_commit": "7dd453cbd36014ba453a26765b00cd0cc9a99655",
+  "artifact_manifest": {"path": "qa/golden/m11/manifest.json", "sha256": "737a8b85a35cc97662dbdb0313fc2d71c3095049eca6980b8d5264b816f53a3e"},
+  "fresh_prerequisite": "M11 FRESH PREREQUISITE PASS",
+  "main_runs": [{"boundaries": ["K0", "K1", "K2", "K3", "K4", "K5", "K6", "K7", "K8", "K9"], "inputs_preserved": true, "projection_equal": true}, {"boundaries": ["K0", "K1", "K2", "K3", "K4", "K5", "K6", "K7", "K8", "K9"], "inputs_preserved": true, "projection_equal": true}],
+  "control_runs": [{"boundaries": ["N0", "N1", "N2", "N3", "N4"], "inputs_preserved": true, "projection_equal": true}, {"boundaries": ["N0", "N1", "N2", "N3", "N4"], "inputs_preserved": true, "projection_equal": true}],
+  "two_main_runs_equal": true,
+  "two_control_runs_equal": true,
+  "actual_schema_instances_valid": true,
+  "production_memory_trace": true,
+  "private_execution_in_public_ci": false,
+  "hardware_run": false,
+  "evidence_retention": "persistent_ignored"
+}

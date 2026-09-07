@@ -1,5 +1,8 @@
 # Build
 
-Build orchestration is deferred. M00 does not install a toolchain, compile
-source, select packages, or generate a boot image. The only implemented Make
-targets are scaffold and component-status operations.
+M01 adds a pinned Linux/amd64 host baseline. It exports the exact parent
+gitlinks and builds the pinned kernel (with the approved M01F WMake
+build-system repair), FreeCOM, and COUNTRY.SYS sources twice in container-local
+storage. It does not select packages or generate a boot image. See
+`M01-toolchain.md`, `macos-apple-silicon.md`, and
+`upstream-build-contracts.md`.

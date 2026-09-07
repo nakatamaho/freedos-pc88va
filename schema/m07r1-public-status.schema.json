@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "private_gate": {
+      "additionalProperties": false,
+      "properties": {
+        "bounded_instruction_count_per_trial": {
+          "const": 1000000
+        },
+        "evidence_generation": {
+          "const": "fresh_m07r1"
+        },
+        "historical_m07_evidence_accepted": {
+          "const": false
+        },
+        "input_preservation": {
+          "const": "passed"
+        },
+        "private_gate_result": {
+          "const": "inconclusive"
+        },
+        "public_promotion_status": {
+          "const": "prohibited_pending_user_approval"
+        },
+        "repeated_projections": {
+          "const": "byte-identical"
+        },
+        "resolved_fields": {
+          "maxItems": 0,
+          "type": "array"
+        },
+        "trial_count": {
+          "const": 10
+        },
+        "unresolved_fields": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 8,
+          "type": "array",
+          "uniqueItems": true
+        },
+        "variant_count": {
+          "const": 5
+        }
+      },
+      "required": [
+        "bounded_instruction_count_per_trial",
+        "evidence_generation",
+        "historical_m07_evidence_accepted",
+        "input_preservation",
+        "private_gate_result",
+        "public_promotion_status",
+        "repeated_projections",
+        "resolved_fields",
+        "trial_count",
+        "unresolved_fields",
+        "variant_count"
+      ],
+      "type": "object"
+    },
+    "public_harness": {
+      "type": "object"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "status": {
+      "const": "blocked_no_controlled_probe_execution"
+    },
+    "vaeg": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "schema_version",
+    "status",
+    "vaeg",
+    "public_harness",
+    "private_gate"
+  ],
+  "title": "M07R1 redacted production-trace rerun status",
+  "type": "object"
+}

@@ -12,6 +12,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           submodules: recursive
+          fetch-depth: 0
 
       - name: Check component remote script syntax
         run: bash -n tools/configure_component_remotes.sh

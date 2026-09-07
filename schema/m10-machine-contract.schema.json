@@ -1,0 +1,592 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "else": {
+        "properties": {
+          "parent_ci": {
+            "type": "null"
+          }
+        }
+      },
+      "if": {
+        "properties": {
+          "status": {
+            "const": "accepted"
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "parent_ci": {
+            "additionalProperties": false,
+            "properties": {
+              "attempt": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "head_sha": {
+                "pattern": "^[0-9a-f]{40}$",
+                "type": "string"
+              },
+              "manifest": {
+                "additionalProperties": false,
+                "properties": {
+                  "path": {
+                    "const": "qa/golden/m10/manifest.json"
+                  },
+                  "sha256": {
+                    "pattern": "^[0-9a-f]{64}$",
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "path",
+                  "sha256"
+                ],
+                "type": "object"
+              },
+              "repository": {
+                "const": "nakatamaho/freedos-pc88va"
+              },
+              "required_jobs": {
+                "const": [
+                  "public-machine-services",
+                  "historical-regression"
+                ]
+              },
+              "run_id": {
+                "minimum": 1,
+                "type": "integer"
+              },
+              "workflow_path": {
+                "const": ".github/workflows/m10-machine-services.yml"
+              }
+            },
+            "required": [
+              "repository",
+              "run_id",
+              "attempt",
+              "head_sha",
+              "workflow_path",
+              "required_jobs",
+              "manifest"
+            ],
+            "type": "object"
+          }
+        }
+      }
+    }
+  ],
+  "properties": {
+    "acceptance_verifier": {
+      "const": "tools/m10/verify_m10.py"
+    },
+    "child_ci": {
+      "additionalProperties": false,
+      "properties": {
+        "attempt": {
+          "const": 1
+        },
+        "head_sha": {
+          "const": "54c067af9764ace07459b0c2f5df4f70294d0c50"
+        },
+        "repository": {
+          "const": "nakatamaho/fdkernel"
+        },
+        "required_jobs": {
+          "items": false,
+          "maxItems": 1,
+          "minItems": 1,
+          "prefixItems": [
+            {
+              "const": "structure"
+            }
+          ],
+          "type": "array"
+        },
+        "run_id": {
+          "const": 34019124058
+        },
+        "workflow_path": {
+          "const": ".github/workflows/pc88va-compile.yml"
+        }
+      },
+      "required": [
+        "repository",
+        "run_id",
+        "attempt",
+        "head_sha",
+        "workflow_path",
+        "required_jobs"
+      ],
+      "type": "object"
+    },
+    "child_commit": {
+      "const": "54c067af9764ace07459b0c2f5df4f70294d0c50"
+    },
+    "hardware_run": {
+      "const": false
+    },
+    "instances": {
+      "items": false,
+      "maxItems": 5,
+      "minItems": 5,
+      "prefixItems": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "record": {
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "const": "config/m10/services.json"
+                },
+                "sha256": {
+                  "pattern": "^[0-9a-f]{64}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "type": "object"
+            },
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "const": "schema/m10-services.schema.json"
+                },
+                "sha256": {
+                  "pattern": "^[0-9a-f]{64}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "record",
+            "schema"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "record": {
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "const": "qa/golden/m10/manifest.json"
+                },
+                "sha256": {
+                  "pattern": "^[0-9a-f]{64}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "type": "object"
+            },
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "const": "schema/m10-artifact-manifest.schema.json"
+                },
+                "sha256": {
+                  "pattern": "^[0-9a-f]{64}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "record",
+            "schema"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "record": {
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "const": "qa/golden/m10/fatal-controls.json"
+                },
+                "sha256": {
+                  "pattern": "^[0-9a-f]{64}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "type": "object"
+            },
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "const": "schema/m10-fatal-controls.schema.json"
+                },
+                "sha256": {
+                  "pattern": "^[0-9a-f]{64}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "record",
+            "schema"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "record": {
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "const": "config/m10/vaeg-qualification.json"
+                },
+                "sha256": {
+                  "pattern": "^[0-9a-f]{64}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "type": "object"
+            },
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "const": "schema/m10-public-qualification.schema.json"
+                },
+                "sha256": {
+                  "pattern": "^[0-9a-f]{64}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "record",
+            "schema"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "record": {
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "const": "manifests/m10-components.lock.json"
+                },
+                "sha256": {
+                  "pattern": "^[0-9a-f]{64}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "type": "object"
+            },
+            "schema": {
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "const": "schema/m10-components.schema.json"
+                },
+                "sha256": {
+                  "pattern": "^[0-9a-f]{64}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "type": "object"
+            }
+          },
+          "required": [
+            "record",
+            "schema"
+          ],
+          "type": "object"
+        }
+      ],
+      "type": "array"
+    },
+    "milestone": {
+      "const": "M10"
+    },
+    "parent_ci": {
+      "anyOf": [
+        {
+          "type": "null"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "attempt": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "head_sha": {
+              "pattern": "^[0-9a-f]{40}$",
+              "type": "string"
+            },
+            "manifest": {
+              "additionalProperties": false,
+              "properties": {
+                "path": {
+                  "const": "qa/golden/m10/manifest.json"
+                },
+                "sha256": {
+                  "pattern": "^[0-9a-f]{64}$",
+                  "type": "string"
+                }
+              },
+              "required": [
+                "path",
+                "sha256"
+              ],
+              "type": "object"
+            },
+            "repository": {
+              "const": "nakatamaho/freedos-pc88va"
+            },
+            "required_jobs": {
+              "const": [
+                "public-machine-services",
+                "historical-regression"
+              ]
+            },
+            "run_id": {
+              "minimum": 1,
+              "type": "integer"
+            },
+            "workflow_path": {
+              "const": ".github/workflows/m10-machine-services.yml"
+            }
+          },
+          "required": [
+            "repository",
+            "run_id",
+            "attempt",
+            "head_sha",
+            "workflow_path",
+            "required_jobs",
+            "manifest"
+          ],
+          "type": "object"
+        }
+      ]
+    },
+    "pins": {
+      "items": false,
+      "maxItems": 4,
+      "minItems": 4,
+      "prefixItems": [
+        {
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "const": "manifests/components.lock.json"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "sha256"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "const": "manifests/toolchains.lock.json"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "sha256"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "const": "config/m10/m09-handoff.json"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "sha256"
+          ],
+          "type": "object"
+        },
+        {
+          "additionalProperties": false,
+          "properties": {
+            "path": {
+              "const": "schema/m10-build-records.schema.json"
+            },
+            "sha256": {
+              "pattern": "^[0-9a-f]{64}$",
+              "type": "string"
+            }
+          },
+          "required": [
+            "path",
+            "sha256"
+          ],
+          "type": "object"
+        }
+      ],
+      "type": "array"
+    },
+    "private_execution_in_public_ci": {
+      "const": false
+    },
+    "publication_policy": {
+      "additionalProperties": false,
+      "properties": {
+        "config/m10/machine-contract.json": {
+          "additionalProperties": false,
+          "properties": {
+            "fields": {
+              "items": false,
+              "maxItems": 2,
+              "minItems": 2,
+              "prefixItems": [
+                {
+                  "const": "status"
+                },
+                {
+                  "const": "parent_ci"
+                }
+              ],
+              "type": "array"
+            },
+            "kind": {
+              "const": "json_fields"
+            }
+          },
+          "required": [
+            "kind",
+            "fields"
+          ],
+          "type": "object"
+        },
+        "docs/porting/m10-report.md": {
+          "additionalProperties": false,
+          "properties": {
+            "fields": {
+              "const": []
+            },
+            "kind": {
+              "const": "documentation"
+            }
+          },
+          "required": [
+            "kind",
+            "fields"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "docs/porting/m10-report.md",
+        "config/m10/machine-contract.json"
+      ],
+      "type": "object"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "start_sha": {
+      "const": "6b29d4f9b2b732ced9bc25a9b33b453877cbd7f0"
+    },
+    "status": {
+      "enum": [
+        "qualification_complete_ci_pending",
+        "accepted"
+      ]
+    },
+    "vaeg_commit": {
+      "const": "7463f9501d84701f50f3243d5067b6a9dfd0c2e7"
+    }
+  },
+  "required": [
+    "schema_version",
+    "milestone",
+    "start_sha",
+    "child_commit",
+    "vaeg_commit",
+    "status",
+    "parent_ci",
+    "instances",
+    "pins",
+    "child_ci",
+    "private_execution_in_public_ci",
+    "hardware_run",
+    "acceptance_verifier",
+    "publication_policy"
+  ],
+  "title": "M10 bound machine services contract",
+  "type": "object"
+}

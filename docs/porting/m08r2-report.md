@@ -1,0 +1,132 @@
+# M08R2 artifact schema conformance closure
+
+Status: M08R2 PASS — M08 ARTIFACT SCHEMA CONFORMANCE CLOSED.
+
+Evidence label: HOST PASS. The accepted contract is retained after the local
+and native public gates below succeeded. No new private VAEG or hardware gate
+was run for this schema-only acceptance correction.
+
+Parent start: `0bbefb97e6233283053ecb301c84a7688fb39101`.
+Branch: `topic/m08r2-artifact-schema-conformance`.
+
+## Correction and dependency order
+
+The accepted artifact manifest carried three kernel provenance digests that
+its bound schema rejected. The prior verifier checked the schema identity
+but not instance conformance. A dedicated closed `kernel_artifact` definition
+now requires format, size, artifact hash, compile-manifest hash,
+kernel-interface hash, and symbol-evidence hash. Generic artifact definitions
+remain unchanged and reject kernel provenance fields.
+
+The verifier checks Draft 2020-12 schema validity and validates the actual
+manifest before accepting its evidence. Validation failures do not print
+instance values. Host QA uses jsonschema 4.25.1; the guest toolchain is unchanged.
+
+Rebinding order is schema, then golden's schema reference, then contract's
+golden reference. Verifier pins follow those identities. The artifact manifest
+does not reference the schema, so its bytes do not change. The qualification
+record has no dependency on the corrected schema and remains unchanged.
+
+| Record | Previous SHA-256 | Current SHA-256 |
+| --- | --- | --- |
+| Schema | `9e81fef8a5668525e521df9ae322c8dc3029cc336edd34a62b8455f141c7d682` | `575086b668fb7f2439f17b63a33675978fef00861eb0b30f66a7b22d3279e7fe` |
+| Artifact manifest | `2210a590a7d705f3936a9053e197d05eb94888254b708f4435a1e7c89d3ef5e0` | unchanged |
+| Golden | `b7661bcfddd9ab45748a530dac3d8fe07b86eb16254f075ea24c346bd57bad60` | `bd611f5d6a0cb37c16114aec5b7382cb3bf7c18d340b762501d8bc2a574ad2a7` |
+| Contract | `f383a4f4e71b00fd0bcf5e69a00aeef5068f0c55c788b610fcd431f3e29db54c` | `c163ab5a1f1d1a3c3ae76e93bd24da7535393ea923f1d891cdbc1ab4460dae19` |
+| Qualification | `3ebbf58e18ea2acf0f92ba755cca99c3082b5ed419e6bfa51a5bd2d2fd8dbe47` | unchanged |
+| Component lock | `c3e736596ce63ce006ba0363682259260f30a1792e59a04e3250ac9821544f07` | unchanged |
+
+## Build and tests
+
+Two separate network-disabled Linux/amd64 containers rebuilt the unchanged
+child from its deterministic prefixed Git archive using Open Watcom 1.9 and
+the pinned M01 tools. The public synthetic overlay, accepted M05 structure,
+and per-component M01 timestamps were used. Existing accepted FreeCOM/Country
+payloads were hash-checked before use. No private qualification was rerun.
+
+Loader stages, KERNEL.SYS, raw/D88 media, independently extracted payloads,
+objects, library, and canonical JSON compare byte-for-byte. Every public
+artifact matches the unchanged M08 artifact manifest. The rebuilt composition
+manifest in each run hashes to
+`85988bf11900b0d4e75d7fce318ec51771bfc448ebc81cdd527c15d063ecec39`.
+Raw WLink maps differ in their creation-time line; all other map lines and
+canonical symbol evidence match. Raw map byte equality is not claimed.
+
+The repeatable public command is `bash tools/m08/compare_public_builds.sh
+COMMAND.COM COUNTRY.SYS`, with the accepted M01 container image selected by
+`M08_BUILD_IMAGE` and the optional host adapter by `M08_DOCKER_CONTEXT`.
+Generated results remain ignored under `build/`.
+
+ROM-free child tests: 164 passed. Parent tests: 19 passed, including 14
+acceptance/schema tests. Negative checks reject missing required kernel fields,
+unknown fields, invalid hash types/patterns, kernel fields on generic artifacts,
+invalid schema definitions, schema digest drift, manifest digest drift, and
+incomplete acceptance references. An integration test proves acceptance calls
+the instance validator rather than only checking digests.
+
+Local M01/M02/M05/M06/M07 golden verifiers and M04/M07 completion checks passed
+at the accepted historical checkout. The first M05 CI run (33956713641) rejected
+the new report at its historical path gate. M04/M05 descendant path checks now
+allow exactly the M08 artifact manifest, golden and M08R2 report; adjacent
+unreviewed paths remain rejected by negative tests. Current-tree M04 validation
+and all 39 M04 tests pass. No geometry, golden artifact, or historical contract
+validation was weakened. Native M08 CI uses its existing accepted historical
+checkout for M01 through M07 regression.
+M08 source/schema gates and synthetic tests run on the current branch.
+
+The standalone M05 workflow previously selected M06's fixed-child preflight
+even with an M08 lock. For the M08 case it now uses the existing M05 descendant
+validator and unchanged builder/inspector, rebuilds twice, and verifies the
+original golden. This path passed locally using verified retained M01/M02
+public inputs; 36 M05 tests passed. No component checkout is changed by it.
+
+Standalone M06/M07/M07R5/M07R6 workflows also attempted historical fixed-child
+gates against the M08 child. On M08 descendants they now use a separate checkout
+of accepted M07 completion `f0edeaa35126cf6d027adac0316df5056f7b1ddb`, matching
+the existing M08 historical-regression job. Current source/static checks and
+component audits remain on the current checkout; historical verifiers retain
+their strict original identities. Runs 33956944843 and 33956944838 record the
+unfixed M07R5/M07R6 failures; they are not relabeled as successful runs.
+
+## Publication and native CI
+
+Validated implementation tip: `062900ad76fa023dc06a6a6234c5babce6a15932`.
+The topic branch was pushed without force. This archival report is finalized
+in a subsequent documentation-only commit; its final tip is reported at handoff
+to avoid a self-referential commit hash in this file.
+
+All jobs in each listed successful workflow completed:
+
+| Workflow | Successful run |
+| --- | --- |
+| M08 public loader and M01–M07 historical regression | [33957136635](https://github.com/nakatamaho/freedos-pc88va/actions/runs/33957136635) |
+| M06 historical compile target | [33957136629](https://github.com/nakatamaho/freedos-pc88va/actions/runs/33957136629) |
+| M07 public harness | [33957136623](https://github.com/nakatamaho/freedos-pc88va/actions/runs/33957136623) |
+| M07R5 public record | [33957136640](https://github.com/nakatamaho/freedos-pc88va/actions/runs/33957136640) |
+| M07R6 public record | [33957136627](https://github.com/nakatamaho/freedos-pc88va/actions/runs/33957136627) |
+| M03 integration | [33957136622](https://github.com/nakatamaho/freedos-pc88va/actions/runs/33957136622) |
+| Scaffold | [33957136644](https://github.com/nakatamaho/freedos-pc88va/actions/runs/33957136644) |
+| M05 immutable media | [33956944870](https://github.com/nakatamaho/freedos-pc88va/actions/runs/33956944870) |
+| M04 provisional contract | [33956944804](https://github.com/nakatamaho/freedos-pc88va/actions/runs/33956944804) |
+| M04R1 license policy | [33956944821](https://github.com/nakatamaho/freedos-pc88va/actions/runs/33956944821) |
+
+The last three workflows ran at `35eced2e17fa89192544e3b214f5423518f09df7`;
+their tested implementation is unchanged by the later historical-workflow
+selection correction. M08 also passed at runs 33956713628 and 33956944814.
+No failed workflow run is counted as a success. Shell, Python, JSON and YAML
+syntax checks, whitespace checks, component cleanliness and added-public-text
+privacy audits passed. No unresolved M08R2 schema-conformance item remains.
+
+## Preservation and limitations
+
+- fdkernel: `105d49a72ec41afe07fc1e7b080bdbd1b3026ae2`.
+- FreeCOM: `855281a3114b43ad4b8d9a320f2aca39be046bba`.
+- Country: `23f189cca3420606eae8723884fa92ccd65eb307`.
+
+All component sources and gitlinks are unchanged. Existing M09 worktrees and
+untracked reports are preserved. Private qualification values, projections,
+inputs and identities are unchanged and not published. Generated build output
+and logs are not committed. No public history was amended or force-pushed.
+
+This is public evidence correction, not a new runtime qualification.
+HARDWARE NOT RUN. M09 NOT STARTED.

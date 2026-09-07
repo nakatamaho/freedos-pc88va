@@ -1,0 +1,94 @@
+name: M07R4 public boot-path reconstruction record
+
+on:
+  push:
+    paths:
+      - ".github/workflows/m07r4-boot-reconstruction.yml"
+      - "Makefile"
+      - "config/m07/m07r4-public-status.json"
+      - "docs/porting/m07r4-*.md"
+      - "qa/golden/m07r4-public-status.sha256"
+      - "schema/m07r4-public-status.schema.json"
+      - "tests/m07/test_m07r4.py"
+      - "tools/m07/verify_m07r4.py"
+  pull_request:
+    paths:
+      - ".github/workflows/m07r4-boot-reconstruction.yml"
+      - "Makefile"
+      - "config/m07/m07r4-public-status.json"
+      - "docs/porting/m07r4-*.md"
+      - "qa/golden/m07r4-public-status.sha256"
+      - "schema/m07r4-public-status.schema.json"
+      - "tests/m07/test_m07r4.py"
+      - "tools/m07/verify_m07r4.py"
+
+jobs:
+  public-reconstruction-record:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out parent and exact submodules
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          submodules: recursive
+          fetch-depth: 0
+
+      - name: Configure component remotes and run public gates
+        run: |
+          test "$(uname -m)" = x86_64
+          test "$(dpkg --print-architecture)" = amd64
+          bash tools/configure_component_remotes.sh
+          git diff --check
+          make verify-scaffold
+          make m04r1-license-verify
+          make m04-verify
+
+      - name: Select immutable historical contract checkout
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq nasm
+          if test -f manifests/m08-components.lock.json; then
+            git worktree add --detach "$RUNNER_TEMP/freedos-pc88va" f0edeaa35126cf6d027adac0316df5056f7b1ddb
+            git -C "$RUNNER_TEMP/freedos-pc88va" submodule update --init --recursive
+            (cd "$RUNNER_TEMP/freedos-pc88va" && bash tools/configure_component_remotes.sh)
+            echo "HISTORICAL_ROOT=$RUNNER_TEMP/freedos-pc88va" >> "$GITHUB_ENV"
+          fi
+
+      - name: Rebuild accepted public prerequisites
+        working-directory: ${{ env.HISTORICAL_ROOT || github.workspace }}
+        run: |
+          make m01-host-portability
+          make m01-image-identity
+          make m01-preflight
+          make m01-image
+          M01_DIAGNOSTICS=1 make m01-build
+          make m01-compare
+          make m01-verify
+          PYTHONDONTWRITEBYTECODE=1 python3 tools/m01/test_kernel_reproducibility.py --repo-root .
+          PYTHONDONTWRITEBYTECODE=1 python3 tools/m02/test_bundle_contract.py
+          make m02-preflight
+          make m02-clean
+          make m02-bundle
+          make m02-compare
+          make m02-verify
+          make m06-prepare-m05
+          make m05-verify
+          make m06
+
+      - name: Run focused public tests
+        working-directory: ${{ env.HISTORICAL_ROOT || github.workspace }}
+        run: |
+          make m07-public
+          make m07r2-public
+          make m07r3-public
+          make m07r4-public
+          PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/m07 -p 'test_*.py'
+          PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/m07r2 -p 'test_*.py'
+          PYTHONDONTWRITEBYTECODE=1 python3 -m unittest discover -s tests/m07r3 -p 'test_*.py'
+
+      - name: Confirm private analysis is not a CI dependency
+        run: |
+          private_marker="pc88va-"
+          private_marker="${private_marker}private-docs"
+          ! grep -F -n "$private_marker" .github/workflows/m07r4-boot-reconstruction.yml
+          ! grep -F -n 'trace-cpu' .github/workflows/m07r4-boot-reconstruction.yml
+          echo 'M07R4 CI validates the abstract public record; private source contents were not inspected.'

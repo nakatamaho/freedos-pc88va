@@ -1,0 +1,145 @@
+{
+  "boundaries": {
+    "first_absent": null,
+    "g_reached": [
+      "G0_REQUEST_ACCEPTED",
+      "G1_ROUTE_SELECTED",
+      "G2_MAILBOX_ENQUEUE_ATTEMPTED",
+      "G3_MAILBOX_ENQUEUE_COMMITTED",
+      "G4_MAILBOX_REQUEST_VISIBLE",
+      "G5_SUBSYSTEM_DISPATCHED",
+      "G6_MAILBOX_DEQUEUE_ATTEMPTED",
+      "G7_CONSUMER_CALLBACK_ENTERED",
+      "G8_REQUEST_CONSUMED",
+      "G9_RESPONSE_ELIGIBLE"
+    ],
+    "h_reached": [
+      "H0_RESPONSE_PRODUCED",
+      "H1_RESPONSE_DELIVERED",
+      "H2_FDC_COMMAND_ATTEMPTED",
+      "H3_FDC_COMMAND_ISSUED",
+      "H4_SECTOR_REQUESTED",
+      "H5_SECTOR_FOUND",
+      "H6_DMA_OR_TRANSFER_STARTED",
+      "H7_SECTOR_DATA_COMMITTED",
+      "H8_FDC_COMPLETION_REPORTED",
+      "H9_FIRMWARE_ACCEPTED_RECORD"
+    ],
+    "last_reached": "H9_FIRMWARE_ACCEPTED_RECORD"
+  },
+  "classification": "VAEG_FIRMWARE_BOOT_ACCEPTANCE_CONTRACT_COMPLETE",
+  "components": {
+    "clean": true,
+    "gitlinks": {
+      "components/country": "23f189cca3420606eae8723884fa92ccd65eb307",
+      "components/fdkernel": "69ccdd8699895722fc537d647ec490685532bdc4",
+      "components/freecom": "855281a3114b43ad4b8d9a320f2aca39be046bba"
+    }
+  },
+  "fields": {
+    "items": [
+      {
+        "abstract_role": "tested firmware acceptance profile",
+        "evidence_class": "CROSS_VALIDATED",
+        "id": "accepted_signature_profile",
+        "publication_state": "resolved_private"
+      },
+      {
+        "abstract_role": "firmware handoff source-drive contract",
+        "evidence_class": "CROSS_VALIDATED",
+        "id": "boot_drive_identity",
+        "publication_state": "resolved_private"
+      },
+      {
+        "abstract_role": "first diagnostic-probe instruction location",
+        "evidence_class": "DYNAMICALLY_OBSERVED",
+        "id": "first_cs_ip",
+        "publication_state": "resolved_private"
+      },
+      {
+        "abstract_role": "firmware access to the accepted media geometry",
+        "evidence_class": "CROSS_VALIDATED",
+        "id": "firmware_attempts_m05_geometry",
+        "publication_state": "resolved_private"
+      },
+      {
+        "abstract_role": "register, segment, stack, flags, and interrupt state",
+        "evidence_class": "DYNAMICALLY_OBSERVED",
+        "id": "initial_register_state",
+        "publication_state": "resolved_private"
+      },
+      {
+        "abstract_role": "ordered initial physical media reads",
+        "evidence_class": "DYNAMICALLY_OBSERVED",
+        "id": "initial_sector_reads",
+        "publication_state": "resolved_private"
+      },
+      {
+        "abstract_role": "firmware-loaded initial record extent",
+        "evidence_class": "DYNAMICALLY_OBSERVED",
+        "id": "loaded_extent",
+        "publication_state": "resolved_private"
+      },
+      {
+        "abstract_role": "physical destination of the firmware-loaded record",
+        "evidence_class": "DYNAMICALLY_OBSERVED",
+        "id": "physical_load_address",
+        "publication_state": "resolved_private"
+      }
+    ],
+    "resolved_count": 8,
+    "unresolved": []
+  },
+  "historical": {
+    "m07r6_status_preserved": true,
+    "m07r6_status_sha256": "590519252c1b49b34c3160b1855c639b3bebbc36c1b2158a1d49f2115cf2fa59",
+    "root_cause_categories": [
+      "READ_ONLY_D88_OPEN_MODE",
+      "SUBSYSTEM_REQUEST_LATCH_PORT_MAPPING",
+      "TRACE_REQUEST_CORRELATION"
+    ]
+  },
+  "milestone": "M07",
+  "observations": {
+    "architectural_checkpoint_match": true,
+    "control_transfer": true,
+    "fdc_command_issued": true,
+    "firmware_record_accepted": true,
+    "initial_sector_transfer": true,
+    "marker_reached_twice": true,
+    "request_response_path_correlated": true
+  },
+  "private_gate": {
+    "accepted_clean_run_count": 18,
+    "accepted_pair_count": 9,
+    "concrete_values_published": false,
+    "input_preservation": "passed",
+    "performed": true,
+    "persistent_evidence_retained": true,
+    "projection_determinism": "byte-identical",
+    "result": "conclusive"
+  },
+  "promotion_status": "prohibited_pending_user_approval",
+  "status": "M07 PASS \u2014 VAEG FIRMWARE BOOT ACCEPTANCE CONTRACT COMPLETE",
+  "vaeg": {
+    "accepted_ci_conclusion": "success",
+    "accepted_ci_run_id": 33887608335,
+    "final_commit": "d68b1ab7392cedc7080927c24a8aa4b35c6756cb",
+    "flat_test_memory_absent": true,
+    "no_extra_architectural_reads": true,
+    "p1_binary_sha256": "0f326a8d0bc84c674d08e3dff475fed5477c626855e8821b4a89af17451aa707",
+    "production_memory": true,
+    "repository": "https://github.com/nakatamaho/vaeg.git",
+    "start_commit": "e1fddddc98c6534a1dc1d4938bd6fad2b246ebb3",
+    "synthetic_trace_sha256": "6a253f9f0b25e74cf0c95f27d378586c141f821b2f77c8704f3237436f515d9b",
+    "tests_disabled_p1": true,
+    "two_clean_p1_builds": "byte-identical"
+  },
+  "validation": {
+    "hardware": "not_run",
+    "m08": "not_started",
+    "private_leakage": "absent",
+    "public_probe_changed": false
+  },
+  "version": 1
+}

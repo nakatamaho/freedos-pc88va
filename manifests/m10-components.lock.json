@@ -1,0 +1,40 @@
+{
+  "components": [
+    {
+      "branch": "topic/m10-pc88va-machine-services-init",
+      "commit": "54c067af9764ace07459b0c2f5df4f70294d0c50",
+      "name": "fdkernel",
+      "parent_commit": "ef46a7ad4b381cf7a301899bee00fec99f5e37a7",
+      "path": "components/fdkernel",
+      "repository": "https://github.com/nakatamaho/fdkernel.git",
+      "role": "PC-88VA minimal machine services with preserved M08 loader and M09 console",
+      "source_archive_sha256": "83b0c98f297c51f80823c270aaf7c313b73d4a8f62b0b287bc391f1ea60360c9"
+    },
+    {
+      "branch": "deterministic-build-timestamp",
+      "commit": "855281a3114b43ad4b8d9a320f2aca39be046bba",
+      "name": "freecom",
+      "parent_commit": null,
+      "path": "components/freecom",
+      "repository": "https://github.com/nakatamaho/freecom_dbcs2.git",
+      "role": "Unchanged accepted Japanese FreeCOM component",
+      "source_archive_sha256": null
+    },
+    {
+      "branch": "master",
+      "commit": "23f189cca3420606eae8723884fa92ccd65eb307",
+      "name": "country",
+      "parent_commit": null,
+      "path": "components/country",
+      "repository": "https://github.com/FDOS/country.git",
+      "role": "Unchanged accepted standalone COUNTRY.SYS component",
+      "source_archive_sha256": null
+    }
+  ],
+  "historical_components_lock": {
+    "path": "manifests/components.lock.json",
+    "sha256": "440e481b28c740875489a6953a246ce5370c44074053c7aad3f80e79ec40c19c"
+  },
+  "schema_version": 1,
+  "status": "current-m10"
+}

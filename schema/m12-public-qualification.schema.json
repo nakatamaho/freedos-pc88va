@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "M12 abstract private runtime qualification",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "status", "child_commit", "vaeg_commit", "artifact_manifest", "main_runs", "error_runs", "two_main_runs_equal", "two_error_runs_equal", "actual_schema_instances_valid", "production_memory_trace", "private_execution_in_public_ci", "hardware_run", "evidence_retention", "writes_attempted"],
+  "properties": {
+    "schema_version": {"const": 1}, "status": {"enum": ["M12 PRIVATE VAEG QUALIFICATION PENDING", "M12 PRIVATE VAEG QUALIFICATION PASS"]}, "child_commit": {"pattern": "^[0-9a-f]{40}$"}, "vaeg_commit": {"const": "7dd453cbd36014ba453a26765b00cd0cc9a99655"},
+    "artifact_manifest": {"type": "object", "additionalProperties": false, "required": ["path", "sha256"], "properties": {"path": {"const": "qa/golden/m12/manifest.json"}, "sha256": {"$ref": "#/$defs/sha256"}}},
+    "main_runs": {"$ref": "#/$defs/runs"}, "error_runs": {"$ref": "#/$defs/runs"}, "two_main_runs_equal": {"type": "boolean"}, "two_error_runs_equal": {"type": "boolean"}, "actual_schema_instances_valid": {"type": "boolean"}, "production_memory_trace": {"type": "boolean"}, "private_execution_in_public_ci": {"const": false}, "hardware_run": {"const": false}, "evidence_retention": {"const": "persistent_ignored"}, "writes_attempted": {"const": false}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "runs": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"type": "object", "additionalProperties": false, "required": ["boundaries", "projection_equal", "inputs_preserved", "exact_sector_bytes", "no_write_commands"], "properties": {"boundaries": {"type": "array", "minItems": 5}, "projection_equal": {"type": "boolean"}, "inputs_preserved": {"type": "boolean"}, "exact_sector_bytes": {"type": "boolean"}, "no_write_commands": {"type": "boolean"}}}}}
+}

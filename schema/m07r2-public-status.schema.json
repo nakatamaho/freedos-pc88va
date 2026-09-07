@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "classification": {
+      "const": "A"
+    },
+    "component_gitlinks": {
+      "additionalProperties": false,
+      "properties": {
+        "components/country": {
+          "const": "23f189cca3420606eae8723884fa92ccd65eb307"
+        },
+        "components/fdkernel": {
+          "const": "69ccdd8699895722fc537d647ec490685532bdc4"
+        },
+        "components/freecom": {
+          "const": "855281a3114b43ad4b8d9a320f2aca39be046bba"
+        }
+      },
+      "required": [
+        "components/country",
+        "components/fdkernel",
+        "components/freecom"
+      ],
+      "type": "object"
+    },
+    "m08_started": {
+      "const": false
+    },
+    "parent_start_commit": {
+      "const": "93d88d047159364669975dd95c45ace7531a935b"
+    },
+    "private_gate": {
+      "additionalProperties": false,
+      "properties": {
+        "adaptive_variant_count": {
+          "const": 0
+        },
+        "bounded_instruction_count_per_trial": {
+          "const": 1000000
+        },
+        "control_attempted": {
+          "const": true
+        },
+        "control_established": {
+          "const": false
+        },
+        "control_repeated": {
+          "const": true
+        },
+        "first_divergent_boundary": {
+          "const": "firmware_fdd_request_not_reached_by_control"
+        },
+        "input_preservation": {
+          "const": "passed"
+        },
+        "last_common_boundary": {
+          "const": "not_applicable_before_media_comparison"
+        },
+        "marker_reached": {
+          "const": false
+        },
+        "marker_repeat_count": {
+          "const": 0
+        },
+        "probe_variant_trial_count": {
+          "const": 0
+        },
+        "projection_comparison": {
+          "const": "byte-identical"
+        },
+        "resolved_fields": {
+          "maxItems": 0,
+          "type": "array"
+        },
+        "trial_count": {
+          "const": 2
+        },
+        "unresolved_fields": {
+          "items": {
+            "enum": [
+              "accepted_signature_profile",
+              "boot_drive_identity",
+              "firmware_attempts_m05_geometry",
+              "first_cs_ip",
+              "initial_register_state",
+              "initial_sector_reads",
+              "loaded_extent",
+              "physical_load_address"
+            ]
+          },
+          "maxItems": 8,
+          "minItems": 8,
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "adaptive_variant_count",
+        "bounded_instruction_count_per_trial",
+        "control_attempted",
+        "control_established",
+        "control_repeated",
+        "first_divergent_boundary",
+        "input_preservation",
+        "last_common_boundary",
+        "marker_reached",
+        "marker_repeat_count",
+        "probe_variant_trial_count",
+        "projection_comparison",
+        "resolved_fields",
+        "trial_count",
+        "unresolved_fields"
+      ],
+      "type": "object"
+    },
+    "private_policy": {
+      "additionalProperties": false,
+      "properties": {
+        "concrete_values_published": {
+          "const": false
+        },
+        "private_inputs_used_by_ci": {
+          "const": false
+        },
+        "public_promotion_status": {
+          "const": "prohibited_pending_user_approval"
+        }
+      },
+      "required": [
+        "concrete_values_published",
+        "private_inputs_used_by_ci",
+        "public_promotion_status"
+      ],
+      "type": "object"
+    },
+    "public_harness": {
+      "type": "object"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "status": {
+      "const": "blocked_positive_control_failed"
+    },
+    "vaeg": {
+      "type": "object"
+    }
+  },
+  "required": [
+    "classification",
+    "component_gitlinks",
+    "m08_started",
+    "parent_start_commit",
+    "private_gate",
+    "private_policy",
+    "public_harness",
+    "schema_version",
+    "status",
+    "vaeg"
+  ],
+  "title": "M07R2 redacted positive-control diagnosis status",
+  "type": "object"
+}

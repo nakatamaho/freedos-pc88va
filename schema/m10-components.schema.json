@@ -1,0 +1,170 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "M10 closed component lock",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "components",
+    "historical_components_lock",
+    "schema_version",
+    "status"
+  ],
+  "properties": {
+    "components": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "prefixItems": [
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "branch",
+            "commit",
+            "name",
+            "parent_commit",
+            "path",
+            "repository",
+            "role",
+            "source_archive_sha256"
+          ],
+          "properties": {
+            "branch": {
+              "const": "topic/m10-pc88va-machine-services-init"
+            },
+            "commit": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            "name": {
+              "const": "fdkernel"
+            },
+            "parent_commit": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            "path": {
+              "const": "components/fdkernel"
+            },
+            "repository": {
+              "const": "https://github.com/nakatamaho/fdkernel.git"
+            },
+            "role": {
+              "const": "PC-88VA minimal machine services with preserved M08 loader and M09 console"
+            },
+            "source_archive_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "branch",
+            "commit",
+            "name",
+            "parent_commit",
+            "path",
+            "repository",
+            "role",
+            "source_archive_sha256"
+          ],
+          "properties": {
+            "branch": {
+              "const": "deterministic-build-timestamp"
+            },
+            "commit": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            "name": {
+              "const": "freecom"
+            },
+            "parent_commit": {
+              "const": null
+            },
+            "path": {
+              "const": "components/freecom"
+            },
+            "repository": {
+              "const": "https://github.com/nakatamaho/freecom_dbcs2.git"
+            },
+            "role": {
+              "const": "Unchanged accepted Japanese FreeCOM component"
+            },
+            "source_archive_sha256": {
+              "const": null
+            }
+          }
+        },
+        {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "branch",
+            "commit",
+            "name",
+            "parent_commit",
+            "path",
+            "repository",
+            "role",
+            "source_archive_sha256"
+          ],
+          "properties": {
+            "branch": {
+              "const": "master"
+            },
+            "commit": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            "name": {
+              "const": "country"
+            },
+            "parent_commit": {
+              "const": null
+            },
+            "path": {
+              "const": "components/country"
+            },
+            "repository": {
+              "const": "https://github.com/FDOS/country.git"
+            },
+            "role": {
+              "const": "Unchanged accepted standalone COUNTRY.SYS component"
+            },
+            "source_archive_sha256": {
+              "const": null
+            }
+          }
+        }
+      ],
+      "items": false
+    },
+    "historical_components_lock": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "const": "manifests/components.lock.json"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "status": {
+      "const": "current-m10"
+    }
+  }
+}

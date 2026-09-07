@@ -1,0 +1,116 @@
+{
+  "acceptance_verifier": "tools/m10/verify_m10.py",
+  "child_ci": {
+    "attempt": 1,
+    "head_sha": "54c067af9764ace07459b0c2f5df4f70294d0c50",
+    "repository": "nakatamaho/fdkernel",
+    "required_jobs": [
+      "structure"
+    ],
+    "run_id": 34019124058,
+    "workflow_path": ".github/workflows/pc88va-compile.yml"
+  },
+  "child_commit": "54c067af9764ace07459b0c2f5df4f70294d0c50",
+  "hardware_run": false,
+  "instances": [
+    {
+      "record": {
+        "path": "config/m10/services.json",
+        "sha256": "509ef2f587cc47cef3caadd0ddd9c5969555dccc7617f65fce1a15a4244be2b2"
+      },
+      "schema": {
+        "path": "schema/m10-services.schema.json",
+        "sha256": "f862f67cd352080ef5e95a0cd8cbbf18dda4381a56b84ac2bd8fe84c96e510c5"
+      }
+    },
+    {
+      "record": {
+        "path": "qa/golden/m10/manifest.json",
+        "sha256": "5ec22d0dd8bb700e2ecf46a0b5d166ae479717d3fe99d35b16e217a3e9e21046"
+      },
+      "schema": {
+        "path": "schema/m10-artifact-manifest.schema.json",
+        "sha256": "5eb5ac7c26e2fe9699a4eb73d2a7ce1f011328ad316202e35c4872f1b6888bf6"
+      }
+    },
+    {
+      "record": {
+        "path": "qa/golden/m10/fatal-controls.json",
+        "sha256": "ca05d76aa89fd8eac3f5c862b3fb9d26c6160f281295587f5d2cf6064f807aa1"
+      },
+      "schema": {
+        "path": "schema/m10-fatal-controls.schema.json",
+        "sha256": "6f67badd96eca3ab1803834093df5ea9146e04f046ac15685dc56b33d12fbd46"
+      }
+    },
+    {
+      "record": {
+        "path": "config/m10/vaeg-qualification.json",
+        "sha256": "174162bc3595a9f790de29d65155286fe9a03e77fc7e41b65fc13d63b225b211"
+      },
+      "schema": {
+        "path": "schema/m10-public-qualification.schema.json",
+        "sha256": "72d4ae08c969baf2615fcf6d6bd53eb873a1be25b490dfb1e2db4e4f25fbdb48"
+      }
+    },
+    {
+      "record": {
+        "path": "manifests/m10-components.lock.json",
+        "sha256": "b6b6df02d03218a7f65e1a2a523e40e20f10eed7b9ea635266954a4f1cb8b9d0"
+      },
+      "schema": {
+        "path": "schema/m10-components.schema.json",
+        "sha256": "fdcb4f61ebd1fd3b875788f3ac943fb11dec1d05fe37685203a7e560b9477d38"
+      }
+    }
+  ],
+  "milestone": "M10",
+  "parent_ci": {
+    "repository": "nakatamaho/freedos-pc88va",
+    "run_id": 34020956366,
+    "attempt": 1,
+    "head_sha": "eaadb757c4c3e2a4a7d405c0e250e96c1f4c222c",
+    "workflow_path": ".github/workflows/m10-machine-services.yml",
+    "required_jobs": ["public-machine-services", "historical-regression"],
+    "manifest": {
+      "path": "qa/golden/m10/manifest.json",
+      "sha256": "5ec22d0dd8bb700e2ecf46a0b5d166ae479717d3fe99d35b16e217a3e9e21046"
+    }
+  },
+  "pins": [
+    {
+      "path": "manifests/components.lock.json",
+      "sha256": "440e481b28c740875489a6953a246ce5370c44074053c7aad3f80e79ec40c19c"
+    },
+    {
+      "path": "manifests/toolchains.lock.json",
+      "sha256": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162"
+    },
+    {
+      "path": "config/m10/m09-handoff.json",
+      "sha256": "4a39db59b953806a2675a3a82157a4dae81249dca5770b2d016ba7f711c4c182"
+    },
+    {
+      "path": "schema/m10-build-records.schema.json",
+      "sha256": "b22c7c7aceeff6e2861f06e3dc5d80ccb32d12d58a9422ec058ea96d8ab772f4"
+    }
+  ],
+  "private_execution_in_public_ci": false,
+  "publication_policy": {
+    "config/m10/machine-contract.json": {
+      "fields": [
+        "status",
+        "parent_ci"
+      ],
+      "kind": "json_fields"
+    },
+    "docs/porting/m10-report.md": {
+      "fields": [],
+      "kind": "documentation"
+    }
+  },
+  "schema_version": 1,
+  "start_sha": "6b29d4f9b2b732ced9bc25a9b33b453877cbd7f0",
+  "status": "accepted",
+  "vaeg_commit": "7463f9501d84701f50f3243d5067b6a9dfd0c2e7"
+}

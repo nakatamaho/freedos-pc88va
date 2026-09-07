@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "M10 public fatal control manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "artifacts",
+    "baseline_kernel",
+    "changed_bytes_per_artifact",
+    "independent_extraction_verified",
+    "loader_stages_unchanged",
+    "schema_version",
+    "selector_after",
+    "selector_before",
+    "selector_file_offset",
+    "two_clean_controls_equal"
+  ],
+  "properties": {
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fatal_d88_media",
+        "fatal_kernel_sys",
+        "fatal_raw_media"
+      ],
+      "properties": {
+        "fatal_d88_media": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sha256",
+            "size"
+          ],
+          "properties": {
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "size": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "fatal_kernel_sys": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sha256",
+            "size"
+          ],
+          "properties": {
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "size": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        },
+        "fatal_raw_media": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "sha256",
+            "size"
+          ],
+          "properties": {
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            },
+            "size": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        }
+      }
+    },
+    "baseline_kernel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "sha256",
+        "size"
+      ],
+      "properties": {
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "size": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "changed_bytes_per_artifact": {
+      "const": 1
+    },
+    "independent_extraction_verified": {
+      "const": true
+    },
+    "loader_stages_unchanged": {
+      "const": true
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "selector_after": {
+      "const": 1
+    },
+    "selector_before": {
+      "const": 0
+    },
+    "selector_file_offset": {
+      "type": "integer",
+      "minimum": 28
+    },
+    "two_clean_controls_equal": {
+      "const": true
+    }
+  }
+}

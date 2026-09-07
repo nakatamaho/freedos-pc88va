@@ -1,0 +1,240 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "M10 abstract private qualification without private facts",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "child_commit",
+    "vaeg_commit",
+    "artifact_manifest",
+    "fatal_controls",
+    "fresh_prerequisite",
+    "historical_m09_private_reconstruction_claimed",
+    "private_gate",
+    "main_runs",
+    "fatal_runs",
+    "two_main_runs_equal",
+    "two_fatal_runs_equal",
+    "complete_raw_evidence_and_projections_equal",
+    "actual_private_schema_instances_valid",
+    "production_memory_trace",
+    "test_flat_memory_absent",
+    "evidence_retention",
+    "private_execution_in_public_ci",
+    "hardware_run"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "child_commit": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "vaeg_commit": {
+      "const": "7463f9501d84701f50f3243d5067b6a9dfd0c2e7"
+    },
+    "artifact_manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_./-]+$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "fatal_controls": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "pattern": "^[A-Za-z0-9_./-]+$"
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "fresh_prerequisite": {
+      "const": "M10 FRESH PREREQUISITE PASS"
+    },
+    "historical_m09_private_reconstruction_claimed": {
+      "const": false
+    },
+    "private_gate": {
+      "const": "performed"
+    },
+    "main_runs": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "boundaries",
+          "loader_boundaries",
+          "console_boundaries",
+          "memory_partition_and_ownership",
+          "interrupt_masks_vectors_preserved",
+          "clock_origin_and_observed_edge",
+          "post_init_guest_display_exact",
+          "register_segments_flags_stack_preserved",
+          "no_disk_keyboard_nls_dma_reset",
+          "inputs_preserved"
+        ],
+        "properties": {
+          "boundaries": {
+            "const": [
+              "I0",
+              "I1",
+              "I2",
+              "I3",
+              "I4",
+              "I5",
+              "I6",
+              "I7",
+              "I8",
+              "I9"
+            ]
+          },
+          "loader_boundaries": {
+            "const": [
+              "L0",
+              "L1",
+              "L2",
+              "L3",
+              "L4",
+              "L5",
+              "L6",
+              "L7",
+              "L8",
+              "L9"
+            ]
+          },
+          "console_boundaries": {
+            "const": [
+              "C0",
+              "C1",
+              "C2",
+              "C3",
+              "C4",
+              "C5",
+              "C6",
+              "C7",
+              "C8",
+              "C9"
+            ]
+          },
+          "memory_partition_and_ownership": {
+            "const": true
+          },
+          "interrupt_masks_vectors_preserved": {
+            "const": true
+          },
+          "clock_origin_and_observed_edge": {
+            "const": true
+          },
+          "post_init_guest_display_exact": {
+            "const": true
+          },
+          "register_segments_flags_stack_preserved": {
+            "const": true
+          },
+          "no_disk_keyboard_nls_dma_reset": {
+            "const": true
+          },
+          "inputs_preserved": {
+            "const": true
+          }
+        }
+      }
+    },
+    "fatal_runs": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "boundaries",
+          "initialized_before_fatal",
+          "no_return",
+          "guest_quiescent_halt",
+          "external_bound_not_timeout",
+          "inputs_preserved"
+        ],
+        "properties": {
+          "boundaries": {
+            "const": [
+              "F0",
+              "F1",
+              "F2",
+              "F3",
+              "F4"
+            ]
+          },
+          "initialized_before_fatal": {
+            "const": true
+          },
+          "no_return": {
+            "const": true
+          },
+          "guest_quiescent_halt": {
+            "const": true
+          },
+          "external_bound_not_timeout": {
+            "const": true
+          },
+          "inputs_preserved": {
+            "const": true
+          }
+        }
+      }
+    },
+    "two_main_runs_equal": {
+      "const": true
+    },
+    "two_fatal_runs_equal": {
+      "const": true
+    },
+    "complete_raw_evidence_and_projections_equal": {
+      "const": true
+    },
+    "actual_private_schema_instances_valid": {
+      "const": true
+    },
+    "production_memory_trace": {
+      "const": true
+    },
+    "test_flat_memory_absent": {
+      "const": true
+    },
+    "evidence_retention": {
+      "const": "persistent_ignored"
+    },
+    "private_execution_in_public_ci": {
+      "const": false
+    },
+    "hardware_run": {
+      "const": false
+    }
+  }
+}

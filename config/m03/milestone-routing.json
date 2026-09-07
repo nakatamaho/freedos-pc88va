@@ -1,0 +1,712 @@
+{
+  "membership_count_semantics": "Milestone membership counts overlap and are not task counts, effort estimates, or an exclusive partition of the census.",
+  "policy_id": "m03r1-milestone-routing",
+  "roadmap": [
+    {
+      "milestone": "M04",
+      "scope": "PC-88VA boot and media contract from cited evidence; specification only."
+    },
+    {
+      "milestone": "M05",
+      "scope": "Deterministic host-built FAT12 filesystem and image assembly; no VA bootability claim."
+    },
+    {
+      "milestone": "M06",
+      "scope": "First PC-88VA compile-only target, stub HAL, and DBCS on/off build matrix."
+    },
+    {
+      "milestone": "M07",
+      "scope": "IPL reaches the first controlled instruction under VAEG."
+    },
+    {
+      "milestone": "M08",
+      "scope": "FAT loader reads and transfers control to the kernel entry point."
+    },
+    {
+      "milestone": "M09",
+      "scope": "PC-88VA console output."
+    },
+    {
+      "milestone": "M10",
+      "scope": "Memory, timer and clock, interrupt, and runtime foundation."
+    },
+    {
+      "milestone": "M11",
+      "scope": "Keyboard and console input."
+    },
+    {
+      "milestone": "M12",
+      "scope": "Kernel floppy read-only path."
+    },
+    {
+      "milestone": "M13",
+      "scope": "Read-only COMMAND.COM and EXEC session."
+    },
+    {
+      "milestone": "M14",
+      "scope": "Floppy write and media-change handling."
+    },
+    {
+      "milestone": "M15",
+      "scope": "Writable DOS session, clock, AUTOEXEC, and system transfer."
+    },
+    {
+      "milestone": "M16",
+      "scope": "Japanese output and NLS runtime."
+    },
+    {
+      "milestone": "M17",
+      "scope": "Japanese input and DBCS filename behavior."
+    },
+    {
+      "milestone": "M18",
+      "scope": "Optional SASI/SCSI HDD extension; not on the boot-critical path."
+    },
+    {
+      "milestone": "M19",
+      "scope": "Release gate, provenance, documentation, CI, and license decision."
+    }
+  ],
+  "routing_statuses": [
+    "coarse",
+    "curated",
+    "not_applicable",
+    "unresolved"
+  ],
+  "rules": [
+    {
+      "contract_milestones": [],
+      "description": "Leave an unknown census surface without an automatic milestone destination.",
+      "id": "route-unknown-unresolved",
+      "implementation_milestones": [],
+      "match": {
+        "surface": [
+          "unknown"
+        ]
+      },
+      "notes": "No automatic milestone route is justified until the observation is classified.",
+      "priority": 1000,
+      "status": "unresolved"
+    },
+    {
+      "contract_milestones": [
+        "M04"
+      ],
+      "description": "Route explicit SASI, SCSI, or HDD evidence to the optional HDD extension.",
+      "id": "route-explicit-hdd-extension",
+      "implementation_milestones": [
+        "M18"
+      ],
+      "match": {
+        "any_text_regex": "\\b(?:sasi|scsi|hdd|hard[-_ ]?disk|harddisk)\\b"
+      },
+      "notes": "M18 requires explicit tracked-source HDD evidence and is never a catch-all.",
+      "priority": 990,
+      "status": "curated"
+    },
+    {
+      "contract_milestones": [
+        "M04"
+      ],
+      "description": "Route explicit boot-sector, BPB, FAT12, or image-layout evidence.",
+      "id": "route-boot-image-layout",
+      "implementation_milestones": [
+        "M05"
+      ],
+      "match": {
+        "any_text_regex": "\\b(?:bpb|b_fat(?:12f?|16|32)?|fat12|boot[-_ ]?sector|filesystem image|image layout|bsbytespersec|bsmedia)\\b",
+        "surface": [
+          "boot"
+        ]
+      },
+      "notes": "M05 is limited to host-side filesystem and image layout work.",
+      "priority": 980,
+      "status": "curated"
+    },
+    {
+      "contract_milestones": [
+        "M04"
+      ],
+      "description": "Route explicit IPL entry and first-controlled-instruction evidence.",
+      "id": "route-boot-ipl-entry",
+      "implementation_milestones": [
+        "M07"
+      ],
+      "match": {
+        "any_text_regex": "\\b(?:ipl|real_start|boot_success|loadseg|first controlled)\\b",
+        "surface": [
+          "boot"
+        ]
+      },
+      "notes": "The contract precedes the M07 emulator-controlled IPL entry gate.",
+      "priority": 970,
+      "status": "curated"
+    },
+    {
+      "contract_milestones": [
+        "M04"
+      ],
+      "description": "Route explicit FAT loader, kernel load, or transfer evidence.",
+      "id": "route-boot-loader-transfer",
+      "implementation_milestones": [
+        "M08"
+      ],
+      "match": {
+        "any_text_regex": "\\b(?:loader|kernel\\.sys|readdisk|findfile|load kernel|transfer)\\b",
+        "surface": [
+          "boot"
+        ]
+      },
+      "notes": "M08 owns FAT loading and transfer to the kernel entry point.",
+      "priority": 960,
+      "status": "curated"
+    },
+    {
+      "contract_milestones": [
+        "M04"
+      ],
+      "description": "Retain unmatched boot observations as boot-contract candidates.",
+      "id": "route-boot-contract-default",
+      "implementation_milestones": [],
+      "match": {
+        "surface": [
+          "boot"
+        ]
+      },
+      "notes": "Candidate consumers, not exclusive ownership or task counts.",
+      "priority": 950,
+      "status": "coarse"
+    },
+    {
+      "contract_milestones": [
+        "M04"
+      ],
+      "description": "Route disk reads coupled to a boot loader.",
+      "id": "route-loader-disk-read",
+      "implementation_milestones": [
+        "M08"
+      ],
+      "match": {
+        "any_text_regex": "(?:/boot/|\\bloader\\b|\\breaddisk\\b|fat chain|root directory)",
+        "surface": [
+          "disk"
+        ]
+      },
+      "notes": "The same observation informs the M04 contract and M08 loader implementation.",
+      "priority": 940,
+      "status": "curated"
+    },
+    {
+      "contract_milestones": [
+        "M04"
+      ],
+      "description": "Route explicit floppy writes, formatting, or media-change handling.",
+      "id": "route-floppy-write-media-change",
+      "implementation_milestones": [
+        "M14"
+      ],
+      "match": {
+        "any_text_regex": "\\b(?:write|format|media[-_ ]?change|diskchanged|fl_diskchanged)\\b",
+        "surface": [
+          "device_init",
+          "disk",
+          "dma"
+        ]
+      },
+      "notes": "Write and media-change behavior is deferred to M14 after read-only support.",
+      "priority": 930,
+      "status": "curated"
+    },
+    {
+      "contract_milestones": [
+        "M04"
+      ],
+      "description": "Route explicit fdkernel floppy and FDC read-path evidence.",
+      "id": "route-kernel-floppy-read",
+      "implementation_milestones": [
+        "M12"
+      ],
+      "match": {
+        "any_text_regex": "\\b(?:floppy|fdc|readid|fl_read|read sector|blockio|dsk\\.c)\\b",
+        "component": [
+          "fdkernel"
+        ],
+        "path_regex": "(?:/drivers/|/kernel/(?:dsk|blockio|initdisk)|floppy)",
+        "surface": [
+          "device_init",
+          "disk",
+          "dma"
+        ]
+      },
+      "notes": "M12 is the kernel floppy read-only implementation candidate.",
+      "priority": 920,
+      "status": "curated"
+    },
+    {
+      "contract_milestones": [
+        "M04"
+      ],
+      "description": "Keep a generic disk observation at the media-contract boundary.",
+      "id": "route-disk-contract-default",
+      "implementation_milestones": [],
+      "match": {
+        "surface": [
+          "disk"
+        ]
+      },
+      "notes": "A generic disk token is insufficient to choose loader, read, write, or HDD work.",
+      "priority": 910,
+      "status": "coarse"
+    },
+    {
+      "contract_milestones": [
+        "M04"
+      ],
+      "description": "Keep a generic DMA or FDC observation at the hardware-contract boundary.",
+      "id": "route-dma-contract-default",
+      "implementation_milestones": [],
+      "match": {
+        "surface": [
+          "dma"
+        ]
+      },
+      "notes": "Generic DMA evidence does not imply M18 or a particular read/write stage.",
+      "priority": 900,
+      "status": "coarse"
+    },
+    {
+      "contract_milestones": [],
+      "description": "Route Japanese console-output evidence to general and Japanese output stages.",
+      "id": "route-console-output-japanese",
+      "implementation_milestones": [
+        "M09",
+        "M16"
+      ],
+      "match": {
+        "any_text_regex": "\\b(?:japanese|dbcs|nls|country|codepage|glyph|kanji)\\b",
+        "surface": [
+          "console_output"
+        ]
+      },
+      "notes": "General console output precedes Japanese glyph and NLS runtime validation.",
+      "priority": 890,
+      "status": "curated"
+    },
+    {
+      "contract_milestones": [],
+      "description": "Route general console output to M09.",
+      "id": "route-console-output-general",
+      "implementation_milestones": [
+        "M09"
+      ],
+      "match": {
+        "surface": [
+          "console_output"
+        ]
+      },
+      "notes": "M07 may use diagnostics but does not own the final console subsystem.",
+      "priority": 880,
+      "status": "coarse"
+    },
+    {
+      "contract_milestones": [],
+      "description": "Route Japanese console-input evidence to general and Japanese input stages.",
+      "id": "route-console-input-japanese",
+      "implementation_milestones": [
+        "M11",
+        "M17"
+      ],
+      "match": {
+        "any_text_regex": "\\b(?:japanese|dbcs|nls|country|codepage|kanji|filename)\\b",
+        "surface": [
+          "console_input"
+        ]
+      },
+      "notes": "Japanese input and DBCS filename behavior follows the general keyboard path.",
+      "priority": 870,
+      "status": "curated"
+    },
+    {
+      "contract_milestones": [],
+      "description": "Route general keyboard and console input to M11.",
+      "id": "route-console-input-general",
+      "implementation_milestones": [
+        "M11"
+      ],
+      "match": {
+        "surface": [
+          "console_input"
+        ]
+      },
+      "notes": "General console input is not a loader responsibility.",
+      "priority": 860,
+      "status": "coarse"
+    },
+    {
+      "contract_milestones": [],
+      "description": "Route NLS/DBCS evidence in build configuration files to the M06 matrix.",
+      "id": "route-nls-build-matrix",
+      "implementation_milestones": [
+        "M06"
+      ],
+      "match": {
+        "path_regex": "(?:^|/)(?:config(?:\\.|/)|makefile|mkfiles?(?:/|\\.)|[^/]*\\.mak$)",
+        "surface": [
+          "nls_dbcs"
+        ]
+      },
+      "notes": "Compile-matrix routing does not claim Japanese runtime completion.",
+      "priority": 850,
+      "status": "curated"
+    },
+    {
+      "contract_milestones": [],
+      "description": "Route NLS/DBCS input, parsing, editing, and filename evidence to M17.",
+      "id": "route-nls-input-filename",
+      "implementation_milestones": [
+        "M17"
+      ],
+      "match": {
+        "any_text_regex": "\\b(?:filename|argument|parse|edit|input|keyboard|command line)\\b",
+        "surface": [
+          "nls_dbcs"
+        ]
+      },
+      "notes": "M17 owns Japanese input and DBCS filename behavior.",
+      "priority": 840,
+      "status": "curated"
+    },
+    {
+      "contract_milestones": [],
+      "description": "Route Country, NLS, codepage, and output-table evidence to M16.",
+      "id": "route-nls-output-runtime",
+      "implementation_milestones": [
+        "M16"
+      ],
+      "match": {
+        "any_text_regex": "\\b(?:country|nls|codepage|uppercase|collat|glyph|display|output)\\b",
+        "surface": [
+          "nls_dbcs"
+        ]
+      },
+      "notes": "M16 owns Japanese output and NLS runtime behavior.",
+      "priority": 830,
+      "status": "curated"
+    },
+    {
+      "contract_milestones": [],
+      "description": "Keep an otherwise generic NLS/DBCS observation as a runtime candidate.",
+      "id": "route-nls-runtime-default",
+      "implementation_milestones": [
+        "M16",
+        "M17"
+      ],
+      "match": {
+        "surface": [
+          "nls_dbcs"
+        ]
+      },
+      "notes": "The coarse route excludes M06 unless build-matrix evidence is present.",
+      "priority": 820,
+      "status": "coarse"
+    },
+    {
+      "contract_milestones": [],
+      "description": "Route explicit host-side image-layout build evidence to M05.",
+      "id": "route-build-image-layout",
+      "implementation_milestones": [
+        "M05"
+      ],
+      "match": {
+        "any_text_regex": "\\b(?:fat12|bpb|filesystem image|image layout|image metadata|image payload|boot[-_ ]?sector|mkfs)\\b",
+        "surface": [
+          "build"
+        ]
+      },
+      "notes": "Generic compiler and make conditionals are excluded from M05.",
+      "priority": 810,
+      "status": "curated"
+    },
+    {
+      "contract_milestones": [],
+      "description": "Route platform selection, compiler configuration, HAL selection, and build structure to M06.",
+      "id": "route-build-platform",
+      "implementation_milestones": [
+        "M06"
+      ],
+      "match": {
+        "surface": [
+          "build"
+        ]
+      },
+      "notes": "M06 is the first milestone allowed to add a PC-88VA compile-only target.",
+      "priority": 800,
+      "status": "coarse"
+    },
+    {
+      "contract_milestones": [
+        "M04"
+      ],
+      "description": "Route memory/startup observations within boot code to loader handoff work.",
+      "id": "route-memory-boot-entry",
+      "implementation_milestones": [
+        "M08"
+      ],
+      "match": {
+        "path_regex": "/boot/",
+        "surface": [
+          "memory"
+        ]
+      },
+      "notes": "Boot memory state is contracted in M04 and consumed by the M08 handoff.",
+      "priority": 790,
+      "status": "curated"
+    },
+    {
+      "contract_milestones": [],
+      "description": "Route compile, link, segment, and startup layout evidence to M06.",
+      "id": "route-memory-startup-layout",
+      "implementation_milestones": [
+        "M06"
+      ],
+      "match": {
+        "any_text_regex": "\\b(?:entry|startup|segment|stack|link|loadseg)\\b",
+        "component": [
+          "fdkernel"
+        ],
+        "path_regex": "(?:/kernel/|/mkfiles?/|/makefile|/entry\\.)",
+        "surface": [
+          "memory"
+        ]
+      },
+      "notes": "M06 establishes the compile/link/startup shape before runtime foundation work.",
+      "priority": 780,
+      "status": "curated"
+    },
+    {
+      "contract_milestones": [],
+      "description": "Route general memory behavior to the M10 runtime foundation.",
+      "id": "route-memory-runtime-foundation",
+      "implementation_milestones": [
+        "M10"
+      ],
+      "match": {
+        "surface": [
+          "memory"
+        ]
+      },
+      "notes": "Candidate consumers, not exclusive ownership or task counts.",
+      "priority": 770,
+      "status": "coarse"
+    },
+    {
+      "contract_milestones": [],
+      "description": "Route timer and clock behavior to the M10 runtime foundation.",
+      "id": "route-timer-clock-foundation",
+      "implementation_milestones": [
+        "M10"
+      ],
+      "match": {
+        "surface": [
+          "timer_clock"
+        ]
+      },
+      "notes": "M15 receives clock writes only through a specific writable-session rule.",
+      "priority": 760,
+      "status": "coarse"
+    },
+    {
+      "contract_milestones": [
+        "M04"
+      ],
+      "description": "Route interrupt observations in boot code through the entry-state contract.",
+      "id": "route-interrupt-boot-contract",
+      "implementation_milestones": [
+        "M10"
+      ],
+      "match": {
+        "path_regex": "/boot/",
+        "surface": [
+          "interrupts"
+        ]
+      },
+      "notes": "Boot interrupt state is a contract input to the later runtime foundation.",
+      "priority": 750,
+      "status": "curated"
+    },
+    {
+      "contract_milestones": [],
+      "description": "Route general interrupt behavior to the M10 runtime foundation.",
+      "id": "route-interrupt-runtime-foundation",
+      "implementation_milestones": [
+        "M10"
+      ],
+      "match": {
+        "surface": [
+          "interrupts"
+        ]
+      },
+      "notes": "Candidate consumers, not exclusive ownership or task counts.",
+      "priority": 740,
+      "status": "coarse"
+    },
+    {
+      "contract_milestones": [
+        "M04"
+      ],
+      "description": "Route firmware disk evidence in boot code to the loader stage.",
+      "id": "route-firmware-loader-disk",
+      "implementation_milestones": [
+        "M08"
+      ],
+      "match": {
+        "any_text_regex": "\\b(?:disk|sector|bios|firmware)\\b",
+        "path_regex": "/boot/",
+        "surface": [
+          "firmware"
+        ]
+      },
+      "notes": "The firmware ABI is contracted before the loader consumes it.",
+      "priority": 730,
+      "status": "curated"
+    },
+    {
+      "contract_milestones": [
+        "M04"
+      ],
+      "description": "Route firmware-coupled early console evidence to M09.",
+      "id": "route-firmware-early-console",
+      "implementation_milestones": [
+        "M09"
+      ],
+      "match": {
+        "any_text_regex": "\\b(?:console|print|putc|video|display|char)\\b",
+        "surface": [
+          "firmware"
+        ]
+      },
+      "notes": "M04 defines the diagnostic route; M09 implements the console subsystem.",
+      "priority": 720,
+      "status": "curated"
+    },
+    {
+      "contract_milestones": [
+        "M04"
+      ],
+      "description": "Keep generic firmware evidence at the M04 contract boundary.",
+      "id": "route-firmware-contract-default",
+      "implementation_milestones": [],
+      "match": {
+        "surface": [
+          "firmware"
+        ]
+      },
+      "notes": "A generic firmware hit is not broadcast across implementation milestones.",
+      "priority": 710,
+      "status": "coarse"
+    },
+    {
+      "contract_milestones": [],
+      "description": "Route console, video, display, and printer device initialization to M09.",
+      "id": "route-device-console-init",
+      "implementation_milestones": [
+        "M09"
+      ],
+      "match": {
+        "any_text_regex": "\\b(?:console|video|display|printer)\\b",
+        "surface": [
+          "device_init"
+        ]
+      },
+      "notes": "Device initialization follows the identified console-output subsystem.",
+      "priority": 700,
+      "status": "curated"
+    },
+    {
+      "contract_milestones": [],
+      "description": "Route keyboard and input device initialization to M11.",
+      "id": "route-device-input-init",
+      "implementation_milestones": [
+        "M11"
+      ],
+      "match": {
+        "any_text_regex": "\\b(?:keyboard|input|conkey)\\b",
+        "surface": [
+          "device_init"
+        ]
+      },
+      "notes": "Device initialization follows the identified console-input subsystem.",
+      "priority": 690,
+      "status": "curated"
+    },
+    {
+      "contract_milestones": [],
+      "description": "Route generic device initialization to the M10 runtime foundation.",
+      "id": "route-device-runtime-init",
+      "implementation_milestones": [
+        "M10"
+      ],
+      "match": {
+        "surface": [
+          "device_init"
+        ]
+      },
+      "notes": "Storage, console, and input-specific rules take precedence over this default.",
+      "priority": 680,
+      "status": "coarse"
+    },
+    {
+      "contract_milestones": [],
+      "description": "Route explicit writable commands, AUTOEXEC, clock writes, and system transfer to M15.",
+      "id": "route-exec-writable-session",
+      "implementation_milestones": [
+        "M15"
+      ],
+      "match": {
+        "any_text_regex": "(?:^|/)(?:copy|ren|del|md|rd|mkdir|rmdir|sys|autoexec|clock)(?:\\.|/|$)|\\b(?:write|delete|rename|system transfer|sys\\.com|autoexec)\\b",
+        "surface": [
+          "exec_runtime"
+        ]
+      },
+      "notes": "M15 owns writable DOS session behavior rather than the read-only command gate.",
+      "priority": 670,
+      "status": "curated"
+    },
+    {
+      "contract_milestones": [],
+      "description": "Route Japanese command-line and filename evidence to command and Japanese runtime stages.",
+      "id": "route-exec-japanese-session",
+      "implementation_milestones": [
+        "M13",
+        "M16",
+        "M17"
+      ],
+      "match": {
+        "any_text_regex": "\\b(?:dbcs|japanese|nls|country|filename|argument|parse|line edit)\\b",
+        "surface": [
+          "exec_runtime"
+        ]
+      },
+      "notes": "Read-only command integration and Japanese runtime concerns are separate consumers.",
+      "priority": 660,
+      "status": "curated"
+    },
+    {
+      "contract_milestones": [],
+      "description": "Route general COMMAND.COM and EXEC behavior to the M13 read-only session.",
+      "id": "route-exec-readonly-session",
+      "implementation_milestones": [
+        "M13"
+      ],
+      "match": {
+        "surface": [
+          "exec_runtime"
+        ]
+      },
+      "notes": "General EXEC runtime is not a keyboard milestone.",
+      "priority": 650,
+      "status": "coarse"
+    }
+  ],
+  "schema_version": 1
+}

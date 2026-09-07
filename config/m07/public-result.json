@@ -1,0 +1,22 @@
+{
+  "input_preservation": "passed",
+  "private_gate": "performed",
+  "private_gate_result": "inconclusive",
+  "public_promotion_status": "prohibited_pending_user_approval",
+  "resolved_field_count": 0,
+  "resolved_fields": [],
+  "schema_version": 1,
+  "trial_count": 10,
+  "unresolved_field_count": 8,
+  "unresolved_fields": [
+    "accepted_signature_profile",
+    "boot_drive_identity",
+    "entry_cs_ip",
+    "firmware_attempts_m05_geometry",
+    "initial_load_extent",
+    "initial_register_state",
+    "initial_sector_reads",
+    "physical_load_address"
+  ],
+  "variant_count": 5
+}

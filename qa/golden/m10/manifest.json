@@ -1,0 +1,51 @@
+{
+  "artifacts": {
+    "d88_media": {
+      "sha256": "bb64d80cd0519e3fbb21d51ae4c1ae3617f73bf8789f78881723239313cd057e",
+      "size": 1331888
+    },
+    "extracted_command_com": {
+      "sha256": "fabe7744cc7c51c6f72519cc39d89bf77beaf908f994675a97a1e34c93549da1",
+      "size": 91143
+    },
+    "extracted_country_sys": {
+      "sha256": "04b2d2bc8df382090686f00e547d718d6706d22fb34c34dd77cd55083d5c34d5",
+      "size": 42614
+    },
+    "extracted_kernel_sys": {
+      "sha256": "b6a1941fa3950aa0cd3cfc3cc6acf7b4f4efffb3897773a262b084b52e11e77d",
+      "size": 8378
+    },
+    "kernel_sys": {
+      "compile_manifest_sha256": "c01dcd6a05303cc9450a7b76c91f6fe837bc77de99a55bab190c901ef19104b2",
+      "format": "dos-mz",
+      "kernel_interface_sha256": "67a53941ccf3dda44d646f8776e657e25a4051fe828668221819f134a6a48ce9",
+      "sha256": "b6a1941fa3950aa0cd3cfc3cc6acf7b4f4efffb3897773a262b084b52e11e77d",
+      "size": 8378,
+      "symbol_evidence_sha256": "a31ae08854fce436524073f443cb4a4af5b20d2b6d0ebbdcf4c79bfed6c9b730"
+    },
+    "loader_stage1": {
+      "sha256": "20efd8a66dde7feac3f48df4bd6e8c4564d70e80a5a8871a8293e735c1585f24",
+      "size": 1024
+    },
+    "loader_stage2": {
+      "sha256": "db324cbdae11fd1e6085a7957ef171ccf9d6a9be6ea05f3df0eedf83d8f594f7",
+      "size": 4304
+    },
+    "raw_media": {
+      "sha256": "730fb9caa3d17be5dec244060f1d5ce599c106026ab7ffb10969072e74a7aa78",
+      "size": 1310720
+    }
+  },
+  "composition_manifest": {
+    "sha256": "a3934ee8846b28f3d53f510bded04e0b9fec54e8757dccd5fe3a62e63f697de3",
+    "size": 5268
+  },
+  "raw_map_byte_identity_claimed": false,
+  "schema_version": 1,
+  "source": {
+    "archive_sha256": "83b0c98f297c51f80823c270aaf7c313b73d4a8f62b0b287bc391f1ea60360c9",
+    "commit": "54c067af9764ace07459b0c2f5df4f70294d0c50"
+  },
+  "two_clean_builds_equal": true
+}

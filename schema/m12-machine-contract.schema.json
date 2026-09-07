@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "M12 machine acceptance contract",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "milestone", "status", "start_sha", "qualified_implementation_sha", "child_commit", "vaeg_commit", "artifact_manifest", "qualification", "component_lock", "acceptance_verifier", "child_ci", "parent_ci", "publication_policy"],
+  "properties": {
+    "schema_version": {"const": 1}, "milestone": {"const": "M12"}, "status": {"enum": ["in_progress", "qualified", "accepted"]},
+    "start_sha": {"const": "c5ddf7c87cac46d357cfe75d132a819c7cf3fbe4"}, "qualified_implementation_sha": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
+    "child_commit": {"const": "21d9f3450276d42e5fedd1ddb9e80485b888cc07"}, "vaeg_commit": {"const": "7dd453cbd36014ba453a26765b00cd0cc9a99655"},
+    "artifact_manifest": {"$ref": "#/$defs/ref"}, "qualification": {"$ref": "#/$defs/ref"}, "component_lock": {"$ref": "#/$defs/ref"}, "acceptance_verifier": {"const": "tools/m12/verify_m12.py"},
+    "child_ci": {"type": "object", "additionalProperties": false, "required": ["repository", "run_id", "attempt", "head_sha", "workflow_path", "required_jobs"], "properties": {"repository": {"const": "nakatamaho/fdkernel"}, "run_id": {"type": "integer", "minimum": 1}, "attempt": {"const": 1}, "head_sha": {"const": "21d9f3450276d42e5fedd1ddb9e80485b888cc07"}, "workflow_path": {"const": ".github/workflows/ci-build.yml"}, "required_jobs": {"const": ["build"]}}},
+    "parent_ci": {"type": ["object", "null"]}, "publication_policy": {"type": "object", "additionalProperties": false, "required": ["tracked_report", "metadata"], "properties": {"tracked_report": {"const": "documentation"}, "metadata": {"const": "config/m12/machine-contract.json"}}}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "ref": {"type": "object", "additionalProperties": false, "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"$ref": "#/$defs/sha256"}}}}
+}

@@ -1,0 +1,79 @@
+{
+  "boundaries": {
+    "first_unobserved": "B2",
+    "last_reached": "B1",
+    "reached": [
+      "B0",
+      "B1"
+    ],
+    "unreached": [
+      "B2",
+      "B3",
+      "B4",
+      "B5",
+      "B6",
+      "B7"
+    ]
+  },
+  "classification": "UNKNOWN",
+  "components": {
+    "clean": true,
+    "gitlinks": {
+      "components/country": "23f189cca3420606eae8723884fa92ccd65eb307",
+      "components/fdkernel": "69ccdd8699895722fc537d647ec490685532bdc4",
+      "components/freecom": "855281a3114b43ad4b8d9a320f2aca39be046bba"
+    }
+  },
+  "fields": {
+    "promotion_status": "prohibited_pending_user_approval",
+    "resolved": [],
+    "resolved_count": 0,
+    "unresolved": [
+      "accepted_signature_profile",
+      "boot_drive_identity",
+      "entry_cs_ip",
+      "firmware_attempts_m05_geometry",
+      "initial_load_extent",
+      "initial_register_state",
+      "initial_sector_reads",
+      "physical_load_address"
+    ]
+  },
+  "m07r3": {
+    "classification": "U",
+    "public_status_sha256": "ee4f8bc3040a2c900344c3dd25595a0acf65ad6e9d7a9040ae931ebdde20d156",
+    "status": "historical_unresolved_control"
+  },
+  "milestone": "M07R4",
+  "private_gate": {
+    "concrete_values_published": false,
+    "input_preservation": "passed",
+    "result": "inconclusive",
+    "status": "performed"
+  },
+  "reconstruction": {
+    "b2_blocker_category": "UNKNOWN",
+    "d88_fallback": "performed_private_only",
+    "evidence_backed_variant_count": 6,
+    "input_preservation": "passed",
+    "marker_reached": false,
+    "marker_repeat_count": 0,
+    "max_variant_count": 16,
+    "rom_fallback": "performed_private_only",
+    "static_dynamic_agreement": "incomplete",
+    "text_review": "performed",
+    "trial_projection_determinism": "byte-identical"
+  },
+  "schema_version": 1,
+  "status": "M07R4 BLOCKED \u2014 B2 PREDICATE NOT DISTINGUISHABLE",
+  "supersedes": {
+    "positive_control_required_before_private_reconstruction": false,
+    "reason": "M07R4 permits bounded private reconstruction without a verified positive control."
+  },
+  "vaeg": {
+    "accepted_ci_run_id": 33455847870,
+    "commit": "16ad2e0619bf4ed82a739325f7291eba4a6ed8ad",
+    "production_trace": "available",
+    "source_changed": false
+  }
+}

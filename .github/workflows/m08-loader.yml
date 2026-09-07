@@ -1,0 +1,124 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+name: M08 PC-88VA loader public contract
+
+on:
+  push:
+    paths:
+      - ".github/workflows/m08-loader.yml"
+      - "Makefile"
+      - "config/m08/**"
+      - "docs/adr/0003-pc88va-parameterized-kernel-loader.md"
+      - "docs/porting/m08-report.md"
+      - "docs/porting/m08r2-report.md"
+      - "manifests/m08-components.lock.json"
+      - "qa/golden/m08-artifact-manifest.json"
+      - "qa/golden/m08-golden.json"
+      - "schema/m08-artifact-manifest.schema.json"
+      - "schema/m08-loader-overlay.schema.json"
+      - "tests/test_m08_media.py"
+      - "tests/test_m08_acceptance.py"
+      - "tools/m08/**"
+      - "components/fdkernel"
+  pull_request:
+    paths:
+      - ".github/workflows/m08-loader.yml"
+      - "Makefile"
+      - "config/m08/**"
+      - "docs/adr/0003-pc88va-parameterized-kernel-loader.md"
+      - "docs/porting/m08-report.md"
+      - "docs/porting/m08r2-report.md"
+      - "manifests/m08-components.lock.json"
+      - "qa/golden/m08-artifact-manifest.json"
+      - "qa/golden/m08-golden.json"
+      - "schema/m08-artifact-manifest.schema.json"
+      - "schema/m08-loader-overlay.schema.json"
+      - "tests/test_m08_media.py"
+      - "tests/test_m08_acceptance.py"
+      - "tools/m08/**"
+      - "components/fdkernel"
+  workflow_dispatch:
+
+jobs:
+  public-loader:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out exact components
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          submodules: recursive
+          fetch-depth: 0
+      - name: Assert native x64 and configure remotes
+        run: |
+          test "$(uname -m)" = x86_64
+          test "$(dpkg --print-architecture)" = amd64
+          bash tools/configure_component_remotes.sh
+      - name: Install ROM-free QA dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq nasm
+          python3 -m pip install --disable-pip-version-check -r tools/m08/requirements.txt
+          python3 -m pip install --disable-pip-version-check --require-hashes -r components/fdkernel/pc88va/tests/m08-requirements.txt
+      - name: Run M08 public source and synthetic gates
+        run: |
+          git diff --check
+          if test -f manifests/m09-components.lock.json; then
+            git worktree add --detach "$RUNNER_TEMP/m08-accepted/freedos-pc88va" cfdf5841857f9633a20bdb7b6edb0c1e35275969
+            git -C "$RUNNER_TEMP/m08-accepted/freedos-pc88va" submodule update --init --recursive
+            cd "$RUNNER_TEMP/m08-accepted/freedos-pc88va"
+            bash tools/configure_component_remotes.sh
+          fi
+          make m08-public-verify
+          PYTHONDONTWRITEBYTECODE=1 make m08-tests
+      - name: Verify no private or generated material is staged
+        run: |
+          test -z "$(git status --short --untracked-files=all | grep -E 'private|\.img$|\.d88$|\.bin$|trace|rom' || true)"
+          test -z "$(git -C components/fdkernel status --short --untracked-files=all)"
+
+  historical-regression:
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Check out current repository metadata
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with:
+          fetch-depth: 0
+      - name: Install historical gate dependencies
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq nasm
+      - name: Run M01 through M07 from accepted completion commit
+        run: |
+          git fetch origin f0edeaa35126cf6d027adac0316df5056f7b1ddb
+          git worktree add --detach "$RUNNER_TEMP/freedos-pc88va" f0edeaa35126cf6d027adac0316df5056f7b1ddb
+          git -C "$RUNNER_TEMP/freedos-pc88va" submodule update --init --recursive
+          cd "$RUNNER_TEMP/freedos-pc88va"
+          bash tools/configure_component_remotes.sh
+          make verify-scaffold
+          make m04r1-license-verify
+          make m04-verify
+          make m01-host-portability
+          make m01-image-identity
+          make m01-preflight
+          make m01-image
+          M01_DIAGNOSTICS=1 make m01-build
+          make m01-compare
+          make m01-verify
+          make m02-preflight
+          make m02-clean
+          make m02-bundle
+          make m02-compare
+          make m02-verify
+          make m03-preflight
+          make m03-clean
+          make m03-scan
+          make m03-compare
+          make m03-verify
+          make m06-prepare-m05
+          make m05-verify
+          make m06
+          make m07-public
+          make m07r2-public
+          make m07r3-public
+          make m07r4-public
+          make m07r5-public
+          make m07r6-public
+          make m07-completion-public

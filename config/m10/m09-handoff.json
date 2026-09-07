@@ -1,0 +1,109 @@
+{
+  "schema_version": 1,
+  "repository": "nakatamaho/freedos-pc88va",
+  "remote": "origin",
+  "branch": "topic/m09-pc88va-early-console-output-after-m08r1",
+  "identities": {
+    "START_SHA": "cfdf5841857f9633a20bdb7b6edb0c1e35275969",
+    "QUALIFIED_IMPLEMENTATION_SHA": "b2e766d91403635bed3e2434cebe093109a5554b",
+    "PUBLICATION_TIP_SHA": "6b29d4f9b2b732ced9bc25a9b33b453877cbd7f0",
+    "DOWNSTREAM_BASE_SHA": "6b29d4f9b2b732ced9bc25a9b33b453877cbd7f0"
+  },
+  "components": {
+    "components/fdkernel": "ef46a7ad4b381cf7a301899bee00fec99f5e37a7",
+    "components/freecom": "855281a3114b43ad4b8d9a320f2aca39be046bba",
+    "components/country": "23f189cca3420606eae8723884fa92ccd65eb307"
+  },
+  "publication_policy": {
+    "Makefile": {
+      "kind": "make_help",
+      "fields": []
+    },
+    "config/m09/console-contract.json": {
+      "kind": "json_fields",
+      "fields": [
+        "status",
+        "parent_ci"
+      ]
+    },
+    "docs/porting/m09-console-adr.md": {
+      "kind": "documentation",
+      "fields": []
+    },
+    "docs/porting/m09-report.md": {
+      "kind": "documentation",
+      "fields": []
+    }
+  },
+  "pins": [
+    {
+      "path": "config/m09/console-contract.json",
+      "sha256": "1bbd08cbedb4793624c7a438ed436508c759af0917063384bec244e886b6e348"
+    },
+    {
+      "path": "manifests/m09-components.lock.json",
+      "sha256": "9f6fc653d22655ff797d722237994f1251b93306d3fbc4f0a145baaec565fa58"
+    },
+    {
+      "path": "manifests/toolchains.lock.json",
+      "sha256": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162"
+    },
+    {
+      "path": "components/fdkernel/pc88va/config/console-contract.json",
+      "sha256": "8d955931b527e66c7db3b857e293173682544161f5470365f70c93d1603dd9ce"
+    }
+  ],
+  "instances": [
+    {
+      "record": {
+        "path": "qa/golden/m09/manifest.json",
+        "sha256": "19db1c0056b3153f9584359f7eb51293f99a4ca40871162d79d909c1df854497"
+      },
+      "schema": {
+        "path": "schema/m09-artifact-manifest.schema.json",
+        "sha256": "9534b9f088bb4dd3db8a6489e2f0d3c31f1fd026af16d586d41c21533873bba4"
+      }
+    },
+    {
+      "record": {
+        "path": "config/m09/vaeg-qualification.json",
+        "sha256": "fae44680924fcf63bb4ea79da612f2e96099342c5b165ea46f6363fceb239f71"
+      },
+      "schema": {
+        "path": "schema/m09-public-qualification.schema.json",
+        "sha256": "3ea6d2c252884bc86b0a8b06093ec4087c8156bf900acb04217f427dc1ff3c8a"
+      }
+    }
+  ],
+  "artifacts": [],
+  "ci": [
+    {
+      "repository": "nakatamaho/freedos-pc88va",
+      "run_id": 34003567110,
+      "attempt": 1,
+      "head_sha": "b2e766d91403635bed3e2434cebe093109a5554b",
+      "workflow_path": ".github/workflows/m09-console.yml",
+      "required_jobs": [
+        "public-console"
+      ],
+      "manifest": {
+        "path": "qa/golden/m09/manifest.json",
+        "sha256": "19db1c0056b3153f9584359f7eb51293f99a4ca40871162d79d909c1df854497"
+      }
+    },
+    {
+      "repository": "nakatamaho/freedos-pc88va",
+      "run_id": 34003878132,
+      "attempt": 1,
+      "head_sha": "6b29d4f9b2b732ced9bc25a9b33b453877cbd7f0",
+      "workflow_path": ".github/workflows/m09-console.yml",
+      "required_jobs": [
+        "public-console"
+      ],
+      "manifest": {
+        "path": "qa/golden/m09/manifest.json",
+        "sha256": "19db1c0056b3153f9584359f7eb51293f99a4ca40871162d79d909c1df854497"
+      }
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "canonical": {
+    "os": "Ubuntu 22.04 amd64",
+    "architecture": "linux/amd64",
+    "base_image": {
+      "repository": "ubuntu",
+      "tag": "22.04",
+      "index_digest": "sha256:2edbbc5dc405e9612ba3584ce95480277e3eb374407b5505fe26f17df77c7dbc",
+      "amd64_manifest_digest": "sha256:79676deb51ebb02885b0b9d33788e78a37cf1045ad79d1bb04c6a222c3556b3d",
+      "resolved_image_id_policy": "Record the locally built image ID only in ignored runtime evidence; the amd64 manifest digest is the immutable build input."
+    },
+    "apt": {
+      "snapshot_url": "https://snapshot.ubuntu.com/ubuntu/20260827T000000Z/",
+      "snapshot_id": "20260827T000000Z",
+      "suites": ["jammy", "jammy-updates", "jammy-security"],
+      "components": ["main", "universe"],
+      "validity_policy": "The dated snapshot and signed package metadata are used; Check-Valid-Until is disabled for the archived snapshot.",
+      "packages": [
+        {"name": "bash", "version": "5.1-6ubuntu1.1"},
+        {"name": "ca-certificates", "version": "20260601~22.04.1"},
+        {"name": "gcc", "version": "4:11.2.0-1ubuntu1"},
+        {"name": "libc6-dev", "version": "2.35-0ubuntu3.14"},
+        {"name": "make", "version": "4.3-4.1build1"},
+        {"name": "nasm", "version": "2.15.05-1"},
+        {"name": "python3", "version": "3.10.6-1~22.04.1"},
+        {"name": "python3-iso3166", "version": "2.0.2-1"},
+        {"name": "python3-phonenumbers", "version": "8.12.1-1"},
+        {"name": "unzip", "version": "6.0-26ubuntu3"},
+        {"name": "xz-utils", "version": "5.2.5-2ubuntu1.1"}
+      ]
+    },
+    "open_watcom": {
+      "release": "Open Watcom 1.9",
+      "release_tag": "ow1.9",
+      "release_id": 49559960,
+      "tag_commit": "81d626f24e07bdee89300c90ab93717964fbab3a",
+      "package": "open-watcom-c-linux-1.9",
+      "asset_id": 44807673,
+      "asset_size": 83959748,
+      "publisher_md5": "960fe6b5cf88769a42949f5fedf62827",
+      "sha256": "f7484be27eb70028010303fc16bb2acc5a785679567a568b940c28190ddbf3f3",
+      "official_upstream_url": "https://openwatcom.org/ftp/install/open-watcom-c-linux-1.9",
+      "official_github_url": "https://github.com/open-watcom/open-watcom-1.9/releases/download/ow1.9/open-watcom-c-linux-1.9",
+      "verification_method": "dual-official-source-byte-identical-with-publisher-md5-and-sha256",
+      "archive_format": "zip",
+      "install_path": "/opt/openwatcom-1.9",
+      "required_host_directory": "binl",
+      "stability": "stable-final-open-watcom-1.x-release",
+      "host_tools": [
+        {"name": "wcc", "path": "binl/wcc", "size": 861645, "sha256": "d882c85922da81aa7956cc5ee5aacc3e2a85932ef346c424ce508ff499d1aba6", "banner": "Open Watcom C16 Optimizing Compiler Version 1.9"},
+        {"name": "wcl", "path": "binl/wcl", "size": 51343, "sha256": "47911ca4b28875d5d9157e9054a68e88180eedd08a5f66a82e1cd864e6f38ba3", "banner": "Open Watcom C/C++16 Compile and Link Utility Version 1.9"},
+        {"name": "wmake", "path": "binl/wmake", "size": 188973, "sha256": "d13292a724fb000b51e719bf3a411c6870ab26e13b8e32855e88458a850de5b4", "banner": "Open Watcom Make Version 1.9"},
+        {"name": "wlink", "path": "binl/wlink", "size": 457386, "sha256": "e285c328f48b17e115cb6fd0f91f348a915adfd9eeb932eb3e7b4f3b50fc2838", "banner": "Open Watcom Linker Version 1.9"},
+        {"name": "wasm", "path": "binl/wasm", "size": 282185, "sha256": "d4bc79eddea9afba5b6244203dd4ee4ef670161a099d0ea06f2a2943d4f23579", "banner": "Open Watcom Assembler Version 1.9"},
+        {"name": "wlib", "path": "binl/wlib", "size": 188291, "sha256": "0391b9363048520eb3e1da0712c42d096f9ef8407b2a450c2ae97b345a08ed84", "banner": "Open Watcom Library Manager Version 1.9"}
+      ]
+    },
+    "versions": {
+      "nasm": "nasm 2.15.05",
+      "gnu_make": "GNU Make 4.3",
+      "python": "Python 3.10",
+      "python_modules": {
+        "iso3166": "2.0.2",
+        "phonenumbers": "8.12.1"
+      },
+      "open_watcom": "Open Watcom 1.9; executable identities are verified in image and component runtime evidence."
+    }
+  },
+  "container_build_inputs": {
+    "dockerfile": "containers/m01/Dockerfile",
+    "platform_argument": "--platform linux/amd64",
+    "verification_commands": [
+      "uname -m",
+      "dpkg --print-architecture",
+      "type -a wcc wcl wmake wlink wasm wlib",
+      "readlink -f $(command -v wcc)",
+      "readlink -f $(command -v wmake)",
+      "file $(readlink -f $(command -v wcc))",
+      "file $(readlink -f $(command -v wmake))",
+      "sha256sum $(readlink -f $(command -v wcc))",
+      "sha256sum $(readlink -f $(command -v wmake))",
+      "wcc -bt=dos <probe.c> -fo=<probe.obj>",
+      "wmake -f <probe.makefile> <target>",
+      "nasm -v",
+      "make --version",
+      "python3 --version"
+    ],
+    "image_assembly_network": "Only the exact locked apt snapshot and the two exact official Open Watcom 1.9 URLs are accessed during image assembly; the GitHub and upstream package bytes must match before image use.",
+    "build_network": "none",
+    "required_upx": false
+  },
+  "licenses": {
+    "open_watcom_url": "https://github.com/open-watcom/open-watcom-1.9",
+    "ubuntu_url": "https://ubuntu.com/legal/intellectual-property-policy",
+    "identifiers": "Not asserted unless verified from the component or toolchain source."
+  }
+}
