@@ -1,10 +1,10 @@
 # M13 common FreeDOS core and read-only FreeCOM session
 
-Status: **M13 PARTIAL — implementation and private VAEG qualification are
-advanced; final acceptance and handoff are not yet established.**
+Status: **M13 PASS — FINAL PUBLICATION HANDOFF PENDING.**
 
-This report records the current public contracts and the latest private
-qualification boundary. It does not claim M13 PASS or HANDOFF READY.
+This report records the qualified implementation and its public and private
+evidence boundary. Manual physical-keyboard and real-hardware validation are
+not claimed.
 
 ## Fixed identities
 
@@ -12,6 +12,8 @@ qualification boundary. It does not claim M13 PASS or HANDOFF READY.
   `66138e6539e4220ae7b6d3ffee24581e0d674267`.
 - M12 qualified implementation:
   `9b508a80eb3c4d33e1bb683f7963ae350067fd14`.
+- QUALIFIED_IMPLEMENTATION_SHA:
+  `7ddca85c1bf3ee74fea396a27a3a75d91cb78a21`.
 - fdkernel M13 child:
   `e432296345f1ccc783a42c02baa7ffe4bd2a6eb8`.
 - FreeCOM:
@@ -20,6 +22,9 @@ qualification boundary. It does not claim M13 PASS or HANDOFF READY.
   `23f189cca3420606eae8723884fa92ccd65eb307`.
 - VAEG baseline contract:
   `7dd453cbd36014ba453a26765b00cd0cc9a99655`.
+- Qualification record:
+  `qa/golden/m13/qualification.json` (SHA-256
+  `edf0cc28c69b707cf27428a249379425769a30f4b80eb7c64b9f82e9d2726833`).
 
 ## Implemented scope
 
@@ -54,27 +59,31 @@ private firmware or media contents.
 - Private normal VAEG headless runs reached the real FreeCOM command loop and
   completed controlled root and subdirectory `DIR`, `TYPE`, COM and relocated
   MZ probes, returning to a prompt. Invalid-command recovery and automated
-  editing cases also returned to the prompt. These are private VAEG results,
-  not public CI or manual-hardware claims.
+  Backspace editing cases also returned to the prompt. Repeated root-DIR and
+  invalid-command/recovery runs had equal normalized projections. These are
+  private VAEG results, not public CI or manual-hardware claims.
 - The ROM-free M11 consumer contract test passed in the pinned Linux/amd64
-  environment. The current FreeCOM date-parser change is kept as a separate
-  component commit and was not conflated with kernel evidence.
+  environment, including repeatable non-destructive peek, one-time consuming
+  read, and press/release cases. The current FreeCOM date-parser change is
+  kept as a separate component commit and was not conflated with kernel
+  evidence.
 
-## Remaining gates and explicit non-claims
+## Acceptance boundary and explicit non-claims
 
-- The parent branch still needs its identity/qualification publication
-  commits and a successful parent CI run at the final parent tip.
-- The private qualification record remains pending: repeated peek/read and
-  press-release-press coverage must be bound to the final candidate, the full
-  shell command matrix must be reconciled with the accepted contract, and the
-  final D88 must be copied and hash-checked as the exact qualified image.
-- Manual physical-keyboard input was not run. Automated SDL/headless input is
-  labelled as automated and does not establish the manual gate.
-- Hardware validation was not run (`DEFERRED HARDWARE VALIDATION`). Writable
-  DOS, Japanese/NLS, ANSI, HDD, XMS/EMS, TSR, networking and broad DOS
-  compatibility remain outside M13.
-- `M13 PRIVATE VAEG QUALIFICATION PASS`, `M13 PASS`, `M13 HANDOFF READY`, and
-  `DOWNSTREAM_BASE_SHA` are not established by this report.
+- Public qualification CI run `35138781354`, attempt 1, tested exact head
+  `7ddca85c1bf3ee74fea396a27a3a75d91cb78a21`; jobs
+  `public-readonly-freecom` and `historical-regression` concluded success.
+- Child CI run `35132779485`, attempt 1, tested exact child
+  `e432296345f1ccc783a42c02baa7ffe4bd2a6eb8`; required build/test jobs
+  concluded success.
+- `VAEG PASS` applies to the private normal automated SDL/headless command
+  path through real DOS/FreeCOM services. Manual physical-keyboard input was
+  not run. Hardware validation was not run (`DEFERRED HARDWARE VALIDATION`).
+- Writable DOS, Japanese/NLS, ANSI, HDD, XMS/EMS, TSR, networking and broad
+  DOS compatibility remain outside M13.
+- The final D88 is retained in the private handoff directory and is not
+  published in this repository. `M13 HANDOFF READY` and `DOWNSTREAM_BASE_SHA`
+  are recorded after the publication-tip and final-tip checks.
 
 Generated binaries, D88 images, ROMs, traces and concrete VAEG-derived values
 remain in the persistent private evidence area and are not committed.
