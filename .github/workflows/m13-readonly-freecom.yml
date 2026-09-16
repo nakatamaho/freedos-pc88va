@@ -34,7 +34,7 @@ jobs:
           python3 -B -m unittest discover -s tests/m13 -p 'test_*.py'
       - name: Two clean public source and probe builds
         run: |
-          output=$(make m13-build M13_CHILD_SHA=33da21f248fa7af25f9dd17a7a981c34f8ebec37)
+          output=$(make m13-build M13_CHILD_SHA=e432296345f1ccc783a42c02baa7ffe4bd2a6eb8)
           printf '%s\n' "$output"
           root=$(printf '%s\n' "$output" | sed -n 's/^M13_BUILD_ROOT=//p')
           test -n "$root"

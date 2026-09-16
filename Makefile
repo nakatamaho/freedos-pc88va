@@ -76,7 +76,7 @@ m12-accept: m12-compare m12-verify
 m12: m12-accept
 
 M13_PYTHON ?= python3
-M13_CHILD_SHA ?= 33da21f248fa7af25f9dd17a7a981c34f8ebec37
+M13_CHILD_SHA ?= e432296345f1ccc783a42c02baa7ffe4bd2a6eb8
 M13_BUILD_ROOT ?=
 m13-preflight:
 	@$(M13_PYTHON) -B tools/m13/preflight.py

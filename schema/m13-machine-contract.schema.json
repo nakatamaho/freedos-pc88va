@@ -11,7 +11,7 @@
     "start_sha": {"const": "66138e6539e4220ae7b6d3ffee24581e0d674267"},
     "qualified_implementation_sha": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
     "child_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
-    "freecom_commit": {"const": "855281a3114b43ad4b8d9a320f2aca39be046bba"},
+    "freecom_commit": {"const": "6cd372bdd8d54cecbde1635f1296795eb78712af"},
     "country_commit": {"const": "23f189cca3420606eae8723884fa92ccd65eb307"},
     "vaeg_commit": {"const": "7dd453cbd36014ba453a26765b00cd0cc9a99655"},
     "toolchain_lock_sha256": {"$ref": "#/$defs/sha256"},

@@ -2,8 +2,8 @@
   "schema_version": 1,
   "status": "current-m13",
   "components": [
-    {"name": "fdkernel", "path": "components/fdkernel", "commit": "326c5481da09eafa9d1503e95c1339732bec20f5", "branch": "topic/m13-pc88va-readonly-freecom", "repository": "https://github.com/nakatamaho/fdkernel.git", "role": "M13 common FreeDOS core and PC-88VA adapters", "source_archive_sha256": "a13aec4b4fd4aaa6906410f9cc46d83185825c4e0d3f17f03bf5deb1e1165e23"},
-    {"name": "freecom", "path": "components/freecom", "commit": "855281a3114b43ad4b8d9a320f2aca39be046bba", "branch": "deterministic-build-timestamp", "repository": "https://github.com/nakatamaho/freecom_dbcs2.git", "role": "Unchanged generic ASCII FreeCOM", "source_archive_sha256": null},
+    {"name": "fdkernel", "path": "components/fdkernel", "commit": "e432296345f1ccc783a42c02baa7ffe4bd2a6eb8", "branch": "topic/m13-pc88va-completion-20260917", "repository": "https://github.com/nakatamaho/fdkernel.git", "role": "M13 common FreeDOS core and PC-88VA adapters", "source_archive_sha256": "ded2c997e889910faae8441601ea5233540e1dabd42197474709b62dfb2a412a"},
+    {"name": "freecom", "path": "components/freecom", "commit": "6cd372bdd8d54cecbde1635f1296795eb78712af", "branch": "topic/m13-date-parser-20260916", "repository": "https://github.com/nakatamaho/freecom_dbcs2.git", "role": "Generic ASCII FreeCOM with malformed-date rejection fix", "source_archive_sha256": null},
     {"name": "country", "path": "components/country", "commit": "23f189cca3420606eae8723884fa92ccd65eb307", "branch": "master", "repository": "https://github.com/FDOS/country.git", "role": "Unchanged COUNTRY.SYS component", "source_archive_sha256": null}
   ]
 }

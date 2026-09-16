@@ -7,9 +7,9 @@ from jsonschema import Draft202012Validator
 
 ROOT = Path(__file__).resolve().parents[2]
 START = "66138e6539e4220ae7b6d3ffee24581e0d674267"
-CHILD = "326c5481da09eafa9d1503e95c1339732bec20f5"
+CHILD = "e432296345f1ccc783a42c02baa7ffe4bd2a6eb8"
 VAEG = "7dd453cbd36014ba453a26765b00cd0cc9a99655"
-FREECOM = "855281a3114b43ad4b8d9a320f2aca39be046bba"
+FREECOM = "6cd372bdd8d54cecbde1635f1296795eb78712af"
 COUNTRY = "23f189cca3420606eae8723884fa92ccd65eb307"
 
 class Rejected(RuntimeError):
