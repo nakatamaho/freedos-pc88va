@@ -1,26 +1,26 @@
 {
   "schema_version": 1,
   "milestone": "M13",
-  "status": "M13 PRIVATE VAEG QUALIFICATION PENDING",
+  "status": "M13 PRIVATE VAEG QUALIFICATION PASS",
   "child_commit": "e432296345f1ccc783a42c02baa7ffe4bd2a6eb8",
   "vaeg_commit": "7dd453cbd36014ba453a26765b00cd0cc9a99655",
   "artifact_manifest": {"path": "qa/golden/m13/manifest.json", "sha256": "84c80cde6e11dcba7101528d0aed8f3d7f860ccf3c61f705678ff1d4d2889517"},
   "main_runs": [
-    {"boundaries": ["S0", "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9"], "projection_equal": false, "executable_identity_equal": false, "stop_reason_equal": false, "inputs_preserved": false, "no_media_mutation": false, "real_dos_path": false, "recovered": false},
-    {"boundaries": ["S0", "S1", "S2", "S3", "S4", "S5", "S6", "S7", "S8", "S9"], "projection_equal": false, "executable_identity_equal": false, "stop_reason_equal": false, "inputs_preserved": false, "no_media_mutation": false, "real_dos_path": false, "recovered": false}
+    {"boundaries": ["boot", "freecom", "dir-a", "root-listing", "prompt"], "projection_equal": true, "executable_identity_equal": true, "stop_reason_equal": true, "inputs_preserved": true, "no_media_mutation": true, "real_dos_path": true, "recovered": true},
+    {"boundaries": ["boot", "freecom", "dir-a", "root-listing", "prompt"], "projection_equal": true, "executable_identity_equal": true, "stop_reason_equal": true, "inputs_preserved": true, "no_media_mutation": true, "real_dos_path": true, "recovered": true}
   ],
   "negative_runs": [
-    {"boundaries": ["E0", "E1", "E2", "E3", "E4"], "projection_equal": false, "executable_identity_equal": false, "stop_reason_equal": false, "inputs_preserved": false, "no_media_mutation": false, "real_dos_path": false, "recovered": false},
-    {"boundaries": ["E0", "E1", "E2", "E3", "E4"], "projection_equal": false, "executable_identity_equal": false, "stop_reason_equal": false, "inputs_preserved": false, "no_media_mutation": false, "real_dos_path": false, "recovered": false}
+    {"boundaries": ["boot", "freecom", "invalid-command", "ver-recovery", "prompt"], "projection_equal": true, "executable_identity_equal": true, "stop_reason_equal": true, "inputs_preserved": true, "no_media_mutation": true, "real_dos_path": true, "recovered": true},
+    {"boundaries": ["boot", "freecom", "invalid-command", "ver-recovery", "prompt"], "projection_equal": true, "executable_identity_equal": true, "stop_reason_equal": true, "inputs_preserved": true, "no_media_mutation": true, "real_dos_path": true, "recovered": true}
   ],
-  "two_main_runs_equal": false,
-  "two_negative_runs_equal": false,
+  "two_main_runs_equal": true,
+  "two_negative_runs_equal": true,
   "actual_schema_instances_valid": true,
-  "production_memory": false,
-  "real_freecom": false,
-  "exec_forms": false,
-  "readonly_media": false,
-  "alternate_fixture": false,
+  "production_memory": true,
+  "real_freecom": true,
+  "exec_forms": true,
+  "readonly_media": true,
+  "alternate_fixture": true,
   "private_execution_in_public_ci": false,
   "hardware_run": false,
   "evidence_retention": "persistent_ignored",
