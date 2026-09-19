@@ -30,8 +30,8 @@ work while preserving unrelated or independently justified changes.
 | --- | --- | --- | --- |
 | M0 Remove invalid BIOS-shim conformance and rebaseline | COMPLETE | none | VAEG PASS; MCB chain validated to A0000h; hardware deferred |
 | M1 Establish VA-native capacity decoder | COMPLETE | M0 | component `a11c72dc9ce17cc2742d457b39d26629c1aca4df`; HOST PASS for decoder, fixtures, guarded build, and pinned-toolchain build |
-| M2 Drive DOS arena from native capacity | NOT STARTED | M1 | test 256/384/512/640 KiB |
-| M3 Account for 640-KiB low-memory layout | NOT STARTED | M2 | paragraph-exact ownership map |
+| M2 Drive DOS arena from native capacity | BLOCKED | M1 | 640-KiB chain passes; 256/384/512 KiB fail the resident-arena guard before MCB creation |
+| M3 Account for 640-KiB low-memory layout | NOT STARTED | M2 | ineligible until M2's lower-capacity boundary is resolved |
 | M4 Reclaim one proven low-memory loss | NOT STARTED | M3 | one reclaim per run |
 | M5 Reach and verify memory target | NOT STARTED | M4/repeated reclaim work | full reconciliation |
 
@@ -57,8 +57,25 @@ closed). No IBM-PC BIOS handler or allocator-layout change was added. VAEG
 runtime validation was not run in M1; hardware remains DEFERRED HARDWARE
 VALIDATION.
 
+## M2 completion boundary
+
+M2 is **BLOCKED** at the existing resident-arena guard for the 256, 384, and
+512 KiB native capacities. The relocated resident range ends near `98A8h`,
+above each of those arena limits, so no lower-capacity MCB can be created
+without a placement/ownership change. The 640-KiB run does create a valid
+non-overlapping chain whose exclusive end is `A0000h`; its complete walk and
+maximum-block query are recorded in
+`reports/M2-native-capacity-arena.md`. No M2 source change was retained.
+
+The implementation and evidence checkpoint is parent commit
+`f7a41cc532d6d5bb08384a5e221541a7741774fc`; the fdkernel child remains
+`a11c72dc9ce17cc2742d457b39d26629c1aca4df`. There is no qualified M2
+implementation SHA because the milestone is blocked. Physical validation is
+`DEFERRED HARDWARE VALIDATION`.
+
 ## Next eligible work
 
-M2 only. M2 must feed the four native capacities through DOS arena
-initialization and verify the MCB end and allocation behavior at each
-capacity. No M2 source or runtime probe is included in the M1 checkpoint.
+No later milestone is eligible while M2 is blocked. The restart action is a
+scoped resident-placement/ownership analysis for the lower native limits;
+that work belongs to the M3 dependency boundary and must not reclaim memory
+without paragraph-level evidence.

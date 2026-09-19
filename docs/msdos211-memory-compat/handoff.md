@@ -1,6 +1,6 @@
-# Handoff: next eligible milestone
+# Handoff: M2 blocked; resident-placement evidence required
 
-## M1 complete; execute M2 next
+## M1 complete; M2 executed and blocked
 
 The prior plan incorrectly treated IBM-PC BIOS interrupt behavior as a
 PC-88VA contract. M0 inspected the superseded shim commit and the selected
@@ -49,7 +49,20 @@ creation/link-time fields and match after normalization. The M1 report records
 all hashes, commands, and explicitly unrun VAEG/MCB gates. No second
 milestone was mixed into the component commit.
 
-The next eligible milestone is M2. Its first action is a clean native-capacity
-matrix at 256/384/512/640 KiB, followed by complete MCB walks and `AH=48h`
-maximum-block checks. Preserve the M1 child and the existing dirty M13
-worktree; do not infer M2 results from M1's static fixtures.
+The clean native-capacity matrix was executed in M2. The 640-KiB case has a
+valid MCB chain ending at `A0000h`, while the 256/384/512-KiB cases fail the
+existing resident-arena guard before MCB creation because the resident range
+ends near `98A8h`. The detailed M2 report is:
+
+`reports/M2-native-capacity-arena.md`
+
+M2 is **BLOCKED**; no later milestone is eligible. No source change was
+retained in M2 and the component remains at
+`a11c72dc9ce17cc2742d457b39d26629c1aca4df`. The parent checkpoint that
+records this handoff is `f7a41cc532d6d5bb08384a5e221541a7741774fc`; there is
+no qualified M2 implementation SHA. Physical PC-88VA validation remains
+`DEFERRED HARDWARE VALIDATION`.
+
+The next action is to establish paragraph-exact ownership and a safe resident
+placement for the lower native limits. Do not start M3/M4 work or reclaim
+memory until that dependency is resolved and the M2 matrix can be rerun.
