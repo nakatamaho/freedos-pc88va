@@ -1,6 +1,6 @@
 # Handoff: next eligible milestone
 
-## M0 complete; execute M1 only
+## M1 complete; execute M2 next
 
 The prior plan incorrectly treated IBM-PC BIOS interrupt behavior as a
 PC-88VA contract. M0 inspected the superseded shim commit and the selected
@@ -22,45 +22,34 @@ formal 219Fh and 423008-byte FreeDOS values remain comparison baselines; the
 fresh candidate result is reported separately because it is a different dirty
 M13 configuration.
 
-## M1 handoff: VAEG backup-memory source
+## M1 implementation and evidence
 
-Read-only inspection of the matching VAEG source establishes that the VA
-emulator loads a fixed-size `vabkupmem.dat` image (0x4000 bytes) through its
-VA backup-memory module. The mapped VA backup memory is exposed at physical
-`B0000h`; the VA memory-control ports expose the capacity/check bytes from the
-loaded image. The VAEG source normalizes supported VA main-memory selections to
-256, 384, 512, or 640 KiB. M1 must cite the exact field encoding, checksum and
-validation, variant selection, and invalid/missing-image behavior from the
-matching source and private technical evidence before changing the kernel.
-The emulator filename is persistence state, not a guest DOS pathname, and the
-kernel must not open it as a file.
+Read-only inspection of the matching VAEG source established that the VA
+emulator loads a fixed-size 0x4000-byte backup image, selects `vabkupmem.dat`
+for VA and the VA2 file for VA2/VA3, and seeds a missing image from the
+supported 256/384/512/640 KiB setting. The documented field is at offset
+`1fc4h` in backup RAM exposed at `B0000h`; the low three bits encode
+`(capacity/128)-1`. The PC-88VA decoder is implemented in component commit
+`a11c72dc9ce17cc2742d457b39d26629c1aca4df`. It selects bank 9 through the
+evidenced word-port path, preserves the prior bank value, rejects zero and
+codes above four, and returns a 16-bit KiB value. The kernel never opens a
+host persistence file.
 
 Relevant local VAEG source references are `io/bkupmemva.c`, `io/memctrlva.c`,
 `io/memoryva.c`, and the VA memory-selection code in `machine/pccore.c`. The
 matching private input and source hashes remain outside Git under the M0
 evidence record.
 
-## Required M1 sequence
+## M1 completion and next action
 
-1. Read all applicable `AGENTS.md` files and every file/report in this spec
-   set.
-2. Verify the M0 report and exact source/artifact identities before editing.
-3. Cite the native VA backup/common-memory field, supported encoding, variant
-   selection, validation, and invalid/missing-data behavior.
-4. Implement one guarded PC-88VA decoder for 256/384/512/640 KiB only. Do not
-   wire it into unrelated allocators unless it is the exact existing target
-   function.
-5. Run all four value fixtures, variant fixtures, invalid/checksum/missing
-   fixtures, and the non-PC-88VA guard build.
-6. Write the M1 report, update `status.md` and this handoff, then stop. M2 is
-   not eligible in the same invocation.
+The seven M1 decoder fixtures, 19 focused PC-88VA/M13 tests, pinned
+Linux/amd64 Open Watcom build (two byte-identical runs), and guarded NEC98
+`initoem.c` compile passed. The two linked maps differ only in volatile
+creation/link-time fields and match after normalization. The M1 report records
+all hashes, commands, and explicitly unrun VAEG/MCB gates. No second
+milestone was mixed into the component commit.
 
-## M1 stop conditions
-
-Mark M1 BLOCKED rather than guessing if the native field, encoding, or
-invalid-data behavior cannot be established; if a guarded decoder would
-require an invented address or BIOS shim; or if any supported-value fixture or
-non-PC-88VA guard check fails.
-
-The next eligible milestone is M1 only. Do not begin M2 in the same goal
-invocation.
+The next eligible milestone is M2. Its first action is a clean native-capacity
+matrix at 256/384/512/640 KiB, followed by complete MCB walks and `AH=48h`
+maximum-block checks. Preserve the M1 child and the existing dirty M13
+worktree; do not infer M2 results from M1's static fixtures.
