@@ -56,11 +56,12 @@ ends near `98A8h`. The detailed M2 report is:
 
 `reports/M2-native-capacity-arena.md`
 
-M2 is **BLOCKED**; no later milestone is eligible. No source change was
-retained in M2 and the component remains at
-`a11c72dc9ce17cc2742d457b39d26629c1aca4df`. The parent checkpoint that
-records this handoff is `f7a41cc532d6d5bb08384a5e221541a7741774fc`; there is
-no qualified M2 implementation SHA. Physical PC-88VA validation remains
+M2 is **BLOCKED**; no later milestone is eligible. M2 started from parent
+`f7a41cc532d6d5bb08384a5e221541a7741774fc`; its documentation checkpoint is
+`670cd75dd4353f64027bf56d767779fc5251296b`; no source change was retained
+in M2 and the component remains at
+`a11c72dc9ce17cc2742d457b39d26629c1aca4df`. There is no qualified M2
+implementation SHA. Physical PC-88VA validation remains
 `DEFERRED HARDWARE VALIDATION`.
 
 The next action is to establish paragraph-exact ownership and a safe resident

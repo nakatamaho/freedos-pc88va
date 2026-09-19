@@ -67,11 +67,12 @@ non-overlapping chain whose exclusive end is `A0000h`; its complete walk and
 maximum-block query are recorded in
 `reports/M2-native-capacity-arena.md`. No M2 source change was retained.
 
-The implementation and evidence checkpoint is parent commit
-`f7a41cc532d6d5bb08384a5e221541a7741774fc`; the fdkernel child remains
-`a11c72dc9ce17cc2742d457b39d26629c1aca4df`. There is no qualified M2
-implementation SHA because the milestone is blocked. Physical validation is
-`DEFERRED HARDWARE VALIDATION`.
+M2 `START_SHA` is parent commit
+`f7a41cc532d6d5bb08384a5e221541a7741774fc`; the documentation checkpoint
+containing this boundary is `670cd75dd4353f64027bf56d767779fc5251296b` and
+the fdkernel child remains `a11c72dc9ce17cc2742d457b39d26629c1aca4df`.
+There is no qualified M2 implementation SHA because the milestone is blocked.
+Physical validation is `DEFERRED HARDWARE VALIDATION`.
 
 ## Next eligible work
 
