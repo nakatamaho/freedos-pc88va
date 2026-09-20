@@ -27,7 +27,7 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq nasm
-          python3 -m pip install --disable-pip-version-check --user --upgrade --ignore-installed 'jsonschema>=4.18'
+          python3 -m pip install --disable-pip-version-check --user --ignore-installed -r tools/m13/requirements.txt
       - name: Verify M12 prerequisite and actual M13 schemas
         run: |
           make m13-preflight
@@ -51,6 +51,9 @@ jobs:
         with: {submodules: recursive, fetch-depth: 0}
       - name: Immutable M08-M12 public regression
         run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq nasm
+          python3 -m pip install --disable-pip-version-check -r tools/m13/requirements.txt
           python3 -m pip install --disable-pip-version-check -r tools/m08/requirements.txt
           python3 -B -m unittest discover -s tests -p 'test_m08_*.py'
           python3 -B -m unittest discover -s tests/m09 -p 'test_*.py'

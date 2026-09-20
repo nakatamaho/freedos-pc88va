@@ -1,6 +1,31 @@
 # M13 common FreeDOS core and read-only FreeCOM session
 
-Status: **M13 PASS — FINAL PUBLICATION HANDOFF PENDING.**
+Historical status: **M13 PASS — FINAL PUBLICATION HANDOFF PENDING.**
+
+## Subsequent memory-placement work (not covered by the historical qualification)
+
+The current worktree contains a newer PC-88VA placement/lifetime implementation.
+The following historical identities and CI results do **not** qualify these
+changes. The newer component baseline and subsequent uncommitted changes must
+not be relabeled as the earlier qualified implementation.
+
+The new design decouples carrier transport from low resident placement, gives
+INIT-only code and its temporary stack explicit ownership, and releases the
+temporary envelope from the permanent process-zero stack. Shared NEAR data and
+resident error paths remain live. Enumerated MZ fixups, not a whole-image opcode
+scan, establish the copied code targets. Non-PC88VA paths remain separately
+compiled. Supporting ROM-free placement, actual linked-entry, lifetime-negative,
+and DOS-owned memory-reuse probes are included in the working changes.
+
+Focused local implementation checks have run. Private candidate identities,
+actual memory values, command-screen evidence and the tested D88 are retained
+outside Git. The public verifier correctly rejects the current worktree's
+component identity drift from this historical record. Final dependency rebinding,
+scoped child/parent publication and CI qualification for the new implementation
+are **NOT RUN / pending**. No updated M13 PASS or HANDOFF READY is claimed here.
+Manual physical-keyboard and hardware checks for this change are also NOT RUN.
+
+## Historical qualification record
 
 This report records the qualified implementation and its public and private
 evidence boundary. Manual physical-keyboard and real-hardware validation are
@@ -87,3 +112,43 @@ private firmware or media contents.
 
 Generated binaries, D88 images, ROMs, traces and concrete VAEG-derived values
 remain in the persistent private evidence area and are not committed.
+
+## Current fixed-VA-loader implementation checkpoint
+
+This historical report remains the record of the earlier qualified revision.
+The current implementation has a newer fixed-entry source/profile integration;
+it is not folded into the historical PASS above and is not a new M13 PASS.
+
+The source-visible profile is `config/m08/va-fixed-3000-overlay.json`. It
+keeps the VA bootstrap entry at `3000:0000`, the initial system-file load at
+`1340:0000`, and the transformed resident allocation as separate ownership
+intervals. Two pinned Linux/amd64 diagnostic-off builds from the current
+fdkernel source produced identical kernel bytes. The source-bound placement
+test passed in the pinned Unicorn environment (19/19 placement tests); the
+five init-lifetime tests passed on the host.
+
+The first newly composed media image exposed a stage-1 extent mismatch and
+was retained as a failed diagnostic artifact. Rebuilding stage 1 from the
+media-derived extent produced a source-rebuilt private image that was
+VAEG-tested under the 512-KiB VA configuration to `PC88VA kernel`, `InitDisk`,
+FreeCOM, a directory listing, and a returned `A:\>` prompt (exit status 0).
+The image identity and raw runtime evidence remain in the private handoff
+area and are intentionally not published here.
+
+The user subsequently reported the issued M13 human gate as passed for this
+candidate. This is a user-supplied gate result; the message did not identify
+physical PC-88VA versus manual VAEG, so physical hardware remains
+`DEFERRED HARDWARE VALIDATION` unless explicitly identified. This checkpoint
+does not alter the historical acceptance identities, does not claim the
+complete M13 matrix, and does not declare a new M13 PASS. Full details and
+private runtime evidence remain in the ignored private evidence root and are
+not part of this public report.
+
+## User acceptance decision
+
+The user accepted the M13 VAEG/private read-only and interactive scope as
+**M13 PASS** while leaving physical hardware validation deferred. This does
+not claim `HARDWARE PASS`, because the confirmation did not identify a
+physical PC-88VA run. `M13 HANDOFF READY`, publication-tip identity, and
+current implementation CI qualification remain separate and are not inferred
+from this user-level acceptance decision.
