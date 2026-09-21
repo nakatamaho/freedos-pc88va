@@ -1,6 +1,8 @@
 # M14 floppy writes and media changes
 
-Status: **M14 runtime qualified; final parent CI and handoff pending.**
+Status: **M14 PASS (VAEG); implementation qualification complete.**
+
+Final publication readiness is checked separately after this report is pushed.
 
 The common FreeDOS kernel now writes FAT12 media through the resident VA block
 path. Changed or unknown media invalidates old handles, dirty buffers and pending
@@ -11,6 +13,7 @@ records request units, ownership, ABI, completion, verification and retry policy
 ## Source and prerequisite identities
 
 - START_SHA: `e324fa6c7132c7daaa7b936c0902563f47a3e528`.
+- QUALIFIED_IMPLEMENTATION_SHA: `a0a5a246f14b43498f25b5d07861336546d52023`.
 - Starting fdkernel: `b4af4c6c55979ae22843f1b1ec33d5512e4fdc38`.
 - Current fdkernel: `ac16c8a7401526f99787e03babdb2f4223d48fc4`.
 - Current FreeCOM: `9cf57b28abf1d98fab7655fb811375a2aa16c6d9`.
@@ -72,7 +75,7 @@ Completed focused evidence includes:
 - Immutable M08-M13 public regressions run from the accepted M12/M13 checkouts.
   Historical read-only write-rejection tests are not changed into writable tests.
 
-## Acceptance operations and remaining gates
+## Acceptance operations and publication
 
 `tools/m14/verify_m14.py` is the shared local/native-CI verifier. It validates
 actual schema instances, source/archive/gitlink identities, dependency closure,
@@ -92,12 +95,27 @@ negative dependency cases. The final source-bound FreeCOM has been rebuilt
 twice and the affected normal/write/exchange/editing matrix rerun with its
 exact bytes. The complete current parent/child suite passes all 308 tests.
 
-Scoped parent commit/push, parent qualification CI, metadata-only publication
-CI and exact tested image delivery remain pending.
-The [acceptance matrix](m14-acceptance.md) separates passed runtime rows from pending closure. QUALIFIED_IMPLEMENTATION_SHA, PUBLICATION_TIP_SHA and
-DOWNSTREAM_BASE_SHA have not been assigned. A tracked report cannot name its
-own future commit; the final publication identities belong in the post-push
-local handoff.
+Implementation qualification is anchored to the exact parent revision above.
+Parent CI [35652251153](https://github.com/nakatamaho/freedos-pc88va/actions/runs/35652251153),
+attempt 1, passed both `public-floppy-write` and `historical-regression` at that
+head. The public job rebuilt kernel, FreeCOM and probes twice in the locked
+container, ran the shared 308-test acceptance suite and verified clean sources.
+The same local acceptance verifier also validated the actual private bundle.
+These host gates receive **HOST PASS**; guest runtime rows retain **VAEG PASS**.
+
+Nine local image deliveries have been copied from their exact tested sources,
+byte-compared, hashed and independently checked. They include the ordinary boot
+input, disposable A/B inputs, protected B and the relevant saved results.
+Normal fresh-boot persistence uses the identical saved image. Disposable-session
+preparation, ordinary launch, source/binary identities and the supported exchange
+procedure are recorded in the private boot README and handoff manifest.
+
+The [acceptance matrix](m14-acceptance.md) records completed implementation gates.
+Publication changes are limited to acceptance metadata and non-behavioral reports.
+**HANDOFF READY** additionally requires this publication tip's own successful CI,
+remote equality, ancestry and a bounded publication diff. PUBLICATION_TIP_SHA
+and DOWNSTREAM_BASE_SHA are recorded as full identities in the post-push local
+handoff; this report cannot name its own future commit.
 
 Manual physical-keyboard validation and actual hardware are **NOT RUN**;
 hardware remains **DEFERRED HARDWARE VALIDATION**. No M15 or later storage work

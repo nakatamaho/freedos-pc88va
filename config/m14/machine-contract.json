@@ -2,7 +2,7 @@
   "schema_version": 1,
   "milestone": "M14",
   "kind": "contract",
-  "status": "runtime_qualified",
+  "status": "qualified",
   "start_sha": "e324fa6c7132c7daaa7b936c0902563f47a3e528",
   "components": {
     "fdkernel": "ac16c8a7401526f99787e03babdb2f4223d48fc4",
@@ -19,7 +19,7 @@
   },
   "qualification": {
     "path": "qa/golden/m14/qualification.json",
-    "sha256": "e91d0f8deca2b20b0ea23d6aedc8fefb1bbc1acb5a3f4c9ca12d24778662022a"
+    "sha256": "3551fa17b047940c13731666b7e28941ae51fd89495b67bfa0fec54af35959f4"
   },
   "toolchain": {
     "path": "manifests/toolchains.lock.json",

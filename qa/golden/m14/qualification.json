@@ -2,7 +2,7 @@
   "schema_version": 1,
   "milestone": "M14",
   "kind": "qualification",
-  "status": "runtime_qualified",
+  "status": "qualified",
   "components": {
     "fdkernel": "ac16c8a7401526f99787e03babdb2f4223d48fc4",
     "freecom": "9cf57b28abf1d98fab7655fb811375a2aa16c6d9",
@@ -26,9 +26,9 @@
     "M14-FULL": "VAEG PASS",
     "M14-PERSIST": "VAEG PASS",
     "M14-SHELL": "VAEG PASS",
-    "M14-REGRESS": "PARTIAL",
+    "M14-REGRESS": "HOST PASS",
     "M14-NORMAL": "VAEG PASS",
-    "M14-CLOSE": "PARTIAL"
+    "M14-CLOSE": "HOST PASS"
   },
   "hardware": "NOT RUN",
   "manual_keyboard": "NOT RUN",
