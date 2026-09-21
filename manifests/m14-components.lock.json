@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "milestone": "M14",
+  "kind": "components",
+  "components": {
+    "fdkernel": {
+      "commit": "ac16c8a7401526f99787e03babdb2f4223d48fc4",
+      "path": "components/fdkernel",
+      "repository": "https://github.com/nakatamaho/fdkernel.git",
+      "upstream": "https://github.com/lpproj/fdkernel.git",
+      "branch": "topic/m14-floppy-write-media-change-published",
+      "source_archive_sha256": "18a9dc49eba0ee04efea5ae626bb2a270f3f72c4f4154cc02cf6d93be6ddcb74"
+    },
+    "freecom": {
+      "commit": "9cf57b28abf1d98fab7655fb811375a2aa16c6d9",
+      "path": "components/freecom",
+      "repository": "https://github.com/nakatamaho/freecom_dbcs2.git",
+      "upstream": "https://github.com/lpproj/freecom_dbcs2.git",
+      "branch": "topic/m14-freecom-mem-alias",
+      "source_archive_sha256": "f860f6660eb0f272460bb641bd35a1c309070b85ae27b0f72b2ed4fb510b0e7f"
+    },
+    "country": {
+      "commit": "23f189cca3420606eae8723884fa92ccd65eb307",
+      "path": "components/country",
+      "repository": "https://github.com/FDOS/country.git",
+      "upstream": null,
+      "branch": "master",
+      "source_archive_sha256": "db1e064862e9400e6ba433f07c3e5caf7a50780fd9e953b34f8eff2cdeaec87b"
+    }
+  }
+}

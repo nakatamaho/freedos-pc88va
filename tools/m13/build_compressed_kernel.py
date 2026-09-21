@@ -13,6 +13,7 @@ entry.  The carrier is deterministic and contains no private machine values.
 from __future__ import annotations
 
 import argparse
+from collections import deque
 import hashlib
 import json
 import re
@@ -205,7 +206,52 @@ def parse_mz(data: bytes) -> tuple[tuple[int, ...], bytes, bytes]:
 
 
 def compress(body: bytes) -> bytes:
-    """Encode a deterministic literal/match LZSS stream used by m13_unpack."""
+    """Minimize encoded bytes in the existing 8086 literal/match format.
+
+    Include the flag byte for each group of eight tokens in the suffix cost.
+    A longest match also represents every shorter legal match at that position;
+    token distance has fixed cost. Ties prefer the longer token and the nearest
+    source for its longest match. No decoder or history-window change is needed.
+    """
+    history = {}
+    matches = []
+    for position in range(len(body)):
+        expired = position - WINDOW - 1
+        if expired >= 0:
+            old_key = body[expired:expired + MIN_MATCH]
+            history[old_key].popleft()
+            if not history[old_key]:
+                del history[old_key]
+        key = body[position:position + MIN_MATCH]
+        candidates = history.setdefault(key, deque())
+        best_length, best_distance = 0, 0
+        for candidate in reversed(candidates):
+            if len(key) != MIN_MATCH:
+                break
+            distance, length = position - candidate, MIN_MATCH
+            while length < MAX_MATCH and position + length < len(body):
+                source = position + length - distance
+                if body[source] != body[position + length]:
+                    break
+                length += 1
+            if length > best_length:
+                best_length = length
+                best_distance = distance
+            if length == MAX_MATCH:
+                break
+        matches.append((best_length, best_distance))
+        candidates.append(position)
+
+    costs = [[0] * 8 for _ in range(len(body) + 1)]
+    for position in range(len(body) - 1, -1, -1):
+        maximum, _ = matches[position]
+        for slot in range(8):
+            next_slot = (slot + 1) & 7
+            best = 1 + costs[position + 1][next_slot]
+            for length in range(MIN_MATCH, maximum + 1):
+                best = min(best, 2 + costs[position + length][next_slot])
+            costs[position][slot] = int(slot == 0) + best
+
     encoded = bytearray()
     position = 0
     while position < len(body):
@@ -215,26 +261,14 @@ def compress(body: bytes) -> bytes:
         for bit in range(8):
             if position >= len(body):
                 break
-            start = max(0, position - WINDOW)
-            best_length = 0
-            best_distance = 0
-            # Prefer the nearest candidate on a tie.  This makes the stream
-            # stable while still allowing overlapping matches.
-            for candidate in range(position - 1, start - 1, -1):
-                if body[candidate] != body[position]:
-                    continue
-                distance = position - candidate
-                length = 1
-                while length < MAX_MATCH and position + length < len(body):
-                    source = position + length - distance
-                    if body[source] != body[position + length]:
-                        break
-                    length += 1
-                if length > best_length:
-                    best_length = length
-                    best_distance = distance
-                if length == MAX_MATCH:
-                    break
+            maximum, best_distance = matches[position]
+            next_slot = (bit + 1) & 7
+            best_length = 1
+            best_cost = 1 + costs[position + 1][next_slot]
+            for length in range(MIN_MATCH, maximum + 1):
+                cost = 2 + costs[position + length][next_slot]
+                if cost <= best_cost:
+                    best_length, best_cost = length, cost
             if best_length >= MIN_MATCH:
                 distance = best_distance - 1
                 encoded.append(distance & 0xFF)
@@ -276,7 +310,7 @@ def build(kernel: Path, bridge: Path, output: Path, *, load_segment: int,
         if link_map is None:
             raise ValueError('split image requires its matched link map')
         # A 256 KiB machine cannot place INIT at the conventional top while
-        # the fixed low-staging carrier occupies 30000h..3fff0h.  Put the
+        # the fixed low-staging carrier occupies 27000h..36ff0h.  Put the
         # short-lived INIT image immediately below staging; its stack is then
         # dead before the bridge takes ownership of the staging segment.
         # The in-place carrier is deliberately below the resident image's
@@ -308,11 +342,16 @@ def build(kernel: Path, bridge: Path, output: Path, *, load_segment: int,
             start, end = layout['ranges'][name]
             if start < split['init_stack'][1] and split['init'][0] < end:
                 raise ValueError('high INIT overlaps live ' + name)
-    payload_offset = 0x400
+    # In-place mode does not need the relocation/copy trampoline's padding.
+    # Keep a paragraph-aligned code prefix and check the actual assembled
+    # extent below. This changes neither the decoder nor its owned ranges.
+    payload_offset = 0x280 if in_place else 0x400
     # Keep the history ring inside the 65520-byte DOS carrier extent.  The
-    # low staging profile ends at 0x3fff0, so a 4 KiB ring must begin no
-    # later than offset 0xeff0 (rather than consuming the final 16 bytes).
-    ring_offset = 0xEF00 if in_place else 0
+    # The current 2700h low-staging allocation ends at 36ff0h.  M14 adds
+    # resident write code to the linked image; move the 4 KiB history ring by
+    # 40h, leaving 0B0h below that ownership end and retaining the same
+    # one-segment/bootstrap-stack separation.
+    ring_offset = 0xEF40 if in_place else 0
     bridge_stack_segment = (scratch_segment if in_place else
                             (load_segment if bridge_in_allocation else file_segment))
     bridge_stack_sp = 0x7F00 if in_place else 0xFF00
@@ -363,11 +402,18 @@ def build(kernel: Path, bridge: Path, output: Path, *, load_segment: int,
             'M13_HMA_DEST_SEG': split['resident_text'][0] // 16,
             'M13_HMA_BYTES': split['resident_text'][1] - split['resident_text'][0],
         })
+    output.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix="m13-carrier-", dir=output.parent) as temporary:
         bridge_bytes = assemble_bridge(bridge, definitions, Path(temporary) / "bridge.bin")
     if len(bridge_bytes) > payload_offset:
         raise ValueError("M13 bridge exceeds its carrier prefix")
     body = bridge_bytes + bytes(payload_offset - len(bridge_bytes)) + payload + relocations
+    if in_place and (-len(body) & 15) < 4:
+        # The loader pushes its FAR frame below the rounded entry SP before
+        # the bridge reads relocations. A 0..3-byte alignment tail cannot
+        # contain that frame: reserve one more paragraph through file bytes.
+        # Keep already-safe carrier bytes and the fixed ownership limit intact.
+        body += bytes(4)
     if len(body) + 32 > MAX_CARRIER_FILE:
         raise ValueError("M13 carrier exceeds the M08 bounded file extent")
     carrier_allocation = ((len(body) + 15) // 16) * 16
@@ -423,12 +469,12 @@ def main() -> None:
     parser.add_argument("--output", type=Path, required=True)
     # One fixed low-staging envelope is valid on every supported VA memory
     # size.  Override explicitly only for a matched legacy carrier build.
-    parser.add_argument("--load-segment", type=lambda value: int(value, 0), default=0x2600)
+    parser.add_argument("--load-segment", type=lambda value: int(value, 0), default=0x2700)
     parser.add_argument("--image-segment", type=lambda value: int(value, 0), default=0x1000)
     parser.add_argument("--manifest", type=Path)
     parser.add_argument("--map", type=Path)
-    parser.add_argument("--file-segment", type=lambda value: int(value, 0), default=0x2600)
-    parser.add_argument("--scratch-segment", type=lambda value: int(value, 0), default=0x3600)
+    parser.add_argument("--file-segment", type=lambda value: int(value, 0), default=0x2700)
+    parser.add_argument("--scratch-segment", type=lambda value: int(value, 0), default=0x3700)
     parser.add_argument("--source-offset", type=lambda value: int(value, 0), default=4096)
     parser.add_argument("--memory-top", type=lambda value: int(value, 0), default=0xA0000)
     parser.add_argument("--no-split", action="store_true",

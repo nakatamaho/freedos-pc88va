@@ -19,6 +19,7 @@ env/
 config/local.env
 /local/
 /private/
+.private-evidence/
 pc88va-private-docs/
 qa/vaeg/local/*
 !qa/vaeg/local/README.md

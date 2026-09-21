@@ -41,7 +41,8 @@ def verify_init_ownership(syms, init_source, load):
 
 
 def verify(kernel, link_map):
-    from unicorn import Uc, UC_ARCH_X86, UC_MODE_16, UC_HOOK_CODE, UC_HOOK_INSN
+    from unicorn import (Uc, UC_ARCH_X86, UC_MODE_16, UC_HOOK_CODE,
+                         UC_HOOK_INSN, UC_HOOK_INTR)
     from unicorn import x86_const as r
     syms = symbols(link_map)
     members = ['pc88va_dos_getc_', 'pc88va_console_read_dos_',
@@ -83,6 +84,17 @@ def verify(kernel, link_map):
     cpu.mem_write(address('m11_pending_valid'), b'\x01')
     cpu.hook_add(UC_HOOK_INSN, lambda uc, port, size, _: 0xff,
                  None, 1, 0, r.UC_X86_INS_IN)
+    def platform_int(uc, interrupt, _):
+        if interrupt != 0x80:
+            return
+        # The placement verifier exercises only the successful reset/read
+        # contract.  Advance over the real-mode INT instruction and return
+        # CF clear; no guest service is emulated here.
+        # Unicorn reports IP after the two-byte INT instruction here; leave
+        # it untouched so the following SBB/return conversion still runs.
+        uc.reg_write(r.UC_X86_REG_EFLAGS,
+                     uc.reg_read(r.UC_X86_REG_EFLAGS) & ~1)
+    cpu.hook_add(UC_HOOK_INTR, platform_int)
     exits = {address(n): n for n in ['_IOExit', '_IODone', '_IOErrorExit']}
     stopped = []
     def boundary(uc, at, size, _):
@@ -131,7 +143,8 @@ def verify(kernel, link_map):
         cpu.emu_start(0x60000, 0x60000 + len(caller), count=100)
         assert cpu.reg_read(r.UC_X86_REG_CS) == 0x6000, name
         assert cpu.reg_read(r.UC_X86_REG_IP) == len(caller), name
-        assert cpu.reg_read(r.UC_X86_REG_AX) == (0 if name == 'FL_RESET' else 0xA000 + words - 1), name
+        expected_ax = 1 if name == 'FL_RESET' else 0xA000 + words - 1
+        assert cpu.reg_read(r.UC_X86_REG_AX) == expected_ax, (name, hex(cpu.reg_read(r.UC_X86_REG_AX)))
         for reg, value in saved:
             assert cpu.reg_read(reg) == value, name
     if split:

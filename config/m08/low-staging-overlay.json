@@ -24,9 +24,9 @@
     "regions": {
       "stage2": [73728, 90112],
       "loader_stack": [98304, 102400],
-      "scratch": [221184, 237568],
-      "kernel_file": [155648, 221168],
-      "kernel_allocation": [155648, 221168]
+      "scratch": [225280, 241664],
+      "kernel_file": [159744, 225264],
+      "kernel_allocation": [159744, 225264]
     },
     "schema_version": 1,
     "stack": {

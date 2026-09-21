@@ -93,6 +93,22 @@ m13-accept:
 	@$(M13_PYTHON) -B tools/m13/verify_m13.py --accept --build-root "$(M13_BUILD_ROOT)"
 m13: m13-accept
 
+.PHONY: m14-preflight m14-verify m14-build m14-compare m14-tests m14-historical m14-accept
+m14-preflight:
+	@python3 -B tools/m14/preflight.py --output "$(M14_PREFLIGHT_ROOT)"
+m14-verify:
+	@python3 -B tools/m14/verify_m14.py
+m14-build:
+	@python3 -B tools/m14/build_public.py --output "$(M14_BUILD_ROOT)"
+m14-compare:
+	@python3 -B tools/m14/verify_m14.py --build-root "$(M14_BUILD_ROOT)"
+m14-tests:
+	@python3 -B tools/m14/run_tests.py
+m14-historical:
+	@python3 -B tools/m14/historical_regression.py --output "$(M14_HISTORICAL_ROOT)"
+m14-accept:
+	@python3 -B tools/m14/verify_m14.py --accept --build-root "$(M14_BUILD_ROOT)"
+
 help:
 	@printf '%s\n' \
 		'Available targets:' \

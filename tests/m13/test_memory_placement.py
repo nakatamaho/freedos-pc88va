@@ -43,6 +43,34 @@ class PlacementTests(unittest.TestCase):
             self.assertEqual(p['stack'][1], 0x10000 + ((size + 15) & ~15) + 4096)
             self.assertEqual(p['ranges']['image'][1], p['stack'][1])
 
+    def test_in_place_handoff_frame_does_not_overwrite_relocation_tail(self):
+        with tempfile.TemporaryDirectory(prefix='m13-frame-', dir=ROOT / 'build') as tmp:
+            tmp = Path(tmp)
+            for length in range(32, 64):
+                with self.subTest(length=length):
+                    h, body, relocations = fixture(length)
+                    h = list(h)
+                    size = 48 + len(body)
+                    h[1], h[2] = size % 512, (size + 511) // 512
+                    kernel = tmp / 'fixture.exe'
+                    kernel.write_bytes(struct.pack('<14H', *h) + relocations + bytes(16) + body)
+                    output = tmp / 'carrier.exe'
+                    record = carrier.build(
+                        kernel, ROOT / 'components/fdkernel/pc88va/kernel/m13_unpack.asm', output,
+                        load_segment=0x2600, file_segment=0x2600,
+                        scratch_segment=0x3600, source_offset=4096,
+                        image_segment=0x1000)
+                    live_end = (record['payload_offset'] + record['payload_size'] +
+                                record['relocation_count'] * 4)
+                    # The in-place bridge has a bounded paragraph-aligned
+                    # prefix, without the ordinary carrier's unused padding.
+                    self.assertEqual(record['payload_offset'], 0x280)
+                    # loader_handoff.inc pushes a four-byte FAR return frame
+                    # before the unpacker can copy the relocation records.
+                    self.assertGreaterEqual(record['carrier_stack_pointer'] - 4, live_end)
+                    allocation = ((len(output.read_bytes()) - 32 + 15) // 16) * 16
+                    self.assertLessEqual(record['carrier_stack_pointer'], allocation)
+
     def test_exact_limit_and_one_byte_short(self):
         p = self.plan()
         end = p['ranges']['bridge'][1]
@@ -344,7 +372,7 @@ class PlacementTests(unittest.TestCase):
 
     def test_reset_actual_far_entry_and_register_contract(self):
         """Assemble the production entry, not a replacement implementation."""
-        from unicorn import Uc, UC_ARCH_X86, UC_MODE_16
+        from unicorn import Uc, UC_ARCH_X86, UC_MODE_16, UC_HOOK_INTR
         from unicorn import x86_const as regs
         source = (ROOT / 'components/fdkernel/pc88va/kernel/m13_platform.asm').read_text()
         entry = source.split('FL_RESET:\n', 1)[1].split('global FL_DISKCHANGED', 1)[0]
@@ -366,8 +394,23 @@ class PlacementTests(unittest.TestCase):
                               DI=0x5678, BP=0x6789, DS=0x4000, ES=0x5000)
                 for name, value in values.items():
                     cpu.reg_write(getattr(regs, 'UC_X86_REG_' + name), value)
+                # M14 implements a native reset call; provide only its synthetic
+                # firmware boundary instead of assuming the former no-op body.
+                calls = []
+                failed = drive != 0
+
+                def firmware(machine, interrupt, _):
+                    self.assertEqual(interrupt, 0x80)
+                    self.assertEqual(machine.reg_read(regs.UC_X86_REG_AX) >> 8, 0)
+                    calls.append(interrupt)
+                    machine.reg_write(regs.UC_X86_REG_AX, 0)
+                    flags = machine.reg_read(regs.UC_X86_REG_EFLAGS)
+                    machine.reg_write(regs.UC_X86_REG_EFLAGS, (flags & ~1) | int(failed))
+
+                cpu.hook_add(UC_HOOK_INTR, firmware)
                 cpu.emu_start(0x10000, 0x10000 + len(caller), count=32)
-                self.assertEqual(cpu.reg_read(regs.UC_X86_REG_AX), 0)
+                self.assertEqual(calls, [0x80])
+                self.assertEqual(cpu.reg_read(regs.UC_X86_REG_AX), int(not failed))
                 self.assertEqual(cpu.reg_read(regs.UC_X86_REG_IP), len(caller))
                 for name, value in values.items():
                     self.assertEqual(cpu.reg_read(getattr(regs, 'UC_X86_REG_' + name)), value, name)

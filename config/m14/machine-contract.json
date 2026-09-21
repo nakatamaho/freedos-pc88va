@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "milestone": "M14",
+  "kind": "contract",
+  "status": "runtime_qualified",
+  "start_sha": "e324fa6c7132c7daaa7b936c0902563f47a3e528",
+  "components": {
+    "fdkernel": "ac16c8a7401526f99787e03babdb2f4223d48fc4",
+    "freecom": "9cf57b28abf1d98fab7655fb811375a2aa16c6d9",
+    "country": "23f189cca3420606eae8723884fa92ccd65eb307"
+  },
+  "component_lock": {
+    "path": "manifests/m14-components.lock.json",
+    "sha256": "73d94678ad2b1177d38066ce9d6d27fb62469343d94c42934b3d476a5aeda87a"
+  },
+  "artifact_manifest": {
+    "path": "qa/golden/m14/manifest.json",
+    "sha256": "9a50b93720f1508c07ffc97731612fdc663dbd0c0039f9ed21bf716deaebabdf"
+  },
+  "qualification": {
+    "path": "qa/golden/m14/qualification.json",
+    "sha256": "e91d0f8deca2b20b0ea23d6aedc8fefb1bbc1acb5a3f4c9ca12d24778662022a"
+  },
+  "toolchain": {
+    "path": "manifests/toolchains.lock.json",
+    "sha256": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162"
+  },
+  "schema": {
+    "path": "schema/m14-acceptance.schema.json",
+    "sha256": "ead1173dc4e3b503c0fb3bf3340a9aa884e4b45c46119b26045685d595b89491"
+  },
+  "filesystem": "common FreeDOS FAT12",
+  "media_policy": "changed-or-unknown invalidates old handles and dirty cache; explicit reopen",
+  "buffer_bytes": 4096,
+  "qualified_memory_kib": [
+    512
+  ],
+  "memory_other_configurations": "NOT QUALIFIED BY M14",
+  "hardware": "NOT RUN"
+}
