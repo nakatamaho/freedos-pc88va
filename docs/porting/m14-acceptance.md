@@ -43,6 +43,18 @@ Git-excluded storage.
 | M14-NORMAL | Ordinary candidate | No private interposer, state patch, or diagnostic dependency | VAEG PASS |
 | M14-CLOSE | Evidence closure | Source pins, records, CI, and delivered bytes agree | HOST PASS |
 
+## G14 manual acceptance
+
+| Gate | Evidence | Result |
+| --- | --- | --- |
+| G14 | Owner explicitly reported `G14 passed` on 2026-09-22 for the delivered candidate at `65cd674921a157b3b1573434d46c9521f6a203a5` | VAEG PASS; owner-confirmed manual acceptance |
+
+The [report](m14-report.md#g14-owner-confirmation) records the manual scope and
+its evidence boundary. This later owner confirmation supersedes the automated
+snapshot's `manual_keyboard: NOT RUN` for manual acceptance; it does not change
+that historical snapshot, the original mandatory gate set or the delivered bytes.
+Hardware remains NOT RUN. No independent manual transcript is claimed.
+
 ## Scope boundary
 
 M14 reuses the common FreeDOS FAT12 and DOS block/cache layers. The PC-88VA

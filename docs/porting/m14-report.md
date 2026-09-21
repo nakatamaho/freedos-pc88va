@@ -117,7 +117,25 @@ remote equality, ancestry and a bounded publication diff. PUBLICATION_TIP_SHA
 and DOWNSTREAM_BASE_SHA are recorded as full identities in the post-push local
 handoff; this report cannot name its own future commit.
 
-Manual physical-keyboard validation and actual hardware are **NOT RUN**;
-hardware remains **DEFERRED HARDWARE VALIDATION**. No M15 or later storage work
-has started. Generated images, binaries, logs, private source material and
-concrete private identities remain in persistent Git-excluded storage.
+## G14 owner confirmation
+
+On 2026-09-22 the owner explicitly confirmed **"G14 passed"** for the delivered
+M14 candidate at publication `65cd674921a157b3b1573434d46c9521f6a203a5`.
+G14 is **VAEG PASS (owner-confirmed manual acceptance)**. It covers the manual
+VAEG checks described before confirmation: keyboard editing and DIR/TYPE,
+file writing and fresh-boot persistence, and closed-file A/B exchange with
+continued usable operation. The confirmation is owner testimony; it does not
+supply new agent-observed logs or individual command transcripts.
+
+The existing qualification JSON and original delivery manifest retain the
+pre-confirmation automated snapshot, including `manual_keyboard: NOT RUN`.
+This dated G14 record supersedes that snapshot's manual-acceptance status only.
+The qualified implementation, component pins, automated results and delivered
+image bytes are unchanged. G14 adds a human result without adding a retrospective
+mandatory gate to the original M14 contract.
+
+Actual hardware remains **NOT RUN / DEFERRED HARDWARE VALIDATION**. No M15 or
+later storage implementation has started. Generated images, binaries, logs,
+private source material and concrete private identities remain in persistent
+Git-excluded storage. The post-push G14 handoff addendum records this publication's
+exact tip, CI and downstream base separately from the original delivery.
