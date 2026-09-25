@@ -51,14 +51,24 @@ commit, Linux/amd64 verification passed: all 307 kernel PC-88VA tests, all 16
 parent M15 tests, 20 M13 memory-placement tests, and the M13 adapter-selection
 regression. The fdkernel topic push and native CI are verified at implementation
 commit `1545db0201f78588df6a524fc2c07de04533c3e3` (run 36078361707, success).
-The original 8086 fixture set also rebuilt as 38 byte-identical COM files in
-two isolated Linux/amd64 containers. This is reproducible fixture-build
-evidence, not guest execution. The public inventory contains no per-case
-private-run outcome or concrete observation. Parent commits
+The current kernel and FreeCOM source also rebuilt byte-identically in two
+isolated Linux/amd64 containers. The current SYS utility and 38 8086 fixture
+COM files likewise rebuilt byte-identically in two isolated containers. These
+are reproducible build results, not guest execution. Private VA and VA2
+candidate disks were assembled from those outputs and passed independent host
+FAT12 inspection: the source boot records and contiguous loader extents remain
+intact, current payloads match the builds, and stale result files are absent.
+A separate disposable SYS target passed host inspection with its reserved
+zero-filled loader area and sentinel files; it contains no system payload.
+These host checks do not qualify boot, transfer, or persistence in a guest.
+The public inventory contains no per-case private-run outcome or concrete
+observation. Parent commits
 `526fd67b8fea64c7259741c06b37f6f55de3e969` and
 `9263edfbefcda8b18ae5bb3e9815a3b6ff6b01fa` and the child implementation are
 pushed and remote-equal. The new branch-specific M15 host workflow passed on
 exact head `9263edfbefcda8b18ae5bb3e9815a3b6ff6b01fa` (run 36081226448).
+The report-only descendant `4a4c0d287ddaf1597b681982e5eaada7757f1a07` also
+passed the same workflow (run 36081372418).
 Earlier M01-M09 workflows also ran on the first M15 push and failed their
 historical baseline gates: most rejected the newer exact gitlink; the M08
 historical rebuild hit an Ubuntu index-digest mismatch. Their push filters now
@@ -70,8 +80,9 @@ Earlier user-confirmed SYS human acceptance applies to its then-tested
 candidate; it does not qualify the current source revision. Current-source
 VA/VA2 guest qualification remains required for ordinary FreeCOM and batch
 workflows, writable media, the guest SYS transfer, independent boot of the
-transferred disk, and persistence after restart. Parent publication/CI and the
-exact tested-image handoff also remain open.
+transferred disk, and persistence after restart. The exact current-source
+candidate media are prepared in private, Git-excluded storage for this gate.
+Parent publication/CI and the exact tested-image handoff also remain open.
 
 Current-source VAEG validation: **NOT RUN**.
 Hardware validation: **DEFERRED HARDWARE VALIDATION**.
