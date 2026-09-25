@@ -23,8 +23,10 @@ remain deferred under parent issues #3-#6 and do not gate the port.
 - START_SHA: ed7fb3c4fac2597a08c8ce9f76390e90d975c86c (M14 G14 parent baseline).
 - fdkernel M14 baseline: ac16c8a7401526f99787e03babdb2f4223d48fc4.
 - fdkernel M15 implementation commit: 3498c982584867367d2b917a79363f76143c514e.
-- M15 qualified implementation SHA: pending; remaining integrated M15
-  acceptance work remains open.
+- Parent M15 placement/capacity fix commit:
+  aa23f9e27560f60a3f0e20b6a9fdd19354820a4b.
+- M15 qualified implementation SHA: pending; full integrated M15 acceptance
+  remains open.
 - Publication tip and downstream base: recorded in the post-push handoff and
   kept distinct from the start and implementation identities.
 
@@ -65,6 +67,10 @@ commit `cd60877bba0c47a811ffb10b649e909454d8fe7a` updates the gitlink to that
 exact child head. Parent M15 host workflow run 36098380721 passed on that exact
 integration head, including the finite port boundary, parent M15 acceptance
 and memory-placement regressions, and complete PC-88VA kernel component suite.
+The backup-RAM placement correction is parent commit
+`aa23f9e27560f60a3f0e20b6a9fdd19354820a4b`; native M15 workflow run
+36124174958 passed on that exact head, including M15 acceptance, M13 placement,
+and the full PC-88VA kernel component tests.
 The report-only publication tip and its own workflow are recorded in the
 post-push handoff.
 
@@ -96,14 +102,41 @@ failed their historical baseline gates: most rejected the newer exact gitlink;
 the M08 historical rebuild hit an Ubuntu index-digest mismatch. Their push
 filters now exclude M15.
 
+The repeated low-memory startup failure was caused by treating the carrier's
+build-time memory ceiling as the machine's runtime ceiling. The M13 carrier
+builder now places split INIT and its initial stack above the bounded live
+carrier/scratch ranges, records the minimum runtime capacity, and keeps the
+DOS arena ceiling dynamic so the adapter can read the PC-88VA backup-RAM
+selection. The low-memory case uses its matching in-place loader and carrier
+profile as one unit. The linked-placement verifier now checks the unpacked
+descriptor against the exact generated placement plan.
+
+Focused verification of this changed low-memory profile is **HOST PASS** for
+23/23 M13 placement tests, 16/16 parent M15 tests, linked-carrier execution,
+and D88/FAT12 readback checks. The same matched loader and kernel candidate is
+**VAEG PASS** in VA and VA2 at 256, 384, 512, and 640 KiB. All eight runs
+reached FreeCom, completed ordinary DIR/TYPE/COM/MZ and file-write/readback
+probes, and recorded the configured capacity in backup RAM. Host inspection
+confirmed the kernel payload and existing disk files remained intact after
+the guest writes. These results qualify all four supported capacities in both
+modes on the matched profile.
+
+The broader M13 test discovery ran 34 tests: 33 passed. Its remaining
+historical public-contract test could not be qualified from the exported
+Linux/amd64 tree because Git and checkout metadata are absent. That test also
+binds to the earlier accepted M13 component pin, while this branch integrates
+the later M15 component; the M13 acceptance record was left unchanged. The
+focused placement suite and M15 suite are independent of that historical gate.
+
 ## Acceptance still open
 
 The user passed the M15 SYS human gate on the earlier VA/VA2 candidates,
 including transfer and persistence checks. The later banner correction changes
 only startup text, so those SYS steps are not being repeated. The new
 current-source banner check has now been owner-confirmed in both modes. This
-focused startup-banner check is **VAEG PASS** in VA and VA2. Other M15
-acceptance work remains open, and broader current-source VAEG validation of
-the corrected candidates remains **NOT RUN**; the initially mispackaged
-candidate is not counted as qualification evidence. Hardware validation:
-**DEFERRED HARDWARE VALIDATION**.
+focused startup-banner check is **VAEG PASS** in VA and VA2. The focused
+placement checks are **VAEG PASS** in VA and VA2 at all four supported memory
+capacities. Full M15 acceptance remains open; broader current-source M15 QA and
+a human acceptance gate for this exact candidate are **NOT RUN**. The
+initially mispackaged candidate is not counted as qualification evidence.
+Hardware validation: **DEFERRED HARDWARE VALIDATION**.
