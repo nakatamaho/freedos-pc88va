@@ -23,8 +23,8 @@ remain deferred under parent issues #3-#6 and do not gate the port.
 - START_SHA: ed7fb3c4fac2597a08c8ce9f76390e90d975c86c (M14 G14 parent baseline).
 - fdkernel M14 baseline: ac16c8a7401526f99787e03babdb2f4223d48fc4.
 - fdkernel M15 implementation commit: 3498c982584867367d2b917a79363f76143c514e.
-- M15 qualified implementation SHA: pending; current-source VA/VA2 banner
-  confirmation remains open.
+- M15 qualified implementation SHA: pending; remaining integrated M15
+  acceptance work remains open.
 - Publication tip and downstream base: recorded in the post-push handoff and
   kept distinct from the start and implementation identities.
 
@@ -82,8 +82,10 @@ inspection. Their source boot records and contiguous loader extents remain
 intact, current payloads match the builds, and stale result files are absent.
 A separate disposable SYS target passed host inspection with its reserved
 zero-filled loader area and sentinel files; it contains no system payload.
-The corrected candidates still require guest boot, transfer, and persistence
-validation.
+The user has now confirmed that current-source boots in both VA and VA2 display
+the exact 40-character build ID and continue through InitDisk into FreeCom.
+The user confirmed these were VAEG runs. This is **VAEG PASS** for the focused
+startup-banner boot check only; it does not qualify the full M15 integration.
 The public inventory contains no per-case private-run outcome or concrete
 observation. Earlier parent revisions passed the branch-specific M15 host
 workflow on exact heads `9263edfbefcda8b18ae5bb3e9815a3b6ff6b01fa` (run
@@ -99,12 +101,9 @@ filters now exclude M15.
 The user passed the M15 SYS human gate on the earlier VA/VA2 candidates,
 including transfer and persistence checks. The later banner correction changes
 only startup text, so those SYS steps are not being repeated. The new
-current-source VA/VA2 candidates are prepared in private, Git-excluded storage;
-their focused remaining human check is to boot each mode and confirm the full
-40-character build ID appears below `PC88VA kernel`. This does not close other
-open M15 acceptance work. Current-source VAEG validation and human acceptance
-remain open.
-
-Current-source VAEG validation of the corrected candidates: **NOT RUN**. The
-initially mispackaged candidate is not counted as qualification evidence.
-Hardware validation: **DEFERRED HARDWARE VALIDATION**.
+current-source banner check has now been owner-confirmed in both modes. This
+focused startup-banner check is **VAEG PASS** in VA and VA2. Other M15
+acceptance work remains open, and broader current-source VAEG validation of
+the corrected candidates remains **NOT RUN**; the initially mispackaged
+candidate is not counted as qualification evidence. Hardware validation:
+**DEFERRED HARDWARE VALIDATION**.
