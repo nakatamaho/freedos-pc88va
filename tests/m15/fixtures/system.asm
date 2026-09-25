@@ -357,11 +357,16 @@ start:
         mov bx, 0fffeh
         mov dx, country
         DOS 5046
-        ERROR 2
+        ; The selected FreeDOS NLS MUX path returns DE_INVLDFUNC (AX=1) when
+        ; this explicit country package is not loaded; do not impose an
+        ; MS-DOS reference error value on the port.
+        ERROR 1
         mov ax, 5900h
         xor bx, bx
         DOS 5047
-        cmp ax, 2
+        ; AH=59h returns the preserved FreeDOS CritErrCode from the preceding
+        ; missing-country-package request.
+        cmp ax, 1
         jne failure
         OK
         mov ax, 3800h

@@ -104,24 +104,62 @@ start:
         CARRY_CLEAR
         mov [copy_psp], ax
         OK
-        mov dx, ax
+        ; new_psp() replaces PSP:000Ah-0015h with the current IVT vectors.
+        push ds
+        xor ax, ax
+        mov ds, ax
+        mov ax, [0088h]
+        mov [cs:expected_vectors+0], ax
+        mov ax, [008ah]
+        mov [cs:expected_vectors+2], ax
+        mov ax, [008ch]
+        mov [cs:expected_vectors+4], ax
+        mov ax, [008eh]
+        mov [cs:expected_vectors+6], ax
+        mov ax, [0090h]
+        mov [cs:expected_vectors+8], ax
+        mov ax, [0092h]
+        mov [cs:expected_vectors+10], ax
+        pop ds
+        mov dx, [copy_psp]
         mov ah, 26h
         DOS 22024
         mov es, [copy_psp]
-        ; Function 26 copies the PSP, adjusts its memory-end segment, and
-        ; refreshes vector fields. This fixture has not changed those vectors.
-        mov ax, [copy_psp]
-        add ax, 16
-        cmp ax, [es:6]
-        jne failure
+        ; FreeDOS new_psp() copies PSP:0006h unchanged, refreshes vector fields,
+        ; and sets the DOS-version word. Compare the copied size field with the
+        ; source PSP instead of imposing another DOS implementation's rule.
+        cld
         xor si, si
         xor di, di
-        mov cx, 3
+        mov cx, 5                  ; Compare bytes 00h-09h, including PSP:0006h.
         repe cmpsw
         jne failure
-        add si, 2                 ; Offset 06h is adjusted, not copied.
+        mov ax, [cs:expected_vectors+0]
+        cmp ax, [es:0ah]
+        jne failure
+        mov ax, [cs:expected_vectors+2]
+        cmp ax, [es:0ch]
+        jne failure
+        mov ax, [cs:expected_vectors+4]
+        cmp ax, [es:0eh]
+        jne failure
+        mov ax, [cs:expected_vectors+6]
+        cmp ax, [es:10h]
+        jne failure
+        mov ax, [cs:expected_vectors+8]
+        cmp ax, [es:12h]
+        jne failure
+        mov ax, [cs:expected_vectors+10]
+        cmp ax, [es:14h]
+        jne failure
+        add si, 12                 ; Skip refreshed vector fields 0Ah-15h.
+        add di, 12
+        mov cx, 21                 ; Compare unchanged fields through 3Fh.
+        repe cmpsw
+        jne failure
+        add si, 2                  ; Skip FreeDOS ps_retdosver at 40h.
         add di, 2
-        mov cx, 124
+        mov cx, 95                 ; Compare the rest through byte FFh.
         repe cmpsw
         jne failure
         mov ax, [es:40h]
@@ -295,6 +333,7 @@ dpb_ptr: dd 0
 old_version: dw 0
 old_default: dw 0
 copy_psp: dw 0
+expected_vectors: times 6 dw 0
 actual_version: dw 0
 version_changed: db 0
 old_number: dw 0

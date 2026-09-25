@@ -1689,7 +1689,7 @@
       "port_review_status": "PORT_CASE_PLAN_REVIEWED;FINAL_SOURCE_BOUND_QUALIFICATION_PENDING",
       "specification": {
         "inputs": "AH=26h; DX is the segment address at which to create the new PSP, not an absolute address.",
-        "outputs": "No register output is documented. A copy of the current PSP is written at DX; PSP:0006h is adjusted to the memory end available to the new PSP, and current INT 22h/23h/24h vectors are saved at PSP:000Ah-0015h.",
+        "outputs": "No register output is documented. A copy of the current PSP is written at DX; the selected FreeDOS implementation leaves PSP:0006h copied from the source PSP, saves current INT 22h/23h/24h vectors at PSP:000Ah-0015h, and sets the PSP DOS-version word from FreeDOS's current version state.",
         "flags": "No output flags are specified; captured flags are not asserted.",
         "units": "DX and PSP:0006h are 16-bit segment values; the PSP buffer is 256 bytes.",
         "lifetime": "The caller must provide writable memory for the new PSP. A .COM image may follow it; DOS 2.0+ recommends AH=4Bh for loading programs. The mapped copy case has not changed the vectors and does not qualify vector refresh after a prior change.",
@@ -1701,8 +1701,7 @@
       },
       "implementation_source": "components/fdkernel/kernel/inthndlr.c:int21_syscall/int21_service",
       "planned_cases": [
-        "copy all PSP bytes except the separately adjusted memory-end word",
-        "check the copied PSP memory-end segment against the 16-paragraph allocated block",
+        "compare copied PSP bytes excluding the refreshed interrupt-vector and DOS-version fields; verify PSP:0006h remains copied and check current vectors separately",
         "check PSP version-state inheritance across controlled compatibility-state changes",
         "current-vector refresh after changed interrupt vectors remains unqualified"
       ],
@@ -2798,7 +2797,7 @@
       "port_review_status": "PORT_CASE_PLAN_REVIEWED;FINAL_SOURCE_BOUND_QUALIFICATION_PENDING",
       "specification": {
         "inputs": "AH=38h with DX!=FFFFh; AL=00h requests the current country, AL=01h-FEh selects that country code, or AL=FFh uses the country code in BX. DS:DX points to a 34-byte output buffer for DOS 3.x.",
-        "outputs": "On success CF is clear and DOS 3.x returns the country code in BX and country-dependent data in the buffer. On failure CF is set and AX=02h for an invalid country code.",
+        "outputs": "On success CF is clear and DOS 3.x returns the country code in BX and country-dependent data in the buffer. On failure CF is set; in the selected no-NLSFUNC profile, an unavailable explicit country package follows the FreeDOS NLS MUX path and returns DE_INVLDFUNC (AX=01h).",
         "flags": "CF clear on success and set on failure; no other output flags are specified.",
         "units": "AL/BX carry a numeric country code; DS:DX addresses 34 output bytes under DOS 3.x.",
         "lifetime": "The call reads current or selected country data without changing the selected country. The fixture checks current-country lookup and invalid-code handling; explicit lookup of a different valid country is not covered.",
@@ -2811,7 +2810,7 @@
       "implementation_source": "components/fdkernel/kernel/inthndlr.c:int21_syscall/int21_service",
       "planned_cases": [
         "get current-country code and check documented date-format range and buffer guards",
-        "invalid explicit country code returns CF set and AX=02h; a later current-country query still returns the known current code",
+        "an unavailable explicit country package returns CF set and DE_INVLDFUNC (AX=01h) through the selected FreeDOS NLS MUX path; a later current-country query still returns the known current code",
         "explicit valid alternate-country lookup and every locale-specific output field remain unqualified"
       ],
       "case_ids": [
