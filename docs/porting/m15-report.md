@@ -54,13 +54,20 @@ commit `1545db0201f78588df6a524fc2c07de04533c3e3` (run 36078361707, success).
 The current kernel and FreeCOM source also rebuilt byte-identically in two
 isolated Linux/amd64 containers. The current SYS utility and 38 8086 fixture
 COM files likewise rebuilt byte-identically in two isolated containers. These
-are reproducible build results, not guest execution. Private VA and VA2
-candidate disks were assembled from those outputs and passed independent host
-FAT12 inspection: the source boot records and contiguous loader extents remain
+are reproducible build results, not guest execution. The first private VA/VA2
+candidate package mistakenly used the raw Watcom-linked MZ kernel instead of
+the M13 zero-relocation carrier required by the loader. That package is
+invalid for guest qualification. The current linked kernel has now been
+transformed with the M13 carrier builder in two isolated Linux/amd64 runs; the
+carrier outputs are byte-identical, and the actual linked-placement verifier
+executed each bridge through the kernel entry with Unicorn 2.1.4. Corrected
+private VA/VA2 candidates package that carrier and pass independent host FAT12
+inspection. Their source boot records and contiguous loader extents remain
 intact, current payloads match the builds, and stale result files are absent.
 A separate disposable SYS target passed host inspection with its reserved
 zero-filled loader area and sentinel files; it contains no system payload.
-These host checks do not qualify boot, transfer, or persistence in a guest.
+The corrected candidates still require guest boot, transfer, and persistence
+validation.
 The public inventory contains no per-case private-run outcome or concrete
 observation. Parent commits
 `526fd67b8fea64c7259741c06b37f6f55de3e969` and
@@ -84,5 +91,6 @@ transferred disk, and persistence after restart. The exact current-source
 candidate media are prepared in private, Git-excluded storage for this gate.
 Parent publication/CI and the exact tested-image handoff also remain open.
 
-Current-source VAEG validation: **NOT RUN**.
+Current-source VAEG validation of the corrected candidates: **NOT RUN**. The
+initially mispackaged candidate is not counted as qualification evidence.
 Hardware validation: **DEFERRED HARDWARE VALIDATION**.
