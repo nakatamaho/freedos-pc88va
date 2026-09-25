@@ -54,8 +54,12 @@ commit `1545db0201f78588df6a524fc2c07de04533c3e3` (run 36078361707, success).
 The original 8086 fixture set also rebuilt as 38 byte-identical COM files in
 two isolated Linux/amd64 containers. This is reproducible fixture-build
 evidence, not guest execution. The public inventory contains no per-case
-private-run outcome or concrete observation. Parent publication and CI are
-pending.
+private-run outcome or concrete observation. Parent commit
+`526fd67b8fea64c7259741c06b37f6f55de3e969` and the child implementation are
+pushed and remote-equal. A branch-specific M15 host workflow is being added;
+its exact-head native CI is pending. Earlier M01-M09 workflows also ran on this
+branch and failed their historical exact-gitlink checks, so their push filters
+now exclude M15.
 
 ## Acceptance still open
 
