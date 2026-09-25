@@ -22,7 +22,7 @@ remain deferred under parent issues #3-#6 and do not gate the port.
 
 - START_SHA: ed7fb3c4fac2597a08c8ce9f76390e90d975c86c (M14 G14 parent baseline).
 - fdkernel M14 baseline: ac16c8a7401526f99787e03babdb2f4223d48fc4.
-- fdkernel M15 implementation commit: 1545db0201f78588df6a524fc2c07de04533c3e3.
+- fdkernel M15 implementation commit: a47a5d35af92a49857e25287ffa492b26d3436b2.
 - M15 qualified implementation SHA: pending; current source has not passed
   final source-bound qualification.
 - Publication tip and downstream base: pending and will remain distinct
@@ -46,13 +46,22 @@ M15 worktree.
 
 The V4 inventory verifier and five boundary tests pass for the locked
 221-entry scope, pinned M14 source identities, and six separately deferred
-questions. The parent acceptance suite passes (29 tests). On the current source
-commit, Linux/amd64 verification passed: all 307 kernel PC-88VA tests, all 16
-parent M15 tests, 20 M13 memory-placement tests, and the M13 adapter-selection
-regression. The fdkernel topic push and native CI are verified at implementation
-commit `1545db0201f78588df6a524fc2c07de04533c3e3` (run 36078361707, success).
-The current kernel and FreeCOM source also rebuilt byte-identically in two
-isolated Linux/amd64 containers. The current SYS utility and 38 8086 fixture
+questions. On implementation commit
+`a47a5d35af92a49857e25287ffa492b26d3436b2`, Linux/amd64 verification passed:
+all 307 kernel PC-88VA tests, all 16 parent M15 tests, all 29 parent acceptance
+tests, all 20 M13 memory-placement tests, and the M13 adapter-selection
+regression. The PC-88VA startup banner now includes `build: ` followed by the
+full 40-character fdkernel commit ID. The ID is expanded from the source commit
+in exported archives and resolved from `HEAD` in a clean checkout. The kernel
+and FreeCOM source also rebuilt byte-identically in two isolated Linux/amd64
+containers; both recorded the same fdkernel commit ID.
+
+The fdkernel topic branch now points to implementation commit
+`a47a5d35af92a49857e25287ffa492b26d3436b2` on the fork. Parent gitlink
+publication and its native CI remain pending. The fdkernel native Build
+workflow succeeded on that exact child head (run 36095297677).
+
+The current SYS utility and 38 8086 fixture
 COM files likewise rebuilt byte-identically in two isolated containers. These
 are reproducible build results, not guest execution. The first private VA/VA2
 candidate package mistakenly used the raw Watcom-linked MZ kernel instead of
@@ -69,17 +78,14 @@ zero-filled loader area and sentinel files; it contains no system payload.
 The corrected candidates still require guest boot, transfer, and persistence
 validation.
 The public inventory contains no per-case private-run outcome or concrete
-observation. Parent commits
-`526fd67b8fea64c7259741c06b37f6f55de3e969` and
-`9263edfbefcda8b18ae5bb3e9815a3b6ff6b01fa` and the child implementation are
-pushed and remote-equal. The new branch-specific M15 host workflow passed on
-exact head `9263edfbefcda8b18ae5bb3e9815a3b6ff6b01fa` (run 36081226448).
-The report-only descendant `4a4c0d287ddaf1597b681982e5eaada7757f1a07` also
-passed the same workflow (run 36081372418).
-Earlier M01-M09 workflows also ran on the first M15 push and failed their
-historical baseline gates: most rejected the newer exact gitlink; the M08
-historical rebuild hit an Ubuntu index-digest mismatch. Their push filters now
-exclude M15.
+observation. Earlier parent revisions passed the branch-specific M15 host
+workflow on exact heads `9263edfbefcda8b18ae5bb3e9815a3b6ff6b01fa` (run
+36081226448) and `4a4c0d287ddaf1597b681982e5eaada7757f1a07` (run 36081372418).
+Those runs predate the current fdkernel implementation and do not qualify its
+parent gitlink. Earlier M01-M09 workflows also ran on the first M15 push and
+failed their historical baseline gates: most rejected the newer exact gitlink;
+the M08 historical rebuild hit an Ubuntu index-digest mismatch. Their push
+filters now exclude M15.
 
 ## Acceptance still open
 
@@ -89,7 +95,7 @@ VA/VA2 guest qualification remains required for ordinary FreeCOM and batch
 workflows, writable media, the guest SYS transfer, independent boot of the
 transferred disk, and persistence after restart. The exact current-source
 candidate media are prepared in private, Git-excluded storage for this gate.
-Parent publication/CI and the exact tested-image handoff also remain open.
+Parent gitlink publication/CI and the exact tested-image handoff remain open.
 
 Current-source VAEG validation of the corrected candidates: **NOT RUN**. The
 initially mispackaged candidate is not counted as qualification evidence.
