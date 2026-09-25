@@ -25,8 +25,8 @@ remain deferred under parent issues #3-#6 and do not gate the port.
 - fdkernel M15 implementation commit: a47a5d35af92a49857e25287ffa492b26d3436b2.
 - M15 qualified implementation SHA: pending; current source has not passed
   final source-bound qualification.
-- Publication tip and downstream base: pending and will remain distinct
-  from the start and implementation identities.
+- Publication tip and downstream base: recorded in the post-push handoff and
+  kept distinct from the start and implementation identities.
 
 ## Current checkpoint
 
@@ -58,8 +58,12 @@ containers; both recorded the same fdkernel commit ID.
 
 The fdkernel topic branch now points to implementation commit
 `a47a5d35af92a49857e25287ffa492b26d3436b2` on the fork. Parent gitlink
-publication and its native CI remain pending. The fdkernel native Build
-workflow succeeded on that exact child head (run 36095297677).
+publication is complete at parent integration commit
+`b4e5c10394182d8447fd31d5e4d395ec021c53a9`. The parent M15 host workflow
+succeeded on that exact head (run 36095708531). The fdkernel native Build
+workflow also succeeded on the exact child head (run 36095297677). The
+report-only publication tip and its own workflow are recorded in the post-push
+handoff.
 
 The current SYS utility and 38 8086 fixture
 COM files likewise rebuilt byte-identically in two isolated containers. These
@@ -95,7 +99,7 @@ VA/VA2 guest qualification remains required for ordinary FreeCOM and batch
 workflows, writable media, the guest SYS transfer, independent boot of the
 transferred disk, and persistence after restart. The exact current-source
 candidate media are prepared in private, Git-excluded storage for this gate.
-Parent gitlink publication/CI and the exact tested-image handoff remain open.
+Current-source VAEG validation and human acceptance remain open.
 
 Current-source VAEG validation of the corrected candidates: **NOT RUN**. The
 initially mispackaged candidate is not counted as qualification evidence.
