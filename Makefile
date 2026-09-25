@@ -94,6 +94,7 @@ m13-accept:
 m13: m13-accept
 
 .PHONY: m14-preflight m14-verify m14-build m14-compare m14-tests m14-historical m14-accept
+.PHONY: m15-loader-build m15-r7-rebuild
 m14-preflight:
 	@python3 -B tools/m14/preflight.py --output "$(M14_PREFLIGHT_ROOT)"
 m14-verify:
@@ -108,6 +109,23 @@ m14-historical:
 	@python3 -B tools/m14/historical_regression.py --output "$(M14_HISTORICAL_ROOT)"
 m14-accept:
 	@python3 -B tools/m14/verify_m14.py --accept --build-root "$(M14_BUILD_ROOT)"
+
+M15_PYTHON ?= /opt/local/bin/python3.12
+M15_LOADER_OVERLAY ?=
+M15_LOADER_OUTPUT ?=
+M15_LOADER_REFERENCE ?=
+M15_LOADER_EXTENT ?=
+M15_BOOT_REFERENCE ?=
+m15-loader-build:
+	@test -n "$(M15_LOADER_OVERLAY)" -a -n "$(M15_LOADER_OUTPUT)" || { echo 'M15_LOADER_OVERLAY and M15_LOADER_OUTPUT are required'; exit 2; }
+	@PYTHONDONTWRITEBYTECODE=1 $(M15_PYTHON) -B tools/m15/build_loader_pair.py --overlay "$(M15_LOADER_OVERLAY)" --output "$(M15_LOADER_OUTPUT)" $(if $(M15_LOADER_REFERENCE),--expected-loader "$(M15_LOADER_REFERENCE)") $(if $(M15_LOADER_EXTENT),--stage1-extent "$(M15_LOADER_EXTENT)") $(if $(M15_BOOT_REFERENCE),--expected-stage1 "$(M15_BOOT_REFERENCE)")
+
+M15_R7_SEED ?=
+M15_R7_PROFILE ?=
+M15_R7_OUTPUT ?=
+m15-r7-rebuild:
+	@test -n "$(M15_R7_SEED)" -a -n "$(M15_R7_PROFILE)" -a -n "$(M15_R7_OUTPUT)" || { echo 'M15_R7_SEED, M15_R7_PROFILE and M15_R7_OUTPUT are required'; exit 2; }
+	@PYTHONDONTWRITEBYTECODE=1 $(M15_PYTHON) -B tools/m15/rebuild_r7.py --seed "$(M15_R7_SEED)" --profile "$(M15_R7_PROFILE)" --output "$(M15_R7_OUTPUT)"
 
 help:
 	@printf '%s\n' \
@@ -134,6 +152,8 @@ help:
 		'  m13-compare       Validate the M13 build pair and artifact bindings' \
 		'  m13-verify        Validate M13 schemas, instances and component identities' \
 		'  m13-accept        Run the enforced M13 public acceptance gate' \
+		'  m15-loader-build  Build a loader twice from one explicit overlay and bind its inputs' \
+		'  m15-r7-rebuild    Rebuild r7 twice and compare all r6-seed files before QA' \
 		'  help              Show this help' \
 		'  submodules        Initialize/update locked submodules' \
 		'  component-status  Show submodule status' \
