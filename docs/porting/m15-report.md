@@ -25,10 +25,13 @@ remain deferred under parent issues #3-#6 and do not gate the port.
 - fdkernel M15 implementation commit: 3498c982584867367d2b917a79363f76143c514e.
 - Parent M15 placement/capacity fix commit:
   aa23f9e27560f60a3f0e20b6a9fdd19354820a4b.
+- Current QA-contract correction commit:
+  e1a7b6c948e1c646aa78af56e209dacdc529010b; its exact-head M15 workflow
+  passed as run 36129861539.
 - M15 qualified implementation SHA: pending; full integrated M15 acceptance
   remains open.
-- Publication tip and downstream base: recorded in the post-push handoff and
-  kept distinct from the start and implementation identities.
+- The report publication tip will be recorded in the post-push local handoff.
+  The final downstream base remains unset until M15 qualification is complete.
 
 ## Current checkpoint
 
@@ -128,6 +131,26 @@ binds to the earlier accepted M13 component pin, while this branch integrates
 the later M15 component; the M13 acceptance record was left unchanged. The
 focused placement suite and M15 suite are independent of that historical gate.
 
+On 2026-09-25 the ordinary `SYSTEM`, `ALIAS` and `SYSMISC` recorder fixtures
+were corrected to follow the selected FreeDOS source. `new_psp()` copies the
+PSP memory-end field unchanged while refreshing the interrupt vectors and DOS
+version word. The no-NLSFUNC country lookup follows FreeDOS's NLS MUX
+`DE_INVLDFUNC` path when the requested package is absent, and AH=59h reports
+the preserved FreeDOS error value. These were QA expectation and inventory
+corrections; no kernel behavior changed, no API row was added, and no deferred
+MS-DOS comparison was pulled into scope.
+
+Focused ordinary QA then passed in VAEG VA and VA2 on the current
+capacity-matched candidate. The three guest recorders produced complete
+host-verified results with no assertion failures or stack imbalance. Normal
+DIR/TYPE, COM/MZ execution, and file write/readback completed, and existing
+guest files remained intact. This is a focused **VAEG PASS**, not a claim that
+all 113 required services or all 221 inventory entries have been qualified.
+On the exact QA-contract correction commit, M15 host workflow run
+[36129861539](https://github.com/nakatamaho/freedos-pc88va/actions/runs/36129861539)
+passed the finite inventory check, parent acceptance and memory-placement
+regressions, and the full PC-88VA kernel component suite.
+
 ## Acceptance still open
 
 The user passed the M15 SYS human gate on the earlier VA/VA2 candidates,
@@ -136,7 +159,8 @@ only startup text, so those SYS steps are not being repeated. The new
 current-source banner check has now been owner-confirmed in both modes. This
 focused startup-banner check is **VAEG PASS** in VA and VA2. The focused
 placement checks are **VAEG PASS** in VA and VA2 at all four supported memory
-capacities. Full M15 acceptance remains open; broader current-source M15 QA and
-a human acceptance gate for this exact candidate are **NOT RUN**. The
-initially mispackaged candidate is not counted as qualification evidence.
-Hardware validation: **DEFERRED HARDWARE VALIDATION**.
+capacities, and the focused ordinary recorder QA above is **VAEG PASS** in
+both modes. These do not close full M15 acceptance: qualification of the
+remaining mandatory workflow families and final M15 acceptance are still
+open. The initially mispackaged candidate is not counted as qualification
+evidence. Hardware validation remains **DEFERRED HARDWARE VALIDATION**.
