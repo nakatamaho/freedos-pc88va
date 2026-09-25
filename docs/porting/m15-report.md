@@ -141,11 +141,13 @@ corrections; no kernel behavior changed, no API row was added, and no deferred
 MS-DOS comparison was pulled into scope.
 
 Focused ordinary QA then passed in VAEG VA and VA2 on the current
-capacity-matched candidate. The three guest recorders produced complete
-host-verified results with no assertion failures or stack imbalance. Normal
-DIR/TYPE, COM/MZ execution, and file write/readback completed, and existing
-guest files remained intact. This is a focused **VAEG PASS**, not a claim that
-all 113 required services or all 221 inventory entries have been qualified.
+capacity-matched candidate. The `SYSTEM`, `ALIAS`, `SYSMISC`, `CONSOLE` and
+`FCB` guest recorders produced complete host-verified results with no
+assertion failures or stack imbalance. Normal DIR/TYPE, COM/MZ execution,
+redirected console input/output, FCB file operations, and file write/readback
+completed, and existing guest files remained intact. This is a focused
+**VAEG PASS**, not a claim that all 113 required services or all 221 inventory
+entries have been qualified.
 On the exact QA-contract correction commit, M15 host workflow run
 [36129861539](https://github.com/nakatamaho/freedos-pc88va/actions/runs/36129861539)
 passed the finite inventory check, parent acceptance and memory-placement
