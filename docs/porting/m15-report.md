@@ -33,6 +33,25 @@ remain deferred under parent issues #3-#6 and do not gate the port.
 - The report publication tip will be recorded in the post-push local handoff.
   The final downstream base remains unset until M15 qualification is complete.
 
+## Restarted candidate source lock
+
+The next bootable candidate and VA2 QA run are bound to the following already
+committed implementation state; earlier media without a matching private
+manifest are not interchangeable with this candidate:
+
+- Parent source baseline: `c33c142ba72b91c4132f2c086154c4b6a5c2a220`.
+- fdkernel gitlink: `3498c982584867367d2b917a79363f76143c514e`.
+- FreeCOM gitlink: `9cf57b28abf1d98fab7655fb811375a2aa16c6d9`.
+- COUNTRY.SYS source: `23f189cca3420606eae8723884fa92ccd65eb307`.
+- M13 carrier/placement correction included in the parent baseline:
+  `aa23f9e27560f60a3f0e20b6a9fdd19354820a4b`.
+
+The generated candidate media and its build/readback manifest remain in the
+private evidence area. Any subsequent behavioral or source change requires a
+new candidate identity; QA results stay attached to the exact media and source
+manifest that produced them. The report-only commit that records this lock
+does not change the candidate software.
+
 ## Current checkpoint
 
 Common FreeDOS changes that were present in an earlier M15 candidate were
