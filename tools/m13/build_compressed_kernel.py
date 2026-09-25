@@ -317,20 +317,31 @@ def build(kernel: Path, bridge: Path, output: Path, *, load_segment: int,
     if b'M13PLAN1' in original_body and split_init:
         if link_map is None:
             raise ValueError('split image requires its matched link map')
-        # A 256 KiB machine cannot place INIT at the conventional top while
-        # the fixed low-staging carrier occupies 27000h..36ff0h.  Put the
-        # short-lived INIT image immediately below staging; its stack is then
-        # dead before the bridge takes ownership of the staging segment.
-        # The in-place carrier is deliberately below the resident image's
-        # high INIT envelope.  Once the bridge transfers to the expanded
-        # kernel, the carrier is dead and the whole interval is available to
-        # the temporary DOS arena.  Keeping INIT at the native top leaves
-        # enough contiguous space for both preliminary and final allocations
-        # even on the 256 KiB configuration.
-        init_top = memory_top
+        # INIT must not be placed at the build machine's nominal RAM ceiling:
+        # the BIOS backup-memory selection can expose a lower runtime ceiling
+        # (for example, a 512 KiB VA configuration built with 640 KiB defaults).
+        # Reserve the full bounded carrier and scratch windows, then put INIT
+        # and its 4 KiB stack immediately above them.  The resulting fixed
+        # interval is independent of the selected runtime ceiling; the DOS
+        # arena still receives its actual ceiling from pc88va_memory_kb().
+        provisional_body, provisional_split = split_image(
+            original_body, relocations, link_map, image_segment,
+            memory_top=memory_top, init_top=memory_top, runtime_top=True)
+        del provisional_body
+        init_bytes = provisional_split['init'][1] - provisional_split['init'][0]
+        init_extent = (init_bytes + 15) & ~15
+        carrier_end = file_segment * 16 + MAX_CARRIER_FILE
+        if bridge_in_allocation:
+            carrier_end = max(carrier_end,
+                              load_segment * 16 + MAX_CARRIER_FILE)
+        scratch_end = scratch_segment * 16 + (0x1000 if in_place else MAX_CARRIER_FILE)
+        live_staging_end = max(carrier_end, scratch_end)
+        init_top = (live_staging_end + init_extent + 4096 + 0x0fff) & ~0x0fff
+        if init_top > memory_top:
+            raise ValueError('runtime-safe INIT placement exceeds the selected build ceiling')
         original_body, split = split_image(original_body, relocations, link_map,
                                            image_segment, memory_top=memory_top,
-                                           init_top=init_top, runtime_top=in_place)
+                                           init_top=init_top, runtime_top=True)
     payload = compress(original_body)
     if source_offset < RING_BYTES or source_offset + len(payload) > 65520:
         raise ValueError("compressed source and history ring exceed one owned segment")
@@ -345,11 +356,21 @@ def build(kernel: Path, bridge: Path, output: Path, *, load_segment: int,
                          source_extent=scratch_extent,
                          bridge_in_allocation=bridge_in_allocation,
                          memory_top=memory_top)
+    minimum_runtime_memory_top = None
     if split:
         for name in ('bridge', 'scratch', 'image'):
             start, end = layout['ranges'][name]
             if start < split['init_stack'][1] and split['init'][0] < end:
                 raise ValueError('high INIT overlaps live ' + name)
+        # A runtime descriptor makes the arena ceiling dynamic; it does not
+        # make the fixed early-boot ownership ranges dynamic. Record the
+        # highest byte that must exist before INIT releases its stack, so a
+        # loader profile cannot claim a smaller RAM size than its live set.
+        carrier_start = file_segment * 16 if in_place else load_segment * 16
+        carrier_end = carrier_start + MAX_CARRIER_FILE
+        minimum_runtime_memory_top = max(
+            init_top, carrier_end,
+            *(end for _, end in layout['ranges'].values()))
     # Preserve the historical in-place prefix unless compact mode is
     # explicitly requested. Compact mode moves the payload to the bridge end.
     payload_offset = (0x260 if compact_bridge else 0x280) if in_place else 0x400
@@ -390,6 +411,7 @@ def build(kernel: Path, bridge: Path, output: Path, *, load_segment: int,
         "M13_ORIG_IP": header[10],
         "M13_SPLIT_INIT": int(split is not None),
         "M13_IN_PLACE": int(in_place),
+        "M13_RUNTIME_MEMORY_TOP": int(split is not None),
         "M13_BRIDGE_IN_ALLOCATION": int(bridge_in_allocation),
         "M13_RING_OFFSET": ring_offset,
         "M13_BRIDGE_STACK_SEG": bridge_stack_segment,
@@ -488,6 +510,12 @@ def build(kernel: Path, bridge: Path, output: Path, *, load_segment: int,
         "body_sha256": sha256(original_body),
         "linked_body_sha256": sha256(linked_body),
         "split": split,
+        "memory_top": memory_top,
+        "init_top": init_top if split is not None else None,
+        "minimum_runtime_memory_top": minimum_runtime_memory_top,
+        "minimum_runtime_memory_kb": (
+            ((minimum_runtime_memory_top + 131071) // 131072) * 128
+            if minimum_runtime_memory_top is not None else None),
         "payload_size": len(payload),
         "carrier_allocation": carrier_allocation,
         "carrier_stack_segment": 0,

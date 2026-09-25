@@ -211,7 +211,11 @@ def verify_bridge(kernel, link_map, carrier, record):
     metadata = json.loads(record.read_text())
     h, linked, fixups = parse_mz(kernel.read_bytes())
     load = metadata['definitions']['M13_IMAGE_SEG']
-    transformed, split = split_image(linked, fixups, link_map, load)
+    transformed, split = split_image(
+        linked, fixups, link_map, load,
+        memory_top=metadata['memory_top'],
+        init_top=metadata['init_top'],
+        runtime_top=bool(metadata['definitions']['M13_RUNTIME_MEMORY_TOP']))
     expected = bytearray(transformed)
     for off, seg in struct.iter_unpack('<HH', fixups):
         at = seg * 16 + off
@@ -234,6 +238,24 @@ def verify_bridge(kernel, link_map, carrier, record):
     cpu.hook_add(UC_HOOK_CODE, entry, begin=target, end=target)
     cpu.emu_start(carrier_base * 16, 0xfffff, timeout=30000000, count=5000000)
     assert reached == [target], 'real carrier did not reach the MZ entry'
+    if split:
+        actual_descriptor = bytes(cpu.mem_read(split['descriptor'], 24))
+        descriptor_words = struct.unpack_from('<8H', actual_descriptor, 8)
+        runtime_top = bool(metadata['definitions']['M13_RUNTIME_MEMORY_TOP'])
+        expected_descriptor_words = (
+            load,
+            split['resident_text'][0] // 16,
+            split['init'][0] // 16,
+            split['init'][1] - split['init'][0],
+            split['init_stack'][0] // 16,
+            4096,
+            0 if runtime_top else metadata['memory_top'] // 16,
+            1,
+        )
+        assert actual_descriptor[:8] == b'M13PLAN1'
+        assert descriptor_words == expected_descriptor_words, (
+            'unpacked placement descriptor does not match the qualified carrier plan',
+            descriptor_words, expected_descriptor_words)
     for source, destination in [('init_source', 'init'), ('hma_source', 'resident_text')]:
         start, end = split[source]
         wanted = expected[start-load*16:end-load*16]

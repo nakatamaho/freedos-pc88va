@@ -370,6 +370,146 @@ class PlacementTests(unittest.TestCase):
             self.assertLessEqual(record['split']['init_stack'][1], 0x40000)
             self.assertGreaterEqual(record['split']['init'][0], 0x26000)
 
+    def test_split_init_is_safe_for_runtime_512k_with_640k_build_default(self):
+        body, rel, text = self.split_fixture(256)
+        h = (0x5A4D, 0, 0, len(rel) // 4, 3, 256, 0xFFFF, 32,
+             4096, 0, 0, 0, 28, 0)
+        file_size = 48 + len(body)
+        h = list(h)
+        h[1], h[2] = file_size % 512, (file_size + 511) // 512
+        with tempfile.TemporaryDirectory(prefix='m13-runtime-top-', dir=ROOT / 'build') as tmp:
+            tmp = Path(tmp)
+            kernel = tmp / 'fixture.exe'
+            kernel.write_bytes(struct.pack('<14H', *h) + rel + bytes(8) + body)
+            link_map = tmp / 'fixture.map'
+            link_map.write_text(text)
+            output = tmp / 'carrier.exe'
+            record = carrier.build(
+                kernel, ROOT / 'components/fdkernel/pc88va/kernel/m13_unpack.asm',
+                output, load_segment=0x3000, file_segment=0x1340,
+                scratch_segment=0x4000, source_offset=4096,
+                image_segment=0x1000, link_map=link_map,
+                memory_top=0xA0000, bridge_in_allocation=True)
+            staging_end = max(0x1340 * 16 + carrier.MAX_CARRIER_FILE,
+                              0x3000 * 16 + carrier.MAX_CARRIER_FILE,
+                              0x4000 * 16 + carrier.MAX_CARRIER_FILE)
+            self.assertEqual(record['memory_top'], 0xA0000)
+            self.assertEqual(record['minimum_runtime_memory_kb'], 384)
+            self.assertEqual(record['definitions']['M13_RUNTIME_MEMORY_TOP'], 1)
+            self.assertEqual(record['split']['init_stack'][1], record['init_top'])
+            self.assertGreaterEqual(record['split']['init'][0], staging_end)
+            self.assertLessEqual(record['init_top'], 0x80000)
+
+            # The same linked image and carrier bytes remain valid at either
+            # supported capacity above this split profile's fixed early ranges.
+            record_384 = carrier.build(
+                kernel, ROOT / 'components/fdkernel/pc88va/kernel/m13_unpack.asm',
+                tmp / 'carrier-384.exe', load_segment=0x3000,
+                file_segment=0x1340, scratch_segment=0x4000,
+                source_offset=4096, image_segment=0x1000, link_map=link_map,
+                memory_top=0x60000,
+                bridge_in_allocation=True)
+            self.assertEqual(record_384['minimum_runtime_memory_kb'], 384)
+            self.assertEqual(record_384['init_top'], record['init_top'])
+            self.assertEqual(record_384['split']['init_stack'][1], record['init_top'])
+            self.assertEqual(output.read_bytes(), (tmp / 'carrier-384.exe').read_bytes())
+
+    def test_low_in_place_split_layout_fits_256_with_640_build_default(self):
+        body, rel, text = self.split_fixture(256)
+        h = (0x5A4D, 0, 0, len(rel) // 4, 3, 256, 0xFFFF, 32,
+             4096, 0, 0, 0, 28, 0)
+        file_size = 48 + len(body)
+        h = list(h)
+        h[1], h[2] = file_size % 512, (file_size + 511) // 512
+        with tempfile.TemporaryDirectory(prefix='m13-runtime-256-', dir=ROOT / 'build') as tmp:
+            tmp = Path(tmp)
+            kernel = tmp / 'fixture.exe'
+            kernel.write_bytes(struct.pack('<14H', *h) + rel + bytes(8) + body)
+            link_map = tmp / 'fixture.map'
+            link_map.write_text(text)
+            output_640 = tmp / 'carrier-640.exe'
+            profile = dict(
+                load_segment=0x2700, file_segment=0x2700, scratch_segment=0x3700,
+                source_offset=4096, image_segment=0x1000, link_map=link_map,
+                bridge_in_allocation=False)
+            record_640 = carrier.build(
+                kernel, ROOT / 'components/fdkernel/pc88va/kernel/m13_unpack.asm',
+                output_640, memory_top=0xA0000, **profile)
+            output_256 = tmp / 'carrier-256.exe'
+            record_256 = carrier.build(
+                kernel, ROOT / 'components/fdkernel/pc88va/kernel/m13_unpack.asm',
+                output_256, memory_top=0x40000, **profile)
+
+            self.assertEqual(record_640['minimum_runtime_memory_kb'], 256)
+            self.assertEqual(record_640['definitions']['M13_RUNTIME_MEMORY_TOP'], 1)
+            self.assertLessEqual(record_640['minimum_runtime_memory_top'], 0x40000)
+            self.assertLessEqual(record_640['split']['init_stack'][1], 0x40000)
+            self.assertLessEqual(record_640['init_top'], 0x40000)
+            self.assertEqual(record_256['init_top'], record_640['init_top'])
+            self.assertEqual(output_256.read_bytes(), output_640.read_bytes())
+
+    def test_backup_ram_capacity_decoder(self):
+        from unicorn import Uc, UC_ARCH_X86, UC_MODE_16, UC_HOOK_INSN
+        from unicorn.x86_const import (UC_X86_INS_IN, UC_X86_INS_OUT,
+                                       UC_X86_REG_AX, UC_X86_REG_BX,
+                                       UC_X86_REG_CS, UC_X86_REG_DX,
+                                       UC_X86_REG_EFLAGS, UC_X86_REG_ES,
+                                       UC_X86_REG_SI, UC_X86_REG_SP,
+                                       UC_X86_REG_SS)
+
+        source = (ROOT / 'components/fdkernel/pc88va/kernel/m13_platform.asm').read_text()
+        start = source.index('PC88VA_MEMORY_KB:\n')
+        end = source.index('; Return the segment where the MZ loader placed', start)
+        routine = source[start:end].split('\n', 1)[1]
+        with tempfile.TemporaryDirectory(prefix='m13-backup-ram-', dir=ROOT / 'build') as tmp:
+            tmp = Path(tmp)
+            asm = tmp / 'memory-kb.asm'
+            binary = tmp / 'memory-kb.bin'
+            asm.write_text('bits 16\ncpu 8086\norg 0\n' + routine)
+            subprocess.run(['nasm', '-f', 'bin', str(asm), '-o', str(binary)],
+                           check=True, capture_output=True)
+            code = binary.read_bytes()
+
+        for code_value, expected_kb in ((1, 256), (2, 384), (3, 512), (4, 640),
+                                        (0, 0), (5, 0), (7, 0)):
+            with self.subTest(backup_ram_code=code_value):
+                cpu = Uc(UC_ARCH_X86, UC_MODE_16)
+                cpu.mem_map(0, 0x100000)
+                code_segment, stack_segment = 0x1000, 0x2000
+                cpu.mem_write(code_segment * 16, code)
+                cpu.mem_write(0xB0000 + 0x1FC4, bytes((code_value,)))
+                cpu.mem_write(stack_segment * 16 + 0x1000, struct.pack('<HH', 0x0100, code_segment))
+                outputs = []
+
+                def port_in(_cpu, port, size, _user):
+                    self.assertEqual((port, size), (0x152, 2))
+                    return 0x4142
+
+                def port_out(_cpu, port, size, value, _user):
+                    self.assertEqual((port, size), (0x152, 2))
+                    outputs.append(value & 0xFFFF)
+
+                cpu.hook_add(UC_HOOK_INSN, port_in, None, 1, 0, UC_X86_INS_IN)
+                cpu.hook_add(UC_HOOK_INSN, port_out, None, 1, 0, UC_X86_INS_OUT)
+                cpu.reg_write(UC_X86_REG_CS, code_segment)
+                cpu.reg_write(UC_X86_REG_SS, stack_segment)
+                cpu.reg_write(UC_X86_REG_SP, 0x1000)
+                cpu.reg_write(UC_X86_REG_BX, 0x5566)
+                cpu.reg_write(UC_X86_REG_DX, 0x7788)
+                cpu.reg_write(UC_X86_REG_ES, 0x3456)
+                cpu.reg_write(UC_X86_REG_SI, 0x1234)
+                cpu.reg_write(UC_X86_REG_EFLAGS, 0x602)
+                cpu.emu_start(code_segment * 16, code_segment * 16 + 0x0100, count=256)
+
+                self.assertEqual(cpu.reg_read(UC_X86_REG_AX), expected_kb)
+                self.assertEqual(cpu.reg_read(UC_X86_REG_SP), 0x1004)
+                self.assertEqual(cpu.reg_read(UC_X86_REG_BX), 0x5566)
+                self.assertEqual(cpu.reg_read(UC_X86_REG_DX), 0x7788)
+                self.assertEqual(cpu.reg_read(UC_X86_REG_ES), 0x3456)
+                self.assertEqual(cpu.reg_read(UC_X86_REG_SI), 0x1234)
+                self.assertEqual(cpu.reg_read(UC_X86_REG_EFLAGS) & 0x600, 0x600)
+                self.assertEqual(outputs, [0x4942, 0x4142])
+
     def test_reset_actual_far_entry_and_register_contract(self):
         """Assemble the production entry, not a replacement implementation."""
         from unicorn import Uc, UC_ARCH_X86, UC_MODE_16, UC_HOOK_INTR

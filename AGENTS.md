@@ -103,3 +103,28 @@ unresolved work, and explicitly unrun gates. Retain canonical private evidence
 in persistent Git-excluded storage. Never publish private inputs, identities,
 paths, raw traces, or concrete derived values. Unrun hardware is NOT RUN.
 Fix recoverable harness, build, portability, and CI defects within the task.
+
+For PC-88VA M13 startup or kernel changes, treat the linked image, generated
+placement descriptor, MZ carrier, BIOS-derived memory ceiling, INIT stack,
+resident text boundary, and startup banner as one layout contract. Any change
+that can alter the kernel bytes, linker map, section grouping, carrier input,
+or descriptor must rebuild from clean pinned inputs and rerun the carrier and
+linked-placement verifiers plus the focused M13 placement tests. Inspect the
+generated descriptor against the exact map and verify its version, image,
+resident, INIT, stack, and dynamic-or-explicit memory-top fields before
+accepting the build. A prior boot result applies only to the exact kernel
+identity and configuration that was tested; do not infer bootability from a
+successful link, image hash, or a run of another candidate. Do not repeat an
+unchanged RAM-size matrix to diagnose the same startup failure: identify and
+fix the source-level contract first, then boot the changed candidate in the
+reported failing mode and configuration. Preserve recorded results and never
+claim an unrun mode or configuration passed.
+
+For variable-RAM M13 carriers, calculate the minimum runtime capacity from
+every live loader, carrier, scratch, expanded-image, INIT, and initial-stack
+interval. A runtime-detected DOS arena ceiling does not make an early fixed
+interval safe on a smaller machine. Bind the carrier profile to its loader
+profile and verify that the backup-RAM-selected 256, 384, 512, or 640 KiB
+capacity is supported before calling that capacity passed. When a low-memory
+profile is required, qualify its matching in-place loader and carrier together;
+do not transplant only the kernel carrier across incompatible profiles.
