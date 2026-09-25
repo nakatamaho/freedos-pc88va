@@ -22,9 +22,9 @@ remain deferred under parent issues #3-#6 and do not gate the port.
 
 - START_SHA: ed7fb3c4fac2597a08c8ce9f76390e90d975c86c (M14 G14 parent baseline).
 - fdkernel M14 baseline: ac16c8a7401526f99787e03babdb2f4223d48fc4.
-- fdkernel M15 implementation commit: a47a5d35af92a49857e25287ffa492b26d3436b2.
-- M15 qualified implementation SHA: pending; current source has not passed
-  final source-bound qualification.
+- fdkernel M15 implementation commit: 3498c982584867367d2b917a79363f76143c514e.
+- M15 qualified implementation SHA: pending; current-source VA/VA2 banner
+  confirmation and parent CI on the updated gitlink remain open.
 - Publication tip and downstream base: recorded in the post-push handoff and
   kept distinct from the start and implementation identities.
 
@@ -50,20 +50,23 @@ questions. On implementation commit
 `a47a5d35af92a49857e25287ffa492b26d3436b2`, Linux/amd64 verification passed:
 all 307 kernel PC-88VA tests, all 16 parent M15 tests, all 29 parent acceptance
 tests, all 20 M13 memory-placement tests, and the M13 adapter-selection
-regression. The PC-88VA startup banner now includes `build: ` followed by the
-full 40-character fdkernel commit ID. The ID is expanded from the source commit
-in exported archives and resolved from `HEAD` in a clean checkout. The kernel
-and FreeCOM source also rebuilt byte-identically in two isolated Linux/amd64
-containers; both recorded the same fdkernel commit ID.
+regression. That commit first added the startup build ID, but its `%s` formatter
+path displayed an empty value in the guest. Commit
+`3498c982584867367d2b917a79363f76143c514e` places the generated 40-character
+ID directly in the adjacent startup string literals, avoiding the init
+formatter's near-pointer segment limitation. A clean pinned Linux/amd64 build
+confirmed the exact ID in the kernel banner bytes; the M13 carrier build and
+linked-placement verifier also passed. The fdkernel native Build workflow
+passed on that exact child head (run 36097330671). Parent CI for the updated
+gitlink is pending.
 
 The fdkernel topic branch now points to implementation commit
-`a47a5d35af92a49857e25287ffa492b26d3436b2` on the fork. Parent gitlink
-publication is complete at parent integration commit
-`b4e5c10394182d8447fd31d5e4d395ec021c53a9`. The parent M15 host workflow
-succeeded on that exact head (run 36095708531). The fdkernel native Build
-workflow also succeeded on the exact child head (run 36095297677). The
-report-only publication tip and its own workflow are recorded in the post-push
-handoff.
+`3498c982584867367d2b917a79363f76143c514e` on the fork. The prior parent
+gitlink publication at integration commit
+`b4e5c10394182d8447fd31d5e4d395ec021c53a9` and parent M15 workflow run
+36095708531 qualify the preceding source, not this banner correction. The
+updated parent gitlink and its exact workflow result will be recorded after
+publication.
 
 The current SYS utility and 38 8086 fixture
 COM files likewise rebuilt byte-identically in two isolated containers. These
@@ -93,13 +96,14 @@ filters now exclude M15.
 
 ## Acceptance still open
 
-Earlier user-confirmed SYS human acceptance applies to its then-tested
-candidate; it does not qualify the current source revision. Current-source
-VA/VA2 guest qualification remains required for ordinary FreeCOM and batch
-workflows, writable media, the guest SYS transfer, independent boot of the
-transferred disk, and persistence after restart. The exact current-source
-candidate media are prepared in private, Git-excluded storage for this gate.
-Current-source VAEG validation and human acceptance remain open.
+The user passed the M15 SYS human gate on the earlier VA/VA2 candidates,
+including transfer and persistence checks. The later banner correction changes
+only startup text, so those SYS steps are not being repeated. The new
+current-source VA/VA2 candidates are prepared in private, Git-excluded storage;
+their focused remaining human check is to boot each mode and confirm the full
+40-character build ID appears below `PC88VA kernel`. This does not close other
+open M15 acceptance work. Current-source VAEG validation and human acceptance
+remain open.
 
 Current-source VAEG validation of the corrected candidates: **NOT RUN**. The
 initially mispackaged candidate is not counted as qualification evidence.
