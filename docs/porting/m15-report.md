@@ -148,6 +148,12 @@ redirected console input/output, FCB file operations, and file write/readback
 completed, and existing guest files remained intact. This is a focused
 **VAEG PASS**, not a claim that all 113 required services or all 221 inventory
 entries have been qualified.
+The same ordinary QA pass also covered the FreeCOM file workflow in VA and
+VA2: create, copy, read back, delete, rename, and create/use/remove a
+subdirectory. Both input scripts completed. Final-media inspection confirmed
+that the expected files remained, temporary files and directories were gone,
+pre-existing files remained unchanged, and FAT12 copies agreed. This is a
+focused **VAEG PASS** for these shell operations; it does not close M15.
 On the exact QA-contract correction commit, M15 host workflow run
 [36129861539](https://github.com/nakatamaho/freedos-pc88va/actions/runs/36129861539)
 passed the finite inventory check, parent acceptance and memory-placement
