@@ -24,7 +24,7 @@ remain deferred under parent issues #3-#6 and do not gate the port.
 - fdkernel M14 baseline: ac16c8a7401526f99787e03babdb2f4223d48fc4.
 - fdkernel M15 implementation commit: 3498c982584867367d2b917a79363f76143c514e.
 - M15 qualified implementation SHA: pending; current-source VA/VA2 banner
-  confirmation and parent CI on the updated gitlink remain open.
+  confirmation remains open.
 - Publication tip and downstream base: recorded in the post-push handoff and
   kept distinct from the start and implementation identities.
 
@@ -57,16 +57,16 @@ ID directly in the adjacent startup string literals, avoiding the init
 formatter's near-pointer segment limitation. A clean pinned Linux/amd64 build
 confirmed the exact ID in the kernel banner bytes; the M13 carrier build and
 linked-placement verifier also passed. The fdkernel native Build workflow
-passed on that exact child head (run 36097330671). Parent CI for the updated
-gitlink is pending.
+passed on that exact child head (run 36097330671).
 
 The fdkernel topic branch now points to implementation commit
-`3498c982584867367d2b917a79363f76143c514e` on the fork. The prior parent
-gitlink publication at integration commit
-`b4e5c10394182d8447fd31d5e4d395ec021c53a9` and parent M15 workflow run
-36095708531 qualify the preceding source, not this banner correction. The
-updated parent gitlink and its exact workflow result will be recorded after
-publication.
+`3498c982584867367d2b917a79363f76143c514e` on the fork. Parent integration
+commit `cd60877bba0c47a811ffb10b649e909454d8fe7a` updates the gitlink to that
+exact child head. Parent M15 host workflow run 36098380721 passed on that exact
+integration head, including the finite port boundary, parent M15 acceptance
+and memory-placement regressions, and complete PC-88VA kernel component suite.
+The report-only publication tip and its own workflow are recorded in the
+post-push handoff.
 
 The current SYS utility and 38 8086 fixture
 COM files likewise rebuilt byte-identically in two isolated containers. These
