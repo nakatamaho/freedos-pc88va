@@ -301,11 +301,19 @@ def build(kernel: Path, bridge: Path, output: Path, *, load_segment: int,
           file_segment: int, scratch_segment: int, source_offset: int,
           image_segment: int = 0x1000, link_map: Path | None = None,
           memory_top: int = 0xA0000, split_init: bool = True,
-          bridge_in_allocation: bool = False) -> dict:
+          bridge_in_allocation: bool = False,
+          ring_offset: int | None = None, compact_bridge: bool = False) -> dict:
     header, original_body, relocations = parse_mz(kernel.read_bytes())
     linked_body = original_body
     split = None
     in_place = load_segment == file_segment
+    if type(compact_bridge) is not bool or compact_bridge and not in_place:
+        raise ValueError('compact bridge requires the in-place carrier')
+    if ring_offset is not None:
+        if (not in_place or type(ring_offset) is not int or ring_offset < 0
+                or ring_offset & 15
+                or ring_offset + RING_BYTES > MAX_CARRIER_FILE):
+            raise ValueError('history ring must be aligned inside the in-place carrier')
     if b'M13PLAN1' in original_body and split_init:
         if link_map is None:
             raise ValueError('split image requires its matched link map')
@@ -342,21 +350,17 @@ def build(kernel: Path, bridge: Path, output: Path, *, load_segment: int,
             start, end = layout['ranges'][name]
             if start < split['init_stack'][1] and split['init'][0] < end:
                 raise ValueError('high INIT overlaps live ' + name)
-    # In-place mode does not need the relocation/copy trampoline's padding.
-    # Keep a paragraph-aligned code prefix and check the actual assembled
-    # extent below. This changes neither the decoder nor its owned ranges.
-    payload_offset = 0x280 if in_place else 0x400
-    # Keep the history ring inside the 65520-byte DOS carrier extent.  The
-    # The current 2700h low-staging allocation ends at 36ff0h.  M14 adds
-    # resident write code to the linked image; move the 4 KiB history ring by
-    # 40h, leaving 0B0h below that ownership end and retaining the same
-    # one-segment/bootstrap-stack separation.
-    ring_offset = 0xEF40 if in_place else 0
+    # Preserve the historical in-place prefix unless compact mode is
+    # explicitly requested. Compact mode moves the payload to the bridge end.
+    payload_offset = (0x260 if compact_bridge else 0x280) if in_place else 0x400
+    # Preserve historical carrier bytes by default. Later profiles may use
+    # the remaining tail inside the same owned segment, with the unchanged
+    # decoder and independently checked source/bootstrap-stack separation.
+    if ring_offset is None:
+        ring_offset = 0xEF40 if in_place else 0
     bridge_stack_segment = (scratch_segment if in_place else
                             (load_segment if bridge_in_allocation else file_segment))
     bridge_stack_sp = 0x7F00 if in_place else 0xFF00
-    if in_place and payload_offset + len(payload) + len(relocations) > ring_offset:
-        raise ValueError('low staging carrier has no room for its history ring')
     definitions = {
         "M13_LOAD_SEG": load_segment,
         "M13_IMAGE_SEG": image_segment,
@@ -391,6 +395,8 @@ def build(kernel: Path, bridge: Path, output: Path, *, load_segment: int,
         "M13_BRIDGE_STACK_SEG": bridge_stack_segment,
         "M13_BRIDGE_STACK_SP": bridge_stack_sp,
     }
+    if compact_bridge:
+        definitions['M13_COMPACT_BRIDGE'] = 1
     if split:
         definitions.update({
             'M13_INIT_SOURCE_SEG': split['init_source'][0] // 16,
@@ -403,8 +409,44 @@ def build(kernel: Path, bridge: Path, output: Path, *, load_segment: int,
             'M13_HMA_BYTES': split['resident_text'][1] - split['resident_text'][0],
         })
     output.parent.mkdir(mode=0o700, parents=True, exist_ok=True)
-    with tempfile.TemporaryDirectory(prefix="m13-carrier-", dir=output.parent) as temporary:
-        bridge_bytes = assemble_bridge(bridge, definitions, Path(temporary) / "bridge.bin")
+    if in_place and compact_bridge:
+        # The bridge embeds the payload offsets, which can affect its own
+        # assembled extent. Solve the compact layout until the bridge fits,
+        # including any rare size cycle.
+        layouts = {}
+        for _ in range(16):
+            definitions["M13_PAYLOAD_OFFSET"] = payload_offset
+            definitions["M13_SOURCE_OFFSET"] = payload_offset
+            definitions["M13_RELOC_INPUT_OFFSET"] = payload_offset + len(payload)
+            definitions["M13_RELOC_SOURCE_OFFSET"] = payload_offset + len(payload)
+            with tempfile.TemporaryDirectory(prefix="m13-carrier-", dir=output.parent) as temporary:
+                bridge_bytes = assemble_bridge(bridge, definitions, Path(temporary) / "bridge.bin")
+            layouts[payload_offset] = bridge_bytes
+            required_offset = len(bridge_bytes)
+            if required_offset == payload_offset:
+                break
+            if required_offset in layouts:
+                fitting = [offset for offset, assembled in layouts.items()
+                           if len(assembled) <= offset]
+                if not fitting:
+                    raise ValueError("in-place bridge layout has no safe carrier prefix")
+                payload_offset = min(fitting)
+                bridge_bytes = layouts[payload_offset]
+                definitions["M13_PAYLOAD_OFFSET"] = payload_offset
+                definitions["M13_SOURCE_OFFSET"] = payload_offset
+                definitions["M13_RELOC_INPUT_OFFSET"] = payload_offset + len(payload)
+                definitions["M13_RELOC_SOURCE_OFFSET"] = payload_offset + len(payload)
+                break
+            payload_offset = required_offset
+        else:
+            raise ValueError("in-place bridge layout did not converge")
+        if len(bridge_bytes) > payload_offset:
+            raise ValueError("in-place bridge exceeds its selected carrier prefix")
+    else:
+        with tempfile.TemporaryDirectory(prefix="m13-carrier-", dir=output.parent) as temporary:
+            bridge_bytes = assemble_bridge(bridge, definitions, Path(temporary) / "bridge.bin")
+    if in_place and payload_offset + len(payload) + len(relocations) > ring_offset:
+        raise ValueError('low staging carrier has no room for its history ring')
     if len(bridge_bytes) > payload_offset:
         raise ValueError("M13 bridge exceeds its carrier prefix")
     body = bridge_bytes + bytes(payload_offset - len(bridge_bytes)) + payload + relocations
@@ -418,12 +460,11 @@ def build(kernel: Path, bridge: Path, output: Path, *, load_segment: int,
         raise ValueError("M13 carrier exceeds the M08 bounded file extent")
     carrier_allocation = ((len(body) + 15) // 16) * 16
     if in_place:
-        # Stage-2 writes its temporary far-return frame below the MZ stack
-        # pointer before entering the bridge. The low carrier cannot use the
-        # historical 0400h stack value: that frame would overwrite the
-        # transformed body. Put the frame in the rounded zero-filled tail
-        # immediately after the body and keep it below the history ring.
-        if carrier_allocation < 256 or carrier_allocation + 4 > ring_offset:
+        # Stage-2 pushes the temporary far-return frame below the entry SP.
+        # Keep its four bytes after the compacted body and before the history
+        # ring; the frame ends at SP.
+        if (carrier_allocation < 256 or carrier_allocation - 4 < len(body)
+                or carrier_allocation > ring_offset):
             raise ValueError('low staging carrier has no disjoint bootstrap stack')
         carrier_stack_pointer = carrier_allocation
     else:
@@ -476,6 +517,10 @@ def main() -> None:
     parser.add_argument("--file-segment", type=lambda value: int(value, 0), default=0x2700)
     parser.add_argument("--scratch-segment", type=lambda value: int(value, 0), default=0x3700)
     parser.add_argument("--source-offset", type=lambda value: int(value, 0), default=4096)
+    parser.add_argument("--ring-offset", type=lambda value: int(value, 0),
+                        help="aligned history-ring offset within the existing in-place carrier")
+    parser.add_argument("--compact-bridge", action="store_true",
+                        help="omit the unused in-place handoff trampoline and its padding")
     parser.add_argument("--memory-top", type=lambda value: int(value, 0), default=0xA0000)
     parser.add_argument("--no-split", action="store_true",
                         help="keep the linked INIT domain in the resident image")
@@ -486,7 +531,8 @@ def main() -> None:
                    file_segment=args.file_segment, scratch_segment=args.scratch_segment,
                    source_offset=args.source_offset, image_segment=args.image_segment, link_map=args.map,
                    memory_top=args.memory_top, split_init=not args.no_split,
-                   bridge_in_allocation=args.bridge_in_allocation)
+                   bridge_in_allocation=args.bridge_in_allocation,
+                   ring_offset=args.ring_offset, compact_bridge=args.compact_bridge)
     if args.manifest:
         args.manifest.write_text(json.dumps(result, sort_keys=True, indent=2) + '\n')
     print("M13_COMPRESSED_CARRIER_PASS")

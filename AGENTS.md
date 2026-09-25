@@ -1,5 +1,10 @@
 # Agent Rules
 
+For future local Colima profiles, use `tools/host/colima.sh`. It keeps VM
+disks and configuration in this repository's Git-excluded `.colima/`, rather
+than the user's home directory. Keep an active milestone's existing runtime
+until its work is complete, and retain required image exports before removal.
+
 This repository integrates and pins components; component source remains in
 its component repository. If component source must change, work in that
 component's own repository and branch, commit there, and then update the
@@ -9,6 +14,15 @@ The `origin` remote for the kernel and FreeCOM components is the
 `nakatamaho` fork. Their `upstream` remote is the corresponding `lpproj`
 repository. Do not push directly to an upstream branch. Preserve provenance
 and exact source SHAs in the parent metadata.
+
+For the PC-88VA port, keep the selected upstream FreeDOS behavior as the DOS
+implementation baseline. MS-DOS references can inform API review but do not
+require exact MS-DOS behavior or changes solely to match it. Do not repair an
+existing upstream FreeDOS bug as part of the port; record it when relevant and
+leave the upstream behavior intact. Fix defects introduced by the VA adapter,
+platform integration, or port-specific configuration. Do not add behavior to
+turn the project into a separate DOS implementation. Keep public issue reports
+free of private ROMs, media, traces, paths, and derived values.
 
 Do not commit private artifacts or facts derived from private artifacts. Do not
 change the separate VAEG checkout. PC-98 behavior is a structural precedent,

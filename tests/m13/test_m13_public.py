@@ -34,7 +34,8 @@ class M13PublicTests(unittest.TestCase):
             self.assertIn(path, sources)
         adapter = (ROOT / "components/fdkernel/pc88va/kernel/m13_platform.asm").read_text()
         self.assertIn("pc88va_kernel_disk_read_", adapter)
-        self.assertIn("reject_word FL_WRITE", adapter)
+        self.assertIn("global FL_WRITE", adapter)
+        self.assertIn("FL_WRITE:", adapter)
 
     def test_guest_probes_use_dos_interrupts(self):
         com = (ROOT / "tests/m13/fixtures/com_probe.asm").read_text()

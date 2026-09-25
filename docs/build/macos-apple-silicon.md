@@ -6,6 +6,27 @@ the host and daemon may be arm64, while the requested image and the observed
 container must be amd64. The gate is the running container reporting
 `uname -m=x86_64` and `dpkg --print-architecture=amd64`.
 
+## Project-local Colima storage
+
+Use `tools/host/colima.sh` for future Colima commands in this checkout.
+It sets `COLIMA_HOME` to the repository's `.colima/`, `LIMA_HOME` to
+`.colima/_lima/`, and `COLIMA_CACHE_HOME` to `.colima/cache/`. VM disks and
+the Docker images stored inside them belong to that location. The default
+profile is `freedos-pc88va`, with Docker context `colima-freedos-pc88va`.
+The storage directory is Git-excluded. Docker client context metadata remains
+in its normal client configuration directory.
+
+This follows the official [Colima storage configuration](https://github.com/abiosoft/colima/blob/main/docs/FAQ.md#how-do-i-change-where-colima-files-are-stored).
+Use the wrapper for subsequent start, status and stop operations so that they
+address the same storage. For example, `tools/host/colima.sh status`.
+
+Prepare the new profile after completing the active M15 session. Before
+removing an old Colima home, retain any required image exports and evidence
+outside that home. A new profile needs its build images loaded or rebuilt;
+changing the storage directory alone does not migrate an existing VM.
+
+## Runtime profiles
+
 The documented Colima installation and configuration references are the
 [Colima installation guide](https://colima.run/docs/installation/) and
 [Colima configuration guide](https://colima.run/docs/configuration/). The
@@ -13,7 +34,7 @@ recommended user-managed profile on Apple Silicon is:
 
 ```sh
 brew install colima docker
-colima start freedos-m01 \
+tools/host/colima.sh start \
   --runtime docker \
   --arch aarch64 \
   --vm-type vz \
@@ -22,26 +43,26 @@ colima start freedos-m01 \
   --cpus 4 \
   --memory 8 \
   --disk 30
-docker context use colima-freedos-m01
+docker context use colima-freedos-pc88va
 ```
 
 If Rosetta execution is unavailable, use a separate user-selected QEMU
 profile; do not mutate an existing VZ profile's immutable settings:
 
 ```sh
-colima start freedos-m01-qemu \
+tools/host/colima.sh start freedos-pc88va-qemu \
   --runtime docker \
   --arch x86_64 \
   --vm-type qemu \
   --cpus 4 \
   --memory 8 \
   --disk 30
-docker context use colima-freedos-m01-qemu
+docker context use colima-freedos-pc88va-qemu
 ```
 
-The agent does not install, start, stop, delete, recreate, or reconfigure
-Colima, Docker Desktop, Lima, or Rosetta. These read-only checks confirm the
-selected runtime and actual execution path:
+Keep the selected runtime running until its active milestone work is complete.
+VM lifecycle changes follow the owner's instructions. These read-only checks
+confirm the selected runtime and actual execution path:
 
 ```sh
 docker context show

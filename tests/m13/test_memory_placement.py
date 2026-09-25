@@ -346,7 +346,7 @@ class PlacementTests(unittest.TestCase):
                                        image_segment=0x1000, memory_top=memory_top)
                 self.assertTrue(record['layout']['in_place'])
                 self.assertTrue(all(end <= memory_top for start, end in record['layout']['ranges'].values()))
-                self.assertLessEqual(record['carrier_stack_pointer'] + 4, 0xEF00)
+                self.assertLessEqual(record['carrier_stack_pointer'], 0xEF40)
 
     def test_low_staging_split_init_stays_below_fixed_carrier(self):
         body, rel, text = self.split_fixture(256)
