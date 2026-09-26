@@ -204,6 +204,13 @@ host check incorrectly treated `LOWER.TXT` as a leftover even though the batch
 creates it and uses it as input; the corrected check verified its expected
 contents and retained it as an intentional fixture output.
 
+The ordinary CLOCK fixture then ran on the same r7 candidate in VA2. Its 42
+source-ordered DOS records were all checked with no failure and balanced
+stacks. Date/time validation and progression completed, and the packed time
+returned by DOS agreed with the independently inspected FAT directory entry
+for the timestamped file; both FAT copies agreed. This is **VAEG PASS** for the
+CLOCK fixture in VA2 only.
+
 ## Acceptance still open
 
 The user passed the M15 SYS human gate on the earlier VA/VA2 candidates,
@@ -213,8 +220,9 @@ current-source banner check has now been owner-confirmed in both modes. This
 focused startup-banner check is **VAEG PASS** in VA and VA2. The focused
 placement checks are **VAEG PASS** in VA and VA2 at all four supported memory
 capacities, and the previously listed ordinary recorder QA is **VAEG PASS** in
-both modes. The newer DEVICE fixture is qualified in VA2 only. These checks do
-not close full M15 acceptance: qualification of the remaining mandatory
-workflow families and final M15 acceptance are still open. The initially
+both modes. The newer DEVICE, SHELLQA, and CLOCK fixtures are qualified in VA2
+only. These checks do not close full M15 acceptance: qualification of the
+remaining mandatory workflow families and final M15 acceptance are still
+open. The initially
 mispackaged candidate is not counted as qualification
 evidence. Hardware validation remains **DEFERRED HARDWARE VALIDATION**.
