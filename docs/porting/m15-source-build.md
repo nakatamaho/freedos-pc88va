@@ -48,8 +48,9 @@ The stages are:
    and compare both builds before publishing `media.d88` in the output folder.
 
 The normal disk contains KERNEL.SYS, LOADER.BIN, COMMAND.COM, COUNTRY.SYS,
-SYSVA.EXE and SYS.ID. It intentionally contains no previous QA results or
-diagnostic fixture programs. `build.json` records the source commits, archive
+SYSVA.EXE and SYS.ID, plus the five source-generated support files required
+by the current SYSVA transfer contract (COMPROBE.COM, MZPROBE.EXE, TYPEA.TXT,
+TYPEB.TXT and COMDATA.TXT). It contains no previous QA result files. `build.json` records the source commits, archive
 digests, toolchain image, verifier dependency and output identities.
 
 The source-built D88 is a public distribution artifact. It contains no ROM or

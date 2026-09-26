@@ -17,6 +17,7 @@ def identity(data):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--build', type=Path, required=True)
+    parser.add_argument('--replace', action='store_true', help='Replace the designated distribution; Git retains its history')
     args = parser.parse_args()
     record = json.loads((args.build / 'build.json').read_text())
     data = (args.build / 'media.d88').read_bytes()
@@ -33,7 +34,7 @@ def main():
     output = ROOT / 'images/milestones/m15'
     output.mkdir(parents=True, exist_ok=True)
     for name in ('media.d88.xz', 'manifest.json'):
-        if (output / name).exists():
+        if (output / name).exists() and not args.replace:
             raise ValueError('Distribution already exists; review replacement explicitly')
     manifest = {'milestone': 'M15', 'sources': record['sources'],
                 'toolchain_image': record['toolchain_image'],

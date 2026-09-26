@@ -33,8 +33,12 @@ def main():
     build_stage(profile, loader, 2)
     (out / 'LOADER.BIN').write_bytes((loader / 'stage2.bin').read_bytes())
     payloads = {name: (out / name).read_bytes() for name in
-                ('KERNEL.SYS', 'LOADER.BIN', 'COMMAND.COM', 'COUNTRY.SYS', 'SYSVA.EXE')}
+                ('KERNEL.SYS', 'LOADER.BIN', 'COMMAND.COM', 'COUNTRY.SYS', 'SYSVA.EXE',
+                 'COMPROBE.COM', 'MZPROBE.EXE')}
     payloads['SYS.ID'] = b'M15SOURCE\r\n'
+    payloads['TYPEA.TXT'] = b'M13-TYPE-A!\r\n'
+    payloads['TYPEB.TXT'] = b'M13-TYPE-B!\r\n'
+    payloads['COMDATA.TXT'] = b'M13-COM-DATA\r\n'
     compose(payloads, profile, out, 1787814827)
     artifacts = {p.name: {'size': p.stat().st_size, 'sha256': hashlib.sha256(p.read_bytes()).hexdigest()}
                  for p in out.iterdir() if p.is_file()}

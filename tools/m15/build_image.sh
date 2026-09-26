@@ -61,6 +61,9 @@ cp command.com /work/result/COMMAND.COM
 cd /work/source/components/country
 nasm -f bin country.asm -o /work/result/COUNTRY.SYS
 cd /work/source
+nasm -f bin tests/m13/fixtures/com_probe.asm -o /work/result/COMPROBE.COM
+nasm -f obj tests/m13/fixtures/mz_probe.asm -o /work/result/mz_probe.obj
+wlink system dos option quiet name /work/result/MZPROBE.EXE file /work/result/mz_probe.obj
 python3 tools/m15/finish_image.py --output /work/result
 mkdir -p build
 python3 tools/m13/verify_linked_placement.py --kernel /work/result/kernel-linked.exe --map /work/result/kernel.map --carrier /work/result/KERNEL.SYS --placement /work/result/carrier.json
