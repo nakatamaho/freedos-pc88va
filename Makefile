@@ -121,6 +121,12 @@ m15-loader-build:
 	@PYTHONDONTWRITEBYTECODE=1 $(M15_PYTHON) -B tools/m15/build_loader_pair.py --overlay "$(M15_LOADER_OVERLAY)" --output "$(M15_LOADER_OUTPUT)" $(if $(M15_LOADER_REFERENCE),--expected-loader "$(M15_LOADER_REFERENCE)") $(if $(M15_LOADER_EXTENT),--stage1-extent "$(M15_LOADER_EXTENT)") $(if $(M15_BOOT_REFERENCE),--expected-stage1 "$(M15_BOOT_REFERENCE)")
 
 M15_R7_SEED ?=
+.PHONY: m15-image
+M15_IMAGE_OUTPUT ?= build/m15-image
+M15_IMAGE_TOOLCHAIN ?= freedos-pc88va-m01:local
+m15-image:
+	@PYTHONDONTWRITEBYTECODE=1 $(M15_PYTHON) -B tools/m15/build_image.py --output "$(M15_IMAGE_OUTPUT)" --image "$(M15_IMAGE_TOOLCHAIN)"
+
 M15_R7_PROFILE ?=
 M15_R7_OUTPUT ?=
 m15-r7-rebuild:

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "title": "M08 single-source parameterized loader overlay",
-  "description": "Only the synthetic_rom_free profile may appear in public build evidence. Private profiles and every derived identity remain local. The child validator additionally enforces arithmetic, ownership, instruction-token and file-permission rules.",
+  "description": "Public platform profiles contain source-controlled settings; synthetic profiles are ROM-free fixtures. Private observations remain local. The child validator additionally enforces arithmetic, ownership, instruction-token and file-permission rules.",
   "type": "object",
   "additionalProperties": false,
   "required": ["schema_version", "layout", "bootstrap", "firmware_callback"],
@@ -24,7 +24,7 @@
       "required": ["schema_version", "profile_class", "regions", "firmware_regions", "stack", "disk", "cache"],
       "properties": {
         "schema_version": {"const": 1},
-        "profile_class": {"enum": ["synthetic_rom_free", "private_observation_overlay"]},
+        "profile_class": {"enum": ["synthetic_rom_free", "public_platform_profile", "private_observation_overlay"]},
         "firmware_regions": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/interval"}},
         "regions": {
           "type": "object", "additionalProperties": false,

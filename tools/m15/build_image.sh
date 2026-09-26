@@ -1,0 +1,57 @@
+#!/usr/bin/env bash
+# SPDX-License-Identifier: GPL-2.0-or-later
+# Executed only in a fresh offline Linux/amd64 toolchain container.
+set -euo pipefail
+test "$(uname -m)" = x86_64
+test "$(dpkg --print-architecture)" = amd64
+export PATH=/opt/openwatcom-1.9/binl:$PATH
+export WATCOM=/opt/openwatcom-1.9 INCLUDE=/opt/openwatcom-1.9/h
+export LC_ALL=C LANG=C TZ=UTC SOURCE_DATE_EPOCH=1787814827 PYTHONDONTWRITEBYTECODE=1
+umask 022
+mkdir -p /work/source /work/result
+tar -xf /input/parent.tar -C /work/source
+for name in fdkernel freecom country; do
+    mkdir -p "/work/source/components/$name"
+    tar -xf "/input/$name.tar" -C "/work/source/components/$name"
+done
+cd /work/source
+mkdir -p /work/pydeps
+python3 -m zipfile -e /input/unicorn-*.whl /work/pydeps
+export PYTHONPATH=/work/pydeps
+python3 - <<'PY'
+import hashlib,json
+from pathlib import Path
+lock=json.loads(Path('manifests/toolchains.lock.json').read_text())
+for item in lock['canonical']['open_watcom']['host_tools']:
+    data=(Path('/opt/openwatcom-1.9')/item['path']).read_bytes()
+    assert len(data)==item['size'] and hashlib.sha256(data).hexdigest()==item['sha256']
+PY
+cd components/fdkernel/pc88va
+wmake -ms -h -f makefile.m13.wc clean all
+cp bin/KERNEL.SYS /work/result/kernel-linked.exe
+cp build/KVA8616.map /work/result/kernel.map
+cd ../sys
+wmake -ms -h -f makefile.pc88va clean all
+cp sysva.exe /work/result/SYSVA.EXE
+cd /work/source/components/freecom
+python3 - <<'PY'
+import json
+from pathlib import Path
+stamp=json.loads(Path('/work/source/config/m01/freecom-build-timestamp.json').read_text())
+source=Path('config.std').read_text()
+line='CFLAGS2 = -DFREECOM_BUILD_DATE=\\"'+stamp['formatted_date']+'\\" -DFREECOM_BUILD_TIME=\\"'+stamp['formatted_time']+'\\"\n'
+assert source.count('$(CFG):')==1
+Path('config.mak').write_text(source.replace('$(CFG):',line+'$(CFG):',1))
+PY
+gcc utilsc/critstrs.c -o utilsc/critstrs.exe
+bash build.sh generic no-xms-swap wc english
+cp command.com /work/result/COMMAND.COM
+cd /work/source/components/country
+nasm -f bin country.asm -o /work/result/COUNTRY.SYS
+cd /work/source
+python3 tools/m15/finish_image.py --output /work/result
+mkdir -p build
+python3 tools/m13/verify_linked_placement.py --kernel /work/result/kernel-linked.exe --map /work/result/kernel.map --carrier /work/result/KERNEL.SYS --placement /work/result/carrier.json
+python3 -B -m unittest discover -s tests/m13 -p test_memory_placement.py
+python3 -B -m unittest discover -s tests/m15 -p test_carrier_tail.py
+python3 -B -m unittest discover -s components/fdkernel/pc88va/tests -p test_m08_build_loader.py
