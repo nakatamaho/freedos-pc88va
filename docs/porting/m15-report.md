@@ -223,6 +223,17 @@ the expected retained files and hidden attribute, absent moved/deleted paths,
 unchanged pre-existing files, and equal FAT copies. This is **VAEG PASS** for
 the PATHS fixture in VA2 only.
 
+The ordinary PROCESS fixture ran on the same candidate in VA2. All 145
+source-ordered records passed with balanced stacks and no guest failure. Host
+inspection confirmed the expected child-created data, empty executable,
+unchanged existing files, equal FAT copies, and 20 complete memory snapshots
+with stable arena bounds. The temporary environment block began owned by the
+child PSP and ended with DOS ownership after release. The original guest run
+was retained; only its host checker was corrected to recognize a freed MCB as
+a DOS-owned block rather than requiring its header to disappear. This is
+**VAEG PASS** for the PROCESS fixture in VA2 only; broader M15-PROCESS
+acceptance remains open.
+
 ## Acceptance still open
 
 The user passed the M15 SYS human gate on the earlier VA/VA2 candidates,
@@ -232,8 +243,8 @@ current-source banner check has now been owner-confirmed in both modes. This
 focused startup-banner check is **VAEG PASS** in VA and VA2. The focused
 placement checks are **VAEG PASS** in VA and VA2 at all four supported memory
 capacities, and the previously listed ordinary recorder QA is **VAEG PASS** in
-both modes. The newer DEVICE, SHELLQA, CLOCK, HANDLES, and PATHS fixtures are
-qualified in VA2 only. These checks do not close full M15 acceptance:
+both modes. The newer DEVICE, SHELLQA, CLOCK, HANDLES, PATHS, and PROCESS
+fixtures are qualified in VA2 only. These checks do not close full M15 acceptance:
 qualification of the remaining mandatory workflow families and final M15
 acceptance are still open. The initially mispackaged candidate is not counted
 as qualification evidence. Hardware validation remains
