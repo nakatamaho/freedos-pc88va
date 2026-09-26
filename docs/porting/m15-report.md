@@ -234,6 +234,14 @@ a DOS-owned block rather than requiring its header to disappear. This is
 **VAEG PASS** for the PROCESS fixture in VA2 only; broader M15-PROCESS
 acceptance remains open.
 
+The SHELLREC batch recovery fixture ran on the same VA2 candidate. After a
+missing input file, an unavailable executable, and a failed redirection, the
+batch continued through COM and MZ child commands and recorded all six
+expected recovery checkpoints. Host inspection found no file at the failed
+redirection path, no changes to existing files, and equal FAT copies. The
+host check accounts for FreeCOM's trailing spaces in ECHO output. This is
+**VAEG PASS** for the SHELLREC fixture in VA2 only.
+
 The ABSIO fixture also ran on the same VA2 candidate. All seven ordered
 records passed with balanced stacks and no guest failure. This exercised the
 absolute-sector read entry points, packet reads, first/final sector reads,
@@ -263,10 +271,12 @@ current-source banner check has now been owner-confirmed in both modes. This
 focused startup-banner check is **VAEG PASS** in VA and VA2. The focused
 placement checks are **VAEG PASS** in VA and VA2 at all four supported memory
 capacities, and the previously listed ordinary recorder QA is **VAEG PASS** in
-both modes. The newer DEVICE, ABSIO, SHELLQA, CLOCK, HANDLES, PATHS, PROCESS,
-and MEMORY fixtures are qualified in VA2 only. These checks do not close full
-M15 acceptance:
+both modes. The newer DEVICE, ABSIO, SHELLQA, SHELLREC, CLOCK, HANDLES, PATHS,
+PROCESS, and MEMORY fixtures are qualified in VA2 only. These checks do not
+close full M15 acceptance:
 qualification of the remaining mandatory workflow families and final M15
 acceptance are still open. The initially mispackaged candidate is not counted
-as qualification evidence. Hardware validation remains
+as qualification evidence. The interactive CRITICAL sequence is not
+qualified: the available headless input did not deliver the required F1 key,
+so its partial run is not counted. Hardware validation remains
 **DEFERRED HARDWARE VALIDATION**.
