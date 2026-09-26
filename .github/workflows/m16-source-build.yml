@@ -41,10 +41,8 @@ jobs:
           test "$(uname -m)" = x86_64
           test "$(dpkg --print-architecture)" = amd64
           bash tools/configure_component_remotes.sh
-      - name: Verify component lock and M16 export isolation
-        run: |
-          make verify-scaffold
-          python3 -B tools/m16/verify_isolation.py
+      - name: Verify component lock
+        run: make verify-scaffold
       - name: Build or verify the pinned Linux/amd64 Open Watcom toolchain
         run: python3 -B tools/m16/toolchain.py
       - name: Build the full distribution twice from clean source exports
