@@ -39,6 +39,32 @@ committed sources and explicit public configuration.
 
 ## Reproducible milestone distributions
 
+This is a continuous requirement for the active milestone, not only a release
+gate. At every published work checkpoint, the entire current milestone must
+be clean-buildable from a fresh checkout of its pushed public Git revision
+and pinned public dependencies. This includes all component builds, platform
+adapters, loaders, required support programs, configuration, and final media
+composition within that milestone's scope; building only an individual
+component or reconstructing a disk from saved binaries is insufficient.
+
+Keep the complete build entry point, recipes, source pins, configuration,
+dependency acquisition instructions, and usage documentation committed and
+pushed together with the work they enable. Push component commits before
+publishing parent gitlinks. Local-only commits, untracked helpers, private
+inputs, and cached outputs must never be required to reproduce a published
+checkpoint. Maintain a usable published build throughout milestone work; do
+not postpone this obligation until PASS, a human gate, or final archiving.
+
+Verify build-affecting changes with a clean build from the exact public inputs.
+If any step of the full milestone build fails or depends on unpublished
+material, fix the source, recipe, configuration, dependency setup, or
+documentation as appropriate, then repeat the affected clean build through
+the final artifact. Publish the correction and verify its source binding.
+Do not treat the error as documentation-only, work around it with an old D88
+or saved executable, or report the milestone as rebuildable while the error
+remains. If an external blocker cannot be resolved, identify it explicitly
+and retain the last verified public build checkpoint without claiming success.
+
 Every milestone distribution D88 must be clean-buildable using public inputs
 only: committed source, pinned component gitlinks, committed configuration,
 and publicly obtainable, identity-pinned toolchains and dependencies. A fresh
