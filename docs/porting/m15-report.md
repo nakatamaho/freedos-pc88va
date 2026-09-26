@@ -217,6 +217,12 @@ file remained, the temporary second file was removed, pre-existing files and
 directories were unchanged, and both FAT copies agreed. This is **VAEG PASS**
 for the HANDLES fixture in VA2 only.
 
+The ordinary PATHS fixture also ran on the r7 candidate in VA2. All 50
+source-ordered records passed with balanced stacks. Host inspection confirmed
+the expected retained files and hidden attribute, absent moved/deleted paths,
+unchanged pre-existing files, and equal FAT copies. This is **VAEG PASS** for
+the PATHS fixture in VA2 only.
+
 ## Acceptance still open
 
 The user passed the M15 SYS human gate on the earlier VA/VA2 candidates,
@@ -226,7 +232,7 @@ current-source banner check has now been owner-confirmed in both modes. This
 focused startup-banner check is **VAEG PASS** in VA and VA2. The focused
 placement checks are **VAEG PASS** in VA and VA2 at all four supported memory
 capacities, and the previously listed ordinary recorder QA is **VAEG PASS** in
-both modes. The newer DEVICE, SHELLQA, CLOCK, and HANDLES fixtures are
+both modes. The newer DEVICE, SHELLQA, CLOCK, HANDLES, and PATHS fixtures are
 qualified in VA2 only. These checks do not close full M15 acceptance:
 qualification of the remaining mandatory workflow families and final M15
 acceptance are still open. The initially mispackaged candidate is not counted
