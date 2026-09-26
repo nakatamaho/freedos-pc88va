@@ -1,0 +1,255 @@
+{
+  "schema_version": 1,
+  "milestone": "M14",
+  "kind": "manifest",
+  "artifacts": [
+    {
+      "path": ".github/workflows/m01-baseline.yml",
+      "sha256": "51193826392107c304ce11f92b4a62f0d067db08518c7c52b4b6abffc2e952fb"
+    },
+    {
+      "path": ".github/workflows/m02-bundle.yml",
+      "sha256": "56a26011917923bc1ac810f35aa4cd1bcb5d9559ca5e4c56bfe624c1c9405b83"
+    },
+    {
+      "path": ".github/workflows/m03-port-surface.yml",
+      "sha256": "139e67e8f27c14e21641a5afbe0352a604ad1d6b81ab64ed35db79b621d2ff00"
+    },
+    {
+      "path": ".github/workflows/m04-boot-media-contract.yml",
+      "sha256": "1961cd088e96c923b9a39f97881092e4d10b63dfe350b7a35f3769ec9ba1dc4c"
+    },
+    {
+      "path": ".github/workflows/m04r1-license.yml",
+      "sha256": "0f41a229037bc6b7fea8c02afb7decaab3f3523137701417f3ea5625cb9ae61b"
+    },
+    {
+      "path": ".github/workflows/m05-media.yml",
+      "sha256": "e2f54bf86640219fc725fab67940e2492b61e9b4e68f01ad4136849e4559e544"
+    },
+    {
+      "path": ".github/workflows/m06-kernel.yml",
+      "sha256": "6818560f6f1bb838c97c81c6b8202fe41d6c58bb59bb648d1bf494dba1401072"
+    },
+    {
+      "path": ".github/workflows/m07-completion.yml",
+      "sha256": "b1e523676442dcbdcc0348d0206a132b99b7ae66a4886d88cbef188e0d2feff6"
+    },
+    {
+      "path": ".github/workflows/m07-probe.yml",
+      "sha256": "fe2825470836dd745593274837b61b7b60001f15a7c719a20949ae75e4fa6212"
+    },
+    {
+      "path": ".github/workflows/m07r3-fdd-boot-path.yml",
+      "sha256": "d29892b61152d62476c2ca74c6c8ebcc32bd1819344fca3cf0692da3fd2fedb5"
+    },
+    {
+      "path": ".github/workflows/m07r4-boot-reconstruction.yml",
+      "sha256": "1f3d15addfa63c12bda80465d929c5d4ff9c007778b6e2834c948be85a8fb1d5"
+    },
+    {
+      "path": ".github/workflows/m07r5-firmware-request-gate.yml",
+      "sha256": "7b2fdb0139159d1652e2327f0e92068074675a6aeee3cb47b09c2ba5134f64d9"
+    },
+    {
+      "path": ".github/workflows/m07r6-subsystem-fdc-command-gate.yml",
+      "sha256": "ba5ece5edd061f4059f494112ecbba10447cf82de9e324efce459092a8e4e98a"
+    },
+    {
+      "path": ".github/workflows/m08-loader.yml",
+      "sha256": "dfeea2068780f3eb873d633ab054b7559ec3900c97f61c61f069224f8554561d"
+    },
+    {
+      "path": ".github/workflows/m09-console.yml",
+      "sha256": "709d84e86859bc5133a7c8cc4139bd9a2cdd6d3bc41c1f1939d291c9d9c5ce89"
+    },
+    {
+      "path": ".github/workflows/m10-machine-services.yml",
+      "sha256": "4116af9236a17a0f6ca87a14e0b566b6668e9ea321c7c73513acd82b780d6b74"
+    },
+    {
+      "path": ".github/workflows/m11-console-input.yml",
+      "sha256": "5a19fbcf5d3265beaed8bc14e2a8ca7daa4bdb4f753211fe2c3b009b73ee9e55"
+    },
+    {
+      "path": ".github/workflows/m12-floppy-readonly.yml",
+      "sha256": "efeb09e90a15d53de4c4807f9de16b159eb23a3379ec522ad2b8a10b78a6311c"
+    },
+    {
+      "path": ".github/workflows/m13-readonly-freecom.yml",
+      "sha256": "00ce3cd82d3712ad542b58e1774cd5e573442ce6c81913a18f51bb902c38dcff"
+    },
+    {
+      "path": ".github/workflows/m14-floppy-write.yml",
+      "sha256": "79846773a4761aa69bc01c8725192ead50ff57a58c89f6c90d0ffe5d3c1d609e"
+    },
+    {
+      "path": ".github/workflows/scaffold.yml",
+      "sha256": "cee02ffeece86485992d0bc39aa8be9f9050c31daa2b69aa836544eb415e8a76"
+    },
+    {
+      "path": "Makefile",
+      "sha256": "c62d5fe4eba614ed267a2b6c735b3ca488a703100ec251fdb05032ea6187894e"
+    },
+    {
+      "path": "config/m01/freecom-build-timestamp.json",
+      "sha256": "026665fe389fcac242ccecfd5892c2823e8920609797f08870bc50c677e49eba"
+    },
+    {
+      "path": "config/m05/media.json",
+      "sha256": "f8ba0e41300ee6e11d7a1f0cf646e335a09df243afc8e1235efade3d17cd06bc"
+    },
+    {
+      "path": "config/m08/low-staging-overlay.json",
+      "sha256": "b757e78ea2397a67647c5ea7896d50828d653dab186ede86620a279b93cb9355"
+    },
+    {
+      "path": "docs/porting/m14-write-media-contract.md",
+      "sha256": "0a8600d9ef21350715ab753b32c639ed1d31fdaac16844b95eb549e393be02d1"
+    },
+    {
+      "path": "schema/m14-private-qualification.schema.json",
+      "sha256": "cba2e59ad4448c3e769240890b2c477bfe3963ae277c9819cbad8a46a20f0fbc"
+    },
+    {
+      "path": "tests/m13/fixtures/com_probe.asm",
+      "sha256": "e1ba12297a63bdb944f80308ddfdf158b79a230d91620a49282c7f40c332aae6"
+    },
+    {
+      "path": "tests/m13/fixtures/memory_lifetime_probe.asm",
+      "sha256": "db26b12dc23386382a6bd269efd227e2df5090b869bbbf12095dc24f09eee089"
+    },
+    {
+      "path": "tests/m13/fixtures/mz_probe.asm",
+      "sha256": "46e425451f3ae40019f22f039d9be09be92b6b47bdfeaf226eb632c5a88e824e"
+    },
+    {
+      "path": "tests/m13/test_init_lifetime_contract.py",
+      "sha256": "b78dde106134936d80cf8ca15db0bfec6c41add0600e14c472b87686f3fe8743"
+    },
+    {
+      "path": "tests/m13/test_lzss_encoder.py",
+      "sha256": "f42838c695f0dca2ee32cc6d9fdab3685a5ee296e4184dc0a8dd1ff6ee1a37d9"
+    },
+    {
+      "path": "tests/m13/test_m13_public.py",
+      "sha256": "cff0dcca604de7d78f81e779a7767015c59d80f2544b404a5a30677fcb04c9d1"
+    },
+    {
+      "path": "tests/m13/test_memory_placement.py",
+      "sha256": "12d2a94e42eec969eeafec14fdefe0cd34a4224a731cd2fe16d973adb26554e9"
+    },
+    {
+      "path": "tests/m14/fixtures/m14_block_boot.asm",
+      "sha256": "febc997310e611fe951274db950ca4c4545724472c37866c57b2d57ba0c91c24"
+    },
+    {
+      "path": "tests/m14/fixtures/m14_file_probe.asm",
+      "sha256": "0723733c63a94da4c1df0574ec3a647b18d3ced9a5a833e11131bfcd713198dc"
+    },
+    {
+      "path": "tests/m14/fixtures/m14_full_probe.asm",
+      "sha256": "cfe5149359d05037399143641c86bad8bffb46b9e69049c771e1344629f14118"
+    },
+    {
+      "path": "tests/m14/fixtures/m14_io_probe.asm",
+      "sha256": "e7bc501ecc2821894ba9287f6ab48168f996900945fd897b429e7479d63c235d"
+    },
+    {
+      "path": "tests/m14/fixtures/m14_read_probe.asm",
+      "sha256": "7dedbba4f611f6ba7c4412f54d40d33cb7c725b20aca45e622f0848f56efd16a"
+    },
+    {
+      "path": "tests/m14/fixtures/m14_swap_probe.asm",
+      "sha256": "094ec4b394dac01debb136a5874af783c0f8bafc8b199a3e101cdc6c8a53d8b1"
+    },
+    {
+      "path": "tests/m14/test_acceptance.py",
+      "sha256": "da7bd4011ebdb77a1f73c4fff0b400ed454b1079c94bd9dbc26cedac17df702f"
+    },
+    {
+      "path": "tests/m14/test_append_files.py",
+      "sha256": "c6c569d25b663689f8447ea85238f3e8aba71a19ba4b0d7689c9aa1ea94cfdc9"
+    },
+    {
+      "path": "tests/m14/test_inspect_fat12.py",
+      "sha256": "5516b982c124f470e3b90947545e060dafd3570797f823ff0cd778c7ddbf4a89"
+    },
+    {
+      "path": "tests/m14/test_m14_public.py",
+      "sha256": "98e4327c5a5cb2706dbe661fb66624a4576bfac9cd765431e35ab44ae972a736"
+    },
+    {
+      "path": "tools/m13/build_compressed_kernel.py",
+      "sha256": "5881dfd2d218e625c8ef6735a091f4bc6590460fcd36aa4a74163271c0c252de"
+    },
+    {
+      "path": "tools/m13/compare_public_builds.sh",
+      "sha256": "0be8e868f92aae34931ad64e0d5bc40d5b3252f0e312c922bbb2ec23b295866b"
+    },
+    {
+      "path": "tools/m13/preflight.py",
+      "sha256": "dc4cef51a0e5c8e9d42ea7ed405e7485f879fd40df3ceacf48b8bd060ffdb50a"
+    },
+    {
+      "path": "tools/m13/requirements.txt",
+      "sha256": "f015b6916589160372dd6144368b0a9bb382292b3a146c988908a553d638d661"
+    },
+    {
+      "path": "tools/m13/verify_linked_placement.py",
+      "sha256": "0f96d3f40e26a083c9eed7e16ff4274b5f6c9624a4eb46dcafba7123fd81e279"
+    },
+    {
+      "path": "tools/m13/verify_m13.py",
+      "sha256": "f1b3e3094fda3fae7234277bb8ac8a50593b8e9ac30002a26d9585de3dbf7a06"
+    },
+    {
+      "path": "tools/m14/append_files.py",
+      "sha256": "a6d96de6a38b8f3e44a1dca177e77cb02957a1e98770899c714c3fad3379aab3"
+    },
+    {
+      "path": "tools/m14/build_block_probe.sh",
+      "sha256": "4530023de22a666dbcb43f7b615a46c5453837ca64ce911224666af059496870"
+    },
+    {
+      "path": "tools/m14/build_public.py",
+      "sha256": "10edbeb06fc831ca032d8f1117d5ae22b6634468145b295929ff4b460541ae81"
+    },
+    {
+      "path": "tools/m14/check_block_probe.py",
+      "sha256": "41202a14727c82bbd82b0d7a7e4a624853c2c8d50892eadd8f60b0624653518c"
+    },
+    {
+      "path": "tools/m14/compose_media.py",
+      "sha256": "459286b679151a790c07e2886574e618b624e0e11b3e68928ef8a7c3b3309e62"
+    },
+    {
+      "path": "tools/m14/container_tests.py",
+      "sha256": "2deb18a9f217f2313c1fb27e2f2f9dd17502f854a434895efbfdd79ead9461f9"
+    },
+    {
+      "path": "tools/m14/historical_regression.py",
+      "sha256": "85f10ccfa74bb586f9e631f0aa197e5a02e72fe24b9476c1c3207420c56acab7"
+    },
+    {
+      "path": "tools/m14/inspect_fat12.py",
+      "sha256": "97de00cad091130b0b7a4f7f057cc8b172665a2f98395c3127c6bda5f28ceae7"
+    },
+    {
+      "path": "tools/m14/preflight.py",
+      "sha256": "acb006a30bf7fb4e50275fd5169231dcda0dc6011a1570befe182ed380f303af"
+    },
+    {
+      "path": "tools/m14/requirements.txt",
+      "sha256": "5bb9e037e2ce1919cdd98d3897f5994ea4e01c015ac7276e3b4c489b0895f1cf"
+    },
+    {
+      "path": "tools/m14/run_tests.py",
+      "sha256": "ec022af4872a9adc594d65d1f7f74dc150d840d9673e493b7f674403e8a9f252"
+    },
+    {
+      "path": "tools/m14/verify_m14.py",
+      "sha256": "0d5b55f5a3155dec45d33f7a6a35114c5cff4ab7c01221ef3fc8ba50ffa92bdb"
+    }
+  ]
+}

@@ -1,0 +1,385 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "M10 fixed service ABI and ownership contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "abi",
+    "services",
+    "public_provenance",
+    "excluded"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "abi": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "calling_convention",
+        "argument_register",
+        "result_register",
+        "success",
+        "failure",
+        "preserved",
+        "entry_if_df",
+        "record_segment",
+        "record_ownership",
+        "reentrancy"
+      ],
+      "properties": {
+        "calling_convention": {
+          "const": "Watcom near register ABI"
+        },
+        "argument_register": {
+          "const": "AX"
+        },
+        "result_register": {
+          "const": "AX"
+        },
+        "success": {
+          "const": 0
+        },
+        "failure": {
+          "const": 65535
+        },
+        "preserved": {
+          "const": [
+            "BX",
+            "CX",
+            "DX",
+            "SI",
+            "DI",
+            "BP",
+            "DS",
+            "ES",
+            "SS",
+            "SP",
+            "architectural_FLAGS"
+          ]
+        },
+        "entry_if_df": {
+          "const": "clear"
+        },
+        "record_segment": {
+          "const": "DS equals CS"
+        },
+        "record_ownership": {
+          "const": "only exported service record storage; arbitrary pointers rejected"
+        },
+        "reentrancy": {
+          "const": "prohibited"
+        }
+      }
+    },
+    "services": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "pc88va_machine_init",
+        "pc88va_memory_query",
+        "pc88va_interrupts_init",
+        "pc88va_clock_read",
+        "pc88va_fatal_stop_request"
+      ],
+      "properties": {
+        "pc88va_machine_init": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mechanism",
+            "order",
+            "states",
+            "failure",
+            "repeat",
+            "diagnostic_ascii"
+          ],
+          "properties": {
+            "mechanism": {
+              "const": "single-shot validated adoption transaction"
+            },
+            "order": {
+              "const": [
+                "entry_and_ownership",
+                "memory_query",
+                "interrupts_init",
+                "clock_read",
+                "clock_read",
+                "M09_post_init_console",
+                "preservation_check",
+                "readiness_commit"
+              ]
+            },
+            "states": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "unattempted",
+                "in_progress",
+                "ready",
+                "failed"
+              ],
+              "properties": {
+                "unattempted": {
+                  "const": 0
+                },
+                "in_progress": {
+                  "const": 1
+                },
+                "ready": {
+                  "const": 2
+                },
+                "failed": {
+                  "const": 3
+                }
+              }
+            },
+            "failure": {
+              "const": "readiness is not committed; public records invalidated; no hardware rollback needed because no controller was reprogrammed"
+            },
+            "repeat": {
+              "const": "reject once an attempt has started"
+            },
+            "diagnostic_ascii": {
+              "const": "M10 INIT OK\r\n"
+            }
+          }
+        },
+        "pc88va_memory_query": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mechanism",
+            "record_version",
+            "interval_count",
+            "interval_format",
+            "arena_bytes",
+            "physical_address_bits",
+            "policy",
+            "checks",
+            "destructive_probe"
+          ],
+          "properties": {
+            "mechanism": {
+              "const": "conservative linked arena carve-out"
+            },
+            "record_version": {
+              "const": 1
+            },
+            "interval_count": {
+              "const": 3
+            },
+            "interval_format": {
+              "const": "u32 begin, u32 exclusive end, u16 usable"
+            },
+            "arena_bytes": {
+              "const": 256
+            },
+            "physical_address_bits": {
+              "const": 20
+            },
+            "policy": {
+              "const": "reserve prefix and suffix; only the linked kernel-owned arena is usable"
+            },
+            "checks": {
+              "const": [
+                "record_pointer",
+                "segment",
+                "IF_DF",
+                "linear_bound",
+                "carry_overflow"
+              ]
+            },
+            "destructive_probe": {
+              "const": false
+            }
+          }
+        },
+        "pc88va_interrupts_init": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mechanism",
+            "ivt_bytes",
+            "vector_policy",
+            "pic_policy",
+            "cpu_if",
+            "repeat",
+            "failure"
+          ],
+          "properties": {
+            "mechanism": {
+              "const": "read-only firmware-state adoption"
+            },
+            "ivt_bytes": {
+              "const": 1024
+            },
+            "vector_policy": {
+              "const": "nonzero accepted M09 Text BIOS vector; snapshot and compare complete IVT"
+            },
+            "pic_policy": {
+              "const": "read and compare both inherited masks; never program modes, masks or EOI"
+            },
+            "cpu_if": {
+              "const": "remain clear"
+            },
+            "repeat": {
+              "const": "compare adopted state"
+            },
+            "failure": {
+              "const": "return unavailable without IVT or controller writes"
+            }
+          }
+        },
+        "pc88va_clock_read": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mechanism",
+            "units",
+            "elapsed_time_claim",
+            "calendar_claim",
+            "source_port",
+            "source_mask",
+            "read_policy",
+            "poll_bound_per_phase",
+            "counter_bits",
+            "wrap",
+            "progress",
+            "atomicity",
+            "failure",
+            "host_time",
+            "timer_programming",
+            "source_status_mask",
+            "source_status_expected"
+          ],
+          "properties": {
+            "mechanism": {
+              "const": "bounded observed VRTC edge counter"
+            },
+            "units": {
+              "const": "actually observed subsequent rising edges"
+            },
+            "elapsed_time_claim": {
+              "const": false
+            },
+            "calendar_claim": {
+              "const": false
+            },
+            "source_port": {
+              "const": 64
+            },
+            "source_mask": {
+              "const": 32
+            },
+            "read_policy": {
+              "const": "validate modeled status; first sample establishes zero, subsequent calls wait low then high before committing"
+            },
+            "poll_bound_per_phase": {
+              "const": 65535
+            },
+            "counter_bits": {
+              "const": 32
+            },
+            "wrap": {
+              "const": "modulo 2^32"
+            },
+            "progress": {
+              "const": "first valid source sample establishes origin zero without claiming progress; each subsequent successful call observes an edge and advances exactly one"
+            },
+            "atomicity": {
+              "const": "IF clear and explicit non-reentrant busy guard"
+            },
+            "failure": {
+              "const": "stuck source or invalid preconditions leaves counter and record unchanged"
+            },
+            "host_time": {
+              "const": false
+            },
+            "timer_programming": {
+              "const": false
+            },
+            "source_status_mask": {
+              "const": 204
+            },
+            "source_status_expected": {
+              "const": 192
+            }
+          }
+        },
+        "pc88va_fatal_stop_request": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "mechanism",
+            "diagnostic",
+            "returns",
+            "reason_policy",
+            "external_bound_required",
+            "stop_evidence"
+          ],
+          "properties": {
+            "mechanism": {
+              "const": "CLI then HLT loop"
+            },
+            "diagnostic": {
+              "const": "none"
+            },
+            "returns": {
+              "const": false
+            },
+            "reason_policy": {
+              "const": "not printed"
+            },
+            "external_bound_required": {
+              "const": true
+            },
+            "stop_evidence": {
+              "const": "repeated guest HLT fetch with IF clear; timeout or host marker alone rejected"
+            }
+          }
+        }
+      }
+    },
+    "public_provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "vaeg_commit",
+        "source_files",
+        "precedent"
+      ],
+      "properties": {
+        "vaeg_commit": {
+          "const": "7463f9501d84701f50f3243d5067b6a9dfd0c2e7"
+        },
+        "source_files": {
+          "const": [
+            "io/sysportva.c",
+            "io/pic.c",
+            "io/memctrlva.c",
+            "memoryva/memoryva.c",
+            "cpu/upd9002/upd9002_mn.c"
+          ]
+        },
+        "precedent": {
+          "const": "accepted M08 loader and M09 Text BIOS wrapper, not PC-98 machine behavior"
+        }
+      }
+    },
+    "excluded": {
+      "const": [
+        "console_input",
+        "Japanese_NLS",
+        "ANSI",
+        "disk_write",
+        "HDD",
+        "COMMAND.COM_execution",
+        "full_DOS",
+        "hardware_validation"
+      ]
+    }
+  }
+}

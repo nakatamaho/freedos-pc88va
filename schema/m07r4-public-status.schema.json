@@ -1,0 +1,269 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "boundaries": {
+      "additionalProperties": false,
+      "properties": {
+        "first_unobserved": {
+          "const": "B2"
+        },
+        "last_reached": {
+          "const": "B1"
+        },
+        "reached": {
+          "const": [
+            "B0",
+            "B1"
+          ]
+        },
+        "unreached": {
+          "const": [
+            "B2",
+            "B3",
+            "B4",
+            "B5",
+            "B6",
+            "B7"
+          ]
+        }
+      },
+      "required": [
+        "first_unobserved",
+        "last_reached",
+        "reached",
+        "unreached"
+      ],
+      "type": "object"
+    },
+    "classification": {
+      "const": "UNKNOWN"
+    },
+    "components": {
+      "additionalProperties": false,
+      "properties": {
+        "clean": {
+          "const": true
+        },
+        "gitlinks": {
+          "additionalProperties": false,
+          "properties": {
+            "components/country": {
+              "const": "23f189cca3420606eae8723884fa92ccd65eb307"
+            },
+            "components/fdkernel": {
+              "const": "69ccdd8699895722fc537d647ec490685532bdc4"
+            },
+            "components/freecom": {
+              "const": "855281a3114b43ad4b8d9a320f2aca39be046bba"
+            }
+          },
+          "required": [
+            "components/country",
+            "components/fdkernel",
+            "components/freecom"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "clean",
+        "gitlinks"
+      ],
+      "type": "object"
+    },
+    "fields": {
+      "additionalProperties": false,
+      "properties": {
+        "promotion_status": {
+          "const": "prohibited_pending_user_approval"
+        },
+        "resolved": {
+          "const": []
+        },
+        "resolved_count": {
+          "const": 0
+        },
+        "unresolved": {
+          "const": [
+            "accepted_signature_profile",
+            "boot_drive_identity",
+            "entry_cs_ip",
+            "firmware_attempts_m05_geometry",
+            "initial_load_extent",
+            "initial_register_state",
+            "initial_sector_reads",
+            "physical_load_address"
+          ]
+        }
+      },
+      "required": [
+        "promotion_status",
+        "resolved",
+        "resolved_count",
+        "unresolved"
+      ],
+      "type": "object"
+    },
+    "m07r3": {
+      "additionalProperties": false,
+      "properties": {
+        "classification": {
+          "const": "U"
+        },
+        "public_status_sha256": {
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "status": {
+          "const": "historical_unresolved_control"
+        }
+      },
+      "required": [
+        "classification",
+        "public_status_sha256",
+        "status"
+      ],
+      "type": "object"
+    },
+    "milestone": {
+      "const": "M07R4"
+    },
+    "private_gate": {
+      "additionalProperties": false,
+      "properties": {
+        "concrete_values_published": {
+          "const": false
+        },
+        "input_preservation": {
+          "const": "passed"
+        },
+        "result": {
+          "const": "inconclusive"
+        },
+        "status": {
+          "const": "performed"
+        }
+      },
+      "required": [
+        "concrete_values_published",
+        "input_preservation",
+        "result",
+        "status"
+      ],
+      "type": "object"
+    },
+    "reconstruction": {
+      "additionalProperties": false,
+      "properties": {
+        "b2_blocker_category": {
+          "const": "UNKNOWN"
+        },
+        "d88_fallback": {
+          "const": "performed_private_only"
+        },
+        "evidence_backed_variant_count": {
+          "const": 6
+        },
+        "input_preservation": {
+          "const": "passed"
+        },
+        "marker_reached": {
+          "const": false
+        },
+        "marker_repeat_count": {
+          "const": 0
+        },
+        "max_variant_count": {
+          "const": 16
+        },
+        "rom_fallback": {
+          "const": "performed_private_only"
+        },
+        "static_dynamic_agreement": {
+          "const": "incomplete"
+        },
+        "text_review": {
+          "const": "performed"
+        },
+        "trial_projection_determinism": {
+          "const": "byte-identical"
+        }
+      },
+      "required": [
+        "b2_blocker_category",
+        "d88_fallback",
+        "evidence_backed_variant_count",
+        "input_preservation",
+        "marker_reached",
+        "marker_repeat_count",
+        "max_variant_count",
+        "rom_fallback",
+        "static_dynamic_agreement",
+        "text_review",
+        "trial_projection_determinism"
+      ],
+      "type": "object"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "status": {
+      "const": "M07R4 BLOCKED \u2014 B2 PREDICATE NOT DISTINGUISHABLE"
+    },
+    "supersedes": {
+      "additionalProperties": false,
+      "properties": {
+        "positive_control_required_before_private_reconstruction": {
+          "const": false
+        },
+        "reason": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "positive_control_required_before_private_reconstruction",
+        "reason"
+      ],
+      "type": "object"
+    },
+    "vaeg": {
+      "additionalProperties": false,
+      "properties": {
+        "accepted_ci_run_id": {
+          "const": 33455847870
+        },
+        "commit": {
+          "const": "16ad2e0619bf4ed82a739325f7291eba4a6ed8ad"
+        },
+        "production_trace": {
+          "const": "available"
+        },
+        "source_changed": {
+          "const": false
+        }
+      },
+      "required": [
+        "accepted_ci_run_id",
+        "commit",
+        "production_trace",
+        "source_changed"
+      ],
+      "type": "object"
+    }
+  },
+  "required": [
+    "boundaries",
+    "classification",
+    "components",
+    "fields",
+    "milestone",
+    "m07r3",
+    "private_gate",
+    "reconstruction",
+    "schema_version",
+    "status",
+    "supersedes",
+    "vaeg"
+  ],
+  "type": "object"
+}

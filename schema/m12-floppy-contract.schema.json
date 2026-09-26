@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "M12 kernel-resident read-only floppy contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "milestone", "status", "start_sha", "qualified_implementation_sha", "child_commit", "vaeg_commit", "route", "abi", "geometry", "limits", "boundaries", "excluded"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "milestone": {"const": "M12"},
+    "status": {"enum": ["in_progress", "qualified", "accepted"]},
+    "start_sha": {"const": "c5ddf7c87cac46d357cfe75d132a819c7cf3fbe4"},
+    "qualified_implementation_sha": {"type": ["string", "null"], "pattern": "^[0-9a-f]{40}$"},
+    "child_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "vaeg_commit": {"const": "7dd453cbd36014ba453a26765b00cd0cc9a99655"},
+    "route": {"const": "accepted M08 firmware read callback retained by resident kernel entry"},
+    "abi": {
+      "type": "object", "additionalProperties": false,
+      "required": ["entry", "argument", "result", "ownership", "reentrancy"],
+      "properties": {
+        "entry": {"const": "pc88va_kernel_disk_read"},
+        "argument": {"const": "AX points to the exported resident M12 request record"},
+        "result": {"const": "AX typed status; RD_COMPLETED reports valid bytes"},
+        "ownership": {"const": "request and buffer are kernel-resident; destination is the declared resident buffer"},
+        "reentrancy": {"const": "prohibited"}
+      }
+    },
+    "geometry": {
+      "type": "object", "additionalProperties": false,
+      "required": ["sector_bytes", "sectors_track", "heads", "total_sectors"],
+      "properties": {"sector_bytes": {"const": 1024}, "sectors_track": {"const": 8}, "heads": {"const": 2}, "total_sectors": {"const": 1280}}
+    },
+    "limits": {
+      "type": "object", "additionalProperties": false,
+      "required": ["max_request_bytes", "max_retries", "zero_count", "writes"],
+      "properties": {"max_request_bytes": {"const": 4096}, "max_retries": {"const": 3}, "zero_count": {"const": "rejected as range"}, "writes": {"const": "no write or format commands"}}
+    },
+    "boundaries": {"const": ["R0", "R1", "R2", "R3", "R4", "R5", "R6", "R7", "R8", "R9"]},
+    "excluded": {"type": "array", "items": {"type": "string"}, "minItems": 1}
+  }
+}

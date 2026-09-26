@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "milestone": "M14",
+  "kind": "qualification",
+  "status": "qualified",
+  "components": {
+    "fdkernel": "ac16c8a7401526f99787e03babdb2f4223d48fc4",
+    "freecom": "9cf57b28abf1d98fab7655fb811375a2aa16c6d9",
+    "country": "23f189cca3420606eae8723884fa92ccd65eb307"
+  },
+  "artifact_manifest": {
+    "path": "qa/golden/m14/manifest.json",
+    "sha256": "9a50b93720f1508c07ffc97731612fdc663dbd0c0039f9ed21bf716deaebabdf"
+  },
+  "gates": {
+    "M14-BASE": "VAEG PASS",
+    "M14-MEM": "VAEG PASS",
+    "M14-BLOCK": "VAEG PASS",
+    "M14-VERIFY": "VAEG PASS",
+    "M14-REJECT": "VAEG PASS",
+    "M14-PROTECT": "VAEG PASS",
+    "M14-ERROR": "VAEG PASS",
+    "M14-CHANGE": "VAEG PASS",
+    "M14-FILES": "VAEG PASS",
+    "M14-FAT": "VAEG PASS",
+    "M14-FULL": "VAEG PASS",
+    "M14-PERSIST": "VAEG PASS",
+    "M14-SHELL": "VAEG PASS",
+    "M14-REGRESS": "HOST PASS",
+    "M14-NORMAL": "VAEG PASS",
+    "M14-CLOSE": "HOST PASS"
+  },
+  "hardware": "NOT RUN",
+  "manual_keyboard": "NOT RUN",
+  "private_evidence": "persistent_ignored",
+  "public_ci_runs_private_guest": false
+}

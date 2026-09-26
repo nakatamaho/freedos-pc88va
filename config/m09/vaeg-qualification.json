@@ -1,0 +1,80 @@
+{
+  "child_commit": "ef46a7ad4b381cf7a301899bee00fec99f5e37a7",
+  "evidence_retention": "persistent_ignored",
+  "hardware_run": false,
+  "kernel_sha256": "a861eb4f12107f251f5cf25a260bec6661cf4d129ddacdb52a3a2c3a5e1f8fe9",
+  "private_gate": "performed",
+  "private_gate_in_public_ci": false,
+  "public_promotion_status": "prohibited_pending_user_approval",
+  "runs": [
+    {
+      "bottom_row_policy": true,
+      "console_boundaries": [
+        "C0",
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6",
+        "C7",
+        "C8",
+        "C9"
+      ],
+      "cursor_CR_LF_wrap": true,
+      "exact_guest_message": true,
+      "firmware_operational_state_restored": true,
+      "inputs_preserved": true,
+      "loader_boundaries": [
+        "L0",
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7",
+        "L8",
+        "L9"
+      ],
+      "no_unexpected_disk_keyboard_clock_DMA": true,
+      "ownership_preserved": true
+    },
+    {
+      "bottom_row_policy": true,
+      "console_boundaries": [
+        "C0",
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6",
+        "C7",
+        "C8",
+        "C9"
+      ],
+      "cursor_CR_LF_wrap": true,
+      "exact_guest_message": true,
+      "firmware_operational_state_restored": true,
+      "inputs_preserved": true,
+      "loader_boundaries": [
+        "L0",
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7",
+        "L8",
+        "L9"
+      ],
+      "no_unexpected_disk_keyboard_clock_DMA": true,
+      "ownership_preserved": true
+    }
+  ],
+  "schema_version": 1,
+  "two_clean_runs_equal": true,
+  "vaeg_commit": "7463f9501d84701f50f3243d5067b6a9dfd0c2e7"
+}

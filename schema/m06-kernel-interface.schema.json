@@ -1,0 +1,197 @@
+{
+  "$defs": {
+    "unresolvedM08": {
+      "additionalProperties": false,
+      "properties": {
+        "required_by": {
+          "const": "M08"
+        },
+        "status": {
+          "const": "unknown"
+        }
+      },
+      "required": [
+        "required_by",
+        "status"
+      ],
+      "type": "object"
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "artifact": {
+      "additionalProperties": false,
+      "properties": {
+        "path": {
+          "const": "pc88va/bin/KERNEL.SYS"
+        },
+        "sha256": {
+          "pattern": "^[0-9a-f]{64}$",
+          "type": "string"
+        },
+        "size": {
+          "minimum": 1,
+          "type": "integer"
+        }
+      },
+      "required": [
+        "path",
+        "sha256",
+        "size"
+      ],
+      "type": "object"
+    },
+    "artifact_role": {
+      "const": "pc88va-compile-only-kernel-scaffold"
+    },
+    "binary": {
+      "additionalProperties": true,
+      "properties": {
+        "container": {
+          "const": "dos-mz"
+        },
+        "entry": {
+          "additionalProperties": false,
+          "properties": {
+            "cs_relative": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "ip": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "cs_relative",
+            "ip"
+          ],
+          "type": "object"
+        },
+        "relocation_count": {
+          "minimum": 0,
+          "type": "integer"
+        },
+        "required_initial_stack": {
+          "additionalProperties": false,
+          "properties": {
+            "sp": {
+              "minimum": 0,
+              "type": "integer"
+            },
+            "ss_relative": {
+              "minimum": 0,
+              "type": "integer"
+            }
+          },
+          "required": [
+            "sp",
+            "ss_relative"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "container",
+        "entry",
+        "relocation_count",
+        "required_initial_stack"
+      ],
+      "type": "object"
+    },
+    "boot_drive_identity": {
+      "$ref": "#/$defs/unresolvedM08"
+    },
+    "cpu_mode": {
+      "const": "8086-compatible-real-mode-code"
+    },
+    "entry_symbol": {
+      "const": "_pc88va_compile_only_entry"
+    },
+    "firmware_entry_state": {
+      "additionalProperties": false,
+      "properties": {
+        "required_by": {
+          "const": "M07"
+        },
+        "status": {
+          "const": "unknown"
+        }
+      },
+      "required": [
+        "required_by",
+        "status"
+      ],
+      "type": "object"
+    },
+    "initial_register_contract": {
+      "additionalProperties": false,
+      "properties": {
+        "required": {
+          "maxItems": 0,
+          "type": "array"
+        },
+        "unknown": {
+          "items": {
+            "type": "string"
+          },
+          "minItems": 1,
+          "type": "array",
+          "uniqueItems": true
+        }
+      },
+      "required": [
+        "required",
+        "unknown"
+      ],
+      "type": "object"
+    },
+    "loader_responsibilities": {
+      "items": {
+        "type": "string"
+      },
+      "minItems": 1,
+      "type": "array",
+      "uniqueItems": true
+    },
+    "memory_model": {
+      "type": "string"
+    },
+    "physical_load_address": {
+      "$ref": "#/$defs/unresolvedM08"
+    },
+    "relocation_policy": {
+      "type": "string"
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "stub_ledger_sha256": {
+      "pattern": "^[0-9a-f]{64}$",
+      "type": "string"
+    },
+    "target": {
+      "const": "pc88va"
+    }
+  },
+  "required": [
+    "artifact",
+    "artifact_role",
+    "binary",
+    "boot_drive_identity",
+    "cpu_mode",
+    "entry_symbol",
+    "firmware_entry_state",
+    "initial_register_contract",
+    "loader_responsibilities",
+    "memory_model",
+    "physical_load_address",
+    "relocation_policy",
+    "schema_version",
+    "stub_ledger_sha256",
+    "target"
+  ],
+  "title": "M06 PC-88VA compile-only kernel interface",
+  "type": "object"
+}

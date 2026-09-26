@@ -1,0 +1,619 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "M14 public acceptance documents",
+  "oneOf": [
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "milestone",
+        "kind",
+        "components"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "milestone": {
+          "const": "M14"
+        },
+        "kind": {
+          "const": "components"
+        },
+        "components": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "fdkernel",
+            "freecom",
+            "country"
+          ],
+          "properties": {
+            "fdkernel": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "commit",
+                "path",
+                "repository",
+                "upstream",
+                "branch",
+                "source_archive_sha256"
+              ],
+              "properties": {
+                "commit": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{40}$"
+                },
+                "path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "repository": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "upstream": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "branch": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source_archive_sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                }
+              }
+            },
+            "freecom": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "commit",
+                "path",
+                "repository",
+                "upstream",
+                "branch",
+                "source_archive_sha256"
+              ],
+              "properties": {
+                "commit": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{40}$"
+                },
+                "path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "repository": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "upstream": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "branch": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source_archive_sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                }
+              }
+            },
+            "country": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "commit",
+                "path",
+                "repository",
+                "upstream",
+                "branch",
+                "source_archive_sha256"
+              ],
+              "properties": {
+                "commit": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{40}$"
+                },
+                "path": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "repository": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "upstream": {
+                  "type": [
+                    "string",
+                    "null"
+                  ]
+                },
+                "branch": {
+                  "type": "string",
+                  "minLength": 1
+                },
+                "source_archive_sha256": {
+                  "type": "string",
+                  "pattern": "^[0-9a-f]{64}$"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "milestone",
+        "kind",
+        "artifacts"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "milestone": {
+          "const": "M14"
+        },
+        "kind": {
+          "const": "manifest"
+        },
+        "artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "path",
+              "sha256"
+            ],
+            "properties": {
+              "path": {
+                "type": "string",
+                "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+"
+              },
+              "sha256": {
+                "type": "string",
+                "pattern": "^[0-9a-f]{64}$"
+              }
+            }
+          }
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "milestone",
+        "kind",
+        "status",
+        "components",
+        "artifact_manifest",
+        "gates",
+        "hardware",
+        "manual_keyboard",
+        "private_evidence",
+        "public_ci_runs_private_guest"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "milestone": {
+          "const": "M14"
+        },
+        "kind": {
+          "const": "qualification"
+        },
+        "status": {
+          "enum": [
+            "implementation_in_progress",
+            "runtime_qualified",
+            "qualified"
+          ]
+        },
+        "components": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "fdkernel",
+            "freecom",
+            "country"
+          ],
+          "properties": {
+            "fdkernel": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            "freecom": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            "country": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            }
+          }
+        },
+        "artifact_manifest": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "sha256"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        "gates": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "M14-BASE",
+            "M14-MEM",
+            "M14-BLOCK",
+            "M14-VERIFY",
+            "M14-REJECT",
+            "M14-PROTECT",
+            "M14-ERROR",
+            "M14-CHANGE",
+            "M14-FILES",
+            "M14-FAT",
+            "M14-FULL",
+            "M14-PERSIST",
+            "M14-SHELL",
+            "M14-REGRESS",
+            "M14-NORMAL",
+            "M14-CLOSE"
+          ],
+          "properties": {
+            "M14-BASE": {
+              "enum": [
+                "NOT RUN",
+                "PARTIAL",
+                "VAEG PASS",
+                "HOST PASS"
+              ]
+            },
+            "M14-MEM": {
+              "enum": [
+                "NOT RUN",
+                "PARTIAL",
+                "VAEG PASS",
+                "HOST PASS"
+              ]
+            },
+            "M14-BLOCK": {
+              "enum": [
+                "NOT RUN",
+                "PARTIAL",
+                "VAEG PASS",
+                "HOST PASS"
+              ]
+            },
+            "M14-VERIFY": {
+              "enum": [
+                "NOT RUN",
+                "PARTIAL",
+                "VAEG PASS",
+                "HOST PASS"
+              ]
+            },
+            "M14-REJECT": {
+              "enum": [
+                "NOT RUN",
+                "PARTIAL",
+                "VAEG PASS",
+                "HOST PASS"
+              ]
+            },
+            "M14-PROTECT": {
+              "enum": [
+                "NOT RUN",
+                "PARTIAL",
+                "VAEG PASS",
+                "HOST PASS"
+              ]
+            },
+            "M14-ERROR": {
+              "enum": [
+                "NOT RUN",
+                "PARTIAL",
+                "VAEG PASS",
+                "HOST PASS"
+              ]
+            },
+            "M14-CHANGE": {
+              "enum": [
+                "NOT RUN",
+                "PARTIAL",
+                "VAEG PASS",
+                "HOST PASS"
+              ]
+            },
+            "M14-FILES": {
+              "enum": [
+                "NOT RUN",
+                "PARTIAL",
+                "VAEG PASS",
+                "HOST PASS"
+              ]
+            },
+            "M14-FAT": {
+              "enum": [
+                "NOT RUN",
+                "PARTIAL",
+                "VAEG PASS",
+                "HOST PASS"
+              ]
+            },
+            "M14-FULL": {
+              "enum": [
+                "NOT RUN",
+                "PARTIAL",
+                "VAEG PASS",
+                "HOST PASS"
+              ]
+            },
+            "M14-PERSIST": {
+              "enum": [
+                "NOT RUN",
+                "PARTIAL",
+                "VAEG PASS",
+                "HOST PASS"
+              ]
+            },
+            "M14-SHELL": {
+              "enum": [
+                "NOT RUN",
+                "PARTIAL",
+                "VAEG PASS",
+                "HOST PASS"
+              ]
+            },
+            "M14-REGRESS": {
+              "enum": [
+                "NOT RUN",
+                "PARTIAL",
+                "VAEG PASS",
+                "HOST PASS"
+              ]
+            },
+            "M14-NORMAL": {
+              "enum": [
+                "NOT RUN",
+                "PARTIAL",
+                "VAEG PASS",
+                "HOST PASS"
+              ]
+            },
+            "M14-CLOSE": {
+              "enum": [
+                "NOT RUN",
+                "PARTIAL",
+                "VAEG PASS",
+                "HOST PASS"
+              ]
+            }
+          }
+        },
+        "hardware": {
+          "const": "NOT RUN"
+        },
+        "manual_keyboard": {
+          "const": "NOT RUN"
+        },
+        "private_evidence": {
+          "const": "persistent_ignored"
+        },
+        "public_ci_runs_private_guest": {
+          "const": false
+        }
+      }
+    },
+    {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_version",
+        "milestone",
+        "kind",
+        "status",
+        "start_sha",
+        "components",
+        "component_lock",
+        "artifact_manifest",
+        "qualification",
+        "toolchain",
+        "schema",
+        "filesystem",
+        "media_policy",
+        "buffer_bytes",
+        "qualified_memory_kib",
+        "memory_other_configurations",
+        "hardware"
+      ],
+      "properties": {
+        "schema_version": {
+          "const": 1
+        },
+        "milestone": {
+          "const": "M14"
+        },
+        "kind": {
+          "const": "contract"
+        },
+        "status": {
+          "enum": [
+            "implementation_in_progress",
+            "runtime_qualified",
+            "qualified"
+          ]
+        },
+        "start_sha": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{40}$"
+        },
+        "components": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "fdkernel",
+            "freecom",
+            "country"
+          ],
+          "properties": {
+            "fdkernel": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            "freecom": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            },
+            "country": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{40}$"
+            }
+          }
+        },
+        "component_lock": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "sha256"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        "artifact_manifest": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "sha256"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        "qualification": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "sha256"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        "toolchain": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "sha256"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        "schema": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "path",
+            "sha256"
+          ],
+          "properties": {
+            "path": {
+              "type": "string",
+              "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$)).+"
+            },
+            "sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        },
+        "filesystem": {
+          "const": "common FreeDOS FAT12"
+        },
+        "media_policy": {
+          "const": "changed-or-unknown invalidates old handles and dirty cache; explicit reopen"
+        },
+        "buffer_bytes": {
+          "const": 4096
+        },
+        "qualified_memory_kib": {
+          "const": [
+            512
+          ]
+        },
+        "memory_other_configurations": {
+          "const": "NOT QUALIFIED BY M14"
+        },
+        "hardware": {
+          "const": "NOT RUN"
+        }
+      }
+    }
+  ]
+}

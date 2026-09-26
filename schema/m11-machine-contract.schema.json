@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "M11 acceptance contract",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "milestone", "status", "start_sha", "qualified_implementation_sha", "vaeg_commit", "child_commit", "acceptance_verifier", "artifact_manifest", "qualification", "console_contract", "component_lock", "m10_handoff", "child_ci", "private_execution_in_public_ci", "hardware_run", "publication_policy", "parent_ci"],
+  "properties": {
+    "schema_version": {"const": 1}, "milestone": {"const": "M11"}, "status": {"enum": ["qualified", "accepted"]},
+    "start_sha": {"const": "1acd1fbc0d556ec511ba71be833a1c7144eec841"}, "qualified_implementation_sha": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "vaeg_commit": {"const": "7dd453cbd36014ba453a26765b00cd0cc9a99655"}, "child_commit": {"const": "b08ace36670a05992d8ddaa4279727d9b17bd11e"}, "acceptance_verifier": {"const": "tools/m11/verify_m11.py"},
+    "artifact_manifest": {"$ref": "#/$defs/ref"}, "qualification": {"$ref": "#/$defs/ref"}, "console_contract": {"$ref": "#/$defs/ref"}, "component_lock": {"$ref": "#/$defs/ref"},
+    "m10_handoff": {"type": "object", "additionalProperties": false, "required": ["publication_tip", "qualified_parent", "qualification_ci", "final_tip_ci"], "properties": {"publication_tip": {"const": "1acd1fbc0d556ec511ba71be833a1c7144eec841"}, "qualified_parent": {"const": "eaadb757c4c3e2a4a7d405c0e250e96c1f4c222c"}, "qualification_ci": {"const": 34020956366}, "final_tip_ci": {"const": 34021647523}}},
+    "child_ci": {"type": "object", "additionalProperties": false, "required": ["repository", "run_id", "attempt", "head_sha", "workflow_path", "required_jobs"], "properties": {"repository": {"const": "nakatamaho/fdkernel"}, "run_id": {"const": 34028914548}, "attempt": {"const": 1}, "head_sha": {"const": "b08ace36670a05992d8ddaa4279727d9b17bd11e"}, "workflow_path": {"const": ".github/workflows/ci-build.yml"}, "required_jobs": {"const": ["build"]}}},
+    "private_execution_in_public_ci": {"const": false}, "hardware_run": {"const": false},
+    "publication_policy": {"type": "object", "minProperties": 1}, "parent_ci": {"type": ["null", "object"]}
+  },
+  "$defs": {"ref": {"type": "object", "additionalProperties": false, "required": ["path", "sha256"], "properties": {"path": {"type": "string", "pattern": "^[A-Za-z0-9_./-]+$"}, "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}}}
+}

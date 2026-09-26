@@ -1,0 +1,343 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "boundaries": {
+      "additionalProperties": false,
+      "properties": {
+        "first_blocked": {
+          "const": "S3_FDC_COMMAND"
+        },
+        "last_reached": {
+          "const": "S2_MOTOR_STABLE"
+        },
+        "reached": {
+          "const": [
+            "S0_REQUEST_EMITTED",
+            "S1_REQUEST_CONSUMED",
+            "S2_MOTOR_STABLE"
+          ]
+        },
+        "unreached": {
+          "const": [
+            "S3_FDC_COMMAND",
+            "S4_COMMAND_COMPLETE",
+            "S5_SECTOR_TRANSFER",
+            "S6_FETCH_CORRELATED",
+            "S7_MARKER"
+          ]
+        }
+      },
+      "required": [
+        "first_blocked",
+        "last_reached",
+        "reached",
+        "unreached"
+      ],
+      "type": "object"
+    },
+    "classification": {
+      "const": "HANDSHAKE_RESPONSE_MISSING"
+    },
+    "components": {
+      "additionalProperties": false,
+      "properties": {
+        "clean": {
+          "const": true
+        },
+        "gitlinks": {
+          "additionalProperties": false,
+          "properties": {
+            "components/country": {
+              "const": "23f189cca3420606eae8723884fa92ccd65eb307"
+            },
+            "components/fdkernel": {
+              "const": "69ccdd8699895722fc537d647ec490685532bdc4"
+            },
+            "components/freecom": {
+              "const": "855281a3114b43ad4b8d9a320f2aca39be046bba"
+            }
+          },
+          "required": [
+            "components/country",
+            "components/fdkernel",
+            "components/freecom"
+          ],
+          "type": "object"
+        }
+      },
+      "required": [
+        "clean",
+        "gitlinks"
+      ],
+      "type": "object"
+    },
+    "fields": {
+      "additionalProperties": false,
+      "properties": {
+        "promotion_status": {
+          "const": "prohibited_pending_user_approval"
+        },
+        "resolved": {
+          "const": []
+        },
+        "resolved_count": {
+          "const": 0
+        },
+        "unresolved": {
+          "const": [
+            "accepted_signature_profile",
+            "boot_drive_identity",
+            "entry_cs_ip",
+            "firmware_attempts_m05_geometry",
+            "initial_load_extent",
+            "initial_register_state",
+            "initial_sector_reads",
+            "physical_load_address"
+          ]
+        }
+      },
+      "required": [
+        "promotion_status",
+        "resolved",
+        "resolved_count",
+        "unresolved"
+      ],
+      "type": "object"
+    },
+    "m07r5": {
+      "additionalProperties": false,
+      "properties": {
+        "b2_evidence_consumed": {
+          "const": true
+        },
+        "historical_status_preserved": {
+          "const": true
+        },
+        "public_status_sha256": {
+          "pattern": "^[0-9a-f]{64}$"
+        },
+        "status": {
+          "const": "historical_blocked_request_gate"
+        }
+      },
+      "required": [
+        "b2_evidence_consumed",
+        "historical_status_preserved",
+        "public_status_sha256",
+        "status"
+      ],
+      "type": "object"
+    },
+    "milestone": {
+      "const": "M07R6"
+    },
+    "observations": {
+      "additionalProperties": false,
+      "properties": {
+        "command_complete": {
+          "const": false
+        },
+        "fdc_command": {
+          "const": false
+        },
+        "fetch_correlated": {
+          "const": false
+        },
+        "marker": {
+          "const": false
+        },
+        "motor_stable": {
+          "const": true
+        },
+        "request_consumed": {
+          "const": true
+        },
+        "request_emitted": {
+          "const": true
+        },
+        "sector_transfer": {
+          "const": false
+        },
+        "subsystem_executed": {
+          "const": true
+        }
+      },
+      "required": [
+        "command_complete",
+        "fdc_command",
+        "fetch_correlated",
+        "marker",
+        "request_consumed",
+        "request_emitted",
+        "sector_transfer",
+        "subsystem_executed",
+        "motor_stable"
+      ],
+      "type": "object"
+    },
+    "predicate": {
+      "additionalProperties": false,
+      "properties": {
+        "category": {
+          "const": "HANDSHAKE_RESPONSE_MISSING"
+        },
+        "consumer_independently_observed": {
+          "const": true
+        },
+        "producer_fully_identified": {
+          "const": false
+        },
+        "scheduling_alone_used": {
+          "const": false
+        }
+      },
+      "required": [
+        "category",
+        "consumer_independently_observed",
+        "producer_fully_identified",
+        "scheduling_alone_used"
+      ],
+      "type": "object"
+    },
+    "private_gate": {
+      "additionalProperties": false,
+      "properties": {
+        "concrete_values_published": {
+          "const": false
+        },
+        "input_preservation": {
+          "const": "passed"
+        },
+        "performed": {
+          "const": true
+        },
+        "projection_determinism": {
+          "const": "byte-identical"
+        },
+        "result": {
+          "const": "conclusive_through_s2_only"
+        }
+      },
+      "required": [
+        "concrete_values_published",
+        "input_preservation",
+        "performed",
+        "projection_determinism",
+        "result"
+      ],
+      "type": "object"
+    },
+    "promotion_status": {
+      "const": "prohibited_pending_user_approval"
+    },
+    "status": {
+      "const": "M07R6 BLOCKED \u2014 RESPONSE PRODUCER UNOBSERVABLE"
+    },
+    "trial_summary": {
+      "additionalProperties": false,
+      "properties": {
+        "evidence_backed_changed_predicate_trials": {
+          "const": 0
+        },
+        "fresh_clean_run_count": {
+          "const": 6
+        },
+        "repeated_projection_result": {
+          "const": "byte-identical"
+        },
+        "same_condition_pairs": {
+          "const": 2
+        }
+      },
+      "required": [
+        "evidence_backed_changed_predicate_trials",
+        "fresh_clean_run_count",
+        "same_condition_pairs",
+        "repeated_projection_result"
+      ],
+      "type": "object"
+    },
+    "vaeg": {
+      "additionalProperties": false,
+      "properties": {
+        "accepted_ci_run_id": {
+          "const": 33489650578
+        },
+        "commit": {
+          "const": "6bdaae109c92d26a65f0b0b1a9a50eeae5c1385a"
+        },
+        "no_extra_architectural_reads": {
+          "const": true
+        },
+        "production_memory": {
+          "const": true
+        },
+        "repository": {
+          "const": "https://github.com/nakatamaho/vaeg.git"
+        },
+        "source_changed": {
+          "const": false
+        },
+        "tests_disabled": {
+          "const": true
+        }
+      },
+      "required": [
+        "accepted_ci_run_id",
+        "commit",
+        "no_extra_architectural_reads",
+        "production_memory",
+        "repository",
+        "source_changed",
+        "tests_disabled"
+      ],
+      "type": "object"
+    },
+    "validation": {
+      "additionalProperties": false,
+      "properties": {
+        "next_target": {
+          "const": "response_producer_attribution"
+        },
+        "s0_s2_repeated": {
+          "const": true
+        },
+        "s1_independently_confirmed": {
+          "const": true
+        },
+        "s3_candidate_trial_required": {
+          "const": true
+        }
+      },
+      "required": [
+        "next_target",
+        "s0_s2_repeated",
+        "s3_candidate_trial_required",
+        "s1_independently_confirmed"
+      ],
+      "type": "object"
+    },
+    "version": {
+      "const": 1
+    }
+  },
+  "required": [
+    "boundaries",
+    "classification",
+    "components",
+    "fields",
+    "m07r5",
+    "milestone",
+    "observations",
+    "predicate",
+    "private_gate",
+    "promotion_status",
+    "status",
+    "trial_summary",
+    "validation",
+    "vaeg",
+    "version"
+  ],
+  "type": "object"
+}

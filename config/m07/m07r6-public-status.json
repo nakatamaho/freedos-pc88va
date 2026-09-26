@@ -1,0 +1,97 @@
+{
+  "boundaries": {
+    "first_blocked": "S3_FDC_COMMAND",
+    "last_reached": "S2_MOTOR_STABLE",
+    "reached": [
+      "S0_REQUEST_EMITTED",
+      "S1_REQUEST_CONSUMED",
+      "S2_MOTOR_STABLE"
+    ],
+    "unreached": [
+      "S3_FDC_COMMAND",
+      "S4_COMMAND_COMPLETE",
+      "S5_SECTOR_TRANSFER",
+      "S6_FETCH_CORRELATED",
+      "S7_MARKER"
+    ]
+  },
+  "classification": "HANDSHAKE_RESPONSE_MISSING",
+  "components": {
+    "clean": true,
+    "gitlinks": {
+      "components/country": "23f189cca3420606eae8723884fa92ccd65eb307",
+      "components/fdkernel": "69ccdd8699895722fc537d647ec490685532bdc4",
+      "components/freecom": "855281a3114b43ad4b8d9a320f2aca39be046bba"
+    }
+  },
+  "fields": {
+    "promotion_status": "prohibited_pending_user_approval",
+    "resolved": [],
+    "resolved_count": 0,
+    "unresolved": [
+      "accepted_signature_profile",
+      "boot_drive_identity",
+      "entry_cs_ip",
+      "firmware_attempts_m05_geometry",
+      "initial_load_extent",
+      "initial_register_state",
+      "initial_sector_reads",
+      "physical_load_address"
+    ]
+  },
+  "m07r5": {
+    "b2_evidence_consumed": true,
+    "historical_status_preserved": true,
+    "public_status_sha256": "60f8254ed2bef023bff3daa00c8cd6caa9094beda6ec5dc0917e040a3e22daae",
+    "status": "historical_blocked_request_gate"
+  },
+  "milestone": "M07R6",
+  "observations": {
+    "command_complete": false,
+    "fdc_command": false,
+    "fetch_correlated": false,
+    "marker": false,
+    "motor_stable": true,
+    "request_consumed": true,
+    "request_emitted": true,
+    "sector_transfer": false,
+    "subsystem_executed": true
+  },
+  "predicate": {
+    "category": "HANDSHAKE_RESPONSE_MISSING",
+    "consumer_independently_observed": true,
+    "producer_fully_identified": false,
+    "scheduling_alone_used": false
+  },
+  "private_gate": {
+    "concrete_values_published": false,
+    "input_preservation": "passed",
+    "performed": true,
+    "projection_determinism": "byte-identical",
+    "result": "conclusive_through_s2_only"
+  },
+  "promotion_status": "prohibited_pending_user_approval",
+  "status": "M07R6 BLOCKED \u2014 RESPONSE PRODUCER UNOBSERVABLE",
+  "trial_summary": {
+    "evidence_backed_changed_predicate_trials": 0,
+    "fresh_clean_run_count": 6,
+    "repeated_projection_result": "byte-identical",
+    "same_condition_pairs": 2
+  },
+  "vaeg": {
+    "accepted_ci_run_id": 33489650578,
+    "commit": "6bdaae109c92d26a65f0b0b1a9a50eeae5c1385a",
+    "no_extra_architectural_reads": true,
+    "production_memory": true,
+    "repository": "https://github.com/nakatamaho/vaeg.git",
+    "source_changed": false,
+    "tests_disabled": true
+  },
+  "validation": {
+    "next_target": "response_producer_attribution",
+    "s0_s2_repeated": true,
+    "s1_independently_confirmed": true,
+    "s3_candidate_trial_required": true
+  },
+  "version": 1
+}

@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "abi": {
+    "calling_convention": "Watcom near register ABI",
+    "argument_register": "AX",
+    "result_register": "AX",
+    "success": 0,
+    "failure": 65535,
+    "preserved": [
+      "BX",
+      "CX",
+      "DX",
+      "SI",
+      "DI",
+      "BP",
+      "DS",
+      "ES",
+      "SS",
+      "SP",
+      "architectural_FLAGS"
+    ],
+    "entry_if_df": "clear",
+    "record_segment": "DS equals CS",
+    "record_ownership": "only exported service record storage; arbitrary pointers rejected",
+    "reentrancy": "prohibited"
+  },
+  "services": {
+    "pc88va_machine_init": {
+      "mechanism": "single-shot validated adoption transaction",
+      "order": [
+        "entry_and_ownership",
+        "memory_query",
+        "interrupts_init",
+        "clock_read",
+        "clock_read",
+        "M09_post_init_console",
+        "preservation_check",
+        "readiness_commit"
+      ],
+      "states": {
+        "unattempted": 0,
+        "in_progress": 1,
+        "ready": 2,
+        "failed": 3
+      },
+      "failure": "readiness is not committed; public records invalidated; no hardware rollback needed because no controller was reprogrammed",
+      "repeat": "reject once an attempt has started",
+      "diagnostic_ascii": "M10 INIT OK\r\n"
+    },
+    "pc88va_memory_query": {
+      "mechanism": "conservative linked arena carve-out",
+      "record_version": 1,
+      "interval_count": 3,
+      "interval_format": "u32 begin, u32 exclusive end, u16 usable",
+      "arena_bytes": 256,
+      "physical_address_bits": 20,
+      "policy": "reserve prefix and suffix; only the linked kernel-owned arena is usable",
+      "checks": [
+        "record_pointer",
+        "segment",
+        "IF_DF",
+        "linear_bound",
+        "carry_overflow"
+      ],
+      "destructive_probe": false
+    },
+    "pc88va_interrupts_init": {
+      "mechanism": "read-only firmware-state adoption",
+      "ivt_bytes": 1024,
+      "vector_policy": "nonzero accepted M09 Text BIOS vector; snapshot and compare complete IVT",
+      "pic_policy": "read and compare both inherited masks; never program modes, masks or EOI",
+      "cpu_if": "remain clear",
+      "repeat": "compare adopted state",
+      "failure": "return unavailable without IVT or controller writes"
+    },
+    "pc88va_clock_read": {
+      "mechanism": "bounded observed VRTC edge counter",
+      "units": "actually observed subsequent rising edges",
+      "elapsed_time_claim": false,
+      "calendar_claim": false,
+      "source_port": 64,
+      "source_mask": 32,
+      "read_policy": "validate modeled status; first sample establishes zero, subsequent calls wait low then high before committing",
+      "poll_bound_per_phase": 65535,
+      "counter_bits": 32,
+      "wrap": "modulo 2^32",
+      "progress": "first valid source sample establishes origin zero without claiming progress; each subsequent successful call observes an edge and advances exactly one",
+      "atomicity": "IF clear and explicit non-reentrant busy guard",
+      "failure": "stuck source or invalid preconditions leaves counter and record unchanged",
+      "host_time": false,
+      "timer_programming": false,
+      "source_status_mask": 204,
+      "source_status_expected": 192
+    },
+    "pc88va_fatal_stop_request": {
+      "mechanism": "CLI then HLT loop",
+      "diagnostic": "none",
+      "returns": false,
+      "reason_policy": "not printed",
+      "external_bound_required": true,
+      "stop_evidence": "repeated guest HLT fetch with IF clear; timeout or host marker alone rejected"
+    }
+  },
+  "public_provenance": {
+    "vaeg_commit": "7463f9501d84701f50f3243d5067b6a9dfd0c2e7",
+    "source_files": [
+      "io/sysportva.c",
+      "io/pic.c",
+      "io/memctrlva.c",
+      "memoryva/memoryva.c",
+      "cpu/upd9002/upd9002_mn.c"
+    ],
+    "precedent": "accepted M08 loader and M09 Text BIOS wrapper, not PC-98 machine behavior"
+  },
+  "excluded": [
+    "console_input",
+    "Japanese_NLS",
+    "ANSI",
+    "disk_write",
+    "HDD",
+    "COMMAND.COM_execution",
+    "full_DOS",
+    "hardware_validation"
+  ]
+}

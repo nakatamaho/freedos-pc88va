@@ -1,0 +1,4 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+# ROM-free host validation; the guest compiler remains pinned separately.
+jsonschema==4.25.1
+unicorn==2.1.4

@@ -1,0 +1,122 @@
+{
+  "boot_record": {
+    "extended_bpb_signature": 41,
+    "filesystem_type": "FAT12",
+    "oem_name": "FDPC88VA",
+    "placeholder_code": [
+      235,
+      254,
+      144
+    ],
+    "placeholder_semantics": "x86_short_jump_minus_2_self_loop_then_unreached_nop",
+    "signature_policy": "no_firmware_signature_at_offset_510_or_1022",
+    "unassigned_byte_policy": "zero"
+  },
+  "component_gitlinks": {
+    "country": "23f189cca3420606eae8723884fa92ccd65eb307",
+    "fdkernel": "6523acdb87f4665e6068ea331859885267242005",
+    "freecom": "855281a3114b43ad4b8d9a320f2aca39be046bba"
+  },
+  "consumed_identities": {
+    "components_lock_sha256": "440e481b28c740875489a6953a246ce5370c44074053c7aad3f80e79ec40c19c",
+    "copying_sha256": "0f1e68d9b4a580cdcca4c5f4e3b8046f7a8759da05edd109cff081bc484b3c4b",
+    "m01_contract_sha256": "7d66be32b508395d8c36a902389f368e9f38d9abab08085bda89e3d2c5d6d578",
+    "m01_golden_sha256": "6fcfe834f90ffc602589ddc63b50d90eba33bbc1802b6bff3c9ef6b9d397c7c3",
+    "m02_golden_sha256": "4d4e92f92911130109b5b140b2202fc1dfc3abb9af3cd7501b685894d0cb78fd",
+    "m03r1_golden_sha256": "d871c7f188313218c2c9481ea9fe7c6abf6acd6369f996b2641021ad27c80550",
+    "m04_contract_sha256": "f2e4efdc9d9e3a31dc100b81896427beeaeaca29d36d692b5dfeb5fb459460f4",
+    "m04_evidence_matrix_sha256": "0612699d305738f2db131cb87c5fa7e9393b206672d6bec27483a602e7e91770",
+    "m04_schema_sha256": "f50c099211e2e70f959fb1cc70e93553699f9862113b50c7cda7f29816e6b7c0",
+    "toolchain_lock_sha256": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162"
+  },
+  "d88": {
+    "declared_size": 1331888,
+    "deleted_data": 0,
+    "disk_name": "FD-PC88VA-M05",
+    "disk_type": 32,
+    "error_status": 0,
+    "header_size": 688,
+    "mfm_density_field": 0,
+    "populated_tracks": 160,
+    "rpm_field": 0,
+    "sector_header_size": 16,
+    "sector_size_code": 3,
+    "track_table_entries": 164,
+    "write_protect": 0
+  },
+  "filesystem": {
+    "data_clusters": 1269,
+    "fat_bytes_required": 1907,
+    "fat_count": 2,
+    "fat_timestamp_policy": "per_payload_m02_source_date_epoch_utc_truncated_to_even_second",
+    "fat_type": "FAT12",
+    "first_data_sector": 11,
+    "hidden_sectors": 0,
+    "media_descriptor": 254,
+    "reserved_sectors": 1,
+    "root_directory_sectors": 6,
+    "root_entries": 192,
+    "sectors_per_cluster": 1,
+    "sectors_per_fat": 2,
+    "unallocated_data_policy": "zero"
+  },
+  "format_provenance": {
+    "implementation_policy": "independent_minimal_writer_and_parser_no_code_copied",
+    "paths": [
+      "fdd/d88head.h",
+      "fdd/fdd_d88.c",
+      "fdd/newdisk.c"
+    ],
+    "repository": "https://github.com/nakatamaho/vaeg.git",
+    "revision": "2a6c3944bab1fb691261fa2f0950dc4a2faeab8c"
+  },
+  "geometry": {
+    "bytes_per_sector": 1024,
+    "cylinders": 80,
+    "encoding": "MFM",
+    "heads": 2,
+    "physical_sector_id_base": 1,
+    "sectors_per_track": 8,
+    "total_bytes": 1310720,
+    "total_sectors": 1280,
+    "track_order": "cylinder_major_head_minor"
+  },
+  "image": {
+    "d88_filename": "pc88va-m05-candidate.d88",
+    "raw_filename": "pc88va-m05-candidate.img",
+    "volume_label": "PC88VA-M05",
+    "volume_serial": 1446326349
+  },
+  "milestone": "M05-deterministic-candidate-media",
+  "parent_commit": "8b33ee3c6eece05ac4e810726d4dce90372ab4b3",
+  "payloads": [
+    {
+      "bundle_path": "payload/fdkernel/KERNEL.SYS",
+      "dos_name": "KERNEL.SYS",
+      "runtime_claim": "nec98_reference_for_packaging_validation_only",
+      "source_role": "kernel"
+    },
+    {
+      "bundle_path": "payload/freecom/COMMAND.COM",
+      "dos_name": "COMMAND.COM",
+      "runtime_claim": "nec98_japanese_reference_for_packaging_validation_only",
+      "source_role": "command-interpreter"
+    },
+    {
+      "bundle_path": "payload/fdos-country/COUNTRY.SYS",
+      "dos_name": "COUNTRY.SYS",
+      "runtime_claim": "standalone_country_reference_for_packaging_validation_only",
+      "source_role": "standalone-country-driver"
+    }
+  ],
+  "schema_version": 1,
+  "unknowns": [
+    "firmware_boot_acceptance_rules",
+    "required_boot_signature_or_checksum",
+    "whether_firmware_loads_exactly_one_1024_byte_sector",
+    "actual_entry_registers_flags_stack_and_interrupt_state",
+    "boot_drive_identity_convention",
+    "common_firmware_disk_service_entry_point",
+    "pc88va_kernel_load_address_entry_point_and_handoff_state"
+  ]
+}

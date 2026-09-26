@@ -1,0 +1,93 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "additionalProperties": false,
+  "properties": {
+    "boundaries": {
+      "additionalProperties": false,
+      "properties": {
+        "first_absent": {
+          "type": [
+            "null",
+            "string"
+          ]
+        },
+        "g_reached": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "h_reached": {
+          "items": {
+            "type": "string"
+          },
+          "type": "array",
+          "uniqueItems": true
+        },
+        "last_reached": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "first_absent",
+        "g_reached",
+        "h_reached",
+        "last_reached"
+      ],
+      "type": "object"
+    },
+    "classification": {
+      "type": "string"
+    },
+    "components": {
+      "type": "object"
+    },
+    "fields": {
+      "type": "object"
+    },
+    "historical": {
+      "type": "object"
+    },
+    "milestone": {
+      "type": "string"
+    },
+    "observations": {
+      "type": "object"
+    },
+    "private_gate": {
+      "type": "object"
+    },
+    "promotion_status": {
+      "type": "string"
+    },
+    "status": {
+      "type": "string"
+    },
+    "vaeg": {
+      "type": "object"
+    },
+    "validation": {
+      "type": "object"
+    },
+    "version": {
+      "type": "integer"
+    }
+  },
+  "required": [
+    "boundaries",
+    "classification",
+    "components",
+    "fields",
+    "historical",
+    "milestone",
+    "observations",
+    "private_gate",
+    "promotion_status",
+    "status",
+    "validation",
+    "vaeg",
+    "version"
+  ],
+  "type": "object"
+}

@@ -1,0 +1,52 @@
+# SPDX-License-Identifier: GPL-2.0-or-later
+name: M11 PC-88VA keyboard and early console input
+on:
+  push:
+    branches: ['topic/m11-pc88va-console-input']
+  pull_request:
+    paths: ['tools/m11/**', 'config/m11/**', 'schema/m11-*', 'qa/golden/m11/**', 'tests/m11/**', 'tools/qa/**', 'components/fdkernel', 'Makefile', '.github/workflows/m11-console-input.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+env:
+  PYTHONDONTWRITEBYTECODE: '1'
+  GH_TOKEN: ${{ github.token }}
+jobs:
+  public-console-input:
+    runs-on: ubuntu-22.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with: {submodules: recursive, fetch-depth: 0}
+      - name: Native x64 public environment
+        run: |
+          test "$(uname -m)" = x86_64
+          test "$(dpkg --print-architecture)" = amd64
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq nasm
+          python3 -m pip install --disable-pip-version-check -r tools/m08/requirements.txt
+      - name: Verify M10 handoff and two isolated M11 builds
+        run: |
+          make m11-preflight
+          python3 -B tools/m10/historical.py
+          bundle=build/m10-history-baseline/freedos-pc88va/qa/results/m02/run-1/baseline-artifact-bundle/payload
+          make m11-build M11_CHILD_SHA=b08ace36670a05992d8ddaa4279727d9b17bd11e M11_COMMAND="$bundle/freecom/COMMAND.COM" M11_COUNTRY="$bundle/fdos-country/COUNTRY.SYS"
+          roots=(build/m11-public.*); test "${#roots[@]}" = 1
+          echo "M11_BUILD_ROOT=${roots[0]}" >> "$GITHUB_ENV"
+      - name: Shared M11 acceptance verifier
+        run: |
+          make m11-accept M11_BUILD_ROOT="$M11_BUILD_ROOT"
+          git diff --exit-code
+          test -z "$(git status --porcelain --untracked-files=all)"
+  historical-regression:
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683
+        with: {submodules: recursive, fetch-depth: 0}
+      - name: Immutable M08-M10 regression
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq nasm
+          python3 -m pip install --disable-pip-version-check -r tools/m08/requirements.txt
+          python3 -B tools/m10/historical.py --loader-console-only

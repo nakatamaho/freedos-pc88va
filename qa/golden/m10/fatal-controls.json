@@ -1,0 +1,28 @@
+{
+  "artifacts": {
+    "fatal_d88_media": {
+      "sha256": "62637c0e2e0944bc115781912fe032587d8bbc8ff96829d73d2eb2c9013cd480",
+      "size": 1331888
+    },
+    "fatal_kernel_sys": {
+      "sha256": "fe6fc4301f94b55527d008d25399a66ccf3f60c47f8d54e7770df10534b577d6",
+      "size": 8378
+    },
+    "fatal_raw_media": {
+      "sha256": "050f5ca7b686a095ee88bcd13c2cf2a63ad5d0adac2e358fcaa0913fa84ccb79",
+      "size": 1310720
+    }
+  },
+  "baseline_kernel": {
+    "sha256": "b6a1941fa3950aa0cd3cfc3cc6acf7b4f4efffb3897773a262b084b52e11e77d",
+    "size": 8378
+  },
+  "changed_bytes_per_artifact": 1,
+  "independent_extraction_verified": true,
+  "loader_stages_unchanged": true,
+  "schema_version": 1,
+  "selector_after": 1,
+  "selector_before": 0,
+  "selector_file_offset": 2864,
+  "two_clean_controls_equal": true
+}

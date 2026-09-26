@@ -1,0 +1,77 @@
+{
+  "base": {
+    "d88_sha256": "141959c7fe8ddbaf2d37e9c3078404380cbb27198bfe650a17e6f0aa37c92004",
+    "raw_sha256": "333f1a7fd1385ba347e64ae7511f2ed060b057f3b73e1cec94e0532bc9916f66"
+  },
+  "parent_commit": "655d716099d94e94d63f15a9f1c63d85f04f27ec",
+  "pattern": {
+    "formula": "((offset // 64) * 49 + (offset % 64) * 23 + 90) & 255",
+    "range": [
+      62,
+      1024
+    ]
+  },
+  "probe": {
+    "entry_offset": 62,
+    "first_marker_hex": "9087db87c987d2",
+    "jump_hex": "eb3c90",
+    "self_loop_hex": "ebfe",
+    "source": "tools/m07/probe.asm"
+  },
+  "schema_version": 1,
+  "vaeg": {
+    "binary": {
+      "sha256": "1fb5ca69611267041bda26ec83af9f10fb82cb052fd1d22b2c7dfa2fe09e2691",
+      "size": 8155976
+    },
+    "build_options": {
+      "VAEG_ENABLE_TESTS": "OFF",
+      "VAEG_Z80_COMPAT_INTEGRATION_TRACE": "OFF"
+    },
+    "build_preset": "macos-macports",
+    "repository": "https://github.com/nakatamaho/vaeg.git",
+    "reproducibility": "byte-identical-two-clean-builds",
+    "required_but_unavailable": [
+      "production-memory-upd9002-cpu-trace"
+    ],
+    "revision": "2a6c3944bab1fb691261fa2f0950dc4a2faeab8c",
+    "trace_facilities": [
+      "fdc-trace",
+      "fixed-model-selection",
+      "no-config",
+      "no-backup-memory"
+    ]
+  },
+  "variants": [
+    {
+      "id": "V00",
+      "probe": false,
+      "signature_1022": false,
+      "signature_510": false
+    },
+    {
+      "id": "V01",
+      "probe": true,
+      "signature_1022": false,
+      "signature_510": false
+    },
+    {
+      "id": "V02",
+      "probe": true,
+      "signature_1022": false,
+      "signature_510": true
+    },
+    {
+      "id": "V03",
+      "probe": true,
+      "signature_1022": true,
+      "signature_510": false
+    },
+    {
+      "id": "V04",
+      "probe": true,
+      "signature_1022": true,
+      "signature_510": true
+    }
+  ]
+}

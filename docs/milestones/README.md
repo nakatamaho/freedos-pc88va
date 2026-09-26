@@ -1,6 +1,7 @@
 # Milestones
 
-M00 creates the public integration scaffold, provenance records, component
-gitlinks, and host-only validation. Later implementation, package selection,
-build, image, emulator, and hardware work is out of scope until explicitly
-authorized.
+M00 created the public integration scaffold and pinned component gitlinks.
+M01 establishes reproducible host-side buildability for the pinned upstream
+baselines plus the approved fdkernel WMake build-system repair. PC-88VA
+implementation, package selection, boot image, emulator, and hardware work
+remain outside M01.

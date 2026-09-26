@@ -1,0 +1,389 @@
+# M15 FreeDOS PC-88VA port and writable-session qualification
+
+Status: **M15 PASS — owner accepted and closed on 2026-09-26.**
+
+The owner explicitly accepted M15 as PASS after moving the remaining work to
+follow-up issues #7, #8, and #9. This decision closes M15 with those items
+deferred. Their individual QA results remain unqualified; acceptance does not
+convert an incomplete or unrun test into a pass. Historical progress notes
+below describe the evidence available before this final owner decision.
+
+## Post-acceptance source build and distribution
+
+The owner requested a public-input-only clean build and an xz-compressed
+distribution in Git. The complete build recipe is committed at
+`32a340127fb33a8133104614abf180a4cef6de19`, using kernel component
+`d8dbbf7111f86ea4800daeac84ac53ba601aaf32`. The component change adds a public
+loader-profile category and its validation test; it does not change DOS
+behavior. Two clean offline Linux/amd64 builds produced identical media and
+system binaries. The map creation timestamp and elapsed link time are
+explicitly normalized; linker symbols and placement information are retained.
+
+The exact implementation's M15 host CI passed as run
+[36227639922](https://github.com/nakatamaho/freedos-pc88va/actions/runs/36227639922).
+Local linked-placement and actual unpack-bridge verification passed, together
+with 23 memory-placement, four carrier-tail, and 12 loader tests. The new
+filesystem composer and public profile have focused host tests. A byte-identical
+distribution reached the kernel banner, FreeCOM, and its prompt in a VA2
+VAEG smoke check; its source-built COM and MZ support programs also ran: **VAEG PASS** for that bounded boot check only. Full
+guest QA was not repeated; hardware validation of this distribution was not run.
+
+The current recipe exports only M15-owned tooling, configuration and tests,
+plus shared public toolchain identities and licenses. Historical milestone
+directories are absent from both clean builds. The resulting disk is byte-for-byte
+identical to the previously archived and boot-checked distribution. SYS target
+preparation uses the M15 media module and was checked for a zero loader
+placeholder and absence of executable source/boot-code copying. The compatible
+installed toolchain was verified; rebuilding the toolchain container itself
+was not required for this tooling-isolation change.
+
+The public artifact and source identities are under
+[`images/milestones/m15`](../../images/milestones/m15/README.md).
+Follow [the clean source-build instructions](m15-source-build.md) to regenerate
+it without private inputs or old disk images. This packaging work preserves
+the owner-accepted M15 closure and its deferred issues.
+
+## Scope
+
+M15 ports the selected FreeDOS kernel and FreeCOM to the existing PC-88VA
+profile. This is not a FreeDOS fork or an MS-DOS compatibility project.
+Microsoft DOS references are context only. Preserve the selected FreeDOS
+behavior, including existing FreeDOS errors or mismatches; fix VA-specific
+adapter, ABI, memory-placement, and integration defects.
+
+The locked V4 API boundary has 221 dispatch-entry QA keys: 113 active
+services, 82 profile exclusions, and 26 undocumented observations. These are
+not 221 independent behavior contracts. The key set is anchored to the pinned
+kernel dispatch/build guards, selected FreeCOM callers, and M15 feature
+profile. The selected FreeDOS source defines the DOS behavior being ported;
+MS-DOS references are context only. Six separate MS-DOS comparison questions
+remain deferred under parent issues #3-#6 and do not gate the port.
+
+## Revisions
+
+- START_SHA: ed7fb3c4fac2597a08c8ce9f76390e90d975c86c (M14 G14 parent baseline).
+- fdkernel M14 baseline: ac16c8a7401526f99787e03babdb2f4223d48fc4.
+- fdkernel M15 implementation commit: 3498c982584867367d2b917a79363f76143c514e.
+- Parent M15 placement/capacity fix commit:
+  aa23f9e27560f60a3f0e20b6a9fdd19354820a4b.
+- Current QA-contract correction commit:
+  e1a7b6c948e1c646aa78af56e209dacdc529010b; its exact-head M15 workflow
+  passed as run 36129861539.
+- QUALIFIED_IMPLEMENTATION_SHA (owner-accepted scope with deferred issues):
+  `4cbb140b8abe98195fe1bae521d87018521d3145`.
+  Its M15 host workflow passed as run
+  [36223589992](https://github.com/nakatamaho/freedos-pc88va/actions/runs/36223589992).
+- PUBLICATION_TIP_SHA and DOWNSTREAM_BASE_SHA will be recorded in the post-push
+  local handoff after this report-only publication is verified.
+
+## Restarted candidate source lock
+
+The next bootable candidate and VA2 QA run are bound to the following already
+committed implementation state; earlier media without a matching private
+manifest are not interchangeable with this candidate:
+
+- Parent source baseline: `c33c142ba72b91c4132f2c086154c4b6a5c2a220`.
+- fdkernel gitlink: `3498c982584867367d2b917a79363f76143c514e`.
+- FreeCOM gitlink: `9cf57b28abf1d98fab7655fb811375a2aa16c6d9`.
+- COUNTRY.SYS source: `23f189cca3420606eae8723884fa92ccd65eb307`.
+- M13 carrier/placement correction included in the parent baseline:
+  `aa23f9e27560f60a3f0e20b6a9fdd19354820a4b`.
+
+The generated candidate media and its build/readback manifest remain in the
+private evidence area. Any subsequent behavioral or source change requires a
+new candidate identity; QA results stay attached to the exact media and source
+manifest that produced them. The report-only commit that records this lock
+does not change the candidate software.
+
+## Qualification history before owner acceptance
+
+Common FreeDOS changes that were present in an earlier M15 candidate were
+removed when they proved unrelated to the VA port. The source retains the
+existing FreeDOS behavior for generic error classification, EXEC errors,
+NLS fallback errors, character-device errors, JFT resizing, console EOF state,
+and INT 2Fh carry handling. M15 does not correct these behaviors merely to
+match an MS-DOS reference.
+
+The remaining implementation changes are scoped to the PC-88VA build or
+adapter: medium-model FAR call frames, relocated VA entry placement, the
+native session clock, the VA console-key path, VA FAT12/media transfer
+handling, and the compressed carrier layout needed by the existing memory
+contract. The guest SYS utility and its ABI/volume tests are included in the
+M15 worktree.
+
+The V4 inventory verifier and five boundary tests pass for the locked
+221-entry scope, pinned M14 source identities, and six separately deferred
+questions. On implementation commit
+`a47a5d35af92a49857e25287ffa492b26d3436b2`, Linux/amd64 verification passed:
+all 307 kernel PC-88VA tests, all 16 parent M15 tests, all 29 parent acceptance
+tests, all 20 M13 memory-placement tests, and the M13 adapter-selection
+regression. That commit first added the startup build ID, but its `%s` formatter
+path displayed an empty value in the guest. Commit
+`3498c982584867367d2b917a79363f76143c514e` places the generated 40-character
+ID directly in the adjacent startup string literals, avoiding the init
+formatter's near-pointer segment limitation. A clean pinned Linux/amd64 build
+confirmed the exact ID in the kernel banner bytes; the M13 carrier build and
+linked-placement verifier also passed. The fdkernel native Build workflow
+passed on that exact child head (run 36097330671).
+
+The fdkernel topic branch now points to implementation commit
+`3498c982584867367d2b917a79363f76143c514e` on the fork. Parent integration
+commit `cd60877bba0c47a811ffb10b649e909454d8fe7a` updates the gitlink to that
+exact child head. Parent M15 host workflow run 36098380721 passed on that exact
+integration head, including the finite port boundary, parent M15 acceptance
+and memory-placement regressions, and complete PC-88VA kernel component suite.
+The backup-RAM placement correction is parent commit
+`aa23f9e27560f60a3f0e20b6a9fdd19354820a4b`; native M15 workflow run
+36124174958 passed on that exact head, including M15 acceptance, M13 placement,
+and the full PC-88VA kernel component tests.
+The report-only publication tip and its own workflow are recorded in the
+post-push handoff.
+
+The current SYS utility and 38 8086 fixture
+COM files likewise rebuilt byte-identically in two isolated containers. These
+are reproducible build results, not guest execution. The first private VA/VA2
+candidate package mistakenly used the raw Watcom-linked MZ kernel instead of
+the M13 zero-relocation carrier required by the loader. That package is
+invalid for guest qualification. The current linked kernel has now been
+transformed with the M13 carrier builder in two isolated Linux/amd64 runs; the
+carrier outputs are byte-identical, and the actual linked-placement verifier
+executed each bridge through the kernel entry with Unicorn 2.1.4. Corrected
+private VA/VA2 candidates package that carrier and pass independent host FAT12
+inspection. Their source boot records and contiguous loader extents remain
+intact, current payloads match the builds, and stale result files are absent.
+A separate disposable SYS target passed host inspection with its reserved
+zero-filled loader area and sentinel files; it contains no system payload.
+The user has now confirmed that current-source boots in both VA and VA2 display
+the exact 40-character build ID and continue through InitDisk into FreeCom.
+The user confirmed these were VAEG runs. This is **VAEG PASS** for the focused
+startup-banner boot check only; it does not qualify the full M15 integration.
+The public inventory contains no per-case private-run outcome or concrete
+observation. Earlier parent revisions passed the branch-specific M15 host
+workflow on exact heads `9263edfbefcda8b18ae5bb3e9815a3b6ff6b01fa` (run
+36081226448) and `4a4c0d287ddaf1597b681982e5eaada7757f1a07` (run 36081372418).
+Those runs predate the current fdkernel implementation and do not qualify its
+parent gitlink. Earlier M01-M09 workflows also ran on the first M15 push and
+failed their historical baseline gates: most rejected the newer exact gitlink;
+the M08 historical rebuild hit an Ubuntu index-digest mismatch. Their push
+filters now exclude M15.
+
+The repeated low-memory startup failure was caused by treating the carrier's
+build-time memory ceiling as the machine's runtime ceiling. The M13 carrier
+builder now places split INIT and its initial stack above the bounded live
+carrier/scratch ranges, records the minimum runtime capacity, and keeps the
+DOS arena ceiling dynamic so the adapter can read the PC-88VA backup-RAM
+selection. The low-memory case uses its matching in-place loader and carrier
+profile as one unit. The linked-placement verifier now checks the unpacked
+descriptor against the exact generated placement plan.
+
+Focused verification of this changed low-memory profile is **HOST PASS** for
+23/23 M13 placement tests, 16/16 parent M15 tests, linked-carrier execution,
+and D88/FAT12 readback checks. The same matched loader and kernel candidate is
+**VAEG PASS** in VA and VA2 at 256, 384, 512, and 640 KiB. All eight runs
+reached FreeCom, completed ordinary DIR/TYPE/COM/MZ and file-write/readback
+probes, and recorded the configured capacity in backup RAM. Host inspection
+confirmed the kernel payload and existing disk files remained intact after
+the guest writes. These results qualify all four supported capacities in both
+modes on the matched profile.
+
+The broader M13 test discovery ran 34 tests: 33 passed. Its remaining
+historical public-contract test could not be qualified from the exported
+Linux/amd64 tree because Git and checkout metadata are absent. That test also
+binds to the earlier accepted M13 component pin, while this branch integrates
+the later M15 component; the M13 acceptance record was left unchanged. The
+focused placement suite and M15 suite are independent of that historical gate.
+
+On 2026-09-25 the ordinary `SYSTEM`, `ALIAS` and `SYSMISC` recorder fixtures
+were corrected to follow the selected FreeDOS source. `new_psp()` copies the
+PSP memory-end field unchanged while refreshing the interrupt vectors and DOS
+version word. The no-NLSFUNC country lookup follows FreeDOS's NLS MUX
+`DE_INVLDFUNC` path when the requested package is absent, and AH=59h reports
+the preserved FreeDOS error value. These were QA expectation and inventory
+corrections; no kernel behavior changed, no API row was added, and no deferred
+MS-DOS comparison was pulled into scope.
+
+Focused ordinary QA then passed in VAEG VA and VA2 on the current
+capacity-matched candidate. The `SYSTEM`, `ALIAS`, `SYSMISC`, `CONSOLE` and
+`FCB` guest recorders produced complete host-verified results with no
+assertion failures or stack imbalance. Normal DIR/TYPE, COM/MZ execution,
+redirected console input/output, FCB file operations, and file write/readback
+completed, and existing guest files remained intact. This is a focused
+**VAEG PASS**, not a claim that all 113 required services or all 221 inventory
+entries have been qualified.
+The same ordinary QA pass also covered the FreeCOM file workflow in VA and
+VA2: create, copy, read back, delete, rename, and create/use/remove a
+subdirectory. Both input scripts completed. Final-media inspection confirmed
+that the expected files remained, temporary files and directories were gone,
+pre-existing files remained unchanged, and FAT12 copies agreed. This is a
+focused **VAEG PASS** for these shell operations; it does not close M15.
+On the exact QA-contract correction commit, M15 host workflow run
+[36129861539](https://github.com/nakatamaho/freedos-pc88va/actions/runs/36129861539)
+passed the finite inventory check, parent acceptance and memory-placement
+regressions, and the full PC-88VA kernel component suite.
+The later DEVICE expectation and test-navigation revision
+`d23f35a374bddc03446298c5d5d2a0a72f3e0ef5` passed exact-head M15 workflow run
+[36206365951](https://github.com/nakatamaho/freedos-pc88va/actions/runs/36206365951),
+including those same gates and the full kernel component suite.
+
+On 2026-09-26, the DEVICE fixture's expectations were aligned with the pinned
+FreeDOS implementation: NUL's device bit is set, and the local-drive/ordinary-
+handle IOCTL observations do not require the MS-DOS 4 network-provider error
+contract. No kernel behavior changed. Two isolated Linux/amd64 builds of the
+updated fixture matched. One VA2 VAEG run produced the complete 45-record
+fixture sequence; all records were checked, stacks were balanced, the first
+failure field was zero, the 26 REQUIRED device-family case IDs were present,
+and FAT copies agreed. This is **VAEG PASS** for the DEVICE fixture in VA2 only.
+The first host completeness checker compared the whole fixture stream with
+only the API-row subset and omitted setup-call records; that checker was
+corrected, and the complete source-ordered sequence was then verified.
+
+The ordinary FreeCOM batch/stream workflow was then run on the same r7
+candidate in VA2. SHELLQA exercised batch control flow, redirection, append,
+pipeline, PATH lookup, and shell-state recovery. The guest completed and the
+saved media contained every expected payload; failure markers and temporary
+directories were absent, the FAT copies agreed, and the prepared input and ROM
+set remained unchanged. This is **VAEG PASS** for SHELLQA in VA2 only. The first
+host check incorrectly treated `LOWER.TXT` as a leftover even though the batch
+creates it and uses it as input; the corrected check verified its expected
+contents and retained it as an intentional fixture output.
+
+The ordinary CLOCK fixture then ran on the same r7 candidate in VA2. Its 42
+source-ordered DOS records were all checked with no failure and balanced
+stacks. Date/time validation and progression completed, and the packed time
+returned by DOS agreed with the independently inspected FAT directory entry
+for the timestamped file; both FAT copies agreed. This is **VAEG PASS** for the
+CLOCK fixture in VA2 only.
+
+The ordinary HANDLES fixture also ran on the r7 candidate in VA2. All 53
+source-ordered records passed with balanced stacks. The expected empty test
+file remained, the temporary second file was removed, pre-existing files and
+directories were unchanged, and both FAT copies agreed. This is **VAEG PASS**
+for the HANDLES fixture in VA2 only.
+
+The ordinary PATHS fixture also ran on the r7 candidate in VA2. All 50
+source-ordered records passed with balanced stacks. Host inspection confirmed
+the expected retained files and hidden attribute, absent moved/deleted paths,
+unchanged pre-existing files, and equal FAT copies. This is **VAEG PASS** for
+the PATHS fixture in VA2 only.
+
+The ordinary PROCESS fixture ran on the same candidate in VA2. All 145
+source-ordered records passed with balanced stacks and no guest failure. Host
+inspection confirmed the expected child-created data, empty executable,
+unchanged existing files, equal FAT copies, and 20 complete memory snapshots
+with stable arena bounds. The temporary environment block began owned by the
+child PSP and ended with DOS ownership after release. The original guest run
+was retained; only its host checker was corrected to recognize a freed MCB as
+a DOS-owned block rather than requiring its header to disappear. This is
+**VAEG PASS** for the PROCESS fixture in VA2 only; broader M15-PROCESS
+acceptance remains open.
+
+The SHELLREC batch recovery fixture ran on the same VA2 candidate. After a
+missing input file, an unavailable executable, and a failed redirection, the
+batch continued through COM and MZ child commands and recorded all six
+expected recovery checkpoints. Host inspection found no file at the failed
+redirection path, no changes to existing files, and equal FAT copies. The
+host check accounts for FreeCOM's trailing spaces in ECHO output. This is
+**VAEG PASS** for the SHELLREC fixture in VA2 only.
+
+The ABSIO fixture also ran on the same VA2 candidate. All seven ordered
+records passed with balanced stacks and no guest failure. This exercised the
+absolute-sector read entry points, packet reads, first/final sector reads,
+out-of-range rejection, and the required legacy stack cleanup; the disposable
+media remained FAT-consistent and all existing files were unchanged. This is
+**VAEG PASS** for the ABSIO fixture in VA2 only.
+
+The MEMORY fixture was run on the same VA2 candidate with VAEG's default RAM
+configuration and no explicit RAM-size override. The first command invoked
+FreeCOM's built-in `MEMORY` display rather than `MEMORY.COM`; that attempt is
+not counted. The explicit program run produced all 61 source-ordered records,
+with no guest failure, unchecked record, or stack imbalance. Host inspection
+validated 45 complete MCB snapshots, stable arena bounds, restoration of the
+complete chain after 16 allocation/free cycles, unchanged pre-existing files,
+and equal FAT copies. The initial host sequence check omitted two allocation-
+strategy readback calls present in the fixture; the corrected verifier now
+matches the fixture's recorded order. This is **VAEG PASS** for the MEMORY
+fixture in VA2 at the default configuration.
+
+The MEMORY fixture also ran with an explicit VA2 `Main_RAM=384` profile and a
+fresh backup-memory file. The capacity saved in backup RAM and the observed DOS
+arena ceiling both matched 384 KiB. All 61 ordered records passed, all stacks
+were balanced, and host inspection verified 45 complete MCB snapshots, 16
+allocation/free cycles, full chain restoration, unchanged input files, and
+equal FAT copies. This is **VAEG PASS** for the 384-KiB MEMORY profile in VA2.
+At 256 KiB the machine booted, but FreeCOM could not allocate enough DOS memory
+to load `MEMORY.COM`; no fixture call ran, so this is not counted as an API
+failure or a fixture pass. The smallest profile capable of this workload is
+384 KiB. The required default and smallest-capable profiles are now covered.
+
+The bounded RESIDENT fixture then exercised both legacy INT 27h termination
+and INT 21h/AH=31h resident termination in VA2. All 26 ordered DOS observations
+passed with balanced stacks; four complete MCB snapshots retained both child
+resident owners before restart. A separate VAEG process booted the saved image
+and reached the FreeCOM `A:\>` prompt. Existing files and FAT copies remained
+unchanged. This is **VAEG PASS** for the bounded resident-termination and fresh
+boot sequence in VA2 only; it does not qualify the interactive break/critical
+path or close full M15 acceptance.
+
+The LOADMODE fixture exercised COM and MZ load-only operations, flat and MZ
+overlay loading, relocation, parent-state cleanup, and the missing-overlay
+error. Its disposable QA image exposed the existing MZ overlay payload under
+the filename expected by the fixture; the payload and cluster chain were
+unchanged. All 39 ordered observations passed with balanced stacks. Five MCB
+snapshots retained stable arena bounds, and the complete initial chain was
+restored. This is **VAEG PASS** for the LOADMODE fixture in VA2 only and does
+not by itself close full M15 acceptance.
+
+On 2026-09-26, the CRITICAL, EXTENDED, and NLSTABLE fixture expectations were
+aligned with the pinned FreeDOS source behavior; no kernel behavior changed.
+The corrected fixture sources were rebuilt in two isolated Linux/amd64 runs
+with byte-identical outputs. The same VA2 r7 candidate then completed the
+NLSTABLE, BREAKQA, CRITICAL, PSP, and DRVMAP fixtures. Their host verifiers
+checked all 33, 40, 23, 17, and 7 ordered recorder records respectively, with
+no assertion failures or stack imbalance. BREAKQA and CRITICAL received the
+required key events. This is **VAEG PASS** for those five fixtures in VA2 only.
+
+The locked REQUIRED fixture-source mapping names 31 distinct paths. Thirty
+sources are present and 28 have completed VA2 qualification. Three remain
+unqualified:
+
+- BLKIO cannot be run as specified because the guest has no DOS-visible B:
+  drive. Attaching a second D88 to VAEG FDD2 does not create B:; that attempt
+  is not counted.
+- COMPANION recorded only its initial three cases and did not return from the
+  first CP/M CALL 5 path. The fixture did not complete, so it is not a pass.
+- JFT's `tests/m15/fixtures/jft.asm` source is absent, leaving required cases
+  without an executable fixture. This finite source gap is tracked in
+  [Issue #7](https://github.com/nakatamaho/freedos-pc88va/issues/7); no API rows
+  or FreeDOS behavior were changed to work around it.
+
+## Final owner acceptance
+
+The user passed the M15 SYS human gate on the earlier VA/VA2 candidates,
+including transfer and persistence checks. The later banner correction changes
+only startup text, so those SYS steps are not being repeated. The new
+current-source banner check has now been owner-confirmed in both modes. This
+focused startup-banner check is **VAEG PASS** in VA and VA2. The focused
+placement checks are **VAEG PASS** in VA and VA2 at all four supported memory
+capacities, and the previously listed ordinary recorder QA is **VAEG PASS** in
+both modes. The newer DEVICE, ABSIO, SHELLQA, SHELLREC, CLOCK, HANDLES, PATHS,
+PROCESS (including LOADMODE and RESIDENT), MEMORY, NLSTABLE, BREAKQA, CRITICAL,
+PSP, and DRVMAP fixtures are qualified in VA2 only. The corrected CRITICAL run
+used a key-enabled worker and checked all 23 records; earlier partial attempts
+without F1 remain unqualified.
+
+On 2026-09-26 the owner explicitly directed that M15 be marked PASS and closed.
+The remaining fixture work is deferred to:
+
+- [#7](https://github.com/nakatamaho/freedos-pc88va/issues/7): JFT source coverage.
+- [#8](https://github.com/nakatamaho/freedos-pc88va/issues/8): BLKIO's DOS-visible B: prerequisite.
+- [#9](https://github.com/nakatamaho/freedos-pc88va/issues/9): COMPANION CALL 5 qualification.
+
+These follow-ups are not blockers for the owner-accepted M15 closure. The
+previously pending integrated-media reconciliation is waived as a closure
+prerequisite by that decision; no additional media identity or boot result is
+asserted. The initially mispackaged candidate and incomplete fixture attempts
+remain excluded from qualification evidence. Existing HOST PASS and VAEG PASS
+results retain their recorded scopes. Hardware validation remains
+**DEFERRED HARDWARE VALIDATION**. No further QA is required for this owner
+acceptance; source changes made under follow-up issues require their own
+validation.

@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "M12 public build and fixture manifest",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "source", "artifacts", "fixture", "two_clean_builds_equal"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "two_clean_builds_equal": {"const": true},
+    "source": {"type": "object", "additionalProperties": false, "required": ["commit", "archive_sha256"], "properties": {"commit": {"pattern": "^[0-9a-f]{40}$"}, "archive_sha256": {"$ref": "#/$defs/sha256"}}},
+    "artifacts": {"type": "object", "additionalProperties": false, "required": ["loader_stage1", "loader_stage2", "kernel_sys", "raw_media", "d88_media", "extracted_kernel_sys", "extracted_command_com", "extracted_country_sys"], "properties": {
+      "loader_stage1": {"$ref": "#/$defs/artifact"}, "loader_stage2": {"$ref": "#/$defs/artifact"}, "kernel_sys": {"$ref": "#/$defs/kernel"}, "raw_media": {"$ref": "#/$defs/artifact"}, "d88_media": {"$ref": "#/$defs/artifact"}, "extracted_kernel_sys": {"$ref": "#/$defs/artifact"}, "extracted_command_com": {"$ref": "#/$defs/artifact"}, "extracted_country_sys": {"$ref": "#/$defs/artifact"}
+    }},
+    "fixture": {"type": "object", "additionalProperties": false, "required": ["sector_bytes", "lbas", "sectors", "read_only", "pattern"], "properties": {"sector_bytes": {"const": 1024}, "lbas": {"const": [200, 201]}, "sectors": {"type": "object", "minProperties": 2, "additionalProperties": {"$ref": "#/$defs/artifact"}}, "read_only": {"const": true}, "pattern": {"const": "(lba * 17 + byte_offset * 29 + 3) modulo 256"}}}
+  },
+  "$defs": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}, "artifact": {"type": "object", "additionalProperties": false, "required": ["size", "sha256"], "properties": {"size": {"type": "integer", "minimum": 1}, "sha256": {"$ref": "#/$defs/sha256"}}}, "kernel": {"type": "object", "additionalProperties": false, "required": ["format", "size", "sha256", "compile_manifest_sha256", "kernel_interface_sha256", "symbol_evidence_sha256"], "properties": {"format": {"const": "dos-mz"}, "size": {"type": "integer", "minimum": 28}, "sha256": {"$ref": "#/$defs/sha256"}, "compile_manifest_sha256": {"$ref": "#/$defs/sha256"}, "kernel_interface_sha256": {"$ref": "#/$defs/sha256"}, "symbol_evidence_sha256": {"$ref": "#/$defs/sha256"}}}}
+}

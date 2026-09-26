@@ -1,0 +1,147 @@
+{
+  "actual_private_schema_instances_valid": true,
+  "artifact_manifest": {
+    "path": "qa/golden/m10/manifest.json",
+    "sha256": "5ec22d0dd8bb700e2ecf46a0b5d166ae479717d3fe99d35b16e217a3e9e21046"
+  },
+  "child_commit": "54c067af9764ace07459b0c2f5df4f70294d0c50",
+  "complete_raw_evidence_and_projections_equal": true,
+  "evidence_retention": "persistent_ignored",
+  "fatal_controls": {
+    "path": "qa/golden/m10/fatal-controls.json",
+    "sha256": "ca05d76aa89fd8eac3f5c862b3fb9d26c6160f281295587f5d2cf6064f807aa1"
+  },
+  "fatal_runs": [
+    {
+      "boundaries": [
+        "F0",
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "external_bound_not_timeout": true,
+      "guest_quiescent_halt": true,
+      "initialized_before_fatal": true,
+      "inputs_preserved": true,
+      "no_return": true
+    },
+    {
+      "boundaries": [
+        "F0",
+        "F1",
+        "F2",
+        "F3",
+        "F4"
+      ],
+      "external_bound_not_timeout": true,
+      "guest_quiescent_halt": true,
+      "initialized_before_fatal": true,
+      "inputs_preserved": true,
+      "no_return": true
+    }
+  ],
+  "fresh_prerequisite": "M10 FRESH PREREQUISITE PASS",
+  "hardware_run": false,
+  "historical_m09_private_reconstruction_claimed": false,
+  "main_runs": [
+    {
+      "boundaries": [
+        "I0",
+        "I1",
+        "I2",
+        "I3",
+        "I4",
+        "I5",
+        "I6",
+        "I7",
+        "I8",
+        "I9"
+      ],
+      "clock_origin_and_observed_edge": true,
+      "console_boundaries": [
+        "C0",
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6",
+        "C7",
+        "C8",
+        "C9"
+      ],
+      "inputs_preserved": true,
+      "interrupt_masks_vectors_preserved": true,
+      "loader_boundaries": [
+        "L0",
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7",
+        "L8",
+        "L9"
+      ],
+      "memory_partition_and_ownership": true,
+      "no_disk_keyboard_nls_dma_reset": true,
+      "post_init_guest_display_exact": true,
+      "register_segments_flags_stack_preserved": true
+    },
+    {
+      "boundaries": [
+        "I0",
+        "I1",
+        "I2",
+        "I3",
+        "I4",
+        "I5",
+        "I6",
+        "I7",
+        "I8",
+        "I9"
+      ],
+      "clock_origin_and_observed_edge": true,
+      "console_boundaries": [
+        "C0",
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6",
+        "C7",
+        "C8",
+        "C9"
+      ],
+      "inputs_preserved": true,
+      "interrupt_masks_vectors_preserved": true,
+      "loader_boundaries": [
+        "L0",
+        "L1",
+        "L2",
+        "L3",
+        "L4",
+        "L5",
+        "L6",
+        "L7",
+        "L8",
+        "L9"
+      ],
+      "memory_partition_and_ownership": true,
+      "no_disk_keyboard_nls_dma_reset": true,
+      "post_init_guest_display_exact": true,
+      "register_segments_flags_stack_preserved": true
+    }
+  ],
+  "private_execution_in_public_ci": false,
+  "private_gate": "performed",
+  "production_memory_trace": true,
+  "schema_version": 1,
+  "test_flat_memory_absent": true,
+  "two_fatal_runs_equal": true,
+  "two_main_runs_equal": true,
+  "vaeg_commit": "7463f9501d84701f50f3243d5067b6a9dfd0c2e7"
+}

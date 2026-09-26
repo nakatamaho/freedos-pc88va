@@ -1,0 +1,10 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "M11 component lock",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "status", "components"],
+  "properties": {
+    "schema_version": {"const": 1}, "status": {"const": "current-m11"},
+    "components": {"type": "array", "minItems": 3, "maxItems": 3, "items": {"type": "object", "additionalProperties": false, "required": ["name", "path", "commit", "branch", "repository", "role"], "properties": {"name": {"enum": ["fdkernel", "freecom", "country"]}, "path": {"enum": ["components/fdkernel", "components/freecom", "components/country"]}, "commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "branch": {"type": "string", "minLength": 1}, "repository": {"type": "string", "format": "uri"}, "role": {"type": "string", "minLength": 1}, "source_archive_sha256": {"type": ["string", "null"], "pattern": "^[0-9a-f]{64}$"}}}}
+  }
+}

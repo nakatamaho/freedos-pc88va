@@ -1,0 +1,66 @@
+{
+  "private_gate": {
+    "bounded_instruction_count_per_trial": 1000000,
+    "evidence_generation": "fresh_m07r1",
+    "historical_m07_evidence_accepted": false,
+    "input_preservation": "passed",
+    "private_gate_result": "inconclusive",
+    "public_promotion_status": "prohibited_pending_user_approval",
+    "repeated_projections": "byte-identical",
+    "resolved_fields": [],
+    "trial_count": 10,
+    "unresolved_fields": [
+      "accepted_signature_profile",
+      "boot_drive_identity",
+      "entry_cs_ip",
+      "firmware_attempts_m05_geometry",
+      "initial_load_extent",
+      "initial_register_state",
+      "initial_sector_reads",
+      "physical_load_address"
+    ],
+    "variant_count": 5
+  },
+  "public_harness": {
+    "compiled_probe_sha256": "b7f629baec854f9c14776328df12833ba484317968f9cbd94614b33f02a9b03b",
+    "compiled_probe_size": 9,
+    "prior_blocked_public_result_sha256": "c0bdee67a1b0e54a286df9236cb6e9ff48fb699277e3e5aefb3c804721eb3584",
+    "private_overlay_schema_sha256": "e4b6e3eb67280e197c89f142e4e4d29ddc1705476eaebc868839e79de4c7e2a4",
+    "probe_source_sha256": "ae17a5dcd461e80b2a0ca6db73333eebb461d81a0bb9589e464731c4f5bdfa7b",
+    "public_golden_sha256": "fb7637082efeb2d4f57437d723d22453b6493904b7d3e805230e6d00d93aeadd",
+    "public_result_schema_sha256": "4a314a29b243660d9fe796811cfe62f8799646551c4c53a08b410cb01c9fdc73",
+    "variant_definition_sha256": "fdc75b8353c2d1c8a858a86cbabd47eecd6327133c47184c8606f00c4a62768e"
+  },
+  "schema_version": 1,
+  "status": "blocked_no_controlled_probe_execution",
+  "vaeg": {
+    "artifacts": {
+      "canonical_trace_sha256": "6a253f9f0b25e74cf0c95f27d378586c141f821b2f77c8704f3237436f515d9b",
+      "commit_identity_embedded": true,
+      "p0_prior_sha256": "e6f7ef541f5c4d6102ed239727c764300e03d0ee8db659b7af3ea65701dd37d3",
+      "p0_sha256": "529a7a20e0dd7ad127ef6037c1c355558e5eb42d6b7fa5a145aa3a14caf9e58a",
+      "p0_size": 8113816,
+      "p1_prior_sha256": "71d2f5231625c103dce5ad299ebf08073fae169360355869e4be5b7aeae6a481",
+      "p1_sha256": "ed44c3f618d38daed634f4e53d559f65919e19700a1994c9b087effe9e9d592b",
+      "p1_size": 8131880,
+      "two_clean_builds": "byte-identical"
+    },
+    "branch": "topic/freedos-m07-production-trace-r1",
+    "capability": {
+      "flat_test_memory_present": false,
+      "memory_backend": "production",
+      "tests_enabled": false,
+      "trace_enabled": true
+    },
+    "ci": {
+      "all_required_jobs_passed": true,
+      "attempt": 2,
+      "conclusion": "success",
+      "first_attempt_conclusion": "failure",
+      "run_id": 33455847870
+    },
+    "final_commit": "16ad2e0619bf4ed82a739325f7291eba4a6ed8ad",
+    "repository": "https://github.com/nakatamaho/vaeg.git",
+    "starting_commit": "f2117aa2ae3b3c09687365e9eb15c69e7dd82390"
+  }
+}

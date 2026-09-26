@@ -1,6 +1,9 @@
 schema_version: 1
-status: scaffold
-parent_license: deferred
+status: decided
+parent_license: GPL-2.0-or-later
+parent_full_text: COPYING
+parent_notice: LICENSE.md
+decision_milestone: M04R1
 components:
   - name: fdkernel
     repository: https://github.com/nakatamaho/fdkernel.git

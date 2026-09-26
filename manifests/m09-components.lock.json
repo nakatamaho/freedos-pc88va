@@ -1,0 +1,40 @@
+{
+  "components": [
+    {
+      "branch": "topic/m09-pc88va-early-console-output",
+      "commit": "ef46a7ad4b381cf7a301899bee00fec99f5e37a7",
+      "name": "fdkernel",
+      "parent_commit": "105d49a72ec41afe07fc1e7b080bdbd1b3026ae2",
+      "path": "components/fdkernel",
+      "repository": "https://github.com/nakatamaho/fdkernel.git",
+      "role": "PC-88VA early ASCII Text BIOS output with unchanged M08 loader",
+      "source_archive_sha256": "89da321a69e1d26e287ebc310f5c4eb87ec9db49214e5922c6760a6f819c4928"
+    },
+    {
+      "branch": "deterministic-build-timestamp",
+      "commit": "855281a3114b43ad4b8d9a320f2aca39be046bba",
+      "name": "freecom",
+      "parent_commit": null,
+      "path": "components/freecom",
+      "repository": "https://github.com/nakatamaho/freecom_dbcs2.git",
+      "role": "Unchanged accepted Japanese FreeCOM component",
+      "source_archive_sha256": null
+    },
+    {
+      "branch": "master",
+      "commit": "23f189cca3420606eae8723884fa92ccd65eb307",
+      "name": "country",
+      "parent_commit": null,
+      "path": "components/country",
+      "repository": "https://github.com/FDOS/country.git",
+      "role": "Unchanged accepted standalone COUNTRY.SYS component",
+      "source_archive_sha256": null
+    }
+  ],
+  "historical_components_lock": {
+    "path": "manifests/components.lock.json",
+    "sha256": "440e481b28c740875489a6953a246ce5370c44074053c7aad3f80e79ec40c19c"
+  },
+  "schema_version": 1,
+  "status": "current-m09"
+}

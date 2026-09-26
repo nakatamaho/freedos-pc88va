@@ -1,0 +1,25 @@
+{
+  "milestone": "M15",
+  "sources": {
+    "parent": "32a340127fb33a8133104614abf180a4cef6de19",
+    "fdkernel": "d8dbbf7111f86ea4800daeac84ac53ba601aaf32",
+    "freecom": "9cf57b28abf1d98fab7655fb811375a2aa16c6d9",
+    "country": "23f189cca3420606eae8723884fa92ccd65eb307"
+  },
+  "toolchain_image": "sha256:cd5a64eb17deb31b63258e0890629b38dc35c8a7d3f4872a7c72a26b3be04a0a",
+  "source_archives_sha256": {
+    "parent": "af9a80691107ca62b60d4803ea75a5f90d58517accddae7b89135018f60779f5",
+    "fdkernel": "3a3155454d1b662d0ca22fa32c0a17756972f44ec841bc957c079edcf89c0e3f",
+    "freecom": "dc8ba2552001be96fd380e9b089058f367c40f48ee67c17a1dbb6dbee90661ae",
+    "country": "cf0b16ac57e661eeb7e19118cea2d2d200e4545507f15912e8a6462652c2cd9d"
+  },
+  "two_clean_builds_equal": true,
+  "media.d88": {
+    "size": 1331888,
+    "sha256": "ca2861823a4e15c56791518aa8f4b7a29de95cfb1613a1ab1fea630af0f45785"
+  },
+  "media.d88.xz": {
+    "size": 115264,
+    "sha256": "dac5a70ca988c499ce3934e56c03eacb66b33db0b01daae9069053774fe72aa9"
+  }
+}

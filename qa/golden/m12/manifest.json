@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "source": {
+    "commit": "21d9f3450276d42e5fedd1ddb9e80485b888cc07",
+    "archive_sha256": "2a429c0d7d4ea5dca862586e69aaba852bc84de0185015251bfe76f3622e4a0e"
+  },
+  "two_clean_builds_equal": true,
+  "artifacts": {
+    "loader_stage1": {"size": 1024, "sha256": "20efd8a66dde7feac3f48df4bd6e8c4564d70e80a5a8871a8293e735c1585f24"},
+    "loader_stage2": {"size": 4304, "sha256": "db324cbdae11fd1e6085a7957ef171ccf9d6a9be6ea05f3df0eedf83d8f594f7"},
+    "kernel_sys": {"format": "dos-mz", "size": 13980, "sha256": "611b1ee53268a6b7e3137396445211e41e3d0ddb3b60eff8500d8849e2ab0cd9", "compile_manifest_sha256": "c7c0e4e51624352620d08aa3b234151fb9215c1020e2008f30b46306130bc5e9", "kernel_interface_sha256": "ffeb0c54cb83727d8938857da386c62da1d6b6652c8af1343692918b8bbbd2c1", "symbol_evidence_sha256": "c84b5f7adb8a62c0f78fb4365441a41f94bf00884911a4b747d08bbe10769d92"},
+    "raw_media": {"size": 1310720, "sha256": "e529812d3d61e330a3eaf06f29bf85d923541bc20a833d9a0e10b6bbca09833a"},
+    "d88_media": {"size": 1331888, "sha256": "41cdae3ac69393a5e25b9d0dfa3caf7d35cd459f95bb6c65040adde59d0878b9"},
+    "extracted_kernel_sys": {"size": 13980, "sha256": "611b1ee53268a6b7e3137396445211e41e3d0ddb3b60eff8500d8849e2ab0cd9"},
+    "extracted_command_com": {"size": 91143, "sha256": "fabe7744cc7c51c6f72519cc39d89bf77beaf908f994675a97a1e34c93549da1"},
+    "extracted_country_sys": {"size": 42614, "sha256": "04b2d2bc8df382090686f00e547d718d6706d22fb34c34dd77cd55083d5c34d5"}
+  },
+  "fixture": {
+    "sector_bytes": 1024,
+    "lbas": [200, 201],
+    "sectors": {
+      "200": {"size": 1024, "sha256": "2cac5f1c896de6393763988b95cbb09813ce3db8099f606212cf2af17d010579"},
+      "201": {"size": 1024, "sha256": "3965a0837223da7289139ab1486bd9ae899360a9f60bdc70a1aa0faa8a9c8c67"}
+    },
+    "read_only": true,
+    "pattern": "(lba * 17 + byte_offset * 29 + 3) modulo 256"
+  }
+}

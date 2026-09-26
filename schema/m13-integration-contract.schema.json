@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "M13 integration contract",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "milestone", "status", "startup", "resident", "block", "filesystem", "process", "console", "limits"],
+  "properties": {
+    "schema_version": {"const": 1}, "milestone": {"const": "M13"}, "status": {"enum": ["in_progress", "qualified", "accepted"]},
+    "startup": {"type": "object", "additionalProperties": false, "required": ["entry", "machine_init", "dos_vectors"], "properties": {"entry": {"const": "FreeDOSmain"}, "machine_init": {"const": "pc88va_machine_init"}, "dos_vectors": {"type": "array", "minItems": 1, "items": {"type": "string", "pattern": "^0x[0-9a-f]+$"}}}},
+    "resident": {"type": "object", "additionalProperties": false, "required": ["request", "buffer_bytes", "callback", "ownership", "reentrant"], "properties": {"request": {"const": "pc88va_m12_request"}, "buffer_bytes": {"const": 4096}, "callback": {"const": "pc88va_kernel_firmware_read_one"}, "ownership": {"const": "kernel"}, "reentrant": {"const": false}}},
+    "block": {"type": "object", "additionalProperties": false, "required": ["drive", "adapter", "sector_bytes", "max_request_sectors", "write_result"], "properties": {"drive": {"const": "A:"}, "adapter": {"const": "FL_READ"}, "sector_bytes": {"const": 1024}, "max_request_sectors": {"const": 4}, "write_result": {"const": "DOS write-protect error before callback"}}},
+    "filesystem": {"type": "object", "additionalProperties": false, "required": ["implementation", "directory", "dta", "handles"], "properties": {"implementation": {"const": "FreeDOS common FAT12"}, "directory": {"const": "root and ordinary 8.3 paths"}, "dta": {"const": "common DOS DTA"}, "handles": {"const": "common SFT/JFT"}}},
+    "process": {"type": "object", "additionalProperties": false, "required": ["implementation", "formats", "parent_restore"], "properties": {"implementation": {"const": "FreeDOS common MCB/PSP/EXEC"}, "formats": {"const": ["COM", "MZ with relocation"]}, "parent_restore": {"const": true}}},
+    "console": {"type": "object", "additionalProperties": false, "required": ["output", "input", "editing", "encoding"], "properties": {"output": {"const": "M09 pc88va_console_putc"}, "input": {"const": "M11 pc88va_console_getc"}, "editing": {"const": ["Enter", "Backspace"]}, "encoding": {"const": "ASCII"}}},
+    "limits": {"type": "array", "minItems": 1, "items": {"type": "string", "minLength": 1}}
+  }
+}

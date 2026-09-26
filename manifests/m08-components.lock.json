@@ -1,0 +1,40 @@
+{
+  "components": [
+    {
+      "branch": "topic/m08-pc88va-disk-loader-handoff",
+      "commit": "105d49a72ec41afe07fc1e7b080bdbd1b3026ae2",
+      "name": "fdkernel",
+      "parent_commit": "69ccdd8699895722fc537d647ec490685532bdc4",
+      "path": "components/fdkernel",
+      "repository": "https://github.com/nakatamaho/fdkernel.git",
+      "role": "Parameterized PC-88VA disk loader and MZ handoff",
+      "source_archive_sha256": "599da73e96e08118b199dbcb3540f1da8fd639c0eee03e49d5ddc58f5d4064f4"
+    },
+    {
+      "branch": "deterministic-build-timestamp",
+      "commit": "855281a3114b43ad4b8d9a320f2aca39be046bba",
+      "name": "freecom",
+      "parent_commit": null,
+      "path": "components/freecom",
+      "repository": "https://github.com/nakatamaho/freecom_dbcs2.git",
+      "role": "Unchanged accepted Japanese FreeCOM component",
+      "source_archive_sha256": null
+    },
+    {
+      "branch": "master",
+      "commit": "23f189cca3420606eae8723884fa92ccd65eb307",
+      "name": "country",
+      "parent_commit": null,
+      "path": "components/country",
+      "repository": "https://github.com/FDOS/country.git",
+      "role": "Unchanged accepted standalone COUNTRY.SYS component",
+      "source_archive_sha256": null
+    }
+  ],
+  "historical_components_lock": {
+    "path": "manifests/components.lock.json",
+    "sha256": "440e481b28c740875489a6953a246ce5370c44074053c7aad3f80e79ec40c19c"
+  },
+  "schema_version": 1,
+  "status": "current-m08"
+}

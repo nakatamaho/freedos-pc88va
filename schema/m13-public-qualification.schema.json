@@ -1,0 +1,23 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "M13 private session qualification",
+  "type": "object", "additionalProperties": false,
+  "required": ["schema_version", "milestone", "status", "child_commit", "vaeg_commit", "artifact_manifest", "main_runs", "negative_runs", "two_main_runs_equal", "two_negative_runs_equal", "actual_schema_instances_valid", "production_memory", "real_freecom", "exec_forms", "readonly_media", "alternate_fixture", "private_execution_in_public_ci", "hardware_run", "evidence_retention", "writes_attempted"],
+  "properties": {
+    "schema_version": {"const": 1}, "milestone": {"const": "M13"},
+    "status": {"enum": ["M13 PRIVATE VAEG QUALIFICATION PENDING", "M13 PRIVATE VAEG QUALIFICATION PASS"]},
+    "child_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "vaeg_commit": {"const": "7dd453cbd36014ba453a26765b00cd0cc9a99655"},
+    "artifact_manifest": {"$ref": "#/$defs/ref"},
+    "main_runs": {"$ref": "#/$defs/runs"}, "negative_runs": {"$ref": "#/$defs/runs"},
+    "two_main_runs_equal": {"type": "boolean"}, "two_negative_runs_equal": {"type": "boolean"},
+    "actual_schema_instances_valid": {"type": "boolean"}, "production_memory": {"type": "boolean"},
+    "real_freecom": {"type": "boolean"}, "exec_forms": {"type": "boolean"}, "readonly_media": {"type": "boolean"}, "alternate_fixture": {"type": "boolean"},
+    "private_execution_in_public_ci": {"const": false}, "hardware_run": {"const": false}, "evidence_retention": {"const": "persistent_ignored"}, "writes_attempted": {"const": false}
+  },
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "ref": {"type": "object", "additionalProperties": false, "required": ["path", "sha256"], "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"$ref": "#/$defs/sha256"}}},
+    "run": {"type": "object", "additionalProperties": false, "required": ["boundaries", "projection_equal", "executable_identity_equal", "stop_reason_equal", "inputs_preserved", "no_media_mutation", "real_dos_path", "recovered"], "properties": {"boundaries": {"type": "array", "minItems": 5, "items": {"type": "string", "minLength": 2}}, "projection_equal": {"type": "boolean"}, "executable_identity_equal": {"type": "boolean"}, "stop_reason_equal": {"type": "boolean"}, "inputs_preserved": {"type": "boolean"}, "no_media_mutation": {"type": "boolean"}, "real_dos_path": {"type": "boolean"}, "recovered": {"type": "boolean"}}},
+    "runs": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"$ref": "#/$defs/run"}}
+  }
+}

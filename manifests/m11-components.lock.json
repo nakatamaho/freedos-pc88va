@@ -1,0 +1,9 @@
+{
+  "schema_version": 1,
+  "status": "current-m11",
+  "components": [
+    {"name": "fdkernel", "path": "components/fdkernel", "commit": "b08ace36670a05992d8ddaa4279727d9b17bd11e", "branch": "topic/m11-pc88va-console-input", "repository": "https://github.com/nakatamaho/fdkernel.git", "role": "PC-88VA M11 keyboard and early console input" , "source_archive_sha256": "0b2c497f82297e78e0b5707c7dc83e63b031cb435509c4b55664495c91118e93"},
+    {"name": "freecom", "path": "components/freecom", "commit": "855281a3114b43ad4b8d9a320f2aca39be046bba", "branch": "deterministic-build-timestamp", "repository": "https://github.com/nakatamaho/freecom_dbcs2.git", "role": "Unchanged accepted FreeCOM component", "source_archive_sha256": null},
+    {"name": "country", "path": "components/country", "commit": "23f189cca3420606eae8723884fa92ccd65eb307", "branch": "master", "repository": "https://github.com/FDOS/country.git", "role": "Unchanged accepted COUNTRY.SYS component", "source_archive_sha256": null}
+  ]
+}

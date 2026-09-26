@@ -1,0 +1,54 @@
+{
+  "build": {
+    "command": "cd pc88va && wmake -ms -h -f makefile.wc clean all",
+    "container_image_tag": "freedos-pc88va-m01:local",
+    "source_date_epoch": 1787814827,
+    "target_macros": [
+      "DBCS",
+      "JAPAN",
+      "PC88VA"
+    ],
+    "working_directory": "/work/src/fdkernel/pc88va"
+  },
+  "component_identity": {
+    "branch": "necpc88va",
+    "commit": "69ccdd8699895722fc537d647ec490685532bdc4",
+    "parent_commit": "6523acdb87f4665e6068ea331859885267242005",
+    "source_archive_sha256": "d9cc6113cfe297040a7e94f9df70320c52b1f09bf59fb2e7b30e59ddc5001535"
+  },
+  "consumed_identities": {
+    "components_lock": "440e481b28c740875489a6953a246ce5370c44074053c7aad3f80e79ec40c19c",
+    "copying": "0f1e68d9b4a580cdcca4c5f4e3b8046f7a8759da05edd109cff081bc484b3c4b",
+    "m01_contract": "7d66be32b508395d8c36a902389f368e9f38d9abab08085bda89e3d2c5d6d578",
+    "m01_golden": "6fcfe834f90ffc602589ddc63b50d90eba33bbc1802b6bff3c9ef6b9d397c7c3",
+    "m02r1_golden": "4d4e92f92911130109b5b140b2202fc1dfc3abb9af3cd7501b685894d0cb78fd",
+    "m03r1_golden": "d871c7f188313218c2c9481ea9fe7c6abf6acd6369f996b2641021ad27c80550",
+    "m04_contract": "f2e4efdc9d9e3a31dc100b81896427beeaeaca29d36d692b5dfeb5fb459460f4",
+    "m04_evidence": "0612699d305738f2db131cb87c5fa7e9393b206672d6bec27483a602e7e91770",
+    "m04_schema": "f50c099211e2e70f959fb1cc70e93553699f9862113b50c7cda7f29816e6b7c0",
+    "m05_d88": "163e17bd192f22654465a9f61a7c5c411f0aad4160bc020b8522b7e51a62f313",
+    "m05_golden": "b81c7bfdde36df76edfd9e802c22d90c865329f206c7bbb9dae2ddbe39e4abaa",
+    "m05_raw": "507dec28446e82fc69062feb6790998b609fcbfe0bc79941e3f8f22284fb82c8",
+    "m05_schema": "0380d30bec213ade393390498510176fcb14a4f904dd6a9c9c22cee50646fd0f",
+    "m05_specification": "f8ba0e41300ee6e11d7a1f0cf646e335a09df243afc8e1235efade3d17cd06bc",
+    "toolchain_lock": "39c5b3052d71463235a26e8704ab54c1fedb51ee75bb4efb55e6229391a95162"
+  },
+  "historical_nec98_artifacts": {
+    "KWC8616.sys": "3ebddb01abe5e39f16d27439836be283c57d454f012d3c990f01fa8a2b14101d",
+    "b_fat12.bin": "5a480da31b43cde006614d8c3be6fff4d5f227f83055e4ee6ac82665bf6c1212",
+    "b_fat12f.bin": "abc12598f215502ff18fdefb5fb961d82573e31860f34bfd555265e4d04ac559",
+    "b_fat16.bin": "a233d5b7360b5fbee4f4e449d89a77c4adf9cea8210689a64dd5a79fcd75844d",
+    "b_fat32.bin": "607c68fe41ebc150d59078fad7fb859a33b7edfd8f12a5c82c019c9cebcd4ca7",
+    "country.sys": "541f5abefd8d0fd9f4f3eeef7741f36f666eaaa5b0020203a5786a1bc270048f",
+    "kernel.sys": "3ebddb01abe5e39f16d27439836be283c57d454f012d3c990f01fa8a2b14101d",
+    "sys.com": "356f6dce5fa5fb2877a79dd4b7fcc0ff3bc3b00f9c77739fb2c7d2e9f1ae8528"
+  },
+  "media": {
+    "d88_filename": "pc88va-m06-compile-only.d88",
+    "raw_filename": "pc88va-m06-compile-only.img",
+    "replaced_payload": "KERNEL.SYS"
+  },
+  "parent_start_commit": "b41acd3765497498945954756349548c831c7915",
+  "schema_version": 1,
+  "target": "pc88va"
+}

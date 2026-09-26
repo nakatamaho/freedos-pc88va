@@ -1,0 +1,64 @@
+{
+  "classification": "A",
+  "component_gitlinks": {
+    "components/country": "23f189cca3420606eae8723884fa92ccd65eb307",
+    "components/fdkernel": "69ccdd8699895722fc537d647ec490685532bdc4",
+    "components/freecom": "855281a3114b43ad4b8d9a320f2aca39be046bba"
+  },
+  "m08_started": false,
+  "parent_start_commit": "93d88d047159364669975dd95c45ace7531a935b",
+  "private_gate": {
+    "adaptive_variant_count": 0,
+    "bounded_instruction_count_per_trial": 1000000,
+    "control_attempted": true,
+    "control_established": false,
+    "control_repeated": true,
+    "first_divergent_boundary": "firmware_fdd_request_not_reached_by_control",
+    "input_preservation": "passed",
+    "last_common_boundary": "not_applicable_before_media_comparison",
+    "marker_reached": false,
+    "marker_repeat_count": 0,
+    "probe_variant_trial_count": 0,
+    "projection_comparison": "byte-identical",
+    "resolved_fields": [],
+    "trial_count": 2,
+    "unresolved_fields": [
+      "accepted_signature_profile",
+      "boot_drive_identity",
+      "firmware_attempts_m05_geometry",
+      "first_cs_ip",
+      "initial_register_state",
+      "initial_sector_reads",
+      "loaded_extent",
+      "physical_load_address"
+    ]
+  },
+  "private_policy": {
+    "concrete_values_published": false,
+    "private_inputs_used_by_ci": false,
+    "public_promotion_status": "prohibited_pending_user_approval"
+  },
+  "public_harness": {
+    "m07_probe_sha256": "b7f629baec854f9c14776328df12833ba484317968f9cbd94614b33f02a9b03b",
+    "m07_public_golden_sha256": "fb7637082efeb2d4f57437d723d22453b6493904b7d3e805230e6d00d93aeadd",
+    "m07_variant_definition_sha256": "fdc75b8353c2d1c8a858a86cbabd47eecd6327133c47184c8606f00c4a62768e",
+    "m07r1_public_status_sha256": "768b1bde31015b8920d43db1a7822efa98797dda805fc0a4cb6d2c71936c3f69",
+    "m07r1_status_schema_sha256": "e0a1ae543d4af9e9c70f1ee1de44d0fadfca50838651fc3105c86b36fdbe1f4e"
+  },
+  "schema_version": 1,
+  "status": "blocked_positive_control_failed",
+  "vaeg": {
+    "canonical_trace_sha256": "6a253f9f0b25e74cf0c95f27d378586c141f821b2f77c8704f3237436f515d9b",
+    "ci_attempt": 2,
+    "ci_conclusion": "success",
+    "ci_run_id": 33455847870,
+    "commit": "16ad2e0619bf4ed82a739325f7291eba4a6ed8ad",
+    "flat_test_memory_present": false,
+    "memory_backend": "production",
+    "p0_sha256": "529a7a20e0dd7ad127ef6037c1c355558e5eb42d6b7fa5a145aa3a14caf9e58a",
+    "p1_sha256": "ed44c3f618d38daed634f4e53d559f65919e19700a1994c9b087effe9e9d592b",
+    "repository": "https://github.com/nakatamaho/vaeg.git",
+    "tests_enabled": false,
+    "trace_enabled": true
+  }
+}

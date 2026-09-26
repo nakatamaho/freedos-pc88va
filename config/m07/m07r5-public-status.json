@@ -1,0 +1,109 @@
+{
+  "boundaries": {
+    "first_blocked": "B3",
+    "last_reached": "B2",
+    "reached": [
+      "B0",
+      "B1",
+      "B2"
+    ],
+    "unreached": [
+      "B3",
+      "B4",
+      "B5",
+      "B6",
+      "B7"
+    ]
+  },
+  "classification": "HANDSHAKE_INIT",
+  "components": {
+    "clean": true,
+    "gitlinks": {
+      "components/country": "23f189cca3420606eae8723884fa92ccd65eb307",
+      "components/fdkernel": "69ccdd8699895722fc537d647ec490685532bdc4",
+      "components/freecom": "855281a3114b43ad4b8d9a320f2aca39be046bba"
+    }
+  },
+  "fields": {
+    "promotion_status": "prohibited_pending_user_approval",
+    "resolved": [],
+    "resolved_count": 0,
+    "unresolved": [
+      "accepted_signature_profile",
+      "boot_drive_identity",
+      "entry_cs_ip",
+      "firmware_attempts_m05_geometry",
+      "initial_load_extent",
+      "initial_register_state",
+      "initial_sector_reads",
+      "physical_load_address"
+    ]
+  },
+  "irq": {
+    "architectural_reconvergence": true,
+    "classification": "NONCAUSAL_IRQ",
+    "repeated": true
+  },
+  "m07r4": {
+    "classification": "U",
+    "public_status_sha256": "e572fbf6f28d1330223cf13e7c7c8df4b7b1b4b56d9af7f6b77e09983078f4be",
+    "status": "historical_b2_unresolved"
+  },
+  "m08": {
+    "mandatory_resolved_count": 0,
+    "mandatory_unresolved_fields": [
+      "accepted_signature_profile",
+      "boot_drive_identity",
+      "entry_cs_ip",
+      "firmware_attempts_m05_geometry",
+      "initial_load_extent",
+      "initial_register_state",
+      "initial_sector_reads",
+      "physical_load_address"
+    ],
+    "promotion_status": "prohibited_pending_user_approval"
+  },
+  "milestone": "M07R5",
+  "observations": {
+    "controlled_marker": false,
+    "drive_motor_stable": true,
+    "fdc_command": false,
+    "main_subsystem_request": true,
+    "sector_transfer": false,
+    "subsystem_executed": true,
+    "subsystem_scheduled": true
+  },
+  "predicate": {
+    "category": "HANDSHAKE_INIT",
+    "producer_fully_identified": false,
+    "wait_loop_identified": true
+  },
+  "private_gate": {
+    "concrete_values_published": false,
+    "input_preservation": "passed",
+    "projection_determinism": "byte-identical",
+    "result": "conclusive_for_b2_only",
+    "status": "performed"
+  },
+  "promotion_status": "prohibited_pending_user_approval",
+  "status": "M07R5 BLOCKED \u2014 FIRMWARE PREDICATE PRODUCER UNOBSERVABLE",
+  "supersedes": {
+    "historical_no_request_admissible": false,
+    "reason": "The earlier no-request observation is not admissible as current firmware evidence; valid repeated traces reached the abstract request boundary."
+  },
+  "trial_summary": {
+    "evidence_backed_changed_predicate_trials": 0,
+    "extended_same_condition_pairs": 1,
+    "primary_comparison_pairs": 1,
+    "repeated_projection_result": "byte-identical"
+  },
+  "vaeg": {
+    "accepted_ci_run_id": 33489650578,
+    "commit": "6bdaae109c92d26a65f0b0b1a9a50eeae5c1385a",
+    "production_memory": true,
+    "repository": "https://github.com/nakatamaho/vaeg.git",
+    "source_changed": false,
+    "tests_disabled": true
+  },
+  "version": 1
+}

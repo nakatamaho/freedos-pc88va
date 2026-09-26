@@ -1,0 +1,37 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "M09 abstract private qualification result, without private values",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "child_commit", "vaeg_commit", "kernel_sha256", "private_gate", "runs", "two_clean_runs_equal", "evidence_retention", "public_promotion_status", "hardware_run", "private_gate_in_public_ci"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "child_commit": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "vaeg_commit": {"const": "7463f9501d84701f50f3243d5067b6a9dfd0c2e7"},
+    "kernel_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "private_gate": {"const": "performed"},
+    "runs": {"type": "array", "minItems": 2, "maxItems": 2, "items": {"$ref": "#/$defs/run"}},
+    "two_clean_runs_equal": {"const": true},
+    "evidence_retention": {"const": "persistent_ignored"},
+    "public_promotion_status": {"const": "prohibited_pending_user_approval"},
+    "hardware_run": {"const": false},
+    "private_gate_in_public_ci": {"const": false}
+  },
+  "$defs": {
+    "run": {
+      "type": "object", "additionalProperties": false,
+      "required": ["console_boundaries", "loader_boundaries", "exact_guest_message", "cursor_CR_LF_wrap", "bottom_row_policy", "ownership_preserved", "inputs_preserved", "firmware_operational_state_restored", "no_unexpected_disk_keyboard_clock_DMA"],
+      "properties": {
+        "console_boundaries": {"const": ["C0", "C1", "C2", "C3", "C4", "C5", "C6", "C7", "C8", "C9"]},
+        "loader_boundaries": {"const": ["L0", "L1", "L2", "L3", "L4", "L5", "L6", "L7", "L8", "L9"]},
+        "exact_guest_message": {"const": true},
+        "cursor_CR_LF_wrap": {"const": true},
+        "bottom_row_policy": {"const": true},
+        "ownership_preserved": {"const": true},
+        "inputs_preserved": {"const": true},
+        "firmware_operational_state_restored": {"const": true},
+        "no_unexpected_disk_keyboard_clock_DMA": {"const": true}
+      }
+    }
+  }
+}
