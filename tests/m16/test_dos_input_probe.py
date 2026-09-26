@@ -23,9 +23,10 @@ class DosInputProbeTests(unittest.TestCase):
         script = (ROOT / 'tests/m16/dos_input_probe.script').read_text().splitlines()
         commands = [line.strip() for line in script
                     if line.strip() and not line.lstrip().startswith('#')]
-        self.assertEqual(len(commands), 24)
-        self.assertEqual(commands[:3], ['DOSINPUT', '@text q', '@key ctrl-c'])
-        self.assertEqual(commands[3], '@enter')
+        self.assertEqual(len(commands), 27)
+        self.assertEqual(commands[:6], ['@wait 240', '@enter', '@enter', 'DOSINPUT',
+                                        '@text q', '@key ctrl-c'])
+        self.assertEqual(commands[6], '@enter')
         self.assertEqual(commands[-1], '@key shift-right')
 
 

@@ -1,4 +1,8 @@
 # M16 guest input acceptance, through normal frontend keyboard events.
+# Let the firmware and shell start, then accept their optional date/time prompts.
+@wait 240
+@enter
+@enter
 DOSINPUT
 @text q
 @key ctrl-c
