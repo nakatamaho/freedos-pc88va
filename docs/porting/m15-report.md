@@ -194,6 +194,16 @@ The first host completeness checker compared the whole fixture stream with
 only the API-row subset and omitted setup-call records; that checker was
 corrected, and the complete source-ordered sequence was then verified.
 
+The ordinary FreeCOM batch/stream workflow was then run on the same r7
+candidate in VA2. SHELLQA exercised batch control flow, redirection, append,
+pipeline, PATH lookup, and shell-state recovery. The guest completed and the
+saved media contained every expected payload; failure markers and temporary
+directories were absent, the FAT copies agreed, and the prepared input and ROM
+set remained unchanged. This is **VAEG PASS** for SHELLQA in VA2 only. The first
+host check incorrectly treated `LOWER.TXT` as a leftover even though the batch
+creates it and uses it as input; the corrected check verified its expected
+contents and retained it as an intentional fixture output.
+
 ## Acceptance still open
 
 The user passed the M15 SYS human gate on the earlier VA/VA2 candidates,
