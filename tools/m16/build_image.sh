@@ -57,7 +57,7 @@ assert source.count('$(CFG):')==1
 Path('config.mak').write_text(source.replace('$(CFG):',line+'$(CFG):',1))
 PY
 gcc utilsc/critstrs.c -o utilsc/critstrs.exe
-bash build.sh necpc88va no-xms-swap wc english
+bash build.sh generic no-xms-swap wc english
 cp command.com /work/result/COMMAND.COM
 cd /work/source/components/country
 nasm -f bin country.asm -o /work/result/COUNTRY.SYS
