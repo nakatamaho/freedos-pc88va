@@ -58,6 +58,17 @@ the applicable component license notices. The designated milestone D88 is stored
 `images/milestones/m15/` with its source identities and hashes. Intermediate
 build products remain outside Git.
 
+To archive a newly completed build (the destination must not already contain
+a distribution):
+
+```sh
+python3 tools/m15/archive_image.py --build build/m15-image
+```
+
+The archive command checks both build outputs, creates `media.d88.xz` and
+`manifest.json`, and verifies decompression. Review and commit those files
+together with the milestone's distribution README.
+
 ## Public platform configuration
 
 The owner clarified that ROM/private media must remain uncommitted but the

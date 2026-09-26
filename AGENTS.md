@@ -36,12 +36,35 @@ ROM contents, private disk contents, raw observations, and trace payloads
 remain excluded. New media builds must not depend on old candidate disks or
 saved DOS executables; generate payloads and filesystem structures from the
 committed sources and explicit public configuration.
-The owner authorizes public distribution of those source-built D88 images.
-As an explicit exception to the generated-artifact rule, store the public
-source-built distribution D88 compressed with xz under
-`images/milestones/mNN/`, together with exact source/build identities, hashes,
-and component license notices. Retain one designated distribution per
-milestone; do not add private test disks or intermediate build products.
+
+## Reproducible milestone distributions
+
+Every milestone distribution D88 must be clean-buildable using public inputs
+only: committed source, pinned component gitlinks, committed configuration,
+and publicly obtainable, identity-pinned toolchains and dependencies. A fresh
+checkout must be sufficient after the documented toolchain setup. Never
+require private JSON, ROMs, previous milestone D88s, saved DOS binaries,
+untracked scripts, or another developer's build directory to generate it.
+Keep any ROM-dependent emulator verification separate from the build.
+
+Commit and push the complete build recipe and required public settings before
+designating the distribution. Build in clean exported source trees, verify
+two independent builds produce identical D88 bytes, and preserve the exact
+parent/component commits and toolchain identities. Normalize only explicitly
+documented non-semantic build metadata; do not conceal binary differences.
+Do not use unavailable private inputs as an excuse to archive an irreproducible
+milestone image. Fix the build recipe first.
+
+The owner authorizes public distribution and Git storage of these images.
+As an explicit exception to the generated-artifact prohibitions in this file,
+archive the designated D88 with xz under `images/milestones/mNN/`. Commit its
+compressed and uncompressed SHA-256 hashes, byte sizes, exact source/build
+identities, clean rebuild and extraction instructions, applicable license
+notices or references, and the actual validation scope alongside it. Verify
+decompression reproduces the designated D88 exactly. Retain one designated
+distribution per milestone; never substitute private test disks or commit
+intermediate build products. A published image is not automatically a new
+VAEG or hardware PASS.
 
 Use these evidence labels precisely: `HOST PASS`, `VAEG PASS`, `HARDWARE PASS`,
 and `DEFERRED HARDWARE VALIDATION`. Real hardware is optional and non-blocking,
