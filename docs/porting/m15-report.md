@@ -234,6 +234,13 @@ a DOS-owned block rather than requiring its header to disappear. This is
 **VAEG PASS** for the PROCESS fixture in VA2 only; broader M15-PROCESS
 acceptance remains open.
 
+The ABSIO fixture also ran on the same VA2 candidate. All seven ordered
+records passed with balanced stacks and no guest failure. This exercised the
+absolute-sector read entry points, packet reads, first/final sector reads,
+out-of-range rejection, and the required legacy stack cleanup; the disposable
+media remained FAT-consistent and all existing files were unchanged. This is
+**VAEG PASS** for the ABSIO fixture in VA2 only.
+
 The MEMORY fixture was run on the same VA2 candidate with VAEG's default RAM
 configuration and no explicit RAM-size override. The first command invoked
 FreeCOM's built-in `MEMORY` display rather than `MEMORY.COM`; that attempt is
@@ -256,9 +263,9 @@ current-source banner check has now been owner-confirmed in both modes. This
 focused startup-banner check is **VAEG PASS** in VA and VA2. The focused
 placement checks are **VAEG PASS** in VA and VA2 at all four supported memory
 capacities, and the previously listed ordinary recorder QA is **VAEG PASS** in
-both modes. The newer DEVICE, SHELLQA, CLOCK, HANDLES, PATHS, PROCESS, and
-MEMORY fixtures are qualified in VA2 only. These checks do not close full M15
-acceptance:
+both modes. The newer DEVICE, ABSIO, SHELLQA, CLOCK, HANDLES, PATHS, PROCESS,
+and MEMORY fixtures are qualified in VA2 only. These checks do not close full
+M15 acceptance:
 qualification of the remaining mandatory workflow families and final M15
 acceptance are still open. The initially mispackaged candidate is not counted
 as qualification evidence. Hardware validation remains
