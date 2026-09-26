@@ -3,7 +3,6 @@
 The complete build uses only this repository, its pinned component gitlinks,
 the public `config/m15/loader.json`, and the pinned toolchain. It does not read
 an old D88, ROM, private evidence directory, or a saved DOS executable.
-`m15-r7-rebuild` is an historical comparison tool, not this build command.
 
 ## Build
 
@@ -28,6 +27,8 @@ The driver exports the committed parent and exact component gitlinks with
 `git archive`. Tracked edits and mismatched component checkouts are rejected.
 It builds twice in fresh, network-disabled containers without source mounts.
 Open Watcom executable identities are checked against the toolchain lock.
+The map's `Created on:` header is normalized to the fixed source epoch;
+all linker section and symbol records are retained.
 The pinned Unicorn wheel for placement verification is fetched before the
 offline builds; it is not a guest input. No new Colima VM is created.
 

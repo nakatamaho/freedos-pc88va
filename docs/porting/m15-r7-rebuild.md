@@ -1,5 +1,10 @@
 # M15 r7 candidate rebuild recipe
 
+This is the historical r6 comparison procedure, not the source-build entry
+point. To generate a new disk without old media or saved binaries, use
+[M15 build from source](m15-source-build.md). The private paths below are
+example inputs for the historical procedure and are not supplied by a clone.
+
 The r7 candidate is a reproducible rebuild of the recovered r6 media, not a
 claim that the unavailable original r6 build directory was recovered. The
 recipe consumes the immutable r6 D88 seed and a Git-excluded private input

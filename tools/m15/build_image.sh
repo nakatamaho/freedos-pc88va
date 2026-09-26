@@ -30,6 +30,16 @@ cd components/fdkernel/pc88va
 wmake -ms -h -f makefile.m13.wc clean all
 cp bin/KERNEL.SYS /work/result/kernel-linked.exe
 cp build/KVA8616.map /work/result/kernel.map
+python3 - <<'PY'
+import os,re
+from datetime import datetime,timezone
+from pathlib import Path
+p=Path('/work/result/kernel.map')
+stamp=datetime.fromtimestamp(int(os.environ['SOURCE_DATE_EPOCH']),timezone.utc).strftime('%y/%m/%d %H:%M:%S')
+text,count=re.subn(r'^Created on:.*$', 'Created on:       '+stamp, p.read_text(), flags=re.MULTILINE)
+assert count==1
+p.write_text(text)
+PY
 cd ../sys
 wmake -ms -h -f makefile.pc88va clean all
 cp sysva.exe /work/result/SYSVA.EXE

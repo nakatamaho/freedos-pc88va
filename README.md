@@ -1,22 +1,31 @@
 # FreeDOS PC-88VA Integration
 
-This is an experimental FreeDOS integration project for NEC PC-88VA. The
-current milestone is M01 upstream baseline buildability; no bootable release
-exists.
+This is an experimental FreeDOS integration project for NEC PC-88VA. M15 is
+owner-accepted with the deferred work listed in its
+[acceptance report](docs/porting/m15-report.md).
+
+For a complete build from public source and configuration, see
+[M15 build from source](docs/porting/m15-source-build.md):
+
+```sh
+make m01-image   # Prepare the pinned toolchain once.
+make m15-image
+```
+
+This produces `build/m15-image/media.d88` without an old candidate D88 or
+saved DOS binaries. Initialize the pinned submodules first as shown below.
 
 Kernel-only is not a complete distribution. The three foundational components
 are:
 
-- `components/fdkernel`: the editable experimental NEC98 kernel build-fix fork,
-  `nakatamaho/fdkernel:nec98-current`; no PC-88VA porting change is included.
-- `components/freecom`: the editable DBCS/Japanese command processor fork,
-  `nakatamaho/freecom_dbcs2:deterministic-build-timestamp`.
+- `components/fdkernel`: the `nakatamaho/fdkernel` fork with PC-88VA adapters.
+- `components/freecom`: the `nakatamaho/freecom_dbcs2` command processor fork.
 - `components/country`: the read-only upstream NLS/DBCS data component,
   `FDOS/country:master`.
 
-The parent repository pins exact component commits with gitlinks and
-`manifests/components.lock.json`. The kernel and FreeCOM forks are experimental
-and their branch names do not imply PC-88VA boot success.
+The parent gitlinks pin the exact M15 component commits. The M01 manifests
+retain their historical baseline identities. The kernel and FreeCOM forks
+are experimental; branch names do not imply PC-88VA boot success.
 
 Clone the repository with its components:
 

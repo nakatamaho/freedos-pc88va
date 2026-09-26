@@ -28,6 +28,15 @@ Do not commit private artifacts or facts derived from private artifacts. Do not
 change the separate VAEG checkout. PC-98 behavior is a structural precedent,
 not PC-88VA evidence.
 
+The owner clarified the public build boundary: project-authored platform
+adapters, memory-layout settings, and BIOS call interfaces needed to build
+the port are source inputs and must be versioned. Do not classify these as
+private merely because they were tested against private media or firmware.
+ROM contents, private disk contents, raw observations, and trace payloads
+remain excluded. New media builds must not depend on old candidate disks or
+saved DOS executables; generate payloads and filesystem structures from the
+committed sources and explicit public configuration.
+
 Use these evidence labels precisely: `HOST PASS`, `VAEG PASS`, `HARDWARE PASS`,
 and `DEFERRED HARDWARE VALIDATION`. Real hardware is optional and non-blocking,
 but only an actual hardware result can receive `HARDWARE PASS`.

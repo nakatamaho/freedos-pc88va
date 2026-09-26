@@ -12,6 +12,16 @@ spec.loader.exec_module(composer)
 
 
 class SourceImageTests(unittest.TestCase):
+    def test_public_profile_schema(self):
+        import jsonschema
+        schema = json.loads((ROOT / 'schema/m15-loader-overlay.schema.json').read_text())
+        jsonschema.Draft202012Validator.check_schema(schema)
+        profile = json.loads((ROOT / 'config/m15/loader.json').read_text())
+        jsonschema.validate(profile, schema)
+        profile['layout']['profile_class'] = 'unknown'
+        with self.assertRaises(jsonschema.ValidationError):
+            jsonschema.validate(profile, schema)
+
     def test_roundtrip_fragment_boundary_and_empty_file(self):
         profile = json.loads((ROOT / 'config/m15/loader.json').read_text())
         payloads = {'LOADER.BIN': bytes(1500), 'EMPTY.TXT': b'',

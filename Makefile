@@ -159,7 +159,7 @@ help:
 		'  m13-verify        Validate M13 schemas, instances and component identities' \
 		'  m13-accept        Run the enforced M13 public acceptance gate' \
 		'  m15-loader-build  Build a loader twice from one explicit overlay and bind its inputs' \
-		'  m15-r7-rebuild    Rebuild r7 twice and compare all r6-seed files before QA' \
+		'  m15-image         Build complete media twice from public source inputs' \
 		'  help              Show this help' \
 		'  submodules        Initialize/update locked submodules' \
 		'  component-status  Show submodule status' \
