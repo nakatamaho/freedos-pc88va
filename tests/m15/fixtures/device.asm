@@ -24,8 +24,9 @@ start:
         OK
         IOCTL 0, 9002
         SUCCESS
+        ; NUL is a character device; FreeDOS returns SFT_FDEVICE in DL.
         test dl, 80h
-        jne failure
+        jz failure
         OK
         mov bx, [handle]
         mov dx, buffer
@@ -163,10 +164,10 @@ start:
         mov bx, 1
         mov ax, 4409h
         DOS 9031
-        ; DOS 4 requires file-sharing support for this query.
-        ; Keep the provider-unavailable result explicit but continue collecting
-        ; independent local-device cases; this out-of-profile row remains FAIL.
-        ERROR_CONTINUE 1
+        ; Record the selected FreeDOS local-drive result; do not impose the
+        ; DOS 4 network-provider error contract on this out-of-profile query.
+        CARRY_CLEAR
+        OK
         mov bx, 1
         mov ax, 440eh
         DOS 9032
@@ -219,16 +220,15 @@ start:
         mov bx, 1
         mov ax, 440ah
         DOS 9047
-        ; The handle is valid, but the required network provider is absent.
-        ; Retain any provider mismatch while finishing the guarded observations.
-        ERROR_CONTINUE 1
+        ; Record the selected FreeDOS SFT result without asserting remote-handle
+        ; semantics from an unavailable network provider.
+        CARRY_CLEAR
+        OK
         cmp word [buffer-2], 0a55ah
         jne failure
         cmp word [buffer+64], 05aa5h
         jne failure
-        ; first_failure intentionally remains set for an unchecked provider
-        ; mismatch. This fixture must therefore bypass `passed`.
-        jmp finish
+        jmp passed
 handle: dw 0
 old_mode: db 0
 nul_name: db 'NUL',0

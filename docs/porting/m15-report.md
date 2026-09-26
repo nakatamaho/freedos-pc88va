@@ -178,6 +178,18 @@ On the exact QA-contract correction commit, M15 host workflow run
 passed the finite inventory check, parent acceptance and memory-placement
 regressions, and the full PC-88VA kernel component suite.
 
+On 2026-09-26, the DEVICE fixture's expectations were aligned with the pinned
+FreeDOS implementation: NUL's device bit is set, and the local-drive/ordinary-
+handle IOCTL observations do not require the MS-DOS 4 network-provider error
+contract. No kernel behavior changed. Two isolated Linux/amd64 builds of the
+updated fixture matched. One VA2 VAEG run produced the complete 45-record
+fixture sequence; all records were checked, stacks were balanced, the first
+failure field was zero, the 26 REQUIRED device-family case IDs were present,
+and FAT copies agreed. This is **VAEG PASS** for the DEVICE fixture in VA2 only.
+The first host completeness checker compared the whole fixture stream with
+only the API-row subset and omitted setup-call records; that checker was
+corrected, and the complete source-ordered sequence was then verified.
+
 ## Acceptance still open
 
 The user passed the M15 SYS human gate on the earlier VA/VA2 candidates,
@@ -186,8 +198,9 @@ only startup text, so those SYS steps are not being repeated. The new
 current-source banner check has now been owner-confirmed in both modes. This
 focused startup-banner check is **VAEG PASS** in VA and VA2. The focused
 placement checks are **VAEG PASS** in VA and VA2 at all four supported memory
-capacities, and the focused ordinary recorder QA above is **VAEG PASS** in
-both modes. These do not close full M15 acceptance: qualification of the
-remaining mandatory workflow families and final M15 acceptance are still
-open. The initially mispackaged candidate is not counted as qualification
+capacities, and the previously listed ordinary recorder QA is **VAEG PASS** in
+both modes. The newer DEVICE fixture is qualified in VA2 only. These checks do
+not close full M15 acceptance: qualification of the remaining mandatory
+workflow families and final M15 acceptance are still open. The initially
+mispackaged candidate is not counted as qualification
 evidence. Hardware validation remains **DEFERRED HARDWARE VALIDATION**.

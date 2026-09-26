@@ -197,6 +197,19 @@ allowed when it does not bypass a required runtime dependency.
 
 ## 3. Build a bounded API inventory for the FreeDOS port
 
+### 3.0. Find the scope, cases, and current results
+
+This goal document is the acceptance specification; it is not a linear
+per-fixture run list. The finite API ledger, including each row's disposition,
+case IDs, expected behavior, and `fixture_sources`, is
+`config/m15/api-inventory.json`. The executable guest scenarios are under
+`tests/m15/fixtures/`; host checks are under `tests/m15/test_*.py`. A fixture
+may call additional DOS services to establish preconditions, so a row's case
+IDs are not necessarily the complete record sequence emitted by that fixture.
+Use `docs/porting/m15-report.md` for public aggregate progress and the excluded
+`.private-evidence/m15/progress.md` for current run state. File presence or a
+guest PASS message alone is not a qualified result.
+
 Inspect the pinned local kernel's dispatch, headers, build guards, documentation,
 and existing tests. Inspect FreeCOM's actual selected configuration and callers.
 Enumerate INT 21h AH functions and relevant AL/AX or other subfunction values;

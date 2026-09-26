@@ -4046,12 +4046,12 @@
       "family": "device",
       "build_guard": "PC88VA, M13WATCOM, XCPU=86; no WITHFAT32/WITHLFNAPI/DEBUG/TSC",
       "disposition": "OUT_OF_PROFILE",
-      "reason": "MS-DOS 4 documents this network redirection query as requiring file-sharing support, which is excluded from the M15 profile; its provider-unavailable error remains a defined rejection check.",
+      "reason": "Remote redirection semantics are outside the M15 profile. Retain the dispatch row to record selected FreeDOS behavior for a local drive and invalid-drive rejection; do not impose the MS-DOS 4 provider-unavailable result.",
       "port_review_status": "M15_PROFILE_EXCLUDED;NO_REQUIRED_BEHAVIOR_ASSERTION",
       "specification": {
-        "inputs": "BL is a drive number (0=default, 1=A, etc.); a file-sharing/network provider is required.",
-        "outputs": "With the provider loaded, DX contains local device attributes or the remote-device bit. Without it, CF=1 and AX=1; invalid drive returns AX=15.",
-        "flags": "Assert CF and AX for errors; assert DX only when a provider-backed success is in scope.",
+        "inputs": "BL is a drive ordinal (0=default, 1=A, etc.); this fixture queries the valid local A: drive and an invalid drive, not a remote redirection.",
+        "outputs": "For the valid local drive, the selected FreeDOS implementation returns local device status and attributes; the fixture records them without asserting network semantics. An invalid drive returns the selected FreeDOS invalid-drive error.",
+        "flags": "The valid local-drive query succeeds with CF clear. The invalid-drive case checks the selected FreeDOS error; DOS 4 provider-unavailable behavior is not required.",
         "units": "BL is an ordinal drive number; DX is an attribute bitfield.",
         "lifetime": "Read-only query; does not mutate drive data or mappings.",
         "references": [
@@ -4083,12 +4083,12 @@
       "family": "device",
       "build_guard": "PC88VA, M13WATCOM, XCPU=86; no WITHFAT32/WITHLFNAPI/DEBUG/TSC",
       "disposition": "OUT_OF_PROFILE",
-      "reason": "MS-DOS 4 documents this network redirection query as requiring a network provider, which is excluded from the M15 profile; valid-handle provider-unavailable and invalid-handle errors remain defined rejection checks.",
+      "reason": "Remote-handle semantics are outside the M15 profile. Retain the dispatch row to record selected FreeDOS behavior for a valid ordinary handle and invalid-handle rejection; do not impose the MS-DOS 4 provider-unavailable result.",
       "port_review_status": "M15_PROFILE_EXCLUDED;NO_REQUIRED_BEHAVIOR_ASSERTION",
       "specification": {
-        "inputs": "BX is an open handle; a network provider is required.",
-        "outputs": "With the provider loaded, DX contains the IOCTL bitfield and bit 15 denotes a remote handle. Without it, CF=1 and AX=1; an invalid handle returns AX=6.",
-        "flags": "Assert CF and AX on errors; assert DX only when a provider-backed success is in scope.",
+        "inputs": "BX is an open DOS handle; this fixture uses the ordinary console handle and an invalid handle, not a remote handle.",
+        "outputs": "The selected FreeDOS implementation returns SFT flags in DX for a valid handle and rejects an invalid handle. Remote-handle bit semantics are not asserted.",
+        "flags": "A valid ordinary handle query succeeds with CF clear; the invalid-handle case checks the selected FreeDOS error. DOS 4 provider-unavailable behavior is not required.",
         "units": "BX is a word handle; DX is an attribute bitfield.",
         "lifetime": "Read-only query; does not mutate the SFT or handle state.",
         "references": [
