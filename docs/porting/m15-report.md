@@ -211,6 +211,12 @@ returned by DOS agreed with the independently inspected FAT directory entry
 for the timestamped file; both FAT copies agreed. This is **VAEG PASS** for the
 CLOCK fixture in VA2 only.
 
+The ordinary HANDLES fixture also ran on the r7 candidate in VA2. All 53
+source-ordered records passed with balanced stacks. The expected empty test
+file remained, the temporary second file was removed, pre-existing files and
+directories were unchanged, and both FAT copies agreed. This is **VAEG PASS**
+for the HANDLES fixture in VA2 only.
+
 ## Acceptance still open
 
 The user passed the M15 SYS human gate on the earlier VA/VA2 candidates,
@@ -220,9 +226,9 @@ current-source banner check has now been owner-confirmed in both modes. This
 focused startup-banner check is **VAEG PASS** in VA and VA2. The focused
 placement checks are **VAEG PASS** in VA and VA2 at all four supported memory
 capacities, and the previously listed ordinary recorder QA is **VAEG PASS** in
-both modes. The newer DEVICE, SHELLQA, and CLOCK fixtures are qualified in VA2
-only. These checks do not close full M15 acceptance: qualification of the
-remaining mandatory workflow families and final M15 acceptance are still
-open. The initially
-mispackaged candidate is not counted as qualification
-evidence. Hardware validation remains **DEFERRED HARDWARE VALIDATION**.
+both modes. The newer DEVICE, SHELLQA, CLOCK, and HANDLES fixtures are
+qualified in VA2 only. These checks do not close full M15 acceptance:
+qualification of the remaining mandatory workflow families and final M15
+acceptance are still open. The initially mispackaged candidate is not counted
+as qualification evidence. Hardware validation remains
+**DEFERRED HARDWARE VALIDATION**.
