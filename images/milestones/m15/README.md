@@ -2,7 +2,9 @@
 
 `media.d88.xz` contains the normal FreeDOS PC-88VA system disk generated from
 the source commits in `manifest.json`. It contains KERNEL.SYS, LOADER.BIN,
-COMMAND.COM, COUNTRY.SYS, SYSVA.EXE and SYS.ID, without ROMs or old QA results.
+COMMAND.COM, COUNTRY.SYS, SYSVA.EXE and SYS.ID, plus COMPROBE.COM, MZPROBE.EXE,
+TYPEA.TXT, TYPEB.TXT and COMDATA.TXT required by the existing SYSVA transfer
+contract. All are source-generated; there are no ROMs or old QA results.
 
 Extract a working copy from the repository root:
 

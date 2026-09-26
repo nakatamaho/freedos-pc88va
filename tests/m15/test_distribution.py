@@ -2,6 +2,7 @@
 import hashlib
 import json
 import lzma
+import re
 from pathlib import Path
 import subprocess
 import sys
@@ -30,5 +31,8 @@ class DistributionTests(unittest.TestCase):
         spec['image']['volume_label'] = 'PC88VA-M15'
         report, files = inspect(media, spec)
         self.assertTrue(report['fat_copies_equal'])
-        self.assertEqual(set(files), {'KERNEL.SYS', 'LOADER.BIN', 'COMMAND.COM',
-                                     'COUNTRY.SYS', 'SYSVA.EXE', 'SYS.ID'})
+        sys_source = subprocess.check_output(['git', '-C', 'components/fdkernel',
+                       'show', manifest['sources']['fdkernel'] + ':sys/pc88va.c'], cwd=ROOT, text=True)
+        assets = sys_source.split('static asset files[ASSETS] = {', 1)[1].split('};', 1)[0]
+        required = set(re.findall(r'\{"([A-Z0-9.]+)"', assets))
+        self.assertEqual(set(files), required | {'SYSVA.EXE', 'SYS.ID'})

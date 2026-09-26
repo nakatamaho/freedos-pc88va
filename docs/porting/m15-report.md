@@ -8,13 +8,11 @@ deferred. Their individual QA results remain unqualified; acceptance does not
 convert an incomplete or unrun test into a pass. Historical progress notes
 below describe the evidence available before this final owner decision.
 
-## Scope
-
-### Post-acceptance source build and distribution
+## Post-acceptance source build and distribution
 
 The owner requested a public-input-only clean build and an xz-compressed
 distribution in Git. The complete build recipe is committed at
-`ef14128de519fbea0eb7112fd3e7557cd03275e7`, using kernel component
+`0913737edb78f7236fe81c7c293f4323172587d9`, using kernel component
 `d8dbbf7111f86ea4800daeac84ac53ba601aaf32`. The component change adds a public
 loader-profile category and its validation test; it does not change DOS
 behavior. Two clean offline Linux/amd64 builds produced identical media and
@@ -22,12 +20,12 @@ system binaries. The map creation timestamp and elapsed link time are
 explicitly normalized; linker symbols and placement information are retained.
 
 The exact implementation's M15 host CI passed as run
-[36226351360](https://github.com/nakatamaho/freedos-pc88va/actions/runs/36226351360).
+[36226668191](https://github.com/nakatamaho/freedos-pc88va/actions/runs/36226668191).
 Local linked-placement and actual unpack-bridge verification passed, together
 with 23 memory-placement, four carrier-tail, and 12 loader tests. The new
 filesystem composer and public profile have focused host tests. A byte-identical
 distribution reached the kernel banner, FreeCOM, and its prompt in a VA2
-VAEG boot smoke check: **VAEG PASS** for that bounded boot check only. Full
+VAEG smoke check; its source-built COM and MZ support programs also ran: **VAEG PASS** for that bounded boot check only. Full
 guest QA was not repeated; hardware validation of this distribution was not run.
 
 The public artifact and source identities are under
@@ -35,6 +33,8 @@ The public artifact and source identities are under
 Follow [the clean source-build instructions](m15-source-build.md) to regenerate
 it without private inputs or old disk images. This packaging work preserves
 the owner-accepted M15 closure and its deferred issues.
+
+## Scope
 
 M15 ports the selected FreeDOS kernel and FreeCOM to the existing PC-88VA
 profile. This is not a FreeDOS fork or an MS-DOS compatibility project.

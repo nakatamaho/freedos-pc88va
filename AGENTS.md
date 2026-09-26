@@ -70,8 +70,9 @@ Use these evidence labels precisely: `HOST PASS`, `VAEG PASS`, `HARDWARE PASS`,
 and `DEFERRED HARDWARE VALIDATION`. Real hardware is optional and non-blocking,
 but only an actual hardware result can receive `HARDWARE PASS`.
 
-Do not commit generated files, build products, images, or logs. Use English for
-code, comments, and file names. Fail closed: an unrun test is not a success.
+Except for the designated milestone archives described above, do not commit
+generated files, build products, images, or logs. Use English for code,
+comments, and file names. Fail closed: an unrun test is not a success.
 M00 permits scaffold and provenance work only. M01 permits the parent
 repository build harness and reproducibility evidence for pinned component
 exports. The approved M01F exception is one fdkernel child commit that changes
