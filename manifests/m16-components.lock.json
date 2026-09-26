@@ -12,13 +12,13 @@
     },
     {
       "branch": "topic/m16-floppy-formats-console-input",
-      "commit": "cef9f24d8e03c4938f106d860bd831a00932dc4e",
+      "commit": "8e9ba7377e87c1c743993e63e0781d7158a650b3",
       "name": "fdkernel",
       "parent_commit": "d8dbbf7111f86ea4800daeac84ac53ba601aaf32",
       "path": "components/fdkernel",
       "repository": "https://github.com/nakatamaho/fdkernel.git",
-      "role": "M16 PC-88VA floppy I/O and M13 staging ring support",
-      "source_archive_sha256": "cf19ed19345948b4b289d8c6c7e3b5ad21ad227886c8ea1d2a7e915a6714099d",
+      "role": "M16 PC-88VA floppy I/O, CHS-preserving firmware callbacks, and M13 staging ring support",
+      "source_archive_sha256": "6d9533f158bb8f2d7620d9f4427c28bda469d924e686661663e7d3d3a7697058",
       "upstream": "https://github.com/lpproj/fdkernel.git"
     },
     {
