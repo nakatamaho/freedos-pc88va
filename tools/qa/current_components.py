@@ -143,9 +143,25 @@ def resolve_current_components(root: Path, historical: dict[str, str]) -> dict[s
                 raise CurrentComponentError("M15 control commit is unavailable") from exc
             if pinned != expected_commit:
                 raise CurrentComponentError(f"M15 control component pin differs: {path}")
-        for path in ("components/freecom", "components/country"):
-            if current[path] != M15_CONTROL_COMPONENTS[path] or by_path[path].get("parent_commit") is not None:
-                raise CurrentComponentError(f"M16 unexpectedly changes {path}")
+        freecom = "components/freecom"
+        freecom_parent = M15_CONTROL_COMPONENTS[freecom]
+        if (
+            current[freecom] == freecom_parent
+            or by_path[freecom].get("parent_commit") != freecom_parent
+        ):
+            raise CurrentComponentError("M16 FreeCOM must descend from the exact M15 control")
+        result = subprocess.run(
+            ("git", "merge-base", "--is-ancestor", freecom_parent, current[freecom]),
+            cwd=root / freecom,
+            check=False,
+            stdout=subprocess.DEVNULL,
+            stderr=subprocess.DEVNULL,
+        )
+        if result.returncode:
+            raise CurrentComponentError("M16 FreeCOM commit is not a descendant of the M15 control")
+        path = "components/country"
+        if current[path] != M15_CONTROL_COMPONENTS[path] or by_path[path].get("parent_commit") is not None:
+            raise CurrentComponentError(f"M16 unexpectedly changes {path}")
     else:
         for path in ("components/freecom", "components/country"):
             if current[path] != historical[path] or by_path[path].get("parent_commit") is not None:
