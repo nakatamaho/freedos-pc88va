@@ -6,16 +6,16 @@ from pathlib import Path
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path[:0] = [str(ROOT / 'tools/m05'), str(ROOT / 'tools/m14'),
+sys.path[:0] = [str(ROOT / 'tools/m15'),
                str(ROOT / 'components/fdkernel/pc88va/tools')]
-from build_media import build_boot_record, build_d88, build_directory_entry, set_fat12_entry
-from common import derive_layout
-from inspect_fat12 import inspect
+from media import build_boot_record, build_d88, build_directory_entry, set_fat12_entry
+from media import derive_layout
+from media import inspect
 from build_loader import build_stage, validate_overlay
 
 
 def compose(payloads, overlay, output, epoch):
-    spec = json.loads((ROOT / 'config/m05/media.json').read_text())
+    spec = json.loads((ROOT / 'config/m15/media.json').read_text())
     spec['d88']['disk_name'] = 'FDOS-PC88VA-M15'
     spec['image']['volume_label'] = 'PC88VA-M15'
     layout = derive_layout(spec)

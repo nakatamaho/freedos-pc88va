@@ -23,12 +23,12 @@ from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[2]
 EVIDENCE = ROOT / ".private-evidence"
-sys.path[:0] = [str(ROOT / "tools/m05"), str(ROOT / "tools/m14")]
+sys.path[:0] = [str(ROOT / "tools/m15")]
 
-from build_media import build_d88  # noqa: E402
-from common import derive_layout  # noqa: E402
-from inspect_fat12 import inspect as inspect_fat12  # noqa: E402
-from inspect_media import parse_d88  # noqa: E402
+from media import build_d88  # noqa: E402
+from media import derive_layout  # noqa: E402
+from media import inspect as inspect_fat12  # noqa: E402
+from media import parse_d88  # noqa: E402
 
 
 FORMAT = "m15-r7-input-profile-v1"
@@ -183,7 +183,7 @@ def validate_source_lock(profile: dict) -> dict[str, str]:
     subprocess.run(["git", "diff", "--quiet", lock["fixture_source_commit"], current,
                     "--", "tests/m15/fixtures"], cwd=ROOT, check=True,
                    stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    builder = git_output("rev-parse", "HEAD:tools/m13/build_compressed_kernel.py")
+    builder = git_output("rev-parse", "HEAD:tools/m15/build_compressed_kernel.py")
     if builder != lock["carrier_builder_blob_sha1"]:
         raise RebuildError("M13 carrier builder differs from the r6 source lock")
     observed["parent_head"] = current
@@ -228,7 +228,7 @@ def load_payloads(profile_path: Path, profile: dict) -> dict[str, dict]:
 def build_once(seed: bytes, profile: dict, payload_sources: dict[str, dict]) -> tuple[bytes, dict]:
     if len(seed) != profile["seed_media"]["size"] or sha256(seed) != profile["seed_media"]["sha256"]:
         raise RebuildError("r6 seed D88 does not match the private recipe binding")
-    spec = json.loads((ROOT / "config/m05/media.json").read_text(encoding="utf-8"))
+    spec = json.loads((ROOT / "config/m15/media.json").read_text(encoding="utf-8"))
     if len(seed) < 17:
         raise RebuildError("r6 seed D88 header is truncated")
     try:

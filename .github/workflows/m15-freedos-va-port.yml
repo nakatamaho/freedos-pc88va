@@ -43,7 +43,7 @@ jobs:
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y -qq nasm
-          python3 -m pip install --disable-pip-version-check --user --ignore-installed -r tools/m13/requirements.txt
+          python3 -m pip install --disable-pip-version-check --user --ignore-installed -r tools/m15/requirements.txt
       - name: Verify the finite FreeDOS port boundary
         run: |
           python3 -B tools/m15/verify_api_inventory_scope.py
@@ -51,8 +51,6 @@ jobs:
       - name: Run M15 parent acceptance and memory-placement regressions
         run: |
           python3 -B -m unittest discover -s tests/qa -p 'test_milestone_acceptance.py'
-          python3 -B -m unittest discover -s tests/m13 -p 'test_memory_placement.py'
-          python3 -B -m unittest tests.m13.test_m13_public.M13PublicTests.test_common_core_and_real_adapter_are_selected
       - name: Run the complete PC-88VA kernel component suite
         run: python3 -B -m unittest discover -s components/fdkernel/pc88va/tests -p 'test_*.py'
       - name: Confirm public sources remain clean

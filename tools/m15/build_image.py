@@ -9,6 +9,9 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
+PARENT_INPUTS = ('tools/m15', 'tests/m15', 'config/m15',
+                 'schema/m15-loader-overlay.schema.json',
+                 'manifests/toolchains.lock.json', 'COPYING', 'LICENSE.md')
 
 
 def call(*args):
@@ -47,7 +50,10 @@ def main():
         repo = ROOT if name == 'parent' else ROOT / 'components' / name
         archive = inputs / (name + '.tar')
         with archive.open('xb') as f:
-            subprocess.run(['git', '-C', str(repo), 'archive', sha], stdout=f, check=True)
+            command = ['git', '-C', str(repo), 'archive', sha]
+            if name == 'parent':
+                command.extend(PARENT_INPUTS)
+            subprocess.run(command, stdout=f, check=True)
         archives[name] = hashlib.sha256(archive.read_bytes()).hexdigest()
     # This verifier dependency is separate from the guest toolchain. Fetch a
     # pinned Linux wheel once; both build containers remain network-disabled.

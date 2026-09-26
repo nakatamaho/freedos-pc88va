@@ -9,8 +9,8 @@ import sys
 import unittest
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path[:0] = [str(ROOT / 'tools/m05'), str(ROOT / 'tools/m14')]
-from inspect_fat12 import inspect
+sys.path[:0] = [str(ROOT / 'tools/m15')]
+from media import inspect
 
 
 class DistributionTests(unittest.TestCase):
@@ -26,7 +26,7 @@ class DistributionTests(unittest.TestCase):
             pin = subprocess.check_output(['git', 'rev-parse',
                     manifest['sources']['parent'] + ':components/' + component], cwd=ROOT, text=True).strip()
             self.assertEqual(pin, manifest['sources'][component])
-        spec = json.loads((ROOT / 'config/m05/media.json').read_text())
+        spec = json.loads((ROOT / 'config/m15/media.json').read_text())
         spec['d88']['disk_name'] = 'FDOS-PC88VA-M15'
         spec['image']['volume_label'] = 'PC88VA-M15'
         report, files = inspect(media, spec)

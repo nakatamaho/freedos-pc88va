@@ -6,10 +6,10 @@ import struct
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path[:0] = [str(ROOT / 'tools/m05'), str(ROOT / 'tools/m14')]
-from common import derive_layout, encode_dos_name
-from inspect_media import parse_d88
-from inspect_fat12 import inspect
+sys.path[:0] = [str(ROOT / 'tools/m15')]
+from media import derive_layout, encode_dos_name
+from media import parse_d88
+from media import inspect
 
 
 def clock_timestamp(image, spec, results):

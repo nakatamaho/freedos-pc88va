@@ -121,9 +121,12 @@ m15-loader-build:
 	@PYTHONDONTWRITEBYTECODE=1 $(M15_PYTHON) -B tools/m15/build_loader_pair.py --overlay "$(M15_LOADER_OVERLAY)" --output "$(M15_LOADER_OUTPUT)" $(if $(M15_LOADER_REFERENCE),--expected-loader "$(M15_LOADER_REFERENCE)") $(if $(M15_LOADER_EXTENT),--stage1-extent "$(M15_LOADER_EXTENT)") $(if $(M15_BOOT_REFERENCE),--expected-stage1 "$(M15_BOOT_REFERENCE)")
 
 M15_R7_SEED ?=
-.PHONY: m15-image
+.PHONY: m15-image m15-toolchain
 M15_IMAGE_OUTPUT ?= build/m15-image
 M15_IMAGE_TOOLCHAIN ?= freedos-pc88va-m01:local
+m15-toolchain:
+	@PYTHONDONTWRITEBYTECODE=1 $(M15_PYTHON) -B tools/m15/toolchain.py --image "$(M15_IMAGE_TOOLCHAIN)"
+
 m15-image:
 	@PYTHONDONTWRITEBYTECODE=1 $(M15_PYTHON) -B tools/m15/build_image.py --output "$(M15_IMAGE_OUTPUT)" --image "$(M15_IMAGE_TOOLCHAIN)"
 
@@ -160,6 +163,7 @@ help:
 		'  m13-accept        Run the enforced M13 public acceptance gate' \
 		'  m15-loader-build  Build a loader twice from one explicit overlay and bind its inputs' \
 		'  m15-image         Build complete media twice from public source inputs' \
+		'  m15-toolchain     Prepare or verify the pinned M15 build environment' \
 		'  help              Show this help' \
 		'  submodules        Initialize/update locked submodules' \
 		'  component-status  Show submodule status' \

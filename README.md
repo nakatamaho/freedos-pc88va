@@ -8,7 +8,7 @@ For a complete build from public source and configuration, see
 [M15 build from source](docs/porting/m15-source-build.md):
 
 ```sh
-make m01-image   # Prepare the pinned toolchain once.
+make m15-toolchain   # Prepare or verify the pinned toolchain.
 make m15-image
 ```
 

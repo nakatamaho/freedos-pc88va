@@ -15,6 +15,7 @@ for name in fdkernel freecom country; do
     tar -xf "/input/$name.tar" -C "/work/source/components/$name"
 done
 cd /work/source
+python3 tools/m15/verify_isolation.py
 mkdir -p /work/pydeps
 python3 -m zipfile -e /input/unicorn-*.whl /work/pydeps
 export PYTHONPATH=/work/pydeps
@@ -49,7 +50,7 @@ cd /work/source/components/freecom
 python3 - <<'PY'
 import json
 from pathlib import Path
-stamp=json.loads(Path('/work/source/config/m01/freecom-build-timestamp.json').read_text())
+stamp=json.loads(Path('/work/source/config/m15/freecom-build-timestamp.json').read_text())
 source=Path('config.std').read_text()
 line='CFLAGS2 = -DFREECOM_BUILD_DATE=\\"'+stamp['formatted_date']+'\\" -DFREECOM_BUILD_TIME=\\"'+stamp['formatted_time']+'\\"\n'
 assert source.count('$(CFG):')==1
@@ -61,14 +62,14 @@ cp command.com /work/result/COMMAND.COM
 cd /work/source/components/country
 nasm -f bin country.asm -o /work/result/COUNTRY.SYS
 cd /work/source
-nasm -f bin tests/m13/fixtures/com_probe.asm -o /work/result/COMPROBE.COM
-nasm -f obj tests/m13/fixtures/mz_probe.asm -o /work/result/mz_probe.obj
+nasm -f bin tests/m15/system/com_probe.asm -o /work/result/COMPROBE.COM
+nasm -f obj tests/m15/system/mz_probe.asm -o /work/result/mz_probe.obj
 wlink system dos option quiet name /work/result/MZPROBE.EXE file /work/result/mz_probe.obj
 python3 tools/m15/finish_image.py --output /work/result
 mkdir -p build
-python3 tools/m13/verify_linked_placement.py --kernel /work/result/kernel-linked.exe --map /work/result/kernel.map --carrier /work/result/KERNEL.SYS --placement /work/result/carrier.json
+python3 tools/m15/verify_linked_placement.py --kernel /work/result/kernel-linked.exe --map /work/result/kernel.map --carrier /work/result/KERNEL.SYS --placement /work/result/carrier.json
 if [ "${M15_BUILD_PASS:-1}" = 1 ]; then
-python3 -B -m unittest discover -s tests/m13 -p test_memory_placement.py
+python3 -B -m unittest discover -s tests/m15 -p test_memory_placement.py
 python3 -B -m unittest discover -s tests/m15 -p test_carrier_tail.py
 python3 -B -m unittest discover -s components/fdkernel/pc88va/tests -p test_m08_build_loader.py
 fi

@@ -9,6 +9,9 @@ tokens in the respective `SYS.ID` files followed by CR/LF. The root volume
 must be flat; nested directories are outside this prepared-target contract.
 `tools/m15/prepare_sys_target.py` prepares the empty target from the selected
 source's loader allocation, without copying executable payloads or boot code.
+Its FAT12/D88 producer and independent readback routines are in
+`tools/m15/media.py`, using `config/m15/media.json`. Target preparation does
+not import code or configuration from historical milestone directories.
 
 The existing kernel SYS utility assumes a 512-byte PC boot record and PC disk
 interfaces. The VA backend must use the accepted 1024-byte FAT12 layout and DOS

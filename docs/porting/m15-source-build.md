@@ -13,7 +13,7 @@ on Linux pass `M15_PYTHON=python3`. For new Colima profiles use
 `tools/host/colima.sh` as described in the host setup documentation.
 
 ```sh
-make m01-image   # Once, unless the pinned toolchain image is already installed.
+make m15-toolchain   # Verify the installed toolchain, or build it if absent.
 make m15-image
 ```
 
@@ -25,6 +25,18 @@ make m15-image M15_IMAGE_OUTPUT=build/m15-image-next
 
 The driver exports the committed parent and exact component gitlinks with
 `git archive`. Tracked edits and mismatched component checkouts are rejected.
+The parent export includes only M15 tools, tests and configuration plus the
+shared toolchain lock and license files. Other milestone directories are
+absent, and the build checks that isolation before compiling. FAT12/D88
+production and inspection, carrier generation and placement verification
+are owned by `tools/m15`; the media layout is in `config/m15/media.json`.
+The component's historical filenames such as `makefile.m13.wc` remain part
+of its pinned source interface and do not refer to parent milestone tooling.
+
+`tools/m15/toolchain.py` and its local Dockerfile provide toolchain setup.
+The compatible installed image retains the tag `freedos-pc88va-m01:local`;
+that name requires no M01 scripts or configuration. Use `--rebuild` with the
+toolchain script to force reconstruction from the public pinned download.
 It builds twice in fresh, network-disabled containers without source mounts.
 Open Watcom executable identities are checked against the toolchain lock.
 The map's `Created on:` header is normalized to the fixed source epoch and

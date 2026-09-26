@@ -8,7 +8,7 @@ from pathlib import Path
 import sys
 from compose_image import compose, ROOT
 
-sys.path.insert(0, str(ROOT / 'tools/m13'))
+sys.path.insert(0, str(ROOT / 'tools/m15'))
 from build_compressed_kernel import build
 from build_loader import build_stage
 

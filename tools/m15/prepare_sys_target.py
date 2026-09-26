@@ -10,10 +10,10 @@ import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]
-sys.path[:0] = [str(ROOT / 'tools/m05'), str(ROOT / 'tools/m14')]
-from common import derive_layout, encode_dos_name
-from build_media import build_boot_record, build_d88, set_fat12_entry
-from inspect_fat12 import inspect
+sys.path[:0] = [str(ROOT / 'tools/m15')]
+from media import derive_layout, encode_dos_name
+from media import build_boot_record, build_d88, set_fat12_entry
+from media import inspect
 
 
 def prepare(source, spec, token):
@@ -80,7 +80,7 @@ def main():
         if subprocess.run(['git', '-C', str(ROOT), 'check-ignore', '-q', '--', str(path)]).returncode:
             raise ValueError('OUTPUT_MUST_BE_GIT_EXCLUDED')
     result, record = prepare(args.source.read_bytes(),
-                             json.loads((ROOT / 'config/m05/media.json').read_text()),
+                             json.loads((ROOT / 'config/m15/media.json').read_text()),
                              args.target_token)
     output.parent.mkdir(parents=True, exist_ok=True)
     output.open('xb').write(result)
