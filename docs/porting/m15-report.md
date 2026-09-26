@@ -234,6 +234,19 @@ a DOS-owned block rather than requiring its header to disappear. This is
 **VAEG PASS** for the PROCESS fixture in VA2 only; broader M15-PROCESS
 acceptance remains open.
 
+The MEMORY fixture was run on the same VA2 candidate with VAEG's default RAM
+configuration and no explicit RAM-size override. The first command invoked
+FreeCOM's built-in `MEMORY` display rather than `MEMORY.COM`; that attempt is
+not counted. The explicit program run produced all 61 source-ordered records,
+with no guest failure, unchecked record, or stack imbalance. Host inspection
+validated 45 complete MCB snapshots, stable arena bounds, restoration of the
+complete chain after 16 allocation/free cycles, unchanged pre-existing files,
+and equal FAT copies. The initial host sequence check omitted two allocation-
+strategy readback calls present in the fixture; the corrected verifier now
+matches the fixture's recorded order. This is **VAEG PASS** for the MEMORY
+fixture in VA2 at the default configuration only. The broader M15-MEMORY gate
+remains open pending configuration-specific qualification.
+
 ## Acceptance still open
 
 The user passed the M15 SYS human gate on the earlier VA/VA2 candidates,
@@ -243,8 +256,9 @@ current-source banner check has now been owner-confirmed in both modes. This
 focused startup-banner check is **VAEG PASS** in VA and VA2. The focused
 placement checks are **VAEG PASS** in VA and VA2 at all four supported memory
 capacities, and the previously listed ordinary recorder QA is **VAEG PASS** in
-both modes. The newer DEVICE, SHELLQA, CLOCK, HANDLES, PATHS, and PROCESS
-fixtures are qualified in VA2 only. These checks do not close full M15 acceptance:
+both modes. The newer DEVICE, SHELLQA, CLOCK, HANDLES, PATHS, PROCESS, and
+MEMORY fixtures are qualified in VA2 only. These checks do not close full M15
+acceptance:
 qualification of the remaining mandatory workflow families and final M15
 acceptance are still open. The initially mispackaged candidate is not counted
 as qualification evidence. Hardware validation remains

@@ -5,6 +5,8 @@ import struct
 
 SNAPSHOTS = (list(range(6006, 6014)) + [6016, 6017, 6019, 6020] +
              list(range(6026, 6058)) + [6059])
+MEMORY_CASES = (list(range(6001, 6006)) + [6061] + list(range(6006, 6016)) +
+                [6062] + list(range(6016, 6021)) + list(range(6022, 6061)))
 
 
 def decode(data):
@@ -43,9 +45,10 @@ def decode(data):
 def require_memory_lifetime(snapshots, result):
     if [snapshot['case_id'] for snapshot in snapshots] != SNAPSHOTS:
         raise ValueError('MCB_MISSING_OR_UNEXPECTED_SNAPSHOT')
-    records = {record['case_id']: record for record in result['records']}
-    if set(records) != set(range(6001, 6061)) or result['first_failure']:
+    if ([record['case_id'] for record in result['records']] != MEMORY_CASES or
+            result['first_failure']):
         raise ValueError('MCB_CASE_RECORDS_INCOMPLETE')
+    records = {record['case_id']: record for record in result['records']}
     if any(not record['checked'] or record['stack_delta'] for record in records.values()):
         raise ValueError('MCB_GUEST_ASSERTION_OR_STACK')
     psp = records[6002]['bx']
