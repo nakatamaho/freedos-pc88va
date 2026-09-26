@@ -3,7 +3,6 @@
 """Create fresh FAT12/D88 media from source-built payloads, without a seed."""
 import json
 from pathlib import Path
-import struct
 import sys
 
 ROOT = Path(__file__).resolve().parents[2]

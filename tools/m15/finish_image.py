@@ -5,7 +5,6 @@ import argparse
 import hashlib
 import json
 from pathlib import Path
-import subprocess
 import sys
 from compose_image import compose, ROOT
 
@@ -22,7 +21,7 @@ def main():
     carrier = build(out / 'kernel-linked.exe',
                     ROOT / 'components/fdkernel/pc88va/kernel/m13_unpack.asm',
                     out / 'KERNEL.SYS', load_segment=0x2700, file_segment=0x2700,
-                    scratch_segment=0x3700, source_offset=640, ring_offset=0xef40,
+                    scratch_segment=0x3700, source_offset=4096, ring_offset=0xef40,
                     compact_bridge=True, link_map=out / 'kernel.map')
     limit = max(carrier['minimum_runtime_memory_top'],
                 *(hi for lo, hi in profile['layout']['regions'].values()))
