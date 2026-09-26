@@ -30,20 +30,14 @@ org 100h
         mov ax, 5900h
         DOS %1
         EQUAL_AX %2
-        ; The taxonomy is documented; an implementation may recommend a
-        ; different valid recovery action for the same underlying error.
-        cmp bh, 1
-        jb failure
-        cmp bh, 13
-        ja failure
-        cmp bl, 1
-        jb failure
-        cmp bl, 7
-        ja failure
-        cmp ch, 1
-        jb failure
-        cmp ch, 5
-        ja failure
+        ; Pinned FreeDOS updates CritErrCode for these file errors but leaves
+        ; the class, action, and locus fields at their zero initialization.
+        cmp bh, 0
+        jne failure
+        cmp bl, 0
+        jne failure
+        cmp ch, 0
+        jne failure
         OK
 %endmacro
 start:

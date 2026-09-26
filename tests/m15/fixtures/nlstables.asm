@@ -45,7 +45,8 @@ org 100h
         mov di, table
         mov ax, 6500h | %2
         DOS %1+3
-        ERROR 1
+        ; Pinned FreeDOS kernel/nls.c returns DE_INVLDDATA (13) for CX=0.
+        ERROR 13
         call check_untouched
         mov bx, 437
         mov dx, 0fffeh
@@ -53,7 +54,9 @@ org 100h
         mov di, table
         mov ax, 6500h | %2
         DOS %1+4
-        ERROR 2
+        ; FreeDOS syscall_MUX14 returns DE_INVLDFUNC (1) for an
+        ; unavailable country/codepage package.
+        ERROR 1
         call check_untouched
         mov bx, 0ffffh
         mov dx, 0ffffh

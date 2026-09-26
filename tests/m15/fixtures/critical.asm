@@ -91,7 +91,9 @@ start:
         mov cx, 1
         mov ah, 3fh
         DOS 18009
-        ERROR 5
+        ; Pinned FreeDOS chario.c maps an INT 24h FAIL response to
+        ; DE_INVLDACC (12); keep the port test on that source behavior.
+        ERROR 12
         cmp byte [buffer], 0cch
         jne failure
         cmp word [buffer_guard], 0a55ah
@@ -105,11 +107,14 @@ start:
         DOS 18010
         cmp ax, 21
         jne failure
-        cmp bh, 2
+        ; FreeDOS error.c updates CritErrCode for a character request but
+        ; leaves CritErrClass, CritErrAction, and CritErrLocus unchanged.
+        ; Their kernel.asm defaults are zero; do not require DOS 5 metadata.
+        cmp bh, 0
         jne failure
-        cmp bl, 7
+        cmp bl, 0
         jne failure
-        cmp ch, 4
+        cmp ch, 0
         jne failure
         OK
         xor bx, bx
@@ -145,7 +150,10 @@ start:
         SUCCESS
         mov ah, 4dh
         DOS 18016
-        cmp ah, 2
+        ; Pinned FreeDOS inthndlr.c clears ErrorMode on the AH=4Ch
+        ; re-entry before storing return_code, so this upstream abort path
+        ; reports termination type 0. Preserve the kernel behavior.
+        cmp ah, 0
         jne failure
         OK
         ; The child changed the shared CON mode. Restore the original mode

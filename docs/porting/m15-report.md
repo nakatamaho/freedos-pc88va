@@ -290,6 +290,29 @@ snapshots retained stable arena bounds, and the complete initial chain was
 restored. This is **VAEG PASS** for the LOADMODE fixture in VA2 only and does
 not by itself close full M15 acceptance.
 
+On 2026-09-26, the CRITICAL, EXTENDED, and NLSTABLE fixture expectations were
+aligned with the pinned FreeDOS source behavior; no kernel behavior changed.
+The corrected fixture sources were rebuilt in two isolated Linux/amd64 runs
+with byte-identical outputs. The same VA2 r7 candidate then completed the
+NLSTABLE, BREAKQA, CRITICAL, PSP, and DRVMAP fixtures. Their host verifiers
+checked all 33, 40, 23, 17, and 7 ordered recorder records respectively, with
+no assertion failures or stack imbalance. BREAKQA and CRITICAL received the
+required key events. This is **VAEG PASS** for those five fixtures in VA2 only.
+
+The locked REQUIRED fixture-source mapping names 31 distinct paths. Thirty
+sources are present and 28 have completed VA2 qualification. Three remain
+unqualified:
+
+- BLKIO cannot be run as specified because the guest has no DOS-visible B:
+  drive. Attaching a second D88 to VAEG FDD2 does not create B:; that attempt
+  is not counted.
+- COMPANION recorded only its initial three cases and did not return from the
+  first CP/M CALL 5 path. The fixture did not complete, so it is not a pass.
+- JFT's `tests/m15/fixtures/jft.asm` source is absent, leaving required cases
+  without an executable fixture. This finite source gap is tracked in
+  [Issue #7](https://github.com/nakatamaho/freedos-pc88va/issues/7); no API rows
+  or FreeDOS behavior were changed to work around it.
+
 ## Acceptance still open
 
 The user passed the M15 SYS human gate on the earlier VA/VA2 candidates,
@@ -300,14 +323,13 @@ focused startup-banner check is **VAEG PASS** in VA and VA2. The focused
 placement checks are **VAEG PASS** in VA and VA2 at all four supported memory
 capacities, and the previously listed ordinary recorder QA is **VAEG PASS** in
 both modes. The newer DEVICE, ABSIO, SHELLQA, SHELLREC, CLOCK, HANDLES, PATHS,
-PROCESS (including LOADMODE and RESIDENT), and MEMORY fixtures are qualified
-in VA2 only. These checks do not close full M15 acceptance:
-qualification of the remaining mandatory workflow families and final M15
-acceptance are still open. The initially mispackaged candidate is not counted
-as qualification evidence. The interactive CRITICAL sequence is not
-qualified: the available headless input did not deliver the required F1 key,
-so its partial run is not counted. Keyboard-dependent break and critical-error
-recovery therefore remain open. The exact normal and independently booted
-transferred media, tested revisions, and final acceptance record also remain
-to be reconciled for handoff. Hardware validation remains **DEFERRED HARDWARE
-VALIDATION**.
+PROCESS (including LOADMODE and RESIDENT), MEMORY, NLSTABLE, BREAKQA, CRITICAL,
+PSP, and DRVMAP fixtures are qualified in VA2 only. The corrected CRITICAL run
+used a key-enabled worker and checked all 23 records; earlier partial attempts
+without F1 remain unqualified. Full M15 acceptance remains open: BLKIO needs an
+explicit DOS-visible B: setup, COMPANION needs a completed CALL 5 sequence, and
+JFT source coverage is tracked by Issue #7. The initially mispackaged
+candidate is not counted as qualification evidence. Exact normal and
+independently booted transferred-media identities, tested revisions, and the
+final acceptance record still need handoff reconciliation. Hardware
+validation remains **DEFERRED HARDWARE VALIDATION**.
