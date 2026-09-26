@@ -12,24 +12,24 @@
     },
     {
       "branch": "topic/m16-floppy-formats-console-input",
-      "commit": "8e9ba7377e87c1c743993e63e0781d7158a650b3",
+      "commit": "f8f995038b5e71549f3b6d507c466cd97f800e2f",
       "name": "fdkernel",
       "parent_commit": "d8dbbf7111f86ea4800daeac84ac53ba601aaf32",
       "path": "components/fdkernel",
       "repository": "https://github.com/nakatamaho/fdkernel.git",
       "role": "M16 PC-88VA floppy I/O, CHS-preserving firmware callbacks, and M13 staging ring support",
-      "source_archive_sha256": "6d9533f158bb8f2d7620d9f4427c28bda469d924e686661663e7d3d3a7697058",
+      "source_archive_sha256": "428ea31c1c3e9b79f6008fe7925a1ef97d3a7273d47d6aa584219245615328d4",
       "upstream": "https://github.com/lpproj/fdkernel.git"
     },
     {
       "branch": "topic/m16-floppy-formats-console-input",
-      "commit": "9cf57b28abf1d98fab7655fb811375a2aa16c6d9",
+      "commit": "29bbbc7748e5c1b9a70fbc56c7faa33f6cd84c2e",
       "name": "freecom",
       "parent_commit": null,
       "path": "components/freecom",
       "repository": "https://github.com/nakatamaho/freecom_dbcs2.git",
       "role": "Unchanged FreeCOM M15 control component",
-      "source_archive_sha256": "dc8ba2552001be96fd380e9b089058f367c40f48ee67c17a1dbb6dbee90661ae",
+      "source_archive_sha256": "e61d4e889a6b10f9e05903f9575bb1466dfc5b20cb232f5286219bc173bbb24a",
       "upstream": "https://github.com/lpproj/freecom_dbcs2.git"
     }
   ],

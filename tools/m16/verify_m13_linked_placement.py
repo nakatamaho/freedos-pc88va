@@ -47,6 +47,7 @@ def verify(kernel, link_map):
     syms = symbols(link_map)
     members = ['pc88va_dos_getc_', 'pc88va_console_read_dos_',
                'pc88va_console_peek_dos_', 'pc88va_m11_character_',
+               'pc88va_m16_input_flush_', 'pc88va_m16_count_',
                'pc88va_m10_state_', 'ConRead', 'CommonNdRdExit']
     frames = {syms[name][0] for name in members}
     if len(frames) != 1:
@@ -80,8 +81,8 @@ def verify(kernel, link_map):
     cpu.mem_write(address('_ReqPktPtr'), struct.pack('<HH', 0, packet // 16))
     cpu.mem_write(packet, bytes([26, 0, 5]) + bytes(23))
     cpu.mem_write(address('pc88va_m10_state_'), b'\x02')
-    write_word('pc88va_m11_character_', ord('v'))
-    cpu.mem_write(address('m11_pending_valid'), b'\x01')
+    write_word('pc88va_m16_queue_', ord('v'))
+    cpu.mem_write(address('pc88va_m16_count_'), b'\x01')
     cpu.hook_add(UC_HOOK_INSN, lambda uc, port, size, _: 0xff,
                  None, 1, 0, r.UC_X86_INS_IN)
     def platform_int(uc, interrupt, _):
@@ -119,14 +120,14 @@ def verify(kernel, link_map):
     for _ in range(2):
         invoke('CommonNdRdExit', '_IOExit')
         assert cpu.mem_read(packet + 13, 1) == b'v'
-        assert cpu.mem_read(address('m11_pending_valid'), 1) == b'\x01'
+        assert cpu.mem_read(address('pc88va_m16_count_'), 1) == b'\x01'
     invoke('ConRead', '_IOExit', 1)
     assert cpu.mem_read(destination, 1) == b'v'
-    assert cpu.mem_read(address('m11_pending_valid'), 1) == b'\x00'
+    assert cpu.mem_read(address('pc88va_m16_count_'), 1) == b'\x00'
     invoke('CommonNdRdExit', '_IODone')
-    cpu.mem_write(address('m11_pending_valid'), b'\x01')
+    cpu.mem_write(address('pc88va_m16_count_'), b'\x01')
     invoke('ConInpFlush', '_IOExit')
-    assert cpu.mem_read(address('m11_pending_valid'), 1) == b'\x00'
+    assert cpu.mem_read(address('pc88va_m16_count_'), 1) == b'\x00'
     for name, words in [('FL_RESET', 1), ('WRITEPCCLOCK', 2), ('WRITEATCLOCK', 4)]:
         seg, off = syms[name]
         caller = b''.join(b'\xb8' + struct.pack('<H', 0xA000 + i) + b'\x50'

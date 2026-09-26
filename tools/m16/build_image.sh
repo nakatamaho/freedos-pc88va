@@ -57,12 +57,13 @@ assert source.count('$(CFG):')==1
 Path('config.mak').write_text(source.replace('$(CFG):',line+'$(CFG):',1))
 PY
 gcc utilsc/critstrs.c -o utilsc/critstrs.exe
-bash build.sh generic no-xms-swap wc english
+bash build.sh pc88va no-xms-swap wc english
 cp command.com /work/result/COMMAND.COM
 cd /work/source/components/country
 nasm -f bin country.asm -o /work/result/COUNTRY.SYS
 cd /work/source
 nasm -f bin tests/m16/system_com_probe.asm -o /work/result/COMPROBE.COM
+nasm -f bin tests/m16/dos_input_probe.asm -o /work/result/DOSINPUT.COM
 nasm -f obj tests/m16/system_mz_probe.asm -o /work/result/mz_probe.obj
 wlink system dos option quiet name /work/result/MZPROBE.EXE file /work/result/mz_probe.obj
 python3 tools/m16/finish_image.py --output /work/result
@@ -73,4 +74,10 @@ python3 -B -m unittest discover -s tests/m16 -p 'test_m13_memory_placement.py'
 python3 -B -m unittest discover -s tests/m16 -p 'test_m13_carrier_tail.py'
 python3 -B -m unittest discover -s tests/m16 -p 'test_floppy_media.py'
 python3 -B -m unittest discover -s tests/m16 -p 'test_loader_builder.py'
+python3 -B -m unittest discover -s tests/m16 -p 'test_freecom_input_source.py'
+python3 -B -m unittest discover -s tests/m16 -p 'test_dos_input_probe.py'
+python3 -B -m unittest discover -s components/fdkernel/pc88va/tests -p 'test_m11_input.py'
+python3 -B -m unittest discover -s components/fdkernel/pc88va/tests -p 'test_m11_consumer.py'
+python3 -B -m unittest discover -s components/fdkernel/pc88va/tests -p 'test_m15_console_controls.py'
+python3 -B -m unittest discover -s components/fdkernel/pc88va/tests -p 'test_m16_input.py'
 fi
