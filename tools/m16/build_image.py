@@ -11,6 +11,7 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[2]
 PARENT_INPUTS = ('tools/m16', 'tests/m16', 'config/m16',
+                 'manifests/components.lock.json', 'manifests/m16-components.lock.json',
                  'manifests/toolchains.lock.json', 'COPYING', 'LICENSE.md')
 
 
@@ -34,6 +35,55 @@ def verifier_wheel_spec():
     return spec
 
 
+def component_lock():
+    lock = json.loads((ROOT / 'manifests/m16-components.lock.json').read_text())
+    if lock.get('schema_version') != 1 or lock.get('milestone') != 'M16' or lock.get('status') != 'current-m16':
+        raise ValueError('M16 component lock schema or status is invalid')
+    expected_history = lock.get('historical_components_lock', {})
+    if expected_history != {
+            'path': 'manifests/components.lock.json',
+            'sha256': '440e481b28c740875489a6953a246ce5370c44074053c7aad3f80e79ec40c19c'}:
+        raise ValueError('M16 historical component lock reference is invalid')
+    history_sha = hashlib.sha256((ROOT / expected_history['path']).read_bytes()).hexdigest()
+    if history_sha != expected_history.get('sha256'):
+        raise ValueError('M16 historical component lock identity differs')
+    expected_control = {
+        'parent_commit': '1af9974700cd4dd1164cc0df56cc062925376148',
+        'components': {
+            'components/country': '23f189cca3420606eae8723884fa92ccd65eb307',
+            'components/fdkernel': 'd8dbbf7111f86ea4800daeac84ac53ba601aaf32',
+            'components/freecom': '9cf57b28abf1d98fab7655fb811375a2aa16c6d9',
+        },
+    }
+    if lock.get('m15_control') != expected_control:
+        raise ValueError('M16 lock does not preserve the exact M15 control')
+    for path, commit in expected_control['components'].items():
+        if call('git', 'rev-parse', f"{expected_control['parent_commit']}:{path}") != commit:
+            raise ValueError('M15 control component identity differs: ' + path)
+    entries = lock.get('components')
+    if not isinstance(entries, list) or len(entries) != 3:
+        raise ValueError('M16 component lock must contain exactly three components')
+    by_path = {item.get('path'): item for item in entries if isinstance(item, dict)}
+    if set(by_path) != {'components/fdkernel', 'components/freecom', 'components/country'}:
+        raise ValueError('M16 component path set is invalid')
+    expected = {
+        'components/fdkernel': ('fdkernel', 'https://github.com/nakatamaho/fdkernel.git',
+                                'topic/m16-floppy-formats-console-input',
+                                expected_control['components']['components/fdkernel']),
+        'components/freecom': ('freecom', 'https://github.com/nakatamaho/freecom_dbcs2.git',
+                               'topic/m16-floppy-formats-console-input', None),
+        'components/country': ('country', 'https://github.com/FDOS/country.git', 'master', None),
+    }
+    for path, (name, repository, branch, parent) in expected.items():
+        item = by_path[path]
+        if (item.get('name') != name or item.get('repository') != repository or
+                item.get('branch') != branch or item.get('parent_commit') != parent or
+                not re.fullmatch(r'[0-9a-f]{40}', str(item.get('commit', ''))) or
+                not re.fullmatch(r'[0-9a-f]{64}', str(item.get('source_archive_sha256', '')))):
+            raise ValueError('M16 component provenance record is invalid: ' + path)
+    return by_path
+
+
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--output', type=Path, default=ROOT / 'build/m16-image')
@@ -41,6 +91,7 @@ def main():
     args = parser.parse_args()
     if call('git', 'diff', 'HEAD', '--', '.', ':!components/fdkernel'):
         raise ValueError('Commit parent changes before exporting the build')
+    locked_components = component_lock()
     sources = {'parent': call('git', 'rev-parse', 'HEAD')}
     for name in ('fdkernel', 'freecom', 'country'):
         path = 'components/' + name
@@ -49,6 +100,8 @@ def main():
             raise ValueError('Component checkout differs from parent gitlink: ' + name)
         if call('git', '-C', path, 'status', '--porcelain', '--untracked-files=no'):
             raise ValueError('Component tracked source is dirty: ' + name)
+        if locked_components[path].get('commit') != sources[name]:
+            raise ValueError('Component gitlink differs from the M16 lock: ' + name)
     output = args.output.resolve()
     output.relative_to(ROOT)
     if subprocess.run(['git', 'check-ignore', '-q', str(output / 'probe')], cwd=ROOT).returncode:
@@ -71,6 +124,8 @@ def main():
                 command.extend(PARENT_INPUTS)
             subprocess.run(command, stdout=f, check=True)
         archives[name] = hashlib.sha256(archive.read_bytes()).hexdigest()
+        if name != 'parent' and archives[name] != locked_components[f'components/{name}'].get('source_archive_sha256'):
+            raise ValueError('Component source archive differs from the M16 lock: ' + name)
     # This verifier dependency is separate from the guest toolchain. Fetch a
     # pinned Linux wheel once; both build containers remain network-disabled.
     verifier = verifier_wheel_spec()

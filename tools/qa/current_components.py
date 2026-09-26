@@ -14,8 +14,15 @@ from pathlib import Path
 M06_LOCK = Path("manifests/m08-components.lock.json")
 M09_LOCK = Path("manifests/m09-components.lock.json")
 M10_LOCK = Path("manifests/m10-components.lock.json")
+M16_LOCK = Path("manifests/m16-components.lock.json")
 HISTORICAL_LOCK = Path("manifests/components.lock.json")
 HISTORICAL_LOCK_SHA256 = "440e481b28c740875489a6953a246ce5370c44074053c7aad3f80e79ec40c19c"
+M15_CONTROL_COMMIT = "1af9974700cd4dd1164cc0df56cc062925376148"
+M15_CONTROL_COMPONENTS = {
+    "components/country": "23f189cca3420606eae8723884fa92ccd65eb307",
+    "components/fdkernel": "d8dbbf7111f86ea4800daeac84ac53ba601aaf32",
+    "components/freecom": "9cf57b28abf1d98fab7655fb811375a2aa16c6d9",
+}
 EXPECTED_PATHS = {
     "components/country",
     "components/fdkernel",
@@ -61,7 +68,8 @@ def resolve_current_components(root: Path, historical: dict[str, str]) -> dict[s
         raise CurrentComponentError("historical component path set is invalid")
     is_m09 = (root / M09_LOCK).exists()
     is_m10 = (root / M10_LOCK).exists()
-    lock_path = root / (M10_LOCK if is_m10 else M09_LOCK if is_m09 else M06_LOCK)
+    is_m16 = (root / M16_LOCK).exists()
+    lock_path = root / (M16_LOCK if is_m16 else M10_LOCK if is_m10 else M09_LOCK if is_m09 else M06_LOCK)
     if not lock_path.exists():
         return dict(historical)
     if _sha256(root / HISTORICAL_LOCK) != HISTORICAL_LOCK_SHA256:
@@ -76,7 +84,14 @@ def resolve_current_components(root: Path, historical: dict[str, str]) -> dict[s
     if is_m10:
         expected_status = "current-m10"
         kernel_branch = "topic/m10-pc88va-machine-services-init"
-    if data.get("schema_version") != 1 or data.get("status") != expected_status:
+    if is_m16:
+        expected_status = "current-m16"
+        kernel_branch = "topic/m16-floppy-formats-console-input"
+    if (
+        data.get("schema_version") != 1
+        or data.get("status") != expected_status
+        or (is_m16 and data.get("milestone") != "M16")
+    ):
         raise CurrentComponentError("current component lock schema or status is invalid")
     historical_record = data.get("historical_components_lock")
     if historical_record != {"path": HISTORICAL_LOCK.as_posix(), "sha256": HISTORICAL_LOCK_SHA256}:
@@ -96,6 +111,8 @@ def resolve_current_components(root: Path, historical: dict[str, str]) -> dict[s
         expected_name, expected_repository, expected_branch = EXPECTED_POLICY[path]
         if path == "components/fdkernel":
             expected_branch = kernel_branch
+        if is_m16 and path == "components/freecom":
+            expected_branch = "topic/m16-floppy-formats-console-input"
         if (
             by_path[path].get("name") != expected_name
             or by_path[path].get("repository") != expected_repository
@@ -106,9 +123,33 @@ def resolve_current_components(root: Path, historical: dict[str, str]) -> dict[s
         if not isinstance(commit, str) or HEX40.fullmatch(commit) is None:
             raise CurrentComponentError(f"current component commit is invalid: {path}")
         current[path] = commit
-    for path in ("components/freecom", "components/country"):
-        if current[path] != historical[path] or by_path[path].get("parent_commit") is not None:
-            raise CurrentComponentError(f"M06 unexpectedly changes {path}")
+    if is_m16:
+        control = data.get("m15_control")
+        if control != {
+            "parent_commit": M15_CONTROL_COMMIT,
+            "components": M15_CONTROL_COMPONENTS,
+        }:
+            raise CurrentComponentError("M16 does not preserve the exact M15 control")
+        for path, expected_commit in M15_CONTROL_COMPONENTS.items():
+            try:
+                pinned = subprocess.run(
+                    ("git", "rev-parse", f"{M15_CONTROL_COMMIT}:{path}"),
+                    cwd=root,
+                    check=True,
+                    capture_output=True,
+                    text=True,
+                ).stdout.strip()
+            except subprocess.CalledProcessError as exc:
+                raise CurrentComponentError("M15 control commit is unavailable") from exc
+            if pinned != expected_commit:
+                raise CurrentComponentError(f"M15 control component pin differs: {path}")
+        for path in ("components/freecom", "components/country"):
+            if current[path] != M15_CONTROL_COMPONENTS[path] or by_path[path].get("parent_commit") is not None:
+                raise CurrentComponentError(f"M16 unexpectedly changes {path}")
+    else:
+        for path in ("components/freecom", "components/country"):
+            if current[path] != historical[path] or by_path[path].get("parent_commit") is not None:
+                raise CurrentComponentError(f"M06 unexpectedly changes {path}")
     fdkernel = by_path["components/fdkernel"]
     archive = fdkernel.get("source_archive_sha256")
     expected_parent = historical["components/fdkernel"] if data.get("status") == "current-m06" else "69ccdd8699895722fc537d647ec490685532bdc4"
@@ -116,6 +157,8 @@ def resolve_current_components(root: Path, historical: dict[str, str]) -> dict[s
         expected_parent = "105d49a72ec41afe07fc1e7b080bdbd1b3026ae2"
     if is_m10:
         expected_parent = "ef46a7ad4b381cf7a301899bee00fec99f5e37a7"
+    if is_m16:
+        expected_parent = M15_CONTROL_COMPONENTS["components/fdkernel"]
     if (
         fdkernel.get("parent_commit") != expected_parent
         or fdkernel.get("branch") != kernel_branch
@@ -132,4 +175,17 @@ def resolve_current_components(root: Path, historical: dict[str, str]) -> dict[s
     )
     if result.returncode:
         raise CurrentComponentError("M06 fdkernel commit is not a descendant of the historical commit")
+    if is_m16:
+        for path, item in by_path.items():
+            archive = item.get("source_archive_sha256")
+            if not isinstance(archive, str) or HEX64.fullmatch(archive) is None:
+                raise CurrentComponentError(f"M16 source archive identity is invalid: {path}")
+            archived = subprocess.run(
+                ("git", "archive", current[path]),
+                cwd=root / path,
+                check=True,
+                capture_output=True,
+            ).stdout
+            if hashlib.sha256(archived).hexdigest() != archive:
+                raise CurrentComponentError(f"M16 source archive digest differs: {path}")
     return current
