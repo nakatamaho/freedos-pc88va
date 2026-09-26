@@ -30,7 +30,7 @@ are experimental; branch names do not imply PC-88VA boot success.
 Clone the repository with its components:
 
 ```sh
-git clone --recurse-submodules https://github.com/nakatamaho/freedos-pc88va.git
+git clone --branch topic/m15-dos-api-writable-session --recurse-submodules https://github.com/nakatamaho/freedos-pc88va.git
 ```
 
 For an existing clone, initialize the components with:

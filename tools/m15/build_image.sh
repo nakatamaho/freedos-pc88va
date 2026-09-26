@@ -38,6 +38,8 @@ p=Path('/work/result/kernel.map')
 stamp=datetime.fromtimestamp(int(os.environ['SOURCE_DATE_EPOCH']),timezone.utc).strftime('%y/%m/%d %H:%M:%S')
 text,count=re.subn(r'^Created on:.*$', 'Created on:       '+stamp, p.read_text(), flags=re.MULTILINE)
 assert count==1
+text,count=re.subn(r'^Link time:.*$', 'Link time: 00:00.00', text, flags=re.MULTILINE)
+assert count==1
 p.write_text(text)
 PY
 cd ../sys
@@ -62,6 +64,8 @@ cd /work/source
 python3 tools/m15/finish_image.py --output /work/result
 mkdir -p build
 python3 tools/m13/verify_linked_placement.py --kernel /work/result/kernel-linked.exe --map /work/result/kernel.map --carrier /work/result/KERNEL.SYS --placement /work/result/carrier.json
+if [ "${M15_BUILD_PASS:-1}" = 1 ]; then
 python3 -B -m unittest discover -s tests/m13 -p test_memory_placement.py
 python3 -B -m unittest discover -s tests/m15 -p test_carrier_tail.py
 python3 -B -m unittest discover -s components/fdkernel/pc88va/tests -p test_m08_build_loader.py
+fi

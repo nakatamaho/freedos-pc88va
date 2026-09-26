@@ -60,7 +60,7 @@ def main():
     command = 'mkdir -p /work/entry && tar -xf /input/parent.tar -C /work/entry tools/m15/build_image.sh && bash /work/entry/tools/m15/build_image.sh'
     for number in (1, 2):
         cid = call('docker', 'create', '--platform', 'linux/amd64', '--network', 'none',
-                   '--entrypoint', 'bash', info['Id'], '-ec', command)
+                   '-e', f'M15_BUILD_PASS={number}', '--entrypoint', 'bash', info['Id'], '-ec', command)
         try:
             subprocess.run(['docker', 'cp', str(inputs) + '/.', cid + ':/input'], check=True)
             with (output / f'build-{number}.log').open('xb') as f:

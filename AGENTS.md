@@ -36,6 +36,12 @@ ROM contents, private disk contents, raw observations, and trace payloads
 remain excluded. New media builds must not depend on old candidate disks or
 saved DOS executables; generate payloads and filesystem structures from the
 committed sources and explicit public configuration.
+The owner authorizes public distribution of those source-built D88 images.
+As an explicit exception to the generated-artifact rule, store the public
+source-built distribution D88 compressed with xz under
+`images/milestones/mNN/`, together with exact source/build identities, hashes,
+and component license notices. Retain one designated distribution per
+milestone; do not add private test disks or intermediate build products.
 
 Use these evidence labels precisely: `HOST PASS`, `VAEG PASS`, `HARDWARE PASS`,
 and `DEFERRED HARDWARE VALIDATION`. Real hardware is optional and non-blocking,

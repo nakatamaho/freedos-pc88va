@@ -6,8 +6,8 @@ an old D88, ROM, private evidence directory, or a saved DOS executable.
 
 ## Build
 
-Clone the repository with `--recurse-submodules` and check out the desired
-parent commit. A Docker-compatible Linux/amd64 runtime and Python with pip are
+Clone `topic/m15-dos-api-writable-session` with `--recurse-submodules` and
+check out the desired parent commit. A Docker-compatible Linux/amd64 runtime and Python with pip are
 required. On macOS the default Python command is `/opt/local/bin/python3.12`;
 on Linux pass `M15_PYTHON=python3`. For new Colima profiles use
 `tools/host/colima.sh` as described in the host setup documentation.
@@ -27,7 +27,8 @@ The driver exports the committed parent and exact component gitlinks with
 `git archive`. Tracked edits and mismatched component checkouts are rejected.
 It builds twice in fresh, network-disabled containers without source mounts.
 Open Watcom executable identities are checked against the toolchain lock.
-The map's `Created on:` header is normalized to the fixed source epoch;
+The map's `Created on:` header is normalized to the fixed source epoch and
+its `Link time:` duration to zero;
 all linker section and symbol records are retained.
 The pinned Unicorn wheel for placement verification is fetched before the
 offline builds; it is not a guest input. No new Colima VM is created.
@@ -50,6 +51,12 @@ The normal disk contains KERNEL.SYS, LOADER.BIN, COMMAND.COM, COUNTRY.SYS,
 SYSVA.EXE and SYS.ID. It intentionally contains no previous QA results or
 diagnostic fixture programs. `build.json` records the source commits, archive
 digests, toolchain image, verifier dependency and output identities.
+
+The source-built D88 is a public distribution artifact. It contains no ROM or
+private disk input. Distribute it with the exact source/build identities and
+the applicable component license notices. The designated milestone D88 is stored as an xz archive under
+`images/milestones/m15/` with its source identities and hashes. Intermediate
+build products remain outside Git.
 
 ## Public platform configuration
 
