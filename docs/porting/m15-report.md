@@ -259,8 +259,18 @@ complete chain after 16 allocation/free cycles, unchanged pre-existing files,
 and equal FAT copies. The initial host sequence check omitted two allocation-
 strategy readback calls present in the fixture; the corrected verifier now
 matches the fixture's recorded order. This is **VAEG PASS** for the MEMORY
-fixture in VA2 at the default configuration only. The broader M15-MEMORY gate
-remains open pending configuration-specific qualification.
+fixture in VA2 at the default configuration.
+
+The MEMORY fixture also ran with an explicit VA2 `Main_RAM=384` profile and a
+fresh backup-memory file. The capacity saved in backup RAM and the observed DOS
+arena ceiling both matched 384 KiB. All 61 ordered records passed, all stacks
+were balanced, and host inspection verified 45 complete MCB snapshots, 16
+allocation/free cycles, full chain restoration, unchanged input files, and
+equal FAT copies. This is **VAEG PASS** for the 384-KiB MEMORY profile in VA2.
+At 256 KiB the machine booted, but FreeCOM could not allocate enough DOS memory
+to load `MEMORY.COM`; no fixture call ran, so this is not counted as an API
+failure or a fixture pass. The smallest profile capable of this workload is
+384 KiB. The required default and smallest-capable profiles are now covered.
 
 The bounded RESIDENT fixture then exercised both legacy INT 27h termination
 and INT 21h/AH=31h resident termination in VA2. All 26 ordered DOS observations
@@ -270,6 +280,15 @@ and reached the FreeCOM `A:\>` prompt. Existing files and FAT copies remained
 unchanged. This is **VAEG PASS** for the bounded resident-termination and fresh
 boot sequence in VA2 only; it does not qualify the interactive break/critical
 path or close full M15 acceptance.
+
+The LOADMODE fixture exercised COM and MZ load-only operations, flat and MZ
+overlay loading, relocation, parent-state cleanup, and the missing-overlay
+error. Its disposable QA image exposed the existing MZ overlay payload under
+the filename expected by the fixture; the payload and cluster chain were
+unchanged. All 39 ordered observations passed with balanced stacks. Five MCB
+snapshots retained stable arena bounds, and the complete initial chain was
+restored. This is **VAEG PASS** for the LOADMODE fixture in VA2 only and does
+not by itself close full M15 acceptance.
 
 ## Acceptance still open
 
@@ -281,11 +300,14 @@ focused startup-banner check is **VAEG PASS** in VA and VA2. The focused
 placement checks are **VAEG PASS** in VA and VA2 at all four supported memory
 capacities, and the previously listed ordinary recorder QA is **VAEG PASS** in
 both modes. The newer DEVICE, ABSIO, SHELLQA, SHELLREC, CLOCK, HANDLES, PATHS,
-PROCESS, and MEMORY fixtures are qualified in VA2 only. These checks do not
-close full M15 acceptance:
+PROCESS (including LOADMODE and RESIDENT), and MEMORY fixtures are qualified
+in VA2 only. These checks do not close full M15 acceptance:
 qualification of the remaining mandatory workflow families and final M15
 acceptance are still open. The initially mispackaged candidate is not counted
 as qualification evidence. The interactive CRITICAL sequence is not
 qualified: the available headless input did not deliver the required F1 key,
-so its partial run is not counted. Hardware validation remains
-**DEFERRED HARDWARE VALIDATION**.
+so its partial run is not counted. Keyboard-dependent break and critical-error
+recovery therefore remain open. The exact normal and independently booted
+transferred media, tested revisions, and final acceptance record also remain
+to be reconciled for handoff. Hardware validation remains **DEFERRED HARDWARE
+VALIDATION**.
