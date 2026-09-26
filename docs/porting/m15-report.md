@@ -262,6 +262,15 @@ matches the fixture's recorded order. This is **VAEG PASS** for the MEMORY
 fixture in VA2 at the default configuration only. The broader M15-MEMORY gate
 remains open pending configuration-specific qualification.
 
+The bounded RESIDENT fixture then exercised both legacy INT 27h termination
+and INT 21h/AH=31h resident termination in VA2. All 26 ordered DOS observations
+passed with balanced stacks; four complete MCB snapshots retained both child
+resident owners before restart. A separate VAEG process booted the saved image
+and reached the FreeCOM `A:\>` prompt. Existing files and FAT copies remained
+unchanged. This is **VAEG PASS** for the bounded resident-termination and fresh
+boot sequence in VA2 only; it does not qualify the interactive break/critical
+path or close full M15 acceptance.
+
 ## Acceptance still open
 
 The user passed the M15 SYS human gate on the earlier VA/VA2 candidates,
