@@ -188,7 +188,8 @@ start:
         mov bx, exec_block
         mov ax, 4b02h
         DOS 10132
-        ERROR 1
+        ; Pinned FreeDOS rejects unsupported EXEC mode 02h as invalid format.
+        ERROR 11
         mov bx, 0ffffh
         mov ah, 48h
         DOS 10133
