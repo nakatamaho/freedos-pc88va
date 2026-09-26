@@ -12,7 +12,7 @@ below describe the evidence available before this final owner decision.
 
 The owner requested a public-input-only clean build and an xz-compressed
 distribution in Git. The complete build recipe is committed at
-`0913737edb78f7236fe81c7c293f4323172587d9`, using kernel component
+`32a340127fb33a8133104614abf180a4cef6de19`, using kernel component
 `d8dbbf7111f86ea4800daeac84ac53ba601aaf32`. The component change adds a public
 loader-profile category and its validation test; it does not change DOS
 behavior. Two clean offline Linux/amd64 builds produced identical media and
@@ -20,13 +20,22 @@ system binaries. The map creation timestamp and elapsed link time are
 explicitly normalized; linker symbols and placement information are retained.
 
 The exact implementation's M15 host CI passed as run
-[36226668191](https://github.com/nakatamaho/freedos-pc88va/actions/runs/36226668191).
+[36227639922](https://github.com/nakatamaho/freedos-pc88va/actions/runs/36227639922).
 Local linked-placement and actual unpack-bridge verification passed, together
 with 23 memory-placement, four carrier-tail, and 12 loader tests. The new
 filesystem composer and public profile have focused host tests. A byte-identical
 distribution reached the kernel banner, FreeCOM, and its prompt in a VA2
 VAEG smoke check; its source-built COM and MZ support programs also ran: **VAEG PASS** for that bounded boot check only. Full
 guest QA was not repeated; hardware validation of this distribution was not run.
+
+The current recipe exports only M15-owned tooling, configuration and tests,
+plus shared public toolchain identities and licenses. Historical milestone
+directories are absent from both clean builds. The resulting disk is byte-for-byte
+identical to the previously archived and boot-checked distribution. SYS target
+preparation uses the M15 media module and was checked for a zero loader
+placeholder and absence of executable source/boot-code copying. The compatible
+installed toolchain was verified; rebuilding the toolchain container itself
+was not required for this tooling-isolation change.
 
 The public artifact and source identities are under
 [`images/milestones/m15`](../../images/milestones/m15/README.md).

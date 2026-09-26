@@ -39,6 +39,35 @@ committed sources and explicit public configuration.
 
 ## Reproducible milestone distributions
 
+### Milestone-local tooling from M15 onward
+
+For M15 and every later milestone, keep the complete host build and media
+toolchain orchestration, helper modules, producers and inspectors within
+`tools/mNN/`. Own its milestone-specific settings under `config/mNN/` and its
+fixtures/tests under `tests/mNN/`. Do not import, invoke, or read runtime inputs
+from another milestone's `tools`, `config`, `tests`, or `containers` directory,
+including through wrappers, symlinks, modified search paths, or transitive
+imports. Removing historical milestone directories must not break the active
+milestone's build, SYS-target preparation, or required verification.
+
+When retaining an earlier parent-owned algorithm, commit a maintained local
+copy of the needed implementation and its tests with provenance; do not carry
+forward its historical acceptance state or unrelated build dependencies.
+Component source still belongs in its own pinned component repository: never
+copy component source into the parent to satisfy this rule. Shared public
+toolchain identity locks, repository license files, standard host tools, and
+the prescribed Colima host wrapper may remain milestone-neutral dependencies.
+An old name inside a pinned component interface or compatible image tag does
+not authorize a dependency on the old parent milestone's directories.
+
+Before publication, execute the complete clean build from an allowlisted
+source export containing the active milestone's inputs and its explicit
+milestone-neutral dependencies, with other milestone directories absent.
+Check media preparation and readback through that milestone's own helpers.
+Fix any direct or transitive dependency discovered by this check before
+publishing. Apply this rule to M15 onward; do not rewrite or delete M00-M14
+history merely to make a current build pass.
+
 This is a continuous requirement for the active milestone, not only a release
 gate. At every published work checkpoint, the entire current milestone must
 be clean-buildable from a fresh checkout of its pushed public Git revision
