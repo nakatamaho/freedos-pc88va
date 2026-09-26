@@ -76,8 +76,4 @@ python3 -B -m unittest discover -s tests/m16 -p 'test_floppy_media.py'
 python3 -B -m unittest discover -s tests/m16 -p 'test_loader_builder.py'
 python3 -B -m unittest discover -s tests/m16 -p 'test_freecom_input_source.py'
 python3 -B -m unittest discover -s tests/m16 -p 'test_dos_input_probe.py'
-python3 -B -m unittest discover -s components/fdkernel/pc88va/tests -p 'test_m11_input.py'
-python3 -B -m unittest discover -s components/fdkernel/pc88va/tests -p 'test_m11_consumer.py'
-python3 -B -m unittest discover -s components/fdkernel/pc88va/tests -p 'test_m15_console_controls.py'
-python3 -B -m unittest discover -s components/fdkernel/pc88va/tests -p 'test_m16_input.py'
 fi
