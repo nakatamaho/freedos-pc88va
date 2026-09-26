@@ -177,6 +177,10 @@ On the exact QA-contract correction commit, M15 host workflow run
 [36129861539](https://github.com/nakatamaho/freedos-pc88va/actions/runs/36129861539)
 passed the finite inventory check, parent acceptance and memory-placement
 regressions, and the full PC-88VA kernel component suite.
+The later DEVICE expectation and test-navigation revision
+`d23f35a374bddc03446298c5d5d2a0a72f3e0ef5` passed exact-head M15 workflow run
+[36206365951](https://github.com/nakatamaho/freedos-pc88va/actions/runs/36206365951),
+including those same gates and the full kernel component suite.
 
 On 2026-09-26, the DEVICE fixture's expectations were aligned with the pinned
 FreeDOS implementation: NUL's device bit is set, and the local-drive/ordinary-
