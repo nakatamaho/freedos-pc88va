@@ -1,6 +1,12 @@
 # M15 FreeDOS PC-88VA port and writable-session qualification
 
-Status: **IN PROGRESS. M15 PASS is not claimed.**
+Status: **M15 PASS — owner accepted and closed on 2026-09-26.**
+
+The owner explicitly accepted M15 as PASS after moving the remaining work to
+follow-up issues #7, #8, and #9. This decision closes M15 with those items
+deferred. Their individual QA results remain unqualified; acceptance does not
+convert an incomplete or unrun test into a pass. Historical progress notes
+below describe the evidence available before this final owner decision.
 
 ## Scope
 
@@ -28,10 +34,12 @@ remain deferred under parent issues #3-#6 and do not gate the port.
 - Current QA-contract correction commit:
   e1a7b6c948e1c646aa78af56e209dacdc529010b; its exact-head M15 workflow
   passed as run 36129861539.
-- M15 qualified implementation SHA: pending; full integrated M15 acceptance
-  remains open.
-- The report publication tip will be recorded in the post-push local handoff.
-  The final downstream base remains unset until M15 qualification is complete.
+- QUALIFIED_IMPLEMENTATION_SHA (owner-accepted scope with deferred issues):
+  `4cbb140b8abe98195fe1bae521d87018521d3145`.
+  Its M15 host workflow passed as run
+  [36223589992](https://github.com/nakatamaho/freedos-pc88va/actions/runs/36223589992).
+- PUBLICATION_TIP_SHA and DOWNSTREAM_BASE_SHA will be recorded in the post-push
+  local handoff after this report-only publication is verified.
 
 ## Restarted candidate source lock
 
@@ -52,7 +60,7 @@ new candidate identity; QA results stay attached to the exact media and source
 manifest that produced them. The report-only commit that records this lock
 does not change the candidate software.
 
-## Current checkpoint
+## Qualification history before owner acceptance
 
 Common FreeDOS changes that were present in an earlier M15 candidate were
 removed when they proved unrelated to the VA port. The source retains the
@@ -313,7 +321,7 @@ unqualified:
   [Issue #7](https://github.com/nakatamaho/freedos-pc88va/issues/7); no API rows
   or FreeDOS behavior were changed to work around it.
 
-## Acceptance still open
+## Final owner acceptance
 
 The user passed the M15 SYS human gate on the earlier VA/VA2 candidates,
 including transfer and persistence checks. The later banner correction changes
@@ -326,10 +334,21 @@ both modes. The newer DEVICE, ABSIO, SHELLQA, SHELLREC, CLOCK, HANDLES, PATHS,
 PROCESS (including LOADMODE and RESIDENT), MEMORY, NLSTABLE, BREAKQA, CRITICAL,
 PSP, and DRVMAP fixtures are qualified in VA2 only. The corrected CRITICAL run
 used a key-enabled worker and checked all 23 records; earlier partial attempts
-without F1 remain unqualified. Full M15 acceptance remains open: BLKIO needs an
-explicit DOS-visible B: setup, COMPANION needs a completed CALL 5 sequence, and
-JFT source coverage is tracked by Issue #7. The initially mispackaged
-candidate is not counted as qualification evidence. Exact normal and
-independently booted transferred-media identities, tested revisions, and the
-final acceptance record still need handoff reconciliation. Hardware
-validation remains **DEFERRED HARDWARE VALIDATION**.
+without F1 remain unqualified.
+
+On 2026-09-26 the owner explicitly directed that M15 be marked PASS and closed.
+The remaining fixture work is deferred to:
+
+- [#7](https://github.com/nakatamaho/freedos-pc88va/issues/7): JFT source coverage.
+- [#8](https://github.com/nakatamaho/freedos-pc88va/issues/8): BLKIO's DOS-visible B: prerequisite.
+- [#9](https://github.com/nakatamaho/freedos-pc88va/issues/9): COMPANION CALL 5 qualification.
+
+These follow-ups are not blockers for the owner-accepted M15 closure. The
+previously pending integrated-media reconciliation is waived as a closure
+prerequisite by that decision; no additional media identity or boot result is
+asserted. The initially mispackaged candidate and incomplete fixture attempts
+remain excluded from qualification evidence. Existing HOST PASS and VAEG PASS
+results retain their recorded scopes. Hardware validation remains
+**DEFERRED HARDWARE VALIDATION**. No further QA is required for this owner
+acceptance; source changes made under follow-up issues require their own
+validation.
