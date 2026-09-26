@@ -71,7 +71,8 @@ def component_lock():
                                 'topic/m16-floppy-formats-console-input',
                                 expected_control['components']['components/fdkernel']),
         'components/freecom': ('freecom', 'https://github.com/nakatamaho/freecom_dbcs2.git',
-                               'topic/m16-floppy-formats-console-input', None),
+                               'topic/m16-floppy-formats-console-input',
+                               expected_control['components']['components/freecom']),
         'components/country': ('country', 'https://github.com/FDOS/country.git', 'master', None),
     }
     for path, (name, repository, branch, parent) in expected.items():
