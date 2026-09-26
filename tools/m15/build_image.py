@@ -51,13 +51,13 @@ def main():
         archives[name] = hashlib.sha256(archive.read_bytes()).hexdigest()
     # This verifier dependency is separate from the guest toolchain. Fetch a
     # pinned Linux wheel once; both build containers remain network-disabled.
-    subprocess.run([sys.executable, '-m', 'pip', 'download', '--disable-pip-version-check',
+    subprocess.run([sys.executable, '-m', 'pip', 'download', '--disable-pip-version-check', '--no-cache-dir',
                     '--only-binary=:all:', '--no-deps', '--platform', 'manylinux2014_x86_64',
                     '--python-version', '310', '--implementation', 'cp', '--abi', 'cp310',
                     '--dest', str(inputs), 'unicorn==2.1.4'], check=True)
     wheel = next(inputs.glob('unicorn-*.whl'))
     results = []
-    command = 'mkdir -p /entry && tar -xf /input/parent.tar -C /entry tools/m15/build_image.sh && bash /entry/tools/m15/build_image.sh'
+    command = 'mkdir -p /work/entry && tar -xf /input/parent.tar -C /work/entry tools/m15/build_image.sh && bash /work/entry/tools/m15/build_image.sh'
     for number in (1, 2):
         cid = call('docker', 'create', '--platform', 'linux/amd64', '--network', 'none',
                    '--entrypoint', 'bash', info['Id'], '-ec', command)
